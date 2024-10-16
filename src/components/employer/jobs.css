@@ -1,0 +1,44 @@
+.employ {
+  display: flex;
+  align-items: flex-start; /* Align items at the start of the flex container */
+  justify-content: space-between; /* Add space between the two columns */
+  flex-wrap: wrap; /* Ensure the form is responsive */
+}
+
+.employ-column {
+  width: 48%; /* Each column takes up about half the width with some margin */
+}
+
+button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #2840b7;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left:80%;
+  width: 20%; /* Ensure button takes full width */
+}
+
+input[type="text"], textarea, select {
+  width: 100%; /* Ensure the form elements take full width within their column */
+  padding: 10px;
+  margin: 10px 0; /* Adjust margin for consistency */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+textarea {
+  resize: none; /* Prevent resizing */
+}
+
+.experience-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.experience-group input {
+  width: 48%; /* Ensure both fields are next to each other and aligned */
+}

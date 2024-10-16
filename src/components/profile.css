@@ -1,0 +1,93 @@
+/* ProfilePage.css */
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  }
+  
+  .profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+    /* padding: 20px; */
+  }
+  
+  .profile-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    /* max-width: 400px; */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .profile-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .profile-image {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 5px solid  #7883c0;
+    margin-bottom: 20px;
+  }
+  
+  .profile-name {
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .profile-bio {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 20px;
+  }
+  
+  .profile-info {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .info-item {
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+  
+  .info-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .info-value {
+    margin-left: 10px;
+    color: #555;
+  }
+  
+  .edit-button {
+    /* margin-top: 20px; */
+    margin:20px;
+    /* padding: 10px 20px; */
+    background: linear-gradient(45deg,  #7883c0, #7b77ac);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 150px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .edit-button:hover {
+    background: linear-gradient(45deg, #7883c0, #7b77ac);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  

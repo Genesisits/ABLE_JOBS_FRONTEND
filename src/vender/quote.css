@@ -1,0 +1,122 @@
+/* .vendor_quote_2{
+    width:100%;
+} */
+.vendor_quote_input_2{
+    width: 150%;
+    padding: 8px; 
+    box-sizing: border-box;
+    margin-bottom: 5px; 
+    border-radius: 50px;
+    margin-left: -25%;
+}
+.vendor_quote_input_4{
+    width: 50%;
+    padding: 8px; 
+    box-sizing: border-box;
+    margin-bottom: 5px; 
+    border-radius: 50px;
+}
+.vendor_quote_input_3{
+    width: 100%;
+    padding: 8px; 
+    box-sizing: border-box;
+    margin-bottom: 5px; 
+    border-radius: 50px;
+}
+.vendor_quote_1{
+    margin-top: 2%;
+    margin-left: 25%;
+}
+.vendor_quote input{
+    width:100%;
+}
+.quote-container{
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+.quote-container-1{
+    display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.quote-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.vendor_quote_1 {
+    margin-bottom: 5px;
+}
+
+/* .vendor_quote_input_2 {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+} */
+
+.vendor_quote_button_1 {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.vendor_quote_button_1:hover {
+    background-color: #45a049;
+}
+
+.response-container {
+    margin-top: 20px;
+}
+
+.data-item {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.data-item p {
+    margin: 5px 0;
+}
+
+.data-item ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.data-item li {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.data-item li:last-child {
+    border-bottom: none;
+}
+.quote-success-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin-left: 10%;
+  }
+  
+  .quote-success-popup svg {
+    font-size: 1.2rem;
+  }
+

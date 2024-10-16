@@ -1,0 +1,264 @@
+.c-contact{
+    width: 100%;
+    height: 500px;
+}
+.contact-heading{
+    text-align: center;
+    /* margin-left: 30%; */
+}
+.contact-heading1{
+    text-align: center;
+    /* margin-left: 30%; */
+}
+form {
+    width: 50%;
+    margin: 0 auto;
+}
+.bg_color{
+    background-color: whitesmoke;
+}
+label {
+    display: block;
+    margin-top: 10px;
+    margin-right: 90%;
+    white-space: nowrap;
+    font-size: large;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+textarea{
+    width: 100%;
+    padding: 20px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.c-event{
+    width: 105%;
+    padding: 20px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);   
+}
+
+/* select {
+    height: 48px; 
+    width:105%;
+    font-size: large;
+} */
+.contact-event{
+    width:105%; 
+    /* width: 100%; */
+    padding: 20px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: #5384c9;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    margin-bottom: 3%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style the button on hover */
+/* button:hover {
+    background-color: #0056b3;
+} */
+span{
+    color: white;
+}
+p{
+    font-size: large;
+}
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+    font-size: 18px; /* You can adjust the font size to your preference */
+    color: #999; /* You can also change the color if needed */
+}
+.text-center {
+    text-align: center!important;
+}
+.single-box {
+    border: 1px solid #0056b3;
+    min-height: 250px;
+    padding: 50px 20px 20px 20px;
+    transition: all 0.3s ease 0s;
+    /* background-color: #e40b7f; */
+}
+.single-box1 {
+    border: 1px solid #0056b3;
+    min-height: 250px;
+    padding: 50px 20px 20px 20px;
+    transition: all 0.3s ease 0s;
+    /* background-color: #e40b7f; */
+}
+.single-box2 {
+    border: 1px solid #0056b3;
+    min-height: 250px;
+    padding: 50px 20px 20px 20px;
+    transition: all 0.3s ease 0s;
+    /* background-color: #e40b7f; */
+}
+.single-box1 i {
+    font-size: 40px;
+    margin-bottom: 36px;
+    transition: all 0.3s ease 0s;
+    color: #0056b3;
+}
+.single-box i {
+    font-size: 40px;
+    margin-bottom: 36px;
+    transition: all 0.3s ease 0s;
+    color: #0056b3;
+}
+.single-box2 i {
+    font-size: 40px;
+    margin-bottom: 36px;
+    transition: all 0.3s ease 0s;
+    color: #0056b3;
+}
+::after, ::before {
+    box-sizing: border-box;
+}
+.fa-map:before {
+    content: "\f279";
+}
+.row1 {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: 25%;
+    margin-left: 25%;
+    padding: 6px;
+    gap:10px;
+}
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+/* .fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+} */
+.svg-inline--fa {
+    display: var(--fa-display, inline-block);
+    height: 1.5em;
+    overflow: visible;
+    vertical-align: -0.125em;
+    color: red;
+}
+.col-md-4{  
+    margin: 0 10px;
+    width:30%  
+}
+.single-box p{
+    color: black;
+}
+.contact-phone-icon{
+    /* margin-left: 25%;
+    height: 35px; */
+    filter: brightness(100%) contrast(100%) saturate(100%) hue-rotate(149deg);
+    
+    }
+    .contact-email-icon{
+    /* margin-left: 25%;
+    height: 35px; */
+    filter: brightness(110%) contrast(110%) saturate(110%) hue-rotate(399deg);
+    }
+    .contact-map-icon{
+    /* margin-left: 25%;
+    height: 35px; */
+    filter: brightness(100%) contrast(100%) saturate(100%) hue-rotate(240deg);
+    } 
+   
+    @media only screen and (max-width: 768px) {
+        .contact{
+            height: 300px;
+        }
+        form {
+            width: 70%;
+            /* margin: 0 auto; */
+            margin-left: 8%;
+        }
+        .c-event {
+            /* height: 48px;  */
+            width:115%;
+            font-size: large;
+        }
+        .contact-event{
+            width:115%;
+        }
+        button {
+           margin-left: 12%; 
+        }
+        p{
+            text-align: center;
+            margin-left: 5%;
+            margin-right: 5%;
+
+        }
+        .row1{
+        width:70%;
+        margin-left: 13%;
+        display: flex;
+        height: 30%;
+        gap:10px;
+       
+        }
+        .single-box {
+            min-height: 100px;
+        }
+.single-box1 {
+    width:145%;
+    min-height: 100px;
+}
+.single-box2 {
+    width:104%;
+    min-height: 100px;
+}
+
+.bg_color iframe{
+    height: 300px;
+}
+    }
+ @media screen and (min-width: 768px) and (max-width: 1024px) {
+    .c-event {
+        /* height: 48px;  */
+        width:110%;
+        font-size: large;
+    }
+    .contact-event{
+        width:110%;
+    }
+    }
+    @media screen and (min-width: 1024px) and (max-width: 1024px) {
+        .c-event {
+            /* height: 48px;  */
+            width:108%;
+            font-size: large;
+        }
+        .contact-event{
+            width:108%;
+        } 
+    }

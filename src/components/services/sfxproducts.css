@@ -1,0 +1,39 @@
+.sfx_span{
+    font-size: 35px;
+    margin-right: 65%;
+    font-family: auto;
+    color: #881008;
+    position: relative;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #881008; 
+  }
+  .sfx_text p{
+    color:#000000;
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: left ;
+  }
+  .sfx-container {
+    /* display: flex; */
+    justify-content: space-around;
+    padding: 20px;
+  }
+  .sfx_img{
+    height:500px;
+    width:55%;
+    box-shadow: 0 0 18px rgb(1 1 1 / 15%);
+      padding: 20px;
+      margin: 2% 20% 30px 0;
+  }
+  @media only screen and (max-width: 768px) {
+    .sfx_img{
+      height: 300px;
+      width:88%;
+      margin-top: 10%;
+    } 
+    .sfx_span{
+      text-align: center;
+    margin-right: 3%; 
+    /* white-space: nowrap; */
+    }
+  }

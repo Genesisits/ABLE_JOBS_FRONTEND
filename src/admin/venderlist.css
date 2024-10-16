@@ -1,0 +1,48 @@
+/* VenderList.css */
+
+.vender-list-container {
+  margin: 20px;
+  overflow-x: auto; /* Add horizontal scroll for small screens */
+}
+
+.vender-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.th, .vender-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.vender-table th {
+  background-color: #f2f2f2;
+}
+
+.vender-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+.pagination li a {
+  text-decoration: none;
+  padding: 8px 16px;
+  background-color: #881008;
+  color: #fff;
+  border-radius: 4px;
+  /* cursor: pointer; */
+  height: 10px;
+}
+/* Media Query for Responsive Table */
+@media (max-width: 600px) {
+  .vender-table {
+    overflow-x: auto; /* Add horizontal scroll for small screens */
+    display: block;
+    white-space: nowrap;
+    width: 120%;
+  }
+
+  .pagination{
+    margin-top: 2%;
+  }
+}

@@ -1,0 +1,17 @@
+.otpContainer {
+    margin-top:10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    /* border: 2px solid red; */
+}
+
+.otpContainer .card {
+    border: 2px solid rgb(175, 169, 169);
+    /* width: 500px; */
+    border-radius: 20px;
+    padding: 50px;
+    /* align-items: center; */
+}
