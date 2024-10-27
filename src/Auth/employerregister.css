@@ -1,62 +1,92 @@
-.image-container {
-    /* margin-top: 5%; */
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-  }
-  
-  .image-container img {
-    width: 1400px;
-    height: 600px;
-    object-fit: cover;
-    display: block;
-  }
-  
-  .gradient-overlay {
-    position: absolute;
-    top: 0;
-    padding-left: 20px;
-    padding-right: 20px;
-    left: 50px;
-    width: 70%;
-    height: 100%;
-    background: linear-gradient(45deg,rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.3));
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    color: white;
-    font-size: 1.5rem;
-  }
-
-  .image-container input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"] {
-    width: 50%;
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-
-.image-container button {
-    background-color: #1d629b;
-    color: #fff;
-    border: none;
-    /* padding: 10px 20px; */
-    margin-top: 10px;
-    margin-bottom: 3%;
-    border-radius: 5px;
-    cursor: pointer;
+/* Customize the input box appearance */
+.custom-input input {
+  /* background-color: #f9f9f9;  */
+  border: 2px solid #ccc; 
+  padding: 12px; /* Increase padding */
+  border-radius: 8px; /* Rounded corners */
+  font-size: 16px; /* Slightly larger font */
+  transition: all 0.3s ease; /* Smooth transitions for hover/focus */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Light inner shadow */
+  outline: none !important; /* Ensure outline is removed */
 }
-  .image-container h3 {
-    color: #4ca0e6;
-    font-family:'Lucida Sans';
-  }
 
-  .ereg {
-    display: flex;
-    flex-direction: row;
-  }
+/* Customize MUI-specific input styling to remove outline */
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: transparent !important; /* Remove MUI focus border */
+}
+
+/* Customize label appearance */
+.custom-input label {
+  font-size: 14px; /* Smaller label */
+  color: #666; /* Soft gray label color */
+}
+
+/* On hover, change the border color */
+.custom-input:hover input {
+  border-color: #007BFF; /* Blue border on hover */
+}
+
+/* On focus, change border and background color */
+.custom-input input:focus {
+  border-color: #007BFF !important; /* Blue border on focus */
+  background-color: #fff; /* White background on focus */
+  outline: none !important; /* Ensure outline is removed */
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4); /* Glow effect on focus */
+}
+
+/* Style the MenuItem for company size select */
+.MuiMenuItem-root {
+  font-size: 26px;
+}
+
+/* Style the TextField select dropdown */
+.custom-input select {
+  /* background-color: #f9f9f9; */
+  border-radius: 8px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  transition: all 0.3s ease;
+  outline: none !important; /* Remove default outline */
+}
+
+/* Hover effects for the dropdown */
+.custom-input:hover select {
+  border-color: #007BFF;
+}
+
+/* Focus effects for the dropdown */
+.custom-input select:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+  outline: none !important; /* Ensure outline is removed */
+}
+
+/* Additional padding and alignment for dialog content */
+.MuiDialog-paper {
+  padding: 20px;
+  max-width: 900px; /* Adjust width if needed */
+  margin: auto;
+}
+
+/* Button styling for better spacing */
+.MuiButton-root {
+  margin-top: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.custom-input1 .MuiOutlinedInput-root {
+  background-color: #fff; /* White background */
+  border-radius: 8px;
+  border: 2px solid #ccc; /* Visible border */
+}
+
+/* Retain border and background on focus */
+.custom-input1 .MuiOutlinedInput-root.Mui-focused {
+  border-color: #007BFF; /* Blue border on focus */
+}
+
+/* MenuItem styling */
+.MuiMenuItem-root {
+  font-size: 16px;
+}
