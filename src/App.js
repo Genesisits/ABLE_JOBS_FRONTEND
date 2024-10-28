@@ -45,6 +45,10 @@ import Jobsapplied from "./components/employeestatus/Jobsapplied";
 import Jobs from "./components/employer/Jobs";
 import Findjobs from "./components/employeestatus/Findjobs";
 import Shortlisted from "./components/employer/Shortlisted";
+import EmployeeData from "./components/Employee/employee";
+import Findjob from "./components/Employee/findajob";
+import Applied from "./components/Employee/applied";
+import Shortlist from "./components/Employee/shortlist";
 const TRACKING_ID = 'G-3Z5SJGDL7N';
 
 ReactGA.initialize(TRACKING_ID);
@@ -106,7 +110,10 @@ export default function App() {
           <Route path="/eventitem" element={<EventItems/>} />
           <Route path="/forgotpassword" element={<ForgotPassword/>} />
           <Route path="/resetpassword" element={<ResetPassword/>} />
-          
+          <Route path="/employeedata" element={<EmployeeData/>} />
+          <Route path="/findajob" element={<Findjob/>} />
+          <Route path="/applied" element={<Applied/>} />
+          <Route path="/shortlist" element={<Shortlist/>} />
         </Routes>
       </div>
     </Router>

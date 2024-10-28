@@ -1,123 +1,690 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './employerregister.css';
-import one from "../../src/images/reg.jpg";
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Grid } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import { EMPLOYER_REGISTER, REGISTER } from '../endpoints';
+import { EMPLOYER_REGISTER } from '../endpoints';
 
 function Employerregister() {
     const navigate = useNavigate();
     const [companyName, setCompanyName] = useState("");
-    const [company_contact, setmobileNumber] = useState("")
-    const [company_email, setEmail] = useState("")
-    const [hemail, setHemail] = useState("")
-    const [head_first_name, setUserfname] = useState("")
-    const [head_last_name,setLastname] = useState("")
-    const [hcontact,setHcontact] = useState("")
-    const [password,setPassword] = useState("")
-    const [confirmpassword, setCpassword] = useState("")
-    const [company_size, setCompanysize] = useState("")
+    const [company_contact, setMobileNumber] = useState("");
+    const [company_email, setEmail] = useState("");
+    const [company_website, setCompanywebsite] = useState("");
+    const [Industry, setIndustry] = useState("");
+    const [Location, setLocation] = useState("");
+    const [Gst, setGst] = useState(null);
+    const [password, setPassword] = useState("");
+    const [confirmpassword, setCpassword] = useState("");
+    const [company_size, setCompanysize] = useState("");
+    const [company_logo, setCompanylogo] = useState(null);
+    const [fblinks, setFblinks] = useState("");
+    const [instalinks, setInstalinks] = useState("");
+    const [linkedinlink, setLinkedinlink] = useState("");
+    const [xlink, setXlink] = useState("");
+    const [head_first_name, setHeadfirstname] = useState("");
+    const [head_last_name, setHeadlastname] = useState("");
+    const [represent_mail, setRepresentMail] = useState("");
+    const [represent_number, setRepresentNumber] = useState("");
+    const [Pan, setPan] = useState(null);
+    const [registration, setRegistration] = useState(null);
+    const [designation, setDesignation] = useState("");
+    const [openDialog, setOpenDialog] = useState(false);
 
-  
-    const handleOTP = () => {
-        // navigate('/verify')
-    }
-    const handleCompanysize = (event) => {
-      setCompanysize(event.target.value); 
-    }
-    const handleFirstname = (event) => {
-      setUserfname(event.target.value); 
-  }
-    const handleChange = (event) => {
-        setCompanyName(event.target.value); 
-    }
-    const handleMobile = (event) => {
-        setmobileNumber(event.target.value)
-    }
-    const handleEmail = (event) => {
-      setEmail(event.target.value)
-    }
-    const handleHemail = (event) => {
-      setHemail(event.target.value)
-  }
-   const handleHeadcontacts = (event) => {
-      setHcontact(event.target.value)
-  }
-  const handleLastname = (event) => {
-    setLastname(event.target.value)
-  }
-  const handlePassword = (event) => {
-    setPassword(event.target.value)
-  }
-  const handleConfirmpassword = (event) => {
-    setCpassword(event.target.value)
-}
-const Register = () => {
- let payload = {
-    "company_name": companyName,
-    "company_contact": company_contact,
-    "email": company_email,
-    "company_size": company_size,
-    "head_first_name": head_first_name,
-    "head_last_name": head_last_name,
-    "head_email":  hemail,
-    "head_contact": hcontact,
-    "password": password
- }
-  console.log(payload)
-  axios.post(`${EMPLOYER_REGISTER}`,payload)
-  .then(response => {
-     
-  })
-  .catch(error => {
-     
-  });
-}
+    const handleCompanysize = (event) => setCompanysize(event.target.value);
+    const handleCompanylogo = (event) => setCompanylogo(event.target.value);
+    const handleChange = (event) => setCompanyName(event.target.value);
+    const handleMobile = (event) => setMobileNumber(event.target.value);
+    const handleEmail = (event) => setEmail(event.target.value);
+    const handleCompanywebsite = (event) => setCompanywebsite(event.target.value);
+    const handleIndustry = (event) => setIndustry(event.target.value);
+    const handleLocation = (event) => setLocation(event.target.value);
+    const handlePassword = (event) => setPassword(event.target.value);
+    const handleConfirmpassword = (event) => setCpassword(event.target.value);
+    const handleGst = (event) => setGst(event.target.value);
+    const handleFblink = (event) => setFblinks(event.target.value);
+    const handleInstalink = (event) => setInstalinks(event.target.value);
+    const handleLinkedinlink = (event) => setLinkedinlink(event.target.value);
+    const handleXlink = (event) => setXlink(event.target.value);
+    const handleHeadFirstName = (event) => setHeadfirstname(event.target.value);
+    const handleHeadLastName = (event) => setHeadlastname(event.target.value);
+    const handleRepresentMail = (event) => setRepresentMail(event.target.value);
+    const handleRepresentNumber = (event) => setRepresentNumber(event.target.value);
+    const handleDesignation = (event) => setDesignation(event.target.value);
+    const handlePan = (event) => setPan(event.target.value);
+    const handleRegistration = (event) => setRegistration(event.target.value);
+    const handleDialogOpen = () => setOpenDialog(true);
+    const handleDialogClose = () => setOpenDialog(false);
 
-  
+    const Register = () => {
+        let payload = {
+            "company_name": companyName,
+            "email": company_email,
+            "company_contact": company_contact,
+            "company_size": company_size,
+            "industry": Industry,
+            "location": Location,
+            "gst_file": Gst,
+            "password": password,
+            "company_website": company_website,
+            "company_logo": company_logo,
+            "fblink": fblinks,
+            "instalink": instalinks,
+            "linkedinlink": linkedinlink,
+            "xlink": xlink,
+            "head_first_name": head_first_name,
+            "head_last_name": head_last_name,
+            "head_email": represent_mail,
+            "head_contact": represent_number,
+            "head_designation": designation,
+            "pan": Pan,
+            "registration_certificate": registration,
+        };
+        console.log(payload);
+
+        axios.post(`${EMPLOYER_REGISTER}`, payload, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(response => {
+            // Handle success
+            console.log(response.data);
+        })
+        .catch(error => {
+            // Handle error
+            console.error(error);
+        });
+    };
+
+    const theme = createTheme();
 
     return (
-      <div className="image-container">
-        <img src={one} alt="Background" />
-        <div className="gradient-overlay">
-          <h3>Employer Registration</h3>
-          <div className='ereg'>
-            {/* Controlled input for company name */}
-            <input 
-              type='text' 
-              placeholder='company name' 
-              value={companyName}  
-              onChange={handleChange} 
-            />
-            <input type='number'
-            placeholder='contact number'
-            value={company_contact}
-            onChange={handleMobile}
-            />
-          </div>
-          <div className='ereg'>
-              <input type='text' placeholder='company email' value={company_email} onChange={handleEmail}/>
-              <input type='text' placeholder='company size' value={company_size} onChange={handleCompanysize}/>
-          </div>
-          <h4>Head of the company</h4>
-          <div className='ereg'>
-              <input type='text' placeholder='First' value={head_first_name} onChange={handleFirstname}/>
-              <input type='text' placeholder='Last name' value={head_last_name} onChange={handleLastname}/>
-          </div>
-          <div className='ereg'>
-              <input type='email' placeholder='Head Email' value={hemail} onChange={handleHemail}/>
-              <input type='number' placeholder='Head contact' value={hcontact} onChange={handleHeadcontacts}/>
-          </div>
-          <div className='ereg'>
-              <input type='password' placeholder='Password' value={password} onChange={handlePassword}/>
-              <input type='password' placeholder='Confirm Password' value={confirmpassword} onChange={handleConfirmpassword}/>
-          </div>
-          <Button onClick={Register}>Register</Button>
-        </div>
-      </div>
+        <ThemeProvider theme={theme}>
+            <div>
+                <Button variant="outlined" color="primary" Style='margin-top:10%' onClick={handleDialogOpen}>
+                    Register as Employer
+                </Button>
+
+                <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth> {/* Increase width */}
+                    <DialogTitle>Employer Registration</DialogTitle>
+                    <DialogContent>
+                        <Grid container spacing={2} rowSpacing={0}> {/* Grid container for 3 inputs in a row */}
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Company Name"
+                                    value={companyName}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Company EMail"
+                                    value={company_email}
+                                    onChange={handleEmail}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Company Contact"
+                                    value={company_contact}
+                                    onChange={handleMobile}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Company Website"
+                                    value={company_website}
+                                    onChange={handleCompanywebsite}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Industry"
+                                    value={Industry}
+                                    onChange={handleIndustry}
+                                    fullWidth
+                                    select
+                                    margin="dense"
+                                    className="custom-input1"
+
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '43px',
+                                            marginTop: '12px',
+                                            // Control the height here
+                                            '& .MuiSelect-select': {
+                                                padding: '10px', // Adjust padding to reduce the height
+                                            },
+                                            backgroundColor: '#fff',
+                                            '& fieldset': {
+                                                borderColor: '#ccc',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#888',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#000',
+                                            },
+                                        },
+
+                                    }}
+                                >
+                                    <MenuItem value="1-10">1-10</MenuItem>
+                                    <MenuItem value="11-50">11-50</MenuItem>
+                                    <MenuItem value="51-200">51-200</MenuItem>
+                                    <MenuItem value="200+">200+</MenuItem>
+                                </TextField>
+
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Location"
+                                    value={Location}
+                                    onChange={handleLocation}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Company Size"
+                                    value={company_size}
+                                    onChange={handleCompanysize}
+                                    select
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input1"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '43px',
+                                            marginTop: '12px',
+                                            // Control the height here
+                                            '& .MuiSelect-select': {
+                                                padding: '10px', // Adjust padding to reduce the height
+                                            },
+                                        },
+                                    }}
+                                >
+
+                                    <MenuItem value="1-10">1-10</MenuItem>
+                                    <MenuItem value="11-50">11-50</MenuItem>
+                                    <MenuItem value="51-200">51-200</MenuItem>
+                                    <MenuItem value="200+">200+</MenuItem>
+
+                                </TextField>
+                            </Grid>
+
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Password"
+                                    value={password}
+                                    onChange={handlePassword}
+                                    type="password"
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Confirm Password"
+                                    value={confirmpassword}
+                                    onChange={handleConfirmpassword}
+                                    type="password"
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="FB Links"
+                                    value={fblinks}
+                                    onChange={handleFblink}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Instagram Links"
+                                    value={instalinks}
+                                    onChange={handleInstalink}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Linkedin Links"
+                                    value={linkedinlink}
+                                    onChange={handleLinkedinlink}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="X Links"
+                                    value={xlink}
+                                    onChange={handleXlink}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Head First Name"
+                                    value={head_first_name}
+                                    onChange={handleHeadFirstName}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Head Last Name"
+                                    value={head_last_name}
+                                    onChange={handleHeadLastName}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Representative Mail"
+                                    value={represent_mail}
+                                    onChange={handleRepresentMail}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Representative Number"
+                                    value={represent_number}
+                                    onChange={handleRepresentNumber}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField
+                                    label="Representative Designation"
+                                    value={designation}
+                                    onChange={handleDesignation}
+                                    fullWidth
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <label>Company Logo</label>
+                                <TextField
+                                    // label="Company Logo"
+                                    onChange={(event) => setCompanylogo(event.target.files[0])}
+                                    fullWidth
+                                    type="file"
+                                    margin="dense"
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <label>GST</label>
+                                <TextField
+                                    type="file"
+                                    onChange={(event) => setGst(event.target.files[0])}
+                                    fullWidth
+                                    margin="dense"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            backgroundColor: '#fff',
+                                            '& fieldset': {
+                                                borderColor: '#ccc',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#888',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#000',
+                                            },
+                                        },
+                                        '& input[type="file"]': {
+                                            display: 'block',
+                                            cursor: 'pointer',
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <label>PAN</label>
+                                <TextField
+                                    type="file"
+                                    onChange={(event) => setPan(event.target.files[0])}
+                                    fullWidth
+                                    margin="dense"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            backgroundColor: '#fff',
+                                            '& fieldset': {
+                                                borderColor: '#ccc',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#888',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#000',
+                                            },
+                                        },
+                                        '& input[type="file"]': {
+                                            display: 'block',
+                                            cursor: 'pointer',
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <label>Registration</label>
+                                <TextField
+                                    type="file"
+                                    onChange={(event) => setRegistration(event.target.files[0])}
+                                    fullWidth
+                                    margin="dense"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            backgroundColor: '#fff',
+                                            '& fieldset': {
+                                                borderColor: '#ccc',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#888',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#000',
+                                            },
+                                        },
+                                        '& input[type="file"]': {
+                                            display: 'block',
+                                            cursor: 'pointer',
+                                        },
+                                    }}
+                                />
+                            </Grid>
+
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleDialogClose} color="secondary">Cancel</Button>
+                        <Button onClick={Register} color="primary">Register</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        </ThemeProvider>
     );
 }
-
 
 export default Employerregister;
