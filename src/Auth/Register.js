@@ -186,6 +186,7 @@ function Employeeregister() {
   const [additionalSkills, setAdditionalSkills] = useState("");
   const [disabilitypercentage, setDisabilitypercentage] = useState("");
   const [disability, setDisability] = useState("");
+  const [file,setFile] = useState(null)
   
   const disabilities = [
     { id: "1", name: "Blindness", abbreviation: "Blindness" },
@@ -1017,21 +1018,37 @@ function Employeeregister() {
               </Grid>
             </Grid>
             <Grid container spacing={6}>
-              <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<CloudUploadIcon />}
-              >
-                Upload files
-                <VisuallyHiddenInput
-                  type="file"
-                  onChange={(event) => setFilename(event.target.files)}
-                  multiple
-                />
-              </Button>
-              {/* <p>{{filename}}</p> */}
+            <Grid item xs={4}>
+                                <label>Disability Certificate</label>
+                                <TextField
+                                    type="file"
+                                    onChange={(event) => setFile(event.target.files[0])}
+                                    fullWidth
+                                    margin="dense"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            backgroundColor: '#fff',
+                                            '& fieldset': {
+                                                borderColor: '#ccc',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#888',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: '#000',
+                                            },
+                                        },
+                                        '& input[type="file"]': {
+                                            display: 'block',
+                                            cursor: 'pointer',
+                                        },
+                                    }}
+                                />
+                            </Grid>
             </Grid>
             <Grid container spacing={1} style={{ margin: "2%" }}>
               {languages.map((language, index) => (
