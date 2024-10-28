@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./main.css";
-import one from "../../images/find_job.jpg";
+import one from "../../images/main.png";
 import two from "../../images/h2.jpg";
 import three from "../../images/h3.jfif";
 import four from "../../images/h4.JPG";
@@ -58,6 +58,55 @@ const qualifications = [
   {id: '7', name: 'Doctorate', abbreviation: 'Doctorate'},
 ]
 
+const locations = [
+  {id:'1',name: 'Pan India',abbreviation: 'pan_india'},
+{id: '2',name: 'Ahmedabad',abbreviation: 'ahmedabad'},
+{id: '3',name: 'Ankleshwar',abbreviation: 'ankleshwar'},
+{name: 'Bangalore',abbreviation: 'bangalore'},
+{name: 'Chennai',abbreviation: 'chennai'},
+{name: 'Delhi',abbreviation: 'delhi'},
+{name: 'Gurgaon',abbreviation: 'gurgaon'},
+{name: 'Hyderabad',abbreviation: 'hyderabad'},
+{name: 'Jamshedpur',abbreviation:'jamshedpur'},
+{name: 'Kolkata',abbreviation:'kolkata'},
+{name: 'Mumbai',abbreviation:'mumbai'},
+{name: 'Noida',abbreviation:'noida'},
+{name: 'Pondicherry',abbreviation:'pondicherry'},
+{name: 'Pune',abbreviation:'pune'},
+{name: 'Thane',abbreviation:'thane'},
+{name: 'Visakhapatnam', abbreviation:'visakhapatnam'},
+{name: 'Gurugram', abbreviation:'gurugram'},
+]
+const disabilities = [
+{id:'1',name: 'Blindness', abbreviation: 'Blindness'},
+{id:'2', name:'Low vision', abbreviation: 'Low vision'},
+{id: '3', name: 'Leprosoy cured persons',abbreviation: 'Leprosoy cured persons'},
+{id: '4',name: 'Locomotor Disability',abbreviation: 'Locomotor Disability'},
+{id: '5', name: 'Intellectual Disability',abbreviation: 'Intellectual Disability'},
+{id: '6', name:'Cerebral Palsy',abbreviation: 'Cerebral Palsy'},
+{id: '7', name: 'Specific Learning Disabilities',abbreviation: 'Specific Learning Disabilities'},
+{id: '8', name: 'Mental Illness',abbreviation: 'Mental Illness'},
+{id: '9',name:'Cerebral Palsy',abbreviation: 'Cerebral Palsy'},
+{id: '10',name:'Specific Learning Disabilities',abbreviation: 'Specific Learning Disabilities'},
+{id: '11',name: 'Speech and Language disability',abbreviation:'Speech and Language disability'},
+{id: '12',name:'Hearing Impairment(Deaf and Hard of Hearing)',abbreviation:'Hearing Impairment(Deaf and Hard of Hearing)'},
+{id:'12',name:'Muscular Dystrophy',abbreviation:'Muscular Dystrophy'},
+{id:'13',name: 'Dwarfism',abbreviation: 'Dwarfism'},
+{id:'14',name:'Acid Attack Victim',abbreviation:'Acid Attack Victim'},
+{id:'15',name: 'Parkinson disease',abbreviation:'Parkinson disease'},
+{id:'16',name: 'Multiple Sclerosis',abbreviation: 'Multiple Sclerosis'},
+{id:'17',name:'Thalassemia',abbreviation: 'Thalassemia'},
+{id:'18',name:'Hemophilia',abbreviation:'Hemophilia'},
+{id: '19',name:'Sickle Cell disease',abbreviation: 'Sickle Cell disease'},
+{id: '20',name:'Autism Spectrum Disorder',abbreviation:'Autism Spectrum Disorder'},
+{id: '21',name:'Chronic Neurological conditions',abbreviation:'Chronic Neurological conditions'},
+{id:'22',name:'Multiple Disabililties including Deaf, Blindess',abbreviation:'Multiple Disabililties including Deaf, Blindess'},
+{id: '23',name:'Down Syndrome',abbreviation:'Down Syndrome'},
+{id:'24',name:'Epilepsy',abbreviation:'Epilepsy'},
+{id: '25',name:'Spinal Cord Injury',abbreviation:'Spinal Cord Injury'},
+{id: '26',name:'Others',abbreviation:'Others'}
+
+]
 const experience = [
   {id: '1',name: 'Fresher', abbreviation: 'fresher'},
   {id: '2',name: '1 Year', abbreviation: '1 years'},
@@ -66,13 +115,41 @@ const experience = [
   {id: '5',name: '4 Years', abbreviation: '4 years'},
   {id: '6',name: '5 Years', abbreviation: '5 years'}
 ]
+
+const companies = [
+
+  {id:'1' ,name: 'Abbott',abbreviation: 'Abott'},
+  {id:'2', name:'AON', abbreviation: 'aon'},
+  {id:'3',name:'Accenture',abbreviation: 'accenture'},
+  {id:'4',name:'Aditya Birla Capital',abbreviation:'aidtya_birla_capital'},
+  {id:'5',name:'Amazon', abbreviation:'amazon'},
+  {id:'6',name:'Asian Paints', abbreviation:'asian_paints'},
+  {id:'7',name:'Axis Bank', abbreviation:'axis_bank'},
+  {id:'8',name:'BSE India',abbreviation: 'bse_india'},
+  {id:'9',name:'Brigade',abbreviation: 'brigade'},
+  {id:'10',name:'Concentrix', abbreviation:'concentrix'},
+  {id:'11',name:'Fiserv', abbreviation:'fiserv'},
+  {id:'12',name:'Godrej Properties', abbreviation:'godrej_properties'},
+  {id:'13',name:'HDFC Ergo',abbreviation: 'hdfc_ergo'},
+  {id:'14',name:'HDFC Ergo GIC ltd', abbreviation:'hdfc_ergo_gic_ltd'},
+  {id:'15',name:'HUL',abbreviation: 'hul'},
+  {id:'16',name:'ITC', abbreviation:'itc'},
+  {id:'17',name:'Indigo',abbreviation: 'indigo'},
+  {id:'18',name:'JK Cement',abbreviation:'jk_cement'},
+  {id:'19',name:'JLL',abbreviation:'jll'}
+]
 export default function Header() {
   const [currentImage, setCurrentImage] = useState(0);
   const [age, setAge] = React.useState("");
+  const [type, setType] = React.useState("")
+  const [state, setStates] = React.useState("")
+  const [department, setDepartment] = React.useState("")
+  const [industry, setIndustry] =React.useState("")
+  const [qualification, setQualifiation] = React.useState("")
+  const [company, setCompany] = React.useState("")
+  const [disability, setDisability] =React.useState("")
+  const [location, setLocation] =React.useState("")
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   // useEffect(() => {
   //   const intervalId = setInterval(() => {
@@ -105,13 +182,13 @@ export default function Header() {
           <Box sx={{ minWidth: 120, display: 'flex', flexDirection: 'row', gap:'10px' }}>
           <FormControl fullWidth>
         <Select
-          value={age}
-          onChange={handleChange}
+          value={type}
+          onChange={(e) => setType(e.target.value)}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
         >
           <MenuItem value="">
-            Location based
+            All Types
           </MenuItem>
           <MenuItem value="hybrid">Hybrid</MenuItem>
           <MenuItem value="remote">Remote</MenuItem>
@@ -120,8 +197,8 @@ export default function Header() {
       </FormControl>
       <FormControl fullWidth>
         <Select
-          value={age}
-          onChange={handleChange}
+          value={state}
+          onChange={(e) => setStates(e.target.value)}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
         >
@@ -137,8 +214,8 @@ export default function Header() {
       </FormControl>
       <FormControl fullWidth>
         <Select
-          value={age}
-          onChange={handleChange}
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
         >
@@ -154,8 +231,8 @@ export default function Header() {
       </FormControl>
       <FormControl fullWidth>
         <Select
-          value={age}
-          onChange={handleChange}
+          value={industry}
+          onChange={(e) => setIndustry(e.target.value)}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
         >
@@ -171,8 +248,25 @@ export default function Header() {
       </FormControl>
       <FormControl fullWidth>
         <Select
-          value={age}
-          onChange={handleChange}
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          <MenuItem value="">
+            All Locations
+          </MenuItem>
+          {locations.map((locate) => (
+                <MenuItem key={locate.id} value={locate.abbreviation}>
+                  {locate.name}
+                </MenuItem>
+              ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <Select
+          value={qualification}
+          onChange={(e) => setQualifiation(e.target.value)}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
         >
@@ -186,19 +280,38 @@ export default function Header() {
               ))}
         </Select>
       </FormControl>
+      </Box>
+      <Box sx={{ maxWidth: 350, display: 'flex', flexDirection: 'row', gap:'10px', marginTop:'5px' }}>
       <FormControl fullWidth>
         <Select
-          value={age}
-          onChange={handleChange}
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
         >
           <MenuItem value="">
-            Experience
+            Companies
           </MenuItem>
-          {experience.map((exp) => (
-                <MenuItem key={exp.id} value={exp.abbreviation}>
-                  {exp.name}
+          {companies.map((company) => (
+                <MenuItem key={company.id} value={company.abbreviation}>
+                  {company.name}
+                </MenuItem>
+              ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <Select
+          value={disability}
+          onChange={(e) => setDisability(e.target.value)}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          <MenuItem value="">
+            All Disabilities
+          </MenuItem>
+          {disabilities.map((disabilit) => (
+                <MenuItem key={disabilit.id} value={disabilit.abbreviation}>
+                  {disabilit.name}
                 </MenuItem>
               ))}
         </Select>
@@ -206,7 +319,7 @@ export default function Header() {
       </Box>
         </div>
         <div>
-          <div style={{border:'1px solid #6c757d', margin:'20px 50px', display:'flex',flexDirection: 'row', justifyContent: 'space-evenly', borderRadius:'5px'}}>
+          <div style={{border:'1px solid #6c757d', margin:'20px 140px', display:'flex',flexDirection: 'row', justifyContent: 'space-evenly', borderRadius:'5px'}}>
             <span style={{fontFamily: 'sans-serif', color: 'black'}}>
               <h6>Sales Drive</h6>
               <p>Godrej Properties</p>
@@ -219,7 +332,7 @@ export default function Header() {
               <button>Apply Now</button>
             </span>
           </div>
-          <div style={{border:'1px solid #6c757d', margin:'20px 50px', display:'flex',flexDirection: 'row', justifyContent: 'space-evenly', borderRadius:'5px'}}>
+          <div style={{border:'1px solid #6c757d', margin:'20px 140px', display:'flex',flexDirection: 'row', justifyContent: 'space-evenly', borderRadius:'5px'}}>
             <span style={{fontFamily: 'sans-serif', color: 'black'}}>
               <h6>Sales Drive</h6>
               <p>Godrej Properties</p>
