@@ -1,12 +1,109 @@
 import * as React from 'react';
 import Layout from '../sidenav/Layout';
 import Paper from '@mui/material/Paper';
+import axios from 'axios';
+import { useState,useEffect} from 'react';
+import {GET_JOB} from './../../endpoints';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import Button from '@mui/material/Button';
+import './applied.css';
+// import Box from "@mui/material/Box";
+
+
+
+const columns = [
+  { id: "id", label: "Job Id", minWidth: 5 },
+  { id: "job_title", label: "Job Title", minWidth: 100 },
+  { id: "company_name", label: "Company Name", minWidth: 100 },
+  { id: "location", label: "Location", minWidth: 100 },
+  { id: "employment_type", label: "Employment Type", minWidth: 100 },
+  { id: "status", label: "Actions", minWidth: 100 },
+]
 
 function Applied(){
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rows, setData] = useState([])
+
+  const handleChangePage = (event, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  useEffect(() => {
+    axios.get(`${GET_JOB}`)
+    .then(response => {
+      setData(response.data)
+    })  
+  },[])
     return(
         <Layout>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-       <h1>Hello</h1>
+     <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer sx={{ maxHeight: 400 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ backgroundColor: "#2840b7", color: "white" }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.company_name}
+                  >
+                    {columns.map((column) => {
+                      if (column.id === "status") {
+                        return (
+                          <TableCell key={column.id}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              sx={{ padding: '4px 8px', minHeight: '14px', fontSize: '0.675rem' }}
+                              // onClick={() => handleViewClick(row.id)}
+                            >
+                              View
+                            </Button>
+                        </TableCell>
+                        );
+                      }
+                      return (
+                        <TableCell key={column.id}>{row[column.id]}</TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
     </Layout>
     )

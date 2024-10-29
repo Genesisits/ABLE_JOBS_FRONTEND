@@ -2,7 +2,7 @@ import * as React from 'react';
 import Layout from '../sidenav/Layout';
 import Paper from '@mui/material/Paper';
 // import TextField from '@mui/material/TextField';
-import './findajob.css'
+import './findajob.css';
 
 function Findjob(){
     return(
