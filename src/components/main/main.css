@@ -23,6 +23,56 @@
   width: 100%;
   background-color: teal;
 }
+.apply-button-container {
+  display: flex;
+  flex: 0;
+  justify-content: flex-end; /* Align items to the left */
+  marginRight: 'auto'  /* Add left margin to move it further left */
+}
+.apply-button-container {
+  margin-right: auto; /* This keeps it aligned left by default */
+}
+@media (min-width: 768px) { /* Adjust the breakpoint as needed */
+  .your-container-class { /* Replace with the actual class or id */
+    display: flex;
+    justify-content: center;
+  }
+}
+.apply-button {
+  padding: 8px 16px; /* Default padding */
+  min-width: 120px; /* Default min-width */
+}
+
+/* Adjust button size for mobile devices */
+@media (max-width: 600px) { /* You can adjust the max-width based on your design */
+  .mobile-apply-button {
+    padding: 6px 12px; /* Smaller padding */
+    min-width: 100px; /* Smaller min-width */
+  }
+}
+@media (max-width: 600px) {
+  .mobile-apply-button {
+    min-width: 80px; /* Adjust as needed for mobile */
+  }
+}
+
+
+
+@media (min-width: 600px) { /* Adjust the breakpoint as necessary */
+  .apply-button-container {
+    margin-left: auto; /* This moves the button to the right for desktop */
+  }
+}
+
+.spacing {
+  margin-right: 40px; /* Adjust as necessary */
+}
+@media (min-width: 768px) { /* Adjust the breakpoint as necessary */
+  .spacing {
+    margin-right: 40px; /* Space for desktop layout */
+  }
+}
+
 
 
 /* body {
@@ -120,6 +170,61 @@
     width:90%;
     margin-left: 3%;
 }
+.my-container {
+  padding: 20px;
+}
+
+.image-zoom-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.zoomed-image {
+  max-width: 100%;
+  height: auto;
+}
+
+h1 {
+  font-size: 2em;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .my-container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  .image-zoom-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .zoomed-image {
+    max-width: 90%;
+  }
+
+  .MuiFormControl-root {
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.2em;
+  }
+
+  .my-container {
+    padding: 5px;
+  }
+
+  .image-zoom-container {
+    margin-bottom: 15px;
+  }
+}
+
 @media (min-width: 768px){
 .m-6 {
     -ms-flex: 0 0 50%;

@@ -18,6 +18,7 @@ import { Button, InputLabel } from "@mui/material";
 import Box from "@mui/material/Box";
 import Footer from "../footer/footer";
 import BackGround from "../background/background";
+import { teal } from "@mui/material/colors";
 // import ReactGA from "react-ga4";
 
 const images = [one, two, three, four];
@@ -167,7 +168,7 @@ export default function Header() {
   const imgarray2 = images2[currentImage % images2.length];
 
   return (
-    // <div>
+    <div>
       <div className="my-container">
         <div className="image-zoom-container">
           <img
@@ -179,7 +180,7 @@ export default function Header() {
         </div>
         <div style={{padding:' 0% 10%'}}>
           <h1>120+ Jobs for you to explore</h1>
-          <Box sx={{ minWidth: 120, display: 'flex', flexDirection: 'row', gap:'10px' }}>
+          <Box sx={{ display: 'flex', flexDirection:  { xs: 'column', sm: 'row' }, gap:'10px' }}>
           <FormControl fullWidth>
         <Select
           value={type}
@@ -281,7 +282,7 @@ export default function Header() {
         </Select>
       </FormControl>
       </Box>
-      <Box sx={{ maxWidth: 350, display: 'flex', flexDirection: 'row', gap:'10px', marginTop:'5px' }}>
+      <Box sx={{ display: 'flex', flexDirection:  { xs: 'column', sm: 'row' }, gap:'10px', marginTop:'5px', }}>
       <FormControl fullWidth>
         <Select
           value={company}
@@ -319,34 +320,58 @@ export default function Header() {
       </Box>
         </div>
         <div>
-          <div style={{border:'1px solid #6c757d', margin:'20px 140px', display:'flex',flexDirection: 'row', justifyContent: 'space-evenly', borderRadius:'5px'}}>
-            <span style={{fontFamily: 'sans-serif', color: 'black'}}>
-              <h6>Sales Drive</h6>
-              <p>Godrej Properties</p>
-            </span>
-            <span style={{fontFamily:'sans-serif', color: 'black'}}>
-              <h6>Multiple Locations</h6>
-              <p>5 Days ago</p>
-            </span>
-            <span>
-              <button>Apply Now</button>
-            </span>
-          </div>
-          <div style={{border:'1px solid #6c757d', margin:'20px 140px', display:'flex',flexDirection: 'row', justifyContent: 'space-evenly', borderRadius:'5px'}}>
-            <span style={{fontFamily: 'sans-serif', color: 'black'}}>
-              <h6>Sales Drive</h6>
-              <p>Godrej Properties</p>
-            </span>
-            <span style={{fontFamily:'sans-serif', color: 'black'}}>
-              <h6>Multiple Locations</h6>
-              <p>5 Days ago</p>
-            </span>
-            <span>
-              <button>Apply Now</button>
-            </span>
-          </div>
+           
+            <div style={{ border: '1px solid #6c757d', margin: '20px 0', borderRadius: '5px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',maxWidth:'750px',width:'100%',marginLeft: 'auto',marginRight:'auto'}}>
+              <div style={{ flex: '1 1 auto', textAlign: 'left' }}> 
+            
+                <span style={{fontFamily: 'sans-serif', color: 'black',marginRight: '40px'}}>
+                  <h6>Sales Drive</h6>
+                  <p>Godrej Properties</p>
+                </span>
+              </div>
+              <div style={{ flex: '1 1 auto', textAlign: 'left' }}> 
+            
+                <span style={{fontFamily:'sans-serif', color: 'black',marginRight: '40px'}}>
+                  <h6>Multiple Locations</h6>
+                  <p>5 Days ago</p>
+                </span>
+              </div>
+              <div style={{ flex: '0 0 auto',display: 'flex', justifyContent: 'flex-end' }}>
+                <button className="apply-button"style={{ padding: '8px 16px', border: 'none', backgroundColor: teal, color: '#fff', borderRadius: '4px', cursor: 'pointer',minWidth:'120px',whiteSpace: 'nowrap' }}>Apply Now</button>
+              </div>
+            </div>
+            <div style={{ border: '1px solid #6c757d', margin: '20px 0', borderRadius: '5px', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',maxWidth:'750px',width:'100%',marginLeft: 'auto',marginRight:'auto'}}>
+              <div style={{ flex: '1 1 auto', textAlign: 'left' }}> 
+            
+                <span style={{fontFamily: 'sans-serif', color: 'black',marginRight: '40px'}}>
+                  <h6>Sales Drive</h6>
+                  <p>Godrej Properties</p>
+                </span>
+              </div>
+              <div style={{ flex: '1 1 auto', textAlign: 'left' }}> 
+            
+                <span style={{fontFamily:'sans-serif', color: 'black',marginRight: '40px'}}>
+                  <h6>Multiple Locations</h6>
+                  <p>5 Days ago</p>
+                </span>
+              </div>
+              <div style={{ flex: '0 0 auto',display: 'flex', justifyContent: 'flex-end' }}>
+                <button className="apply-button mobile-apply-button"style={{ padding: '8px 16px', border: 'none', backgroundColor: teal, color: '#fff', borderRadius: '4px', cursor: 'pointer',minWidth:'120px',whiteSpace: 'nowrap' }}>Apply Now</button>
+              </div>
+            </div>
+          
+          
+            
+          
+          
+          
+          
         </div>
+          
+        </div>
+      
       </div>
-    // </div>
-  );
+      //</div>
+      //</div>
+);
 }
