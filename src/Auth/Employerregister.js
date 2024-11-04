@@ -6,7 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { EMPLOYER_REGISTER } from '../endpoints';
 
-function Employerregister() {
+function Employerregister({ open, onClose }) {
     const navigate = useNavigate();
     const [companyName, setCompanyName] = useState("");
     const [company_contact, setMobileNumber] = useState("");
@@ -19,10 +19,10 @@ function Employerregister() {
     const [confirmpassword, setCpassword] = useState("");
     const [company_size, setCompanysize] = useState("");
     const [company_logo, setCompanylogo] = useState(null);
-    const [fblinks, setFblinks] = useState("");
-    const [instalinks, setInstalinks] = useState("");
+    // const [fblinks, setFblinks] = useState("");
+    // const [instalinks, setInstalinks] = useState("");
     const [linkedinlink, setLinkedinlink] = useState("");
-    const [xlink, setXlink] = useState("");
+    // const [xlink, setXlink] = useState("");
     const [head_first_name, setHeadfirstname] = useState("");
     const [head_last_name, setHeadlastname] = useState("");
     const [represent_mail, setRepresentMail] = useState("");
@@ -43,10 +43,10 @@ function Employerregister() {
     const handlePassword = (event) => setPassword(event.target.value);
     const handleConfirmpassword = (event) => setCpassword(event.target.value);
     const handleGst = (event) => setGst(event.target.value);
-    const handleFblink = (event) => setFblinks(event.target.value);
-    const handleInstalink = (event) => setInstalinks(event.target.value);
+    // const handleFblink = (event) => setFblinks(event.target.value);
+    // const handleInstalink = (event) => setInstalinks(event.target.value);
     const handleLinkedinlink = (event) => setLinkedinlink(event.target.value);
-    const handleXlink = (event) => setXlink(event.target.value);
+    // const handleXlink = (event) => setXlink(event.target.value);
     const handleHeadFirstName = (event) => setHeadfirstname(event.target.value);
     const handleHeadLastName = (event) => setHeadlastname(event.target.value);
     const handleRepresentMail = (event) => setRepresentMail(event.target.value);
@@ -69,10 +69,10 @@ function Employerregister() {
             "password": password,
             "company_website": company_website,
             "company_logo": company_logo,
-            "fblink": fblinks,
-            "instalink": instalinks,
+            // "fblink": fblinks,
+            // "instalink": instalinks,
             "linkedinlink": linkedinlink,
-            "xlink": xlink,
+            // "xlink": xlink,
             "head_first_name": head_first_name,
             "head_last_name": head_last_name,
             "head_email": represent_mail,
@@ -91,6 +91,7 @@ function Employerregister() {
         .then(response => {
             // Handle success
             console.log(response.data);
+            onClose();
         })
         .catch(error => {
             // Handle error
@@ -103,12 +104,10 @@ function Employerregister() {
     return (
         <ThemeProvider theme={theme}>
             <div>
-                <Button variant="outlined" color="primary" Style='margin-top:10%' onClick={handleDialogOpen}>
-                    Register as Employer
-                </Button>
+               
 
-                <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth> {/* Increase width */}
-                    <DialogTitle>Employer Registration</DialogTitle>
+            <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+            <DialogTitle>Employer Registration</DialogTitle>
                     <DialogContent>
                         <Grid container spacing={2} rowSpacing={0}> {/* Grid container for 3 inputs in a row */}
                             <Grid item xs={4}>
@@ -344,52 +343,7 @@ function Employerregister() {
                                 />
                             </Grid>
 
-                            <Grid item xs={4}>
-                                <TextField
-                                    label="FB Links"
-                                    value={fblinks}
-                                    onChange={handleFblink}
-                                    fullWidth
-                                    margin="dense"
-                                    className="custom-input"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                        },
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    label="Instagram Links"
-                                    value={instalinks}
-                                    onChange={handleInstalink}
-                                    fullWidth
-                                    margin="dense"
-                                    className="custom-input"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                        },
-                                    }}
-                                />
-                            </Grid>
+                           
                             <Grid item xs={4}>
                                 <TextField
                                     label="Linkedin Links"
@@ -415,30 +369,7 @@ function Employerregister() {
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
-                                    label="X Links"
-                                    value={xlink}
-                                    onChange={handleXlink}
-                                    fullWidth
-                                    margin="dense"
-                                    className="custom-input"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                        },
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    label="Head First Name"
+                                    label="HR First Name"
                                     value={head_first_name}
                                     onChange={handleHeadFirstName}
                                     fullWidth
@@ -463,7 +394,7 @@ function Employerregister() {
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
-                                    label="Head Last Name"
+                                    label="HR Last Name"
                                     value={head_last_name}
                                     onChange={handleHeadLastName}
                                     fullWidth
@@ -488,7 +419,7 @@ function Employerregister() {
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
-                                    label="Representative Mail"
+                                    label="HR Mail"
                                     value={represent_mail}
                                     onChange={handleRepresentMail}
                                     fullWidth
@@ -511,7 +442,7 @@ function Employerregister() {
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
-                                    label="Representative Number"
+                                    label="HR Number"
                                     value={represent_number}
                                     onChange={handleRepresentNumber}
                                     fullWidth
@@ -536,7 +467,7 @@ function Employerregister() {
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
-                                    label="Representative Designation"
+                                    label="Designation"
                                     value={designation}
                                     onChange={handleDesignation}
                                     fullWidth
@@ -678,7 +609,7 @@ function Employerregister() {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleDialogClose} color="secondary">Cancel</Button>
+                        <Button onClick={onClose} color="secondary">Cancel</Button>
                         <Button onClick={Register} color="primary">Register</Button>
                     </DialogActions>
                 </Dialog>
