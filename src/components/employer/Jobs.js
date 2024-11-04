@@ -1,22 +1,46 @@
-import { React,useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import resume1 from "../../images/Python.pdf";
+import { styled } from "@mui/material/styles";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Button,
+} from "@mui/material";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Switch from "@mui/material/Switch";
 import Paper from "@mui/material/Paper";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
 import Layout from "../sidenav/Layout";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
+import Slide from "@mui/material/Slide";
 import "./jobs.css";
-import { BASE_URL, CREATE_JOB, DELETE_JOB, GET_JOB, UPDATE_JOB } from "../../endpoints";
+import { CREATE_JOB, DELETE_JOB, GET_JOB, UPDATE_JOB } from "../../endpoints";
+import { PDFReader } from "reactjs-pdf-reader";
 import axios from "axios";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
 // Modal custom styles
 const customStyles = {
   position: "absolute",
@@ -30,46 +54,78 @@ const customStyles = {
   p: 4,
 };
 
+function createresumesData(name, calories, fat, carbs, resume, checked) {
+  return { name, calories, fat, carbs, resume, checked };
+}
+
 const columns = [
-  { id: "company_name", label: "Company Name", minWidth: 150 },
-  { id: "job_role", label: "Job Role", minWidth: 100 },
-  { id: "experience", label: "Experience", minWidth: 100 },
-  { id: "salary", label: "Salary", minWidth: 100 },
+  // { id: "job_id", label: "Job ID", minWidth: 150 },
+  { id: "job_title", label: "Job Role", minWidth: 100 },
+  { id: "experience_required", label: "Experience", minWidth: 100 },
+  { id: "salary_offered", label: "Salary", minWidth: 100 },
   // { id: "work_mode", label: "Mode", minWidth: 100 },
   {
-    id: "required_technology_stack",
+    id: "skills",
     label: "Required Technology Stack",
     minWidth: 100,
   },
   { id: "location", label: "Location", minWidth: 100 },
-  { id: "job_description", label: "Job Description", minWidth: 100 },
-  { id: "status", label: "Actions", minWidth: 100 },
+  { id: "description", label: "Job Description", minWidth: 100 },
+  { id: "status", label: "Actions", minWidth: 150 },
 ];
 
 function createData(
   company_name,
-  job_role,
-  experience,
-  salary,
+  job_title,
+  experience_required,
+  salary_offered,
   mode,
-  required_technology_stack,
+  skills,
   location,
-  job_description,
+  description,
   status
 ) {
   return {
     company_name,
-    job_role,
-    experience,
-    salary,
+    job_title,
+    experience_required,
+    salary_offered,
     mode,
-    required_technology_stack,
+    skills,
     location,
-    job_description,
+    description,
     status,
   };
 }
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
+const departments = [
+  { id: 1, name: "IT & Information security", abbreviation: "IT" },
+  { id: 2, name: "Data Science & analytics", abbreviation: "DS" },
+  { id: 3, name: "Human Resource Management", abbreviation: "HRM" },
+  { id: 4, name: "Engineering(Hardware & Software)", abbreviation: "Engg" },
+  { id: 5, name: "Consulting", abbreviation: "consulting" },
+  { id: 6, name: "UI, UX design and architecture", abbreviation: "ui&ux" },
+];
 
 export default function Jobs() {
   const [page, setPage] = useState(0);
@@ -78,46 +134,90 @@ export default function Jobs() {
   const [isEditing, setIsEditing] = useState(false);
   const [work_mode, setWorkmode] = useState("");
   const [company_name, setCompanyName] = useState("");
-  const [job_role, setJobrole] = useState("");
-  const [job_type, setJobtype] = useState("");
-  const [experience_years, setExperienceyears] = useState("");
-  const [experience_months, setExperiencemonths] = useState("");
-  const [salary, setSalary] = useState("");
-  const [required_technology_stack, setRTS] = useState("");
+  const [job_title, setJobrole] = useState("");
+  const [employment_type, setJobtype] = useState("");
+  const [department, setDepartment] = useState("");
+  // const [experience_years, setExperienceyears] = useState("");
+  const [experience_required, setExperiencerequired] = useState("");
+  const [salary_offered, setSalary] = useState("");
+  const [skills, setRTS] = useState("");
   const [location, setLocation] = useState("");
-  const [job_description, setJobdescription] = useState("");
-  const [notice_period,setNoticeperiod] = useState("")
-  const [rows, setData] = useState([])
-  const [jobid, setJobid] = useState("")
-  
+  const [description, setJobdescription] = useState("");
+  const [notice_period, setNoticeperiod] = useState("");
+  const [selectedResume, setSelectedResume] = useState(null);
+  const [resumeModalOpen, setResumeModalOpen] = useState(false);
+  const [resumes, setResumes] = useState([]);
+  const [rows, setData] = useState([]);
+  const [jobid, setJobid] = useState("");
+  const [open, setOpen] = useState(false);
+  const [opendeletedialog, setOpenDeleteDialog] = useState(false);
+  const [rowToDelete, setRowToDelete] = useState(null);
+  const [confirmation, setConfirm] = useState(false);
+  const [number_of_positions, setNofPositions] = useState("");
+
+  const handleConfirm = () => {
+    setConfirm(false);
+  };
+  const handleDelete = (row) => {
+    setRowToDelete(row);
+    setOpenDeleteDialog(true);
+  };
+
+  const confirmDelete = () => {
+    axios
+      .delete(`${DELETE_JOB}${rowToDelete.code}/`)
+      .then((res) => {
+        setOpenDeleteDialog(false);
+        setConfirm(true);
+      })
+      .catch((error) => {
+        console.error("There was an error deleting the row!", error);
+      });
+    setOpen(false);
+  };
+
+  const handleClosedeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setRowToDelete(null); // Reset the rowToDelete when closing the dialog
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
-    axios.get(`${GET_JOB}`)
-    .then(response => {
-      setData(response.data)
-    })  
-  },[])
+    axios.get(`${GET_JOB}`).then((response) => {
+      setData(response.data);
+    });
+  }, []);
   const openModal = (job = null) => {
     if (job) {
       setIsEditing(true);
-      setJobid(job.code)
+      setJobid(job.code);
       setCompanyName(job.company_name);
-      setJobrole(job.job_role);
-      setJobtype(job.job_type);
-      setExperienceyears(job.experience_years);
-      setExperiencemonths(job.experience_months);
-      setSalary(job.salary);
-      setRTS(job.required_technology_stack);
+      setJobrole(job.job_title);
+      setJobtype(job.employment_type);
+      // setExperienceyears(job.experience_years);
+      setExperiencerequired(job.experience_required);
+      setSalary(job.salary_offered);
+      setNofPositions(job.number_of_positions);
+      setRTS(job.skills);
       setLocation(job.location);
-      setNoticeperiod(job.notice_period)
-      setJobdescription(job.job_description);
+
+      setNoticeperiod(job.notice_period);
+      setJobdescription(job.description);
     } else {
       setIsEditing(false);
       // Clear form for adding a new job
       setCompanyName("");
       setJobrole("");
       setJobtype("");
-      setExperienceyears("");
-      setExperiencemonths("");
+      // setExperienceyears("");
+      setExperiencerequired("");
       setSalary("");
       setRTS("");
       setLocation("");
@@ -135,43 +235,44 @@ export default function Jobs() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+  const handleShowResumes = (resume) => {
+    setSelectedResume(resume);
+    setResumeModalOpen(true);
+  };
   const handleNext = () => {
     const payload = {
       company_name: company_name,
-      job_role: job_role,
+      job_role: job_title,
       notice_period,
-      job_type,
+      employment_type,
       work_mode,
-      experience_years,
-      experience_months,
-      salary,
-      required_technology_stack,
+      // experience_years,
+      experience_required,
+      salary_offered,
+      skills,
       location,
-      job_description,
+      description,
     };
     let config = {
-      headers : {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`
-      }
-    }
-    console.log(config)
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    };
+    console.log(config);
     if (isEditing) {
       console.log("Editing job:", payload);
-      axios.put(`${UPDATE_JOB}${jobid}/`,payload,config)
-      .then(response => {
-        console.log(response)
-      })
+      axios.put(`${UPDATE_JOB}${jobid}/`, payload, config).then((response) => {
+        console.log(response);
+      });
       // Update your state or API call for editing here
     } else {
       console.log("Adding job:", payload);
-      axios.post(`${CREATE_JOB}`,payload,config)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-         
-      });      
+      axios
+        .post(`${CREATE_JOB}`, payload, config)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {});
     }
 
     closeModal();
@@ -181,15 +282,30 @@ export default function Jobs() {
     openModal(row);
   };
 
-  const handleDelete = (row) => {
-    console.log("Deleting row:", row);
-    axios.delete(`${DELETE_JOB}${row.code}/`)  
-      .then(res => {  
-        console.log(res);  
-        console.log(res.data);  
-        setData(res.data)
-      })  
-    // Add logic to handle row deletion
+  const [checked, setChecked] = React.useState(true);
+
+  const handleSwitch = (event, index) => {
+    const updatedResumes = [...resumes];
+    updatedResumes[index].checked = event.target.checked;
+    setResumes(updatedResumes);
+    console.log(resumes);
+  };
+
+  const handleActive = (data) => {
+    let config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    };
+    const payload = {
+      // job_code:data.code,
+      active: true,
+    };
+    axios
+      .put(`${UPDATE_JOB}${data.code}/`, payload, config)
+      .then((response) => {
+        console.log(response);
+      });
   };
 
   return (
@@ -215,11 +331,12 @@ export default function Jobs() {
                 <input
                   type="text"
                   placeholder="Job Role"
-                  value={job_role}
+                  value={job_title}
                   onChange={(e) => setJobrole(e.target.value)}
                 />
+
                 <select
-                  value={job_type}
+                  value={employment_type}
                   onChange={(e) => setJobtype(e.target.value)}
                 >
                   <option disabled>Job Type</option>
@@ -233,30 +350,47 @@ export default function Jobs() {
                 <div className="experience-group">
                   <input
                     type="text"
-                    placeholder="Experience in Years"
-                    value={experience_years}
-                    onChange={(e) => setExperienceyears(e.target.value)}
+                    placeholder="Number of positions"
+                    value={number_of_positions}
+                    onChange={(e) => setNofPositions(e.target.value)}
                   />
                   <input
                     type="text"
-                    placeholder="Experience in Months"
-                    value={experience_months}
-                    onChange={(e) => setExperiencemonths(e.target.value)}
+                    placeholder="Experience Required"
+                    value={experience_required}
+                    onChange={(e) => setExperiencerequired(e.target.value)}
                   />
                 </div>
               </div>
+              {/* <FormControl fullWidth>
+        <Select
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          <MenuItem value="">
+            Departments
+          </MenuItem>
+          {departments.map((department) => (
+                <MenuItem key={department.id} value={department.abbreviation}>
+                  {department.name}
+                </MenuItem>
+              ))}
+        </Select>
+      </FormControl> */}
 
               <div className="employ-column">
                 <input
                   type="text"
                   placeholder="Salary"
-                  value={salary}
+                  value={salary_offered}
                   onChange={(e) => setSalary(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Required Technology Stack"
-                  value={required_technology_stack}
+                  value={skills}
                   onChange={(e) => setRTS(e.target.value)}
                 />
                 <select
@@ -276,16 +410,16 @@ export default function Jobs() {
                 />
               </div>
               <textarea
-                value={job_description}
+                value={description}
                 onChange={(e) => setJobdescription(e.target.value)}
                 placeholder="Job Description"
                 rows="4"
               />
               <input
-              type="text"
-              value={notice_period}
-              onChange={(e) => setNoticeperiod(e.target.value)}
-              placeholder="notice period"
+                type="text"
+                value={notice_period}
+                onChange={(e) => setNoticeperiod(e.target.value)}
+                placeholder="notice period"
               />
             </div>
             <Button variant="contained" color="primary" onClick={handleNext}>
@@ -295,6 +429,132 @@ export default function Jobs() {
         </div>
       </Modal>
 
+      <div>
+        <Dialog open={opendeletedialog} onClose={handleClosedeleteDialog}>
+          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this row?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosedeleteDialog} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={confirmDelete} color="primary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+      <div>
+        <Dialog open={confirmation} onClose={onclose}>
+          <DialogTitle>Success</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Deleted Successfully</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleConfirm} color="primary">
+              ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Resumes
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell align="right">Calories</StyledTableCell>
+                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+                <StyledTableCell align="right">Actions</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {resumes.map((resume, index) => (
+                <StyledTableRow key={resume.name}>
+                  <StyledTableCell component="th" scope="row">
+                    {resume.name}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {resume.calories}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{resume.fat}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {resume.carbs}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <VisibilityIcon
+                      onClick={() => handleShowResumes(resume.resume)}
+                      style={{ cursor: "pointer" }}
+                    />
+                    <Switch
+                      checked={resume.checked}
+                      onChange={(event) => handleSwitch(event, index)}
+                      inputProps={{ "aria-label": "controlled" }}
+                    />
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+            <Dialog
+              fullScreen
+              open={resumeModalOpen}
+              onClose={() => setResumeModalOpen(false)}
+              TransitionComponent={Transition}
+            >
+              <AppBar sx={{ position: "relative" }}>
+                <Toolbar>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={() => setResumeModalOpen(false)}
+                    aria-label="close"
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                  <Typography
+                    sx={{ ml: 2, flex: 1 }}
+                    variant="h6"
+                    component="div"
+                  >
+                    Resume Viewer
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+              <Box sx={{ p: 2 }}>
+                {selectedResume ? (
+                  <PDFReader url={selectedResume} showAllPage={true} />
+                ) : (
+                  <Typography>No Resume Available</Typography>
+                )}
+              </Box>
+            </Dialog>
+          </Table>
+        </TableContainer>
+      </Dialog>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 400 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -325,14 +585,27 @@ export default function Jobs() {
                       if (column.id === "status") {
                         return (
                           <TableCell key={column.id}>
+                            <VisibilityIcon
+                              onClick={handleClickOpen}
+                              style={{ cursor: "pointer", marginRight: "2px" }}
+                              fontSize="small"
+                            />
                             <EditIcon
                               onClick={() => handleEdit(row)}
-                              style={{ cursor: "pointer", marginRight: "10px" }}
+                              style={{ cursor: "pointer", marginRight: "2px" }}
+                              fontSize="small"
                             />
-                            <DeleteIcon
+                            <Switch
+                              checked={column.checked}
+                              onChange={(event) => handleActive(row)}
+                              inputProps={{ "aria-label": "controlled" }}
+                               size="small"
+                            />
+                            {/* <DeleteIcon
                               onClick={() => handleDelete(row)}
                               style={{ cursor: "pointer", color: "red" }}
-                            />
+                              fontSize="small"
+                            /> */}
                           </TableCell>
                         );
                       }

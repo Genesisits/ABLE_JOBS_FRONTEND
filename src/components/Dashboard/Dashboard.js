@@ -7,8 +7,8 @@ function Dashboard() {
   return (
     <Layout>
     <div className='dashboardGen'>
-        <h3>Find your dream job with Genesis</h3>
-        <button>Contact us</button>
+        <h3>Welcome to Able Jobs</h3>
+        {/* <button>Contact us</button> */}
     </div>
     </Layout>
   )
