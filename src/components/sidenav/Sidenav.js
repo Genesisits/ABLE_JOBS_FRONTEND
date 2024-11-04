@@ -42,24 +42,8 @@ export default function Sidenav() {
           </ListItem>
         ))} 
       </List> :
-      //    <List>
-      //   {['Jobs','Reports', 'Shortlisted',  'Profile', 'Logout'].map((text, index) => (
-      //      <ListItem
-      //      key={text}
-      //      component={Link}
-      //      to={`/${text.replace(/\s+/g, '').toLowerCase()}`}
-      //      sx={{
-      //        '&:hover': {
-      //          backgroundColor: '#5384c9', // Light blue color for hover
-      //        },
-      //      }}
-      //    >
-      //       <ListItemText primary={text} />
-      //     </ListItem>
-      //   ))}
-      // </List> 
-      <List>
-        {['find a Job','Applied', 'Shortlist', 'Logout'].map((text, index) => (
+         <List>
+        {['Jobs','Reports', 'Shortlisted',  'Profile', 'Logout'].map((text, index) => (
            <ListItem
            key={text}
            component={Link}
@@ -74,6 +58,22 @@ export default function Sidenav() {
           </ListItem>
         ))}
       </List> 
+      // <List>
+      //   {['find a Job','Applied', 'Shortlist', 'Logout'].map((text, index) => (
+      //      <ListItem
+      //      key={text}
+      //      component={Link}
+      //      to={`/${text.replace(/\s+/g, '').toLowerCase()}`}
+      //      sx={{
+      //        '&:hover': {
+      //          backgroundColor: '#5384c9', // Light blue color for hover
+      //        },
+      //      }}
+      //    >
+      //       <ListItemText primary={text} />
+      //     </ListItem>
+      //   ))}
+      // </List> 
       
       }
     </Drawer>

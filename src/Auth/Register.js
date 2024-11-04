@@ -15,12 +15,13 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import Paper from "@mui/material/Paper";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Check from "@mui/icons-material/Check";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import Autocomplete from "@mui/material/Autocomplete";
 import FormLabel from "@mui/material/FormLabel";
 import StepConnector, {
   stepConnectorClasses,
@@ -29,6 +30,13 @@ import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {
+  CountryDropdown,
+  StateDropdown,
+  CityDropdown,
+  LanguagesDropdown,
+  PhoneInput,
+} from "react-country-state-dropdown";
 import {
   CitySelect,
   CountrySelect,
@@ -119,15 +127,15 @@ const steps = [
   "Special Considerations",
 ];
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
 
@@ -150,15 +158,15 @@ function Employeeregister() {
   ];
   const [userfname, setUserfname] = useState("");
   const [userlname, setUserlname] = useState("");
-  const [filename, setFilename] = useState([])
+  const [filename, setFilename] = useState([]);
   const [companyname, setCompanyname] = useState("");
   const [schoolname, setSchoolname] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  const [countryid, setCountryid] = useState(0);
+  const [country, setCountry] = useState(null);
   const [employmentType, setEmploymentType] = useState(0);
   const [endDate, setEndDate] = useState("");
-  const [stateid, setstateid] = useState(0);
+  const [state, setState] = useState(null);
   const [languages_known, setLanguagesknow] = useState("");
   const [useremail, setEmail] = useState("");
   const [usermobile, setMobile] = useState("");
@@ -186,8 +194,16 @@ function Employeeregister() {
   const [additionalSkills, setAdditionalSkills] = useState("");
   const [disabilitypercentage, setDisabilitypercentage] = useState("");
   const [disability, setDisability] = useState("");
-  const [file,setFile] = useState(null)
-  
+  const [file, setFile] = useState(null);
+  const [willingToRelocate, setWillingToRelocate] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSkillAdd = (newSkill) => {
+    if (newSkill && !selectedSkills.includes(newSkill)) {
+      setSelectedSkills([...selectedSkills, newSkill]);
+    }
+  };
+
   const disabilities = [
     { id: "1", name: "Blindness", abbreviation: "Blindness" },
     { id: "2", name: "Low vision", abbreviation: "Low vision" },
@@ -278,23 +294,7 @@ function Employeeregister() {
     { id: "26", name: "Others", abbreviation: "Others" },
   ];
 
-  const [languages, setLanguages] = useState([
-    { name: "", read: false, write: false, speak: false },
-  ]);
 
-  const handleLanguageChange = (index, field, value) => {
-    const updatedLanguages = languages.map((language, i) =>
-      i === index ? { ...language, [field]: value } : language
-    );
-    setLanguages(updatedLanguages);
-  };
-
-  const addLanguage = () => {
-    setLanguages([
-      ...languages,
-      { name: "", read: false, write: false, speak: false },
-    ]);
-  };
 
   // Handle input change in the search bar
   const handleSearchChange = (e) => {
@@ -437,6 +437,64 @@ function Employeeregister() {
       newSkipped.add(activeStep);
       return newSkipped;
     });
+  };
+  const handleSetCountry = (e, value) => setCountry(value);
+  const handleSetState = (e, value) => setState(value);
+
+  const handleSubmit = () => {
+   const payload = {
+    educationDetails: educations.map((education) => ({
+      level: education.level,
+      schoolname: education.schoolname,
+      percentage: education.percentage,
+      startDate: education.startDate,
+      endDate: education.endDate,
+      specialization: education.specialization,
+    })),
+    experienceType: selectedOption,
+      experiences: selectedOption === "Experienced"
+        ? experienceList.map((exp) => ({
+            jobTitle: exp.jobTitle,
+            companyname: exp.companyname,
+            location: exp.location,
+            startDate: exp.startDate,
+            endDate: exp.endDate,
+            employmentType: exp.employmentType,
+          }))
+        : [],
+    first_name: userfname,
+    last_name: userlname,
+    email: useremail,
+    password: userpassword,
+    mobile_number: usermobile,
+    country: country.name,
+    state: state.name,
+    address: useraddress,
+    skills: selectedSkills,
+    workAvailability: type,
+    disabilityType: disability,
+    disabilityPercentage: disabilitypercentage,
+    willingToRelocate,
+    // disabilityCertificate: file,
+    knownLanguages: languages_known.split(',').map(lang => lang.trim()),
+    
+   }
+
+   console.log(payload)
+    axios
+      .post(`${REGISTER}`, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        // Handle success
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
   };
 
   const handleReset = () => {
@@ -628,21 +686,23 @@ function Employeeregister() {
                       justifyContent: "space-evenly",
                     }}
                   >
-                    <span style={{ marginRight: "20px" }}>
-                      <CountrySelect
-                        onChange={(e) => {
-                          setCountryid(e.id);
-                        }}
-                        placeHolder="Select Country"
+                    <span>
+                      <CountryDropdown
+                        clearable
+                        searchable
+                        value={country}
+                        onChange={handleSetCountry}
+                        style={{color:'black',width:'240px',marginRight:'10px'}}
                       />
                     </span>
                     <span>
-                      <StateSelect
-                        countryid={countryid}
-                        onChange={(e) => {
-                          setstateid(e.id);
-                        }}
-                        placeHolder="Select State"
+                      <StateDropdown
+                        clearable
+                        searchable
+                        country={country}
+                        value={state}
+                        onChange={handleSetState}
+                        style={{color:'black',width:'240px'}}
                       />
                     </span>
                   </div>
@@ -904,58 +964,67 @@ function Employeeregister() {
       case 3:
         return (
           <div className="skills">
-            <Box style={{ margin: "20px" }}>
-              <input
-                type="text"
-                placeholder="Search for a skill"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-
-              {searchTerm && (
-                <List style={{ maxHeight: "150px", margin: "0% 5%" }}>
-                  {filteredSkills.map((skill, index) => (
-                    <ListItem
-                      key={index}
-                      button
-                      onClick={() => handleSkillSelect(skill)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {skill}
-                    </ListItem>
-                  ))}
-                </List>
-              )}
-
-              {/* Display the selected skills as chips below the search input */}
-              <Box mt={2}>
-                {selectedSkills.map((skill, index) => (
-                  <Chip
-                    key={index}
-                    label={skill}
-                    onDelete={() => handleSkillRemove(skill)}
-                    sx={{
-                      backgroundColor: "#4E1B9A", // Custom background color
-                      color: "white", // Text color
-                      marginRight: "10px",
-                      marginBottom: "10px",
-                      "& .MuiChip-deleteIcon": {
-                        color: "white", // Change color of the delete icon
-                      },
-                    }}
-                  />
-                ))}
-              </Box>
-
-              {/* <Box>
-              <input
-              type="text"
-              placeholder="Additional skills"
-              value={additionalSkills}
-              onChange={setAdditionalSkills}
-              />
-            </Box> */}
-            </Box>
+          <Box sx={{ margin: "20px", width: "100%" }}>
+        <Autocomplete
+          multiple
+          freeSolo
+          options={skillOptions}
+          value={selectedSkills}
+          onChange={(event, newValue) => {
+            setSelectedSkills([...new Set(newValue)]);
+          }}
+          renderTags={() => null}
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && inputValue) {
+              handleSkillAdd(inputValue);
+              setInputValue("");
+              event.preventDefault();
+            }
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Add or Select Skills"
+              placeholder="Type and press Enter to add"
+              fullWidth
+              InputProps={{
+                ...params.InputProps,
+                disableUnderline: true,
+              }}
+              sx={{
+                'width': '75%',
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: "none",
+                  },
+                },
+              }}
+            />
+          )}
+          sx={{ display: "block", width: "100%" }} 
+        />
+        
+        <Box sx={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}>
+          {selectedSkills.map((skill, index) => (
+            <Chip
+              key={index}
+              label={skill}
+              onDelete={() => handleSkillRemove(skill)}
+              sx={{
+                backgroundColor: "#4E1B9A",
+                color: "white",
+                marginRight: "10px",
+                marginBottom: "10px",
+                "& .MuiChip-deleteIcon": {
+                  color: "white",
+                },
+              }}
+            />
+          ))}
+        </Box>
+      </Box>
           </div>
         );
       case 4:
@@ -1003,13 +1072,18 @@ function Employeeregister() {
                   type="text"
                   placeholder="Disability Percentage"
                   value={disabilitypercentage}
-                  onChange={setDisabilitypercentage}
+                  onChange={(e) => setDisabilitypercentage(e.target.value)}
                 />
               </Grid>
               <Grid item xs={3}>
                 <FormControlLabel
                   required
-                  control={<Checkbox />}
+                  control={
+                    <Checkbox
+                      hecked={willingToRelocate}
+                      onChange={(e) => setWillingToRelocate(e.target.checked)}
+                    />
+                  }
                   label="Willing to relocate"
                   componentsProps={{
                     typography: { color: "black" },
@@ -1017,121 +1091,43 @@ function Employeeregister() {
                 />
               </Grid>
             </Grid>
-            <Grid container spacing={6}>
-            <Grid item xs={4}>
-                                <label>Disability Certificate</label>
-                                <TextField
-                                    type="file"
-                                    onChange={(event) => setFile(event.target.files[0])}
-                                    fullWidth
-                                    margin="dense"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    className="custom-input"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            backgroundColor: '#fff',
-                                            '& fieldset': {
-                                                borderColor: '#ccc',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: '#888',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: '#000',
-                                            },
-                                        },
-                                        '& input[type="file"]': {
-                                            display: 'block',
-                                            cursor: 'pointer',
-                                        },
-                                    }}
-                                />
-                            </Grid>
-            </Grid>
+            {/* <Grid container spacing={6}>
+              <Grid item xs={4}>
+                <label>Disability Certificate</label>
+                <TextField
+                  type="file"
+                  onChange={(event) => setFile(event.target.files[0])}
+                  fullWidth
+                  margin="dense"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "#fff",
+                      "& fieldset": {
+                        borderColor: "#ccc",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#888",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#000",
+                      },
+                    },
+                    '& input[type="file"]': {
+                      display: "block",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+              </Grid>
+            </Grid> */}
             <Grid container spacing={1} style={{ margin: "2%" }}>
-              {languages.map((language, index) => (
-                <React.Fragment key={index}>
-                  <Grid item xs={4}>
-                    <input
-                      type="text"
-                      label="Language"
-                      value={language.name}
-                      onChange={(e) =>
-                        handleLanguageChange(index, "name", e.target.value)
-                      }
-                    />
+                  <Grid item>
+                    <input type="text" value={languages_known} onChange={(e) => setLanguagesknow(e.target.value)} placeholder="Please enter known languages with comma"/>
                   </Grid>
-                  <Grid item xs={2}>
-                    <FormControlLabel
-                      componentsProps={{
-                        typography: { color: "black" },
-                      }}
-                      control={
-                        <Checkbox
-                          checked={language.read}
-                          onChange={(e) =>
-                            handleLanguageChange(
-                              index,
-                              "read",
-                              e.target.checked
-                            )
-                          }
-                        />
-                      }
-                      label="Read"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <FormControlLabel
-                      componentsProps={{
-                        typography: { color: "black" },
-                      }}
-                      control={
-                        <Checkbox
-                          checked={language.write}
-                          onChange={(e) =>
-                            handleLanguageChange(
-                              index,
-                              "write",
-                              e.target.checked
-                            )
-                          }
-                        />
-                      }
-                      label="Write"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <FormControlLabel
-                      componentsProps={{
-                        typography: { color: "black" },
-                      }}
-                      control={
-                        <Checkbox
-                          checked={language.speak}
-                          onChange={(e) =>
-                            handleLanguageChange(
-                              index,
-                              "speak",
-                              e.target.checked
-                            )
-                          }
-                        />
-                      }
-                      label="Speak"
-                    />
-                  </Grid>
-                  {index === languages.length - 1 && (
-                    <Grid item xs={2}>
-                      <IconButton onClick={addLanguage}>
-                        <AddIcon />
-                      </IconButton>
-                    </Grid>
-                  )}
-                </React.Fragment>
-              ))}
             </Grid>
           </Box>
         );
@@ -1184,7 +1180,7 @@ function Employeeregister() {
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Submit</Button>
+            <Button onClick={handleSubmit}>Submit</Button>
           </Box>
         </React.Fragment>
       ) : (

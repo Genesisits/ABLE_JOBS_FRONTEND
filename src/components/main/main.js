@@ -280,8 +280,6 @@ export default function Header() {
               ))}
         </Select>
       </FormControl>
-      </Box>
-      <Box sx={{ maxWidth: 350, display: 'flex', flexDirection: 'row', gap:'10px', marginTop:'5px' }}>
       <FormControl fullWidth>
         <Select
           value={company}
@@ -317,6 +315,42 @@ export default function Header() {
         </Select>
       </FormControl>
       </Box>
+      {/* <Box sx={{ maxWidth: 350, display: 'flex', flexDirection: 'row', gap:'10px', marginTop:'5px' }}>
+      <FormControl fullWidth>
+        <Select
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          <MenuItem value="">
+            Companies
+          </MenuItem>
+          {companies.map((company) => (
+                <MenuItem key={company.id} value={company.abbreviation}>
+                  {company.name}
+                </MenuItem>
+              ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <Select
+          value={disability}
+          onChange={(e) => setDisability(e.target.value)}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          <MenuItem value="">
+            All Disabilities
+          </MenuItem>
+          {disabilities.map((disabilit) => (
+                <MenuItem key={disabilit.id} value={disabilit.abbreviation}>
+                  {disabilit.name}
+                </MenuItem>
+              ))}
+        </Select>
+      </FormControl>
+      </Box> */}
         </div>
         <div>
           <div style={{border:'1px solid #6c757d', margin:'20px 140px', display:'flex',flexDirection: 'row', justifyContent: 'space-evenly', borderRadius:'5px'}}>
