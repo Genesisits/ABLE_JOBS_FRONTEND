@@ -4,15 +4,18 @@ import Paper from '@mui/material/Paper';
 import { GET_JOB } from './../../endpoints';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import './findajob.css';
 
 function Findjob() {
   const [rows, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [companyQuery, setCompanyQuery] = useState(""); // State for company dropdown search
-  const [locationQuery, setLocationQuery] = useState(""); // State for location dropdown search
-  const [uniqueCompanies, setUniqueCompanies] = useState([]); // Unique company names
-  const [uniqueLocations, setUniqueLocations] = useState([]); // Unique locations
+  const [companyQuery, setCompanyQuery] = useState("");
+  const [locationQuery, setLocationQuery] = useState("");
+  const [uniqueCompanies, setUniqueCompanies] = useState([]);
+  const [uniqueLocations, setUniqueLocations] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   useEffect(() => {
     axios.get(GET_JOB)
@@ -20,13 +23,26 @@ function Findjob() {
         const jobData = response.data;
         setData(jobData);
 
-        // Extract unique company names and locations for dropdowns
         const companies = [...new Set(jobData.map(job => job.company_name))];
         const locations = [...new Set(jobData.map(job => job.location))];
         setUniqueCompanies(companies);
         setUniqueLocations(locations);
       });
   }, []);
+
+  const handleOpenDialog = (job) => {
+    setSelectedJob(job);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedJob(null);
+  };
+
+  const handleApplyNow = () => {
+    alert("Apply Now clicked!");
+  };
 
   const filteredRows = rows.filter(job => 
     (job.job_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -40,7 +56,6 @@ function Findjob() {
     <Layout>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <div className="search-container">
-          {/* Search Bar with Dropdowns */}
           <div className="search-bar1">
             <input
               type="text"
@@ -51,7 +66,6 @@ function Findjob() {
               onChange={(e) => setSearchQuery(e.target.value)}  
             />
 
-            {/* Company dropdown input */}
             <input 
               type="text" 
               list="company-options" 
@@ -67,7 +81,6 @@ function Findjob() {
               ))}
             </datalist>
 
-            {/* Location dropdown input */}
             <input 
               type="text" 
               list="location-options" 
@@ -114,11 +127,76 @@ function Findjob() {
                 <p style={{ margin: 0 }}>{job.employment_type}</p>
               </div>
               <div style={{ flex: 0.5, textAlign: 'center' }}>
-                <button className='findajob_button' style={{ marginTop: '5%' ,marginLeft:'-5%' }}>View</button>
+                <button className='findajob_button' style={{ marginTop: '5%' ,marginLeft:'-5%' }}
+                 onClick={() => handleOpenDialog(job)}
+                >View</button>
               </div>
             </div>
           ))}
         </div>
+        
+        <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="lg" fullWidth>
+          <DialogTitle>Job Details</DialogTitle>
+          <DialogContent>
+            {selectedJob && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr ', gap: '8px' }}>
+                <div>
+                  <label>Job Title:</label>
+                  <input type="text" value={selectedJob.job_title} readOnly />
+                </div>
+                <div>
+                  <label>Company:</label>
+                  <input type="text" value={selectedJob.company_name} readOnly />
+                </div>
+                <div>
+                  <label>Location:</label>
+                  <input type="text" value={selectedJob.location} readOnly />
+                </div>
+                <div>
+                  <label>Employment Type:</label>
+                  <input type="text" value={selectedJob.employment_type} readOnly />
+                </div>
+                <div>
+                  <label>Skills:</label>
+                  <input type="text" value={selectedJob.skills} readOnly />
+                </div>
+                <div>
+                  <label>Department:</label>
+                  <input type="text" value={selectedJob.department} readOnly />
+                </div>
+                <div>
+                  <label>Industry:</label>
+                  <input type="text" value={selectedJob.industry} readOnly />
+                </div>
+                <div>
+                  <label>Work Mode:</label>
+                  <input type="text" value={selectedJob.work_mode} readOnly />
+                </div>
+               
+                <div>
+                  <label>Salary Offered:</label>
+                  <input type="text" value={selectedJob.salary_offered} readOnly />
+                </div>
+                <div>
+                  <label>Experience Required:</label>
+                  <input type="text" value={selectedJob.experience_required} readOnly />
+                </div>
+                <div>
+                  <label>Notice Period:</label>
+                  <input type="text" value={selectedJob.notice_period} readOnly />
+                </div>
+                <div>
+                  <label>Description:</label>
+                  <input type="text" value={selectedJob.description} readOnly />
+                </div>
+              </div>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">Close</Button>
+            <Button onClick={handleApplyNow} color="secondary" variant="contained">Apply Now</Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
     </Layout>
   );
