@@ -12,6 +12,7 @@ import nav6 from '../../images/nav6.png';
 import nav7 from '../../images/nav7.png';
 import nav8 from '../../images/nav8.png';
 import { Button } from '@mui/material';
+import avatar from '../../images/avatar.webp';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,6 +22,15 @@ export default function Header() {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+  const user = {
+    name: 'Murali Kukka',
+    // bio: 'Full stack developer based in San Francisco. Passionate about coding, open-source, and technology.',
+    email: 'murali@genesisits.com',
+    location: 'San Francisco, CA',
+    profilePicture: avatar,
+    skills: 'JavaScript, React, Vue.Js',
+    experience: '5 Years in Software Development'
   };
 
   useEffect(() => {
@@ -77,6 +87,12 @@ export default function Header() {
                   <Button className="vender-button" variant="outlined"><span>Register</span></Button>
                 </a>
               </div>
+            </li>
+            <li>
+            <Link to="/profile"  className="profile-container1">
+    <img className="profile-avatar1" src={user.profilePicture} alt="Profile" />
+    <p className="profile-name1">Profile</p>
+    </Link>
             </li>
             {/* Scrolling images when the menu is open */}
             {menuOpen && (

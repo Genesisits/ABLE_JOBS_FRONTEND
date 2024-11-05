@@ -140,55 +140,21 @@ function Findjob() {
           <DialogContent>
             {selectedJob && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr ', gap: '8px' }}>
-                <div>
-                  <label>Job Title:</label>
-                  <input type="text" value={selectedJob.job_title} readOnly />
-                </div>
-                <div>
-                  <label>Company:</label>
-                  <input type="text" value={selectedJob.company_name} readOnly />
-                </div>
-                <div>
-                  <label>Location:</label>
-                  <input type="text" value={selectedJob.location} readOnly />
-                </div>
-                <div>
-                  <label>Employment Type:</label>
-                  <input type="text" value={selectedJob.employment_type} readOnly />
-                </div>
-                <div>
-                  <label>Skills:</label>
-                  <input type="text" value={selectedJob.skills} readOnly />
-                </div>
-                <div>
-                  <label>Department:</label>
-                  <input type="text" value={selectedJob.department} readOnly />
-                </div>
-                <div>
-                  <label>Industry:</label>
-                  <input type="text" value={selectedJob.industry} readOnly />
-                </div>
-                <div>
-                  <label>Work Mode:</label>
-                  <input type="text" value={selectedJob.work_mode} readOnly />
-                </div>
-               
-                <div>
-                  <label>Salary Offered:</label>
-                  <input type="text" value={selectedJob.salary_offered} readOnly />
-                </div>
-                <div>
-                  <label>Experience Required:</label>
-                  <input type="text" value={selectedJob.experience_required} readOnly />
-                </div>
-                <div>
-                  <label>Notice Period:</label>
-                  <input type="text" value={selectedJob.notice_period} readOnly />
-                </div>
-                <div>
-                  <label>Description:</label>
-                  <input type="text" value={selectedJob.description} readOnly />
-                </div>
+                 <p><strong>Job Title:</strong> {selectedJob.job_title}</p>
+                <p><strong>Company:</strong> {selectedJob.company_name}</p>
+                <p><strong>Location:</strong> {selectedJob.location}</p>
+                <p><strong>Employment Type:</strong> {selectedJob.employment_type}</p>
+                <p><strong>Skills Required:</strong> {selectedJob.skills}</p>
+                <p><strong>Department:</strong> {selectedJob.department}</p>
+                <p><strong>Industry:</strong> {selectedJob.industry}</p>
+                <p><strong>Work Mode:</strong> {selectedJob.work_mode}</p>
+                <p><strong>Salary Offered:</strong> {selectedJob.salary_offered}</p>
+                <p><strong>Experience Required:</strong> {selectedJob.experience_required}</p>
+                <p><strong>Company Website:</strong> <a href={selectedJob.company_website} target="_blank" rel="noopener noreferrer">{selectedJob.company_website}</a></p>
+                <p><strong>Number of Positions:</strong> {selectedJob.number_of_positions}</p>
+                <p><strong>Notice Period:</strong> {selectedJob.notice_period}</p>
+                <p><strong>Job Code:</strong> {selectedJob.code}</p>
+                <p><strong>Description:</strong> {selectedJob.description}</p>
               </div>
             )}
           </DialogContent>
