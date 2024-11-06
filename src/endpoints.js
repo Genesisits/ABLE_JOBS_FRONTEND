@@ -3,6 +3,7 @@ export const LOGIN= `${BASE_URL}/user_login/`;
 export const REGISTER = `${BASE_URL}/employee_signup/`;
 export const EMPLOYER_REGISTER = `${BASE_URL}/employer_signup/`
 export const TRAINER_REGISTER = `${BASE_URL}/trainer_signup/`
+export const VOLUNTEER_REGISTER = `${BASE_URL}/volunteer_signup/`
 export const CREATE_JOB = `${BASE_URL}/add_jobs/`;
 export const GET_JOB = `${BASE_URL}/jobs/`;
 export const DELETE_JOB = `${BASE_URL}/jobs/delete/`;
