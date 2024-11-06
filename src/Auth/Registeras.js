@@ -11,12 +11,18 @@ function Registeras() {
     navigate('/employeeregister')
   }
 
+  const handleTrainer = () => {
+    navigate('/trainer')
+  }
+
   return (
     <div className='containerRegas'>
       <div className='reges'>
        <button type="submit" onClick={handleEmployee}>Employee</button>
        <br/>
        <button type="submit" onClick={handleEmployer}>Employer</button>
+       <br/>
+       <button type="submit" onClick={handleTrainer}>Trainer</button>
        </div>
     </div>
   )

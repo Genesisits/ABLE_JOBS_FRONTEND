@@ -49,6 +49,7 @@ import EmployeeData from "./components/Employee/employee";
 import Findjob from "./components/Employee/findajob";
 import Applied from "./components/Employee/applied";
 import Shortlist from "./components/Employee/shortlist";
+import Trainer from './Auth/Trainer'
 const TRACKING_ID = 'G-3Z5SJGDL7N';
 
 ReactGA.initialize(TRACKING_ID);
@@ -102,6 +103,7 @@ export default function App() {
           <Route path="/employeeregister" element={<Register/>} />
           <Route path="/employerregister" element={<Employerregister/>} />
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/trainer" element={<Trainer/>}/>
           {shouldRedirectToAdmin ? <Navigate to="/admin" /> : null}
           <Route path="/admin" element={<Admin/>} />
           <Route path="/vender" element={<Vender/>} />
