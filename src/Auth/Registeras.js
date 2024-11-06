@@ -10,6 +10,9 @@ function Registeras() {
   const handleEmployee = () => {
     navigate('/employeeregister');
   };
+  const handleTrainer = () => {
+    navigate('/trainer')
+  }
 
   const handleEmployer = () => {
     setOpenEmployerModal(true); // Open Employer Modal
@@ -25,6 +28,8 @@ function Registeras() {
         <button type="button" onClick={handleEmployee}>Employee</button>
         <br />
         <button type="button" onClick={handleEmployer}>Employer</button>
+        <br/>
+        <button type="submit" onClick={handleTrainer}>Trainer</button>
       </div>
       <Employerregister open={openEmployerModal} onClose={closeEmployerModal} />
     </div>
