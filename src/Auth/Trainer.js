@@ -12,6 +12,9 @@ import {
 import { CountryDropdown, StateDropdown } from "react-country-state-dropdown";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import axios from "axios";
+import { TRAINER_REGISTER } from "../endpoints";
+import { Password } from "@mui/icons-material";
 
 function Trainer() {
   const theme = createTheme();
@@ -37,9 +40,10 @@ function Trainer() {
 
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append("firstname", userfname);
+    formData.append("first_name", userfname);
     formData.append("last_name", userlname);
     formData.append("email", useremail);
+    formData.append("password", userpassword);
     formData.append("mobile_number", usermobile);
     formData.append("address", useraddress);
     formData.append("country", country.name);
@@ -48,12 +52,23 @@ function Trainer() {
     formData.append("languages_known", languages_known);
     formData.append("qualification", qualification)
     formData.append("availability_of_work", availability_of_work);
-    formData.append("experience", experience);
+    formData.append("job_experience", experience);
     formData.append("skills",skills)
     formData.append("aadhaar_card", Adhar);
     formData.append("pan_card", pancard);
     formData.append("resume", resume);
-    console.log(formData);
+    axios
+    .post(`${TRAINER_REGISTER}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   };
 
   return (
