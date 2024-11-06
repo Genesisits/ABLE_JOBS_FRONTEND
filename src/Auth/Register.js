@@ -23,6 +23,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Autocomplete from "@mui/material/Autocomplete";
 import FormLabel from "@mui/material/FormLabel";
+import { InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material'; // Import icons
+
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
@@ -163,10 +166,10 @@ function Employeeregister() {
   const [schoolname, setSchoolname] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  const [country, setCountry] = useState(null);
+  const [countryid, setCountryid] = useState(null);
   const [employmentType, setEmploymentType] = useState(0);
   const [endDate, setEndDate] = useState("");
-  const [state, setState] = useState(null);
+  const [stateid, setStateid] = useState(null);
   const [languages_known, setLanguagesknow] = useState("");
   const [useremail, setEmail] = useState("");
   const [usermobile, setMobile] = useState("");
@@ -197,12 +200,122 @@ function Employeeregister() {
   const [file, setFile] = useState(null);
   const [willingToRelocate, setWillingToRelocate] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const SkillSelector = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedSkills, setSelectedSkills] = useState([]);
+    const [filteredSkills, setFilteredSkills] = useState([
+      'JavaScript', 'React', 'Node.js', 'CSS', 'HTML', 'TypeScript', 'Python', 'Ruby', 'Java'
+    ]);
+  }
 
-  const handleSkillAdd = (newSkill) => {
-    if (newSkill && !selectedSkills.includes(newSkill)) {
-      setSelectedSkills([...selectedSkills, newSkill]);
-    }
+
+  const [experienceList, setExperienceList] = useState([
+    {
+      jobTitle: "",
+      companyname: "",
+      location: "",
+      startDate: null,
+      endDate: null,
+      employmentType: "",
+    },
+  ]);
+
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
   };
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword); // Toggle password visibility
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+  };
+  const [errors, setErrors] = useState({
+    fname: '',
+    lname: '',
+    email: '',
+    password: '',
+    mobile: '',
+    address: '',
+    country: '',
+    state: '',
+
+
+  });
+
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = { userfname: '', userlname: '', useremail: '', userpassword: '', usermobile: '', useraddress: '', country: '', state: '', };
+
+    if (!userfname) {
+      newErrors.fname = 'First name is required';
+      valid = false;
+    }
+
+
+    if (!userlname) {
+      newErrors.lname = 'Last name is required';
+      valid = false;
+    }
+    if (!useremail) {
+      newErrors.email = 'Email is required';
+      valid = false;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (useremail && !emailPattern.test(useremail)) {
+      newErrors.email = 'Valid email is required';
+      valid = false;
+    }
+
+    if (!userpassword) {
+      newErrors.password = 'Password is required';
+      valid = false;
+    }
+
+
+    if (!useraddress) {
+      newErrors.address = 'Address is required';
+      valid = false;
+    }
+
+
+    if (!userpassword) {
+      newErrors.password = 'Password is required';
+      valid = false;
+    } else if (userpassword.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+      valid = false;
+    }
+
+
+
+    const mobilePattern = /^\d{10}$/; // Example for a 10-digit mobile number
+    if (!usermobile || !mobilePattern.test(usermobile)) {
+      newErrors.mobile = 'Valid mobile number is required';
+      valid = false;
+    }
+    if (!countryid) {
+      newErrors.country = 'Please select a country';
+      valid = false;
+    }
+
+    // State validation
+    if (!stateid) {
+      newErrors.state = 'Please select a state';
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const handleExperienceTypeChange = (e) => {
+    setSelectedOption(e.target.value); // Set the selected option ("Experienced" or "Fresher")
+  };
+
 
   const disabilities = [
     { id: "1", name: "Blindness", abbreviation: "Blindness" },
@@ -293,6 +406,25 @@ function Employeeregister() {
     },
     { id: "26", name: "Others", abbreviation: "Others" },
   ];
+  const [languages, setLanguages] = useState([
+    { name: "", read: false, write: false, speak: false },
+  ]);
+
+  const handleLanguageChange = (index, field, value) => {
+    const updatedLanguages = languages.map((language, i) =>
+      i === index ? { ...language, [field]: value } : language
+    );
+    setLanguages(updatedLanguages);
+  };
+
+  const addLanguage = () => {
+    setLanguages([
+      ...languages,
+      { name: "", read: false, write: false, speak: false },
+    ]);
+  };
+
+
 
 
 
@@ -324,6 +456,16 @@ function Employeeregister() {
       selectedSkills.filter((skill) => skill !== skillToRemove)
     );
   };
+  const handleNextStep = () => {
+    // Prevent proceeding if no skills are selected
+    if (selectedSkills.length === 0) {
+      alert("Please select at least one skill to proceed.");
+    } else {
+      // Proceed to the next step (for example)
+      console.log("Proceeding to next step...");
+    }
+  };
+
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -414,14 +556,22 @@ function Employeeregister() {
   const isStepSkipped = (step) => skipped.has(step);
 
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
+    const isValid = validate();
+    if (isValid) {
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+    };
+    if (activeStep === 2) {
+      validateExperience();
     }
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
+
+
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -438,49 +588,49 @@ function Employeeregister() {
       return newSkipped;
     });
   };
-  const handleSetCountry = (e, value) => setCountry(value);
-  const handleSetState = (e, value) => setState(value);
+  const handleSetCountry = (e, value) => setCountryid(value);
+  const handleSetState = (e, value) => setStateid(value);
 
   const handleSubmit = () => {
-   const payload = {
-    educationDetails: educations.map((education) => ({
-      level: education.level,
-      schoolname: education.schoolname,
-      percentage: education.percentage,
-      startDate: education.startDate,
-      endDate: education.endDate,
-      specialization: education.specialization,
-    })),
-    experienceType: selectedOption,
+    const payload = {
+      educationDetails: educations.map((education) => ({
+        level: education.level,
+        schoolname: education.schoolname,
+        percentage: education.percentage,
+        startDate: education.startDate,
+        endDate: education.endDate,
+        specialization: education.specialization,
+      })),
+      experienceType: selectedOption,
       experiences: selectedOption === "Experienced"
         ? experienceList.map((exp) => ({
-            jobTitle: exp.jobTitle,
-            companyname: exp.companyname,
-            location: exp.location,
-            startDate: exp.startDate,
-            endDate: exp.endDate,
-            employmentType: exp.employmentType,
-          }))
+          jobTitle: exp.jobTitle,
+          companyname: exp.companyname,
+          location: exp.location,
+          startDate: exp.startDate,
+          endDate: exp.endDate,
+          employmentType: exp.employmentType,
+        }))
         : [],
-    first_name: userfname,
-    last_name: userlname,
-    email: useremail,
-    password: userpassword,
-    mobile_number: usermobile,
-    country: country.name,
-    state: state.name,
-    address: useraddress,
-    skills: selectedSkills,
-    workAvailability: type,
-    disabilityType: disability,
-    disabilityPercentage: disabilitypercentage,
-    willingToRelocate,
-    // disabilityCertificate: file,
-    knownLanguages: languages_known.split(',').map(lang => lang.trim()),
-    
-   }
+      first_name: userfname,
+      last_name: userlname,
+      email: useremail,
+      password: userpassword,
+      mobile_number: usermobile,
+      country: countryid.name,
+      state: stateid.name,
+      address: useraddress,
+      skills: selectedSkills,
+      workAvailability: type,
+      disabilityType: disability,
+      disabilityPercentage: disabilitypercentage,
+      willingToRelocate,
+      // disabilityCertificate: file,
+      knownLanguages: languages_known.split(',').map(lang => lang.trim()),
 
-   console.log(payload)
+    }
+
+    console.log(payload)
     axios
       .post(`${REGISTER}`, payload, {
         headers: {
@@ -500,16 +650,6 @@ function Employeeregister() {
   const handleReset = () => {
     setActiveStep(0);
   };
-  const [experienceList, setExperienceList] = useState([
-    {
-      jobTitle: "",
-      companyname: "",
-      location: "",
-      startDate: null,
-      endDate: null,
-      employmentType: "",
-    },
-  ]);
 
   const handleExperienceChange = (index, field, value) => {
     const updatedExperienceList = experienceList.map((experience, i) =>
@@ -531,6 +671,30 @@ function Employeeregister() {
       },
     ]);
   };
+  const validateExperience = () => {
+    let validate_experience = true;
+    let validateErrors = {selectedOption: ''}
+    const errors = [];
+    if (selectedOption) {
+      experienceList.forEach((experience, index) => {
+        if (!experience.jobTitle) errors.push(`Job title is required for experience ${index + 1}`);
+        if (!experience.companyname) errors.push(`Company name is required for experience ${index + 1}`);
+        if (!experience.location) errors.push(`Location is required for experience ${index + 1}`);
+        if (!experience.startDate) errors.push(`Start date is required for experience ${index + 1}`);
+        if (!experience.endDate) errors.push(`End date is required for experience ${index + 1}`);
+        if (experience.endDate && experience.startDate && experience.endDate < experience.startDate) {
+          errors.push(`End date must be after start date for experience ${index + 1}`);
+        }
+        if (!experience.employmentType) errors.push(`Employment type is required for experience ${index + 1}`);
+      });
+    } else {
+      setActiveStep(2)
+      validateErrors.selectedOption = 'Select the Option';
+      validate_experience = false;
+    }
+    return errors;
+  };
+
   const navigate = useNavigate();
   const handleOTP = () => {
     // navigate('/verify')
@@ -552,6 +716,8 @@ function Employeeregister() {
       });
   };
 
+
+
   const theme = createTheme();
   const renderForm = () => {
     switch (activeStep) {
@@ -568,6 +734,8 @@ function Employeeregister() {
                     value={userfname}
                     onChange={(e) => setUserfname(e.target.value)}
                     fullWidth
+                    error={!!errors.fname}
+                    helperText={errors.fname}
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -591,6 +759,8 @@ function Employeeregister() {
                     value={userlname}
                     onChange={(e) => setUserlname(e.target.value)}
                     fullWidth
+                    error={!!errors.lname}
+                    helperText={errors.lname}
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -614,6 +784,8 @@ function Employeeregister() {
                     value={useremail}
                     onChange={(e) => setEmail(e.target.value)}
                     fullWidth
+                    error={!!errors.email}
+                    helperText={errors.email}
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -637,8 +809,41 @@ function Employeeregister() {
                     value={userpassword}
                     onChange={(e) => setPassword(e.target.value)}
                     fullWidth
-                    // margin="dense"
+                    error={!!errors.password}
+                    helperText={errors.password}
                     className="custom-input"
+                    // margin="dense"
+                    type={showPassword ? 'text' : 'password'} // Toggle password field type
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            onClick={handleClickShowPassword}  // Toggle password visibility
+                            onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                            edge="end"
+                            sx={{
+                              padding: 0, // Remove default padding to keep icon within the input field
+                              color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
+                              fontSize: '1.5rem', // Adjust icon size to fit within the input field
+
+                              display: 'flex', // Ensure the icon is vertically centered
+                              alignItems: 'center', // Align the icon vertically within the field
+                              justifyContent: 'center', // Align the icon horizontall
+                              marginLeft: '-16px',
+
+
+
+
+                            }}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+
+                    // margin="dense"
+
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
@@ -650,7 +855,16 @@ function Employeeregister() {
                         "&.Mui-focused fieldset": {
                           borderColor: "transparent",
                         },
+                        "& input": {
+                          padding: '10px 12px', // Adjust padding (same as email and mobile)
+                          fontSize: '0.875rem', // Smaller font size (similar to other fields)
+                        },
                       },
+                      '& .MuiInputBase-root': {
+                        height: '45px', // Ensure consistent height with other fields
+                      },
+
+
                     }}
                   />
                 </Grid>
@@ -660,8 +874,13 @@ function Employeeregister() {
                     value={usermobile}
                     onChange={(e) => setMobile(e.target.value)}
                     fullWidth
-                    // margin="dense"
+                    error={!!errors.mobile}
+                    helperText={errors.mobile}
+
                     className="custom-input"
+
+                    // margin="dense"
+
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": {
@@ -672,6 +891,9 @@ function Employeeregister() {
                         },
                         "&.Mui-focused fieldset": {
                           borderColor: "transparent",
+                        },
+                        "& .MuiInputAdornment-root": {
+                          marginRight: '0', // Remove any default margin
                         },
                       },
                     }}
@@ -686,25 +908,26 @@ function Employeeregister() {
                       justifyContent: "space-evenly",
                     }}
                   >
-                    <span>
-                      <CountryDropdown
-                        clearable
-                        searchable
-                        value={country}
-                        onChange={handleSetCountry}
-                        style={{color:'black',width:'240px',marginRight:'10px'}}
+                    <span style={{ marginRight: "20px" }}>
+                      <CountrySelect
+                        onChange={(e) => {
+                          setCountryid(e.id);
+                        }}
+                        placeHolder="Select Country"
                       />
+                      {errors.country && <span style={{ color: 'red' }}>{errors.country}</span>}
                     </span>
                     <span>
-                      <StateDropdown
-                        clearable
-                        searchable
-                        country={country}
-                        value={state}
-                        onChange={handleSetState}
-                        style={{color:'black',width:'240px'}}
+                      <StateSelect
+                        countryid={countryid}
+                        onChange={(e) => {
+                          setStateid(e.id);
+                        }}
+                        placeHolder="Select State"
                       />
+                      {errors.state && <span style={{ color: 'red' }}>{errors.state}</span>}
                     </span>
+
                   </div>
                 </Grid>
               </Grid>
@@ -715,6 +938,9 @@ function Employeeregister() {
                   onChange={(e) => setAddress(e.target.value)}
                   fullWidth
                   margin="dense"
+                  error={!!errors.address}
+                  helperText={errors.address}
+                  className="custom-input"
                   multiline
                   rows={4} // Specifies 4 rows
                 />
@@ -832,14 +1058,14 @@ function Employeeregister() {
         return (
           <Box style={{ margin: "0% 6%" }}>
             <Grid container spacing={6}>
-              <Grid item sx={6}>
+              <Grid item xs={6}>
                 <label>
                   <input
                     type="radio"
                     name="experience"
                     value="Fresher"
                     checked={selectedOption === "Fresher"}
-                    onChange={handleRadioChange}
+                    onChange={handleExperienceTypeChange}
                   />
                   Fresher
                 </label>
@@ -851,7 +1077,7 @@ function Employeeregister() {
                     name="experience"
                     value="Experienced"
                     checked={selectedOption === "Experienced"}
-                    onChange={handleRadioChange}
+                    onChange={handleExperienceTypeChange}
                   />
                   Experienced
                 </label>
@@ -964,69 +1190,77 @@ function Employeeregister() {
       case 3:
         return (
           <div className="skills">
-          <Box sx={{ margin: "20px", width: "100%" }}>
-        <Autocomplete
-          multiple
-          freeSolo
-          options={skillOptions}
-          value={selectedSkills}
-          onChange={(event, newValue) => {
-            setSelectedSkills([...new Set(newValue)]);
-          }}
-          renderTags={() => null}
-          inputValue={inputValue}
-          onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && inputValue) {
-              handleSkillAdd(inputValue);
-              setInputValue("");
-              event.preventDefault();
-            }
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Add or Select Skills"
-              placeholder="Type and press Enter to add"
-              fullWidth
-              InputProps={{
-                ...params.InputProps,
-                disableUnderline: true,
-              }}
-              sx={{
-                'width': '75%',
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    border: "none",
-                  },
-                },
-              }}
+            <Box style={{ margin: "20px" }}>
+              <input
+                type="text"
+                placeholder="Search for a skill"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+
+              {searchTerm && (
+                <List style={{ maxHeight: "150px", margin: "0% 5%" }}>
+                  {filteredSkills.map((skill, index) => (
+                    <ListItem
+                      key={index}
+                      button
+                      onClick={() => handleSkillSelect(skill)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {skill}
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+
+              {/* Display the selected skills as chips below the search input */}
+              <Box mt={2}>
+                {selectedSkills.map((skill, index) => (
+                  <Chip
+                    key={index}
+                    label={skill}
+                    onDelete={() => handleSkillRemove(skill)}
+                    sx={{
+                      backgroundColor: "#4E1B9A", // Custom background color
+                      color: "white", // Text color
+                      marginRight: "10px",
+                      marginBottom: "10px",
+                      "& .MuiChip-deleteIcon": {
+                        color: "white", // Change color of the delete icon
+                      },
+                    }}
+                  />
+                ))}
+              </Box>
+              <Box mt={2}>
+                {selectedSkills.length === 0 && (
+                  <p style={{ color: 'red' }}>Please select at least one skill to proceed.</p>
+                )}
+              </Box>
+              {/* Next button that is only enabled when at least one skill is selected */}
+              <Box mt={2}>
+                <span
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNextStep}
+                  disabled={selectedSkills.length === 0}
+                >
+                  Next
+                </span>
+              </Box>
+
+              {/* <Box>
+            <input
+            type="text"
+            placeholder="Additional skills"
+            value={additionalSkills}
+            onChange={setAdditionalSkills}
             />
-          )}
-          sx={{ display: "block", width: "100%" }} 
-        />
-        
-        <Box sx={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}>
-          {selectedSkills.map((skill, index) => (
-            <Chip
-              key={index}
-              label={skill}
-              onDelete={() => handleSkillRemove(skill)}
-              sx={{
-                backgroundColor: "#4E1B9A",
-                color: "white",
-                marginRight: "10px",
-                marginBottom: "10px",
-                "& .MuiChip-deleteIcon": {
-                  color: "white",
-                },
-              }}
-            />
-          ))}
-        </Box>
-      </Box>
+          </Box> */}
+            </Box>
           </div>
         );
+
       case 4:
         return (
           <Box style={{ margin: "2% 5%" }}>
@@ -1125,9 +1359,9 @@ function Employeeregister() {
               </Grid>
             </Grid> */}
             <Grid container spacing={1} style={{ margin: "2%" }}>
-                  <Grid item>
-                    <input type="text" value={languages_known} onChange={(e) => setLanguagesknow(e.target.value)} placeholder="Please enter known languages with comma"/>
-                  </Grid>
+              <Grid item>
+                <input type="text" value={languages_known} onChange={(e) => setLanguagesknow(e.target.value)} placeholder="Please enter known languages with comma" />
+              </Grid>
             </Grid>
           </Box>
         );
