@@ -8,6 +8,7 @@ import {
   Checkbox,
   Select,
   MenuItem,
+  IconButton
 } from "@mui/material";
 import { CountryDropdown, StateDropdown } from "react-country-state-dropdown";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -15,6 +16,9 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { VOLUNTEER_REGISTER } from "../endpoints";
 import { Password } from "@mui/icons-material";
+import { InputAdornment} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material'; // Import icons
+
 
 function Volunteer() {
   const theme = createTheme();
@@ -39,8 +43,94 @@ function Volunteer() {
 //   const [availability_of_work, setWorkAvailability] = useState("");
   const handleSetCountry = (e, value) => setCountry(value);
   const handleSetState = (e, value) => setState(value);
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
+};
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword); // Toggle password visibility
+  };
 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+  };
+
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!userfname) {
+      newErrors.userfname = "Please enter first name";
+    } else if (!/^[A-Za-z]+$/.test(userfname)) {
+      newErrors.userfname = "First name must only contain letters";
+    }
+    if (!userlname) {
+      newErrors.userlname = "Please enter last name";
+    } else if (!/^[A-Za-z]+$/.test(userlname)) {
+      newErrors.userfname = "last name must only contain letters";
+    }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!useremail) {
+      newErrors.useremail = "Please enter an email.";
+  } else if (!emailRegex.test(useremail)) {
+      newErrors.useremail = "Please enter a valid email.";
+    }
+
+  const mobileRegex = /^[0-9]{10}$/;
+  if (!usermobile) {
+    newErrors.usermobile = "Please enter an mobile number.";
+} else if (!mobileRegex.test(usermobile)) {
+    newErrors.usermobile = "Please enter a valid mobile number.";
+  }
+  const HoursRegex = /^[0-9]{1,2}$/;
+  if (!no_of_hours) {
+    newErrors.no_of_hours = "Please enter number of hours.";
+} else if (!HoursRegex.test(no_of_hours)) {
+    newErrors.no_of_hours = "Please enter a valid number of hours.";
+  }
+    
+    if (!userpassword || userpassword.length < 6) {
+      newErrors.userpassword = "Password should be at least 6 characters long.";
+    }
+   
+   
+    
+   
+    if (!qualification) {
+      newErrors.qualification = "Please select your qualification.";
+    }
+    if (!pancard) {
+      newErrors.pancard = "Please upload your Pan Card.";
+    }
+    if (!Adhar) {
+      newErrors.Adhar = "Please upload your Aadhar Card.";
+    }
+    if (!resume) {
+      newErrors.resume = "Please upload your Resume.";
+    }
+    if (!useraddress) {
+      newErrors.useraddress = " please enter your Address.";
+    }
+    if (!purpose) {
+      newErrors.purpose = " please enter purpose.";
+    }
+    if (!country) {
+      newErrors.country = "Please select your country.";
+    }
+    if (!state) {
+      newErrors.state = "Please select your state.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const handleSubmit = () => {
+    if (!validateForm()) {
+        return; // Prevent submission if the form is not valid
+    }
+
+
+  
     const formData = new FormData();
     formData.append("first_name", userfname);
     formData.append("last_name", userlname);
@@ -86,6 +176,9 @@ function Volunteer() {
                 value={userfname}
                 onChange={(e) => setUserfname(e.target.value)}
                 fullWidth
+                error={!!errors.userfname}
+                helperText={errors.userfname}
+
                 // margin="dense"
                 className="custom-input"
                 sx={{
@@ -109,6 +202,9 @@ function Volunteer() {
                 value={userlname}
                 onChange={(e) => setUserlname(e.target.value)}
                 fullWidth
+                error={!!errors.userlname}
+                helperText={errors.userlname}
+
                 // margin="dense"
                 className="custom-input"
                 sx={{
@@ -132,6 +228,9 @@ function Volunteer() {
                 value={useremail}
                 onChange={(e) => setEmail(e.target.value)}
                 fullWidth
+                error={!!errors.useremail}
+                helperText={errors.useremail}
+
                 // margin="dense"
                 className="custom-input"
                 sx={{
@@ -150,34 +249,75 @@ function Volunteer() {
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField
-                label="Password"
-                value={userpassword}
-                onChange={(e) => setPassword(e.target.value)}
-                fullWidth
-                // margin="dense"
-                className="custom-input"
+                    <TextField
+                      label="Password"
+                      value={userpassword}
+                      onChange={(e) => setPassword(e.target.value)}
+                    
+                      fullWidth
+                      variant="outlined"
+                      error={!!errors.userpassword}
+                      helperText={errors.userpassword}
+                      // margin="dense"
+                      type={showPassword ? 'text' : 'password'} // Toggle password field type
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="start">
+              <IconButton
+                onClick={handleClickShowPassword}  // Toggle password visibility
+                onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                edge="end"
                 sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
+                  padding: 0, // Remove default padding to keep icon within the input field
+                  color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
+                  fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                 
+                  display: 'flex', // Ensure the icon is vertically centered
+                  alignItems: 'center', // Align the icon vertically within the field
+                  justifyContent: 'center', // Align the icon horizontall
+                  marginLeft: '-16px',
+                  
+                  
+                  
+                
                 }}
-              />
-            </Grid>
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "transparent",
+                          },
+                          "&:hover fieldset": {
+                            borderColor: "transparent",
+                          },
+                          "&.Mui-focused fieldset": {
+                            borderColor: "transparent",
+                          },
+                          "& input": {
+                            padding: '10px 12px', // Adjust padding (same as email and mobile)
+                            fontSize: '0.875rem', // Smaller font size (similar to other fields)
+                          },
+                        },
+                        '& .MuiInputBase-root': {
+                          height: '45px', // Ensure consistent height with other fields
+                        },
+                      }}
+                    />
+                  </Grid>
             <Grid item xs={4}>
               <TextField
                 label="Mobile Number"
                 value={usermobile}
                 onChange={(e) => setMobile(e.target.value)}
                 fullWidth
+                error={!!errors.usermobile}
+                helperText={errors.usermobile}
+
                 // margin="dense"
                 className="custom-input"
                 sx={{
@@ -201,6 +341,9 @@ function Volunteer() {
                 value={no_of_hours}
                 onChange={(e) => setNOH(e.target.value)}
                 fullWidth
+                error={!!errors.no_of_hours}
+                helperText={errors.no_of_hours}
+
                 // margin="dense"
                 className="custom-input"
                 sx={{
@@ -219,7 +362,7 @@ function Volunteer() {
               />
             </Grid>
             <Grid item xs={3}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={!!errors.qualification}>
                 <Select
                   value={qualification}
                   onChange={(e) => setQualification(e.target.value)}
@@ -237,6 +380,12 @@ function Volunteer() {
                   <MenuItem value="12th equivalent">12th /Equivalent</MenuItem>
                   <MenuItem value="degree equivalent">Degree/ Equivalent</MenuItem>
                 </Select>
+                {errors.qualification && (
+                  <div style={{ color: "red", fontSize: "12px" }}>
+                    {errors.qualification}
+                  </div>
+                )}
+
               </FormControl>
             </Grid>
             <Grid>
@@ -259,7 +408,10 @@ function Volunteer() {
                       width: "240px",
                       marginRight: "10px",
                     }}
+                    error={!!errors.country}
+
                   />
+                  {errors.country && <div style={{ color: "red" }}>{errors.country}</div>}
                 </span>
                 <span>
                   <StateDropdown
@@ -269,7 +421,11 @@ function Volunteer() {
                     value={state}
                     onChange={handleSetState}
                     style={{ color: "black", width: "240px" }}
+                    error={!!errors.state}
+
                   />
+                  {errors.state && <div style={{ color: "red" }}>{errors.state}</div>}
+
                 </span>
               </div>
             </Grid>
@@ -389,6 +545,8 @@ function Volunteer() {
                 type="file"
                 onChange={(event) => setPancard(event.target.files[0])}
                 fullWidth
+                error={!!errors.pancard}
+                helperText={errors.pancard}
                 margin="dense"
                 InputLabelProps={{
                   shrink: true,
@@ -420,6 +578,9 @@ function Volunteer() {
                 type="file"
                 onChange={(event) => setAadhar(event.target.files[0])}
                 fullWidth
+                error={!!errors.Adhar}
+                helperText={errors.Adhar}
+
                 margin="dense"
                 InputLabelProps={{
                   shrink: true,
@@ -451,6 +612,9 @@ function Volunteer() {
                 type="file"
                 onChange={(event) => setResume(event.target.files[0])}
                 fullWidth
+                error={!!errors.resume}
+                helperText={errors.resume}
+
                 margin="dense"
                 InputLabelProps={{
                   shrink: true,
@@ -485,6 +649,8 @@ function Volunteer() {
             margin="dense"
             multiline
             rows={3} // Specifies 4 rows
+            error={!!errors.useraddress}
+            helperText={errors.useraddress}
           />
           </Grid>
           <Grid item xs={6}>
@@ -496,6 +662,8 @@ function Volunteer() {
             margin="dense"
             multiline
             rows={3} // Specifies 4 rows
+            error={!!errors.purpose}
+            helperText={errors.purpose}
           />
             </Grid>
           </Grid>
