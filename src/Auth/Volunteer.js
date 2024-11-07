@@ -44,6 +44,7 @@ function Volunteer() {
   const handleSetCountry = (e, value) => setCountry(value);
   const handleSetState = (e, value) => setState(value);
   const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);
 };
@@ -159,9 +160,11 @@ function Volunteer() {
     })
     .then((response) => {
       console.log(response.data);
+      setSuccessMessage("User registered successfully!"); // Display success message
     })
     .catch((error) => {
       console.error(error);
+      setSuccessMessage("");
     });
   };
 
@@ -669,6 +672,11 @@ function Volunteer() {
           </Grid>
          
           <Button onClick={handleSubmit}>Register</Button>
+          {successMessage && (
+            <div style={{ color: "green", marginBottom: "20px", fontSize: "16px" }}>
+              {successMessage}
+            </div>
+          )}
         </Box>
       </ThemeProvider>
     </div>
