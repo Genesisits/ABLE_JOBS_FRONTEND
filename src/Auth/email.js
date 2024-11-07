@@ -9,7 +9,7 @@ function Email() {
         <div className='email_container'>
             <h3 style={{color:'black'}}>you have been successfully activated your account.</h3>
             <Link to="/login">
-            <Button style={{backgroundColor:'#007bff',color:'white'}}>Click Here To Login</Button>
+            <Button style={{backgroundColor:'#007bff',color:'white',minWidth:'100%'}}>Click Here To Login</Button>
             </Link>
         </div>
     )
