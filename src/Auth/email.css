@@ -1,0 +1,17 @@
+.email_button{
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px; /* Reduced padding for smaller button */
+    border: none;
+    /* border-radius: 50px; */
+    cursor: pointer;
+    font-size: 14px;
+    height:40px;
+    margin-left: 0%;
+  }
+/* .email_button:hover{
+    background-color: #0056b3;
+  } */
+.email_container{
+    margin-top: 5%;
+}
