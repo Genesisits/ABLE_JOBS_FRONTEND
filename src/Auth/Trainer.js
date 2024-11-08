@@ -90,8 +90,11 @@ function Trainer() {
     if (!experience || isNaN(experience) || experience <= 0) {
       newErrors.experience = "Please enter valid experience.";
     }
+    
     if (!skills) {
-      newErrors.skills = "please enter skills.";
+      newErrors.skills = "Please enter skills";
+    } else if (!/^[A-Za-z]+$/.test(userlname)) {
+      newErrors.skills= "skills must only contain letters";
     }
     if (!availability_of_work) {
       newErrors.availability_of_work = "Please select availability of work.";
