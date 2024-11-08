@@ -26,9 +26,16 @@
   top: 0;
   z-index: 1000;
   margin-left: -1%;
+  height: 30px;
 }
 .navbar-menu{
   margin-left: 65%;
+  display: flex; 
+  align-items: center;
+  gap: 15px; 
+  margin: 0 0 0 65% ;
+  padding: 0;
+  list-style: none;
 }
 .toggle-button {
   background: #881008;
@@ -639,3 +646,23 @@ button3:hover {
     margin-left: 2%;
   }
 }
+.profile-container1 {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin-top: 10px; */
+}
+
+.profile-avatar1 {
+  width: 30px; /* Increase the size here */
+  height: 30px;
+  border-radius: 50%; /* Makes the avatar round */
+  object-fit: cover;
+}
+
+.profile-name1 {
+  font-size: 12px; /* Adjust font size */
+  /* margin-top: 5px;  */
+}
+
