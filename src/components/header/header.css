@@ -26,6 +26,7 @@
   top: 0;
   z-index: 1000;
   margin-left: -1%;
+  height: 30px;
 }
 .navbar-menu{
   margin-left: 65%;
@@ -638,4 +639,27 @@ button3:hover {
   .navbar-menu{
     margin-left: 2%;
   }
+}
+
+.profile-container1 {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px; /* Reduces space between avatar and name */
+  padding: 0; /* Removes any default padding */
+  margin: 0; /* Removes default margin */
+}
+
+.profile-avatar1 {
+  width: 25px; /* Smaller width */
+  height: 25px; /* Smaller height */
+  border-radius: 50%; /* Keeps the avatar round */
+  object-fit: cover;
+}
+
+.profile-name1 {
+  font-size: 10px; /* Smaller font size */
+  line-height: 1; /* Reduces line height to minimize text height */
+  margin: 0; /* Ensures no extra margin */
 }
