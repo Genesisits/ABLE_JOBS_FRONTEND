@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from "react-router-dom";
-import "./header.css";
-
 import { Button } from '@mui/material';
+import UploadResume from '../Employee/uploadresume'; // Import the dialog component
+import "./header.css";
 import avatar from '../../images/avatar.webp';
 
 export default function Header() {
@@ -11,6 +11,7 @@ export default function Header() {
   const menuRef = useRef();
 
   const [userRole, setUserRole] = useState(null);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false); // State for controlling dialog visibility
 
   useEffect(() => {
     const isEmployee = localStorage.getItem('is_employee') === 'true';
@@ -47,8 +48,10 @@ export default function Header() {
     }
   }, [location]);
 
-  // Check if the current page is the landing, home, login, or register page
-  const isLandingOrRelevantPage = ['/', '/home', '/login', '/register'].includes(location.pathname);
+  const isLandingOrRelevantPage = ['/', '/home', '/login', '/register', '/employeeregister', '/trainer', '/volunteer', '/forgetpassword'].includes(location.pathname);
+
+  const openUploadDialog = () => setUploadDialogOpen(true);
+  const closeUploadDialog = () => setUploadDialogOpen(false);
 
   return (
     <div ref={menuRef}>
@@ -70,6 +73,15 @@ export default function Header() {
                 <Button className="vender-button" variant="standard"><span>Home</span></Button>
               </Link>
             </li>
+             {/* Upload button visible only to employees and not on landing/home/login/register pages */}
+             {userRole === 'employee' && !isLandingOrRelevantPage && (
+              <li>
+                <Button style={{ color: 'white', marginTop: '-4%' }} onClick={openUploadDialog}>
+                  Upload
+                </Button>
+              </li>
+            )}
+
 
             {/* Profile link visible only to employees and employers, and not on landing/home/login/register pages */}
             {(userRole === 'employee' || userRole === 'employer') && !isLandingOrRelevantPage && (
@@ -80,7 +92,6 @@ export default function Header() {
                 </Link>
               </li>
             )}
-
             {/* Show Login and Register buttons if on landing/home/login/register pages or if the user is not an employee/employer */}
             {(isLandingOrRelevantPage || !userRole) && (
               <>
@@ -103,6 +114,7 @@ export default function Header() {
           </ul>
         </nav>
       </div>
+      <UploadResume open={uploadDialogOpen} onClose={closeUploadDialog} />
       {menuOpen && <div className={`background-overlay ${menuOpen ? 'visible' : ''}`} onClick={() => setMenuOpen(false)}></div>}
     </div>
   );

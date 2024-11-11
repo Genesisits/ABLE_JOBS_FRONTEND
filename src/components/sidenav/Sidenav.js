@@ -11,7 +11,7 @@ export default function Sidenav() {
 
     let menuItems = [];
     if (isEmployee) {
-        menuItems = ['Find a Job', 'Applied', 'Shortlist', 'Logout'];
+        menuItems = ['Find a Job', 'Applied', 'Shortlist','On Board', 'Logout'];
     } else if (isEmployer) {
         menuItems = ['Jobs', 'Reports', 'Shortlisted', 'Profile', 'Logout'];
     } else if (isAdmin) {
