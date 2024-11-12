@@ -229,7 +229,7 @@ export default function Header() {
   const [disability, setDisability] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [data, setData] = useState([]);
-
+  
   useEffect(() => {
     axios.get(`${GET_JOB}`).then((response) => {
       setData(response.data);
@@ -258,10 +258,11 @@ export default function Header() {
         <h1>120+ Jobs for you to explore</h1>
         <Box
           sx={{
-            minWidth: 120,
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",
+            
+                  minWidth: 120,
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "10px",
           }}
         >
           <FormControl fullWidth>
@@ -270,6 +271,16 @@ export default function Header() {
               onChange={(e) => setType(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
+             
+             
+              
+              
             >
               <MenuItem value="">All Types</MenuItem>
               <MenuItem value="hybrid">Hybrid</MenuItem>
@@ -283,6 +294,13 @@ export default function Header() {
               onChange={(e) => setStates(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
+             
             >
               <MenuItem value="">States</MenuItem>
               {states.map((state) => (
@@ -298,6 +316,12 @@ export default function Header() {
               onChange={(e) => setDepartment(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
             >
               <MenuItem value="">Departments</MenuItem>
               {departments.map((department) => (
@@ -313,6 +337,12 @@ export default function Header() {
               onChange={(e) => setIndustry(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
             >
               <MenuItem value="">Industries</MenuItem>
               {industries.map((Industrie) => (
@@ -328,6 +358,12 @@ export default function Header() {
               onChange={(e) => setLocation(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
             >
               <MenuItem value="">All Locations</MenuItem>
               {locations.map((locate) => (
@@ -343,6 +379,12 @@ export default function Header() {
               onChange={(e) => setQualifiation(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
             >
               <MenuItem value="">Qualification</MenuItem>
               {qualifications.map((qualification) => (
@@ -361,6 +403,12 @@ export default function Header() {
               onChange={(e) => setCompany(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
             >
               <MenuItem value="">Companies</MenuItem>
               {companies.map((company) => (
@@ -376,6 +424,12 @@ export default function Header() {
               onChange={(e) => setDisability(e.target.value)}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              sx={{
+                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                '&:focus': {
+                  border: '2px solid #1976d2',  // Focus border
+                }
+              }}
             >
               <MenuItem value="">All Disabilities</MenuItem>
               {disabilities.map((disabilit) => (

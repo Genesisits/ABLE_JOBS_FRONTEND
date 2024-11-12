@@ -4,7 +4,7 @@ input[type="number"],
 input[type="date"],
 textarea{
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     margin-top: 10px;
     /* border: 1px solid #ccc; */
     /* border-radius: 5px; */
