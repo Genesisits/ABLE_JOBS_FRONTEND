@@ -2,8 +2,8 @@ import * as React from 'react';
 import Layout from '../sidenav/Layout';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
-import { useState,useEffect} from 'react';
-import {GET_JOB} from './../../endpoints';
+import { useState, useEffect , useRef} from 'react';
+import { APPLIED_JOB } from './../../endpoints';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,39 +13,49 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Button from '@mui/material/Button';
 import './applied.css';
-// import Box from "@mui/material/Box";
-
-
 
 const columns = [
-  { id: "id", label: "Job Id", minWidth: 5 },
+  { id: "code", label: "Job code", minWidth: 5 },
   { id: "job_title", label: "Job Title", minWidth: 100 },
   { id: "company_name", label: "Company Name", minWidth: 100 },
   { id: "location", label: "Location", minWidth: 100 },
-  { id: "employment_type", label: "Employment Type", minWidth: 100 },
-  { id: "status", label: "Actions", minWidth: 100 },
-]
+  { id: "number_of_positions", label: "Employment Type", minWidth: 100 },
+];
 
-function Applied(){
+function Applied() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [rows, setData] = useState([])
+  const [rows, setData] = useState([]);
+
+  const token = localStorage.getItem('access_token'); // Fetch the token from localStorage or wherever it is stored
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  const hasFetched = useRef(false);
 
-  useEffect(() => {
-    axios.get(`${GET_JOB}`)
+useEffect(() => {
+  if (!hasFetched.current) {
+    hasFetched.current = true; // Mark as fetched
+    axios.get(`${APPLIED_JOB}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => {
-      setData(response.data)
-    })  
-  },[])
-    return(
-        <Layout>
-     <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      setData(response.data);
+    })
+    .catch(error => {
+      console.error('Error fetching applied jobs:', error);
+    });
+  }
+}, [token]);
+
+  return (
+    <Layout>
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 400 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -78,16 +88,21 @@ function Applied(){
                             <Button
                               variant="contained"
                               color="primary"
-                              sx={{ padding: '4px 8px', minHeight: '14px', fontSize: '0.675rem' }}
-                              // onClick={() => handleViewClick(row.id)}
+                              sx={{
+                                padding: '4px 8px',
+                                minHeight: '14px',
+                                fontSize: '0.675rem',
+                              }}
                             >
                               View
                             </Button>
-                        </TableCell>
+                          </TableCell>
                         );
                       }
                       return (
-                        <TableCell key={column.id}>{row[column.id]}</TableCell>
+                        <TableCell key={column.id}>
+                          {row[column.id]}
+                        </TableCell>
                       );
                     })}
                   </TableRow>
@@ -106,7 +121,7 @@ function Applied(){
         />
       </Paper>
     </Layout>
-    )
-
+  );
 }
-export default Applied
+
+export default Applied;
