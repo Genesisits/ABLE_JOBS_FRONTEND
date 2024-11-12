@@ -10,6 +10,7 @@ export const DELETE_JOB = `${BASE_URL}/jobs/delete/`;
 export const UPDATE_JOB = `${BASE_URL}/jobs/edit/`
 export const FORGOT_PASSWORD =`${BASE_URL}/forgot_password/`;
 export const APPLY_JOB = `${BASE_URL}/apply_job/`;
+export const APPLIED_JOB = `${BASE_URL}/applied_jobs/`;
 export const CHAIR_URL = `${BASE_URL}/chairs`;
 export const DECORATION_URL = `${BASE_URL}/decoration`;
 export const CALCULATE_PRICE_URL = `${BASE_URL}/calculate_price`;
