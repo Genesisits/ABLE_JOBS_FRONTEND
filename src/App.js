@@ -52,6 +52,7 @@ import Shortlist from "./components/Employee/shortlist";
 import Trainer from './Auth/Trainer';
 import Volunteer from './Auth/Volunteer';
 import UploadResume from './components/Employee/uploadresume';
+import Onboarded from './components/Employee/onboarded';
 const TRACKING_ID = 'G-3Z5SJGDL7N';
 
 ReactGA.initialize(TRACKING_ID);
@@ -120,6 +121,7 @@ export default function App() {
           <Route path="/applied" element={<Applied/>} />
           <Route path="/shortlist" element={<Shortlist/>} />
           <Route path="/uploadresume" element={<UploadResume/>} />
+          <Route path="/onboard" element={<Onboarded/>} />
         </Routes>
       </div>
     </Router>
