@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LOGIN } from '../endpoints';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -36,6 +37,7 @@ function Login() {
     };
 
     const handleSubmit = () => {
+        setLoading(true);  // Show the loading spinner
         if (username === "" && password === "") {
             setErrorMessage('Enter both username and password');
         } else if (username === "") {
@@ -45,7 +47,6 @@ function Login() {
         } else if (!validateUsername(username)) {
             setErrorMessage('Enter a valid email');
         } else {
-            setLoading(true);
             const payload = { email: username, password };
     
             axios.post(`${LOGIN}`, payload)
@@ -82,15 +83,26 @@ function Login() {
                     setErrorMessage('Invalid credentials');
                 })
                 .finally(() => {
-                    setLoading(false);
+                    setLoading(false); // Hide the spinner once the request is complete
                 });
         }
     };
-    
 
     return (
+ fix/css_changes_resetpassword
+        <div className='container-login'>
+            {/* Full page loading spinner */}
+            {loading && (
+                <div className="full-page-spinner">
+                    <CircularProgress color="primary" size={50} />
+                </div>
+            )}
+
+            <div className='flex-item-login'>
+
         <div className='container1'>
             <div className='flex-item'>
+             
                 <h3>Able Jobs</h3>
                 <input
                     type='text'
@@ -121,7 +133,7 @@ function Login() {
                 </div>
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
             </div>
-            <div className='flex-item'>
+            <div className='flex-item-login'>
                 <img src={mail} alt="Mail" className='imageDetails' />
             </div>
         </div>
