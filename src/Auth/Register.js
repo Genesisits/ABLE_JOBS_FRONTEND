@@ -197,6 +197,88 @@ function Employeeregister() {
   const [file, setFile] = useState(null);
   const [willingToRelocate, setWillingToRelocate] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [errors, setErrors] = useState({
+    fname: '',
+    lname: '',
+    email: '',
+    password: '',
+    mobile: '',
+    address: '',
+    country: '',
+    state: '',
+    
+    
+  });
+
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = { userfname: '', userlname: '', useremail: '', userpassword: '', usermobile: '', useraddress: '',country: '', state: '', };
+
+    if (!userfname) {
+      newErrors.fname = 'First name is required';
+      valid = false;
+    }
+    
+
+    if (!userlname) {
+      newErrors.lname = 'Last name is required';
+      valid = false;
+    }
+    if (!useremail) {
+      newErrors.email = 'Email is required';
+      valid = false;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (useremail && !emailPattern.test(useremail)) {
+      newErrors.email = 'Valid email is required';
+      valid = false;
+    }
+  
+    if (!userpassword) {
+      newErrors.password = 'Password is required';
+      valid = false;
+    }
+    
+    
+    if (!useraddress) {
+      newErrors.address = 'Address is required';
+      valid = false;
+    }
+
+
+    if (!userpassword) {
+      newErrors.password = 'Password is required';
+      valid = false;
+    } else if (userpassword.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+      valid = false;
+    }
+
+    
+
+    const mobilePattern = /^\d{10}$/; // Example for a 10-digit mobile number
+    if (!usermobile || !mobilePattern.test(usermobile)) {
+      newErrors.mobile = 'Valid mobile number is required';
+      valid = false;
+    }
+    if (!country) {
+      newErrors.country = 'Please select a country';
+      valid = false;
+    }
+  
+    // State validation
+    if (!state) {
+      newErrors.state = 'Please select a state';
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+
+  
 
   const handleSkillAdd = (newSkill) => {
     if (newSkill && !selectedSkills.includes(newSkill)) {
@@ -568,6 +650,9 @@ function Employeeregister() {
                     value={userfname}
                     onChange={(e) => setUserfname(e.target.value)}
                     fullWidth
+                    error={!!errors.fname}
+                    helperText={errors.fname}
+
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -591,6 +676,9 @@ function Employeeregister() {
                     value={userlname}
                     onChange={(e) => setUserlname(e.target.value)}
                     fullWidth
+                    error={!!errors.lname}
+                    helperText={errors.lname}
+
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -614,6 +702,9 @@ function Employeeregister() {
                     value={useremail}
                     onChange={(e) => setEmail(e.target.value)}
                     fullWidth
+                    error={!!errors.useremil}
+                    helperText={errors.useremail}
+
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -637,6 +728,9 @@ function Employeeregister() {
                     value={userpassword}
                     onChange={(e) => setPassword(e.target.value)}
                     fullWidth
+                    error={!!errors.userpassword}
+                    helperText={errors.userpassword}
+
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -660,6 +754,9 @@ function Employeeregister() {
                     value={usermobile}
                     onChange={(e) => setMobile(e.target.value)}
                     fullWidth
+                    error={!!errors.usermobile}
+                    helperText={errors.usermobile}
+
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -694,6 +791,8 @@ function Employeeregister() {
                         onChange={handleSetCountry}
                         style={{color:'black',width:'240px',marginRight:'10px'}}
                       />
+                       {errors.country && <span style={{ color: 'red' }}>{errors.country}</span>}
+
                     </span>
                     <span>
                       <StateDropdown
@@ -704,6 +803,8 @@ function Employeeregister() {
                         onChange={handleSetState}
                         style={{color:'black',width:'240px'}}
                       />
+                       {errors.state && <span style={{ color: 'red' }}>{errors.state}</span>}
+
                     </span>
                   </div>
                 </Grid>
@@ -717,6 +818,9 @@ function Employeeregister() {
                   margin="dense"
                   multiline
                   rows={4} // Specifies 4 rows
+                  error={!!errors.useraddress}
+                  helperText={errors.useraddress}
+
                 />
               </Grid>
             </Box>
@@ -736,6 +840,7 @@ function Employeeregister() {
                       }
                       displayEmpty
                       fullWidth
+                      style={{ marginTop: '9px' }}
                     >
                       <MenuItem value="" disabled>
                         Select Level

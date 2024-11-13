@@ -89,6 +89,7 @@ function Login() {
     };
 
     return (
+ fix/css_changes_resetpassword
         <div className='container-login'>
             {/* Full page loading spinner */}
             {loading && (
@@ -98,12 +99,17 @@ function Login() {
             )}
 
             <div className='flex-item-login'>
+
+        <div className='container1'>
+            <div className='flex-item'>
+             
                 <h3>Able Jobs</h3>
                 <input
                     type='text'
                     placeholder='username'
                     value={username}
                     onChange={handleUname}
+                     
                 />
                 <div className="password-container">
                     <input

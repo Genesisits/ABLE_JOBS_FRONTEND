@@ -1,23 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from "react-router-dom";
-import "./header.css"; // Make sure the path to your CSS file is correct
-// Importing images
-import logo from '../../images/vajraksh_logo2.jpg'; // Ensure the path is correct
-import nav1 from '../../images/nav1.png';
-import nav2 from '../../images/nav2.png';
-import nav3 from '../../images/nav3.png';
-import nav4 from '../../images/nav4.png';
-import nav5 from '../../images/nav5.png';
-import nav6 from '../../images/nav6.png';
-import nav7 from '../../images/nav7.png';
-import nav8 from '../../images/nav8.png';
 import { Button } from '@mui/material';
+import UploadResume from '../Employee/uploadresume'; // Import the dialog component
+import "./header.css";
+import avatar from '../../images/avatar.webp';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState(""); 
   const location = useLocation();
   const menuRef = useRef();
+
+  const [userRole, setUserRole] = useState(null);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false); // State for controlling dialog visibility
+
+  useEffect(() => {
+    const isEmployee = localStorage.getItem('is_employee') === 'true';
+    const isEmployer = localStorage.getItem('is_employer') === 'true';
+
+    if (isEmployee) {
+      setUserRole('employee');
+    } else if (isEmployer) {
+      setUserRole('employer');
+    } else {
+      setUserRole(null);
+    }
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -29,19 +36,22 @@ export default function Header() {
         setMenuOpen(false);
       }
     };
-
-    // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menuRef]);
+
   useEffect(() => {
     if (menuOpen) {
       setMenuOpen(false);
     }
   }, [location]);
+
+  const isLandingOrRelevantPage = ['/', '/home', '/login', '/register', '/employeeregister', '/trainer', '/volunteer', '/forgetpassword'].includes(location.pathname);
+
+  const openUploadDialog = () => setUploadDialogOpen(true);
+  const closeUploadDialog = () => setUploadDialogOpen(false);
 
   return (
     <div ref={menuRef}>
@@ -58,45 +68,53 @@ export default function Header() {
         </div>
         <nav className={`navbar ${menuOpen ? 'visible' : ''}`}>
           <ul className="navbar-menu">
-            {/* Links will be here */}
             <li>
               <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
-              <Button className="vender-button" variant="standard"><span>Home</span></Button>
+                <Button className="vender-button" variant="standard"><span>Home</span></Button>
               </Link>
             </li>
-            <li>
-              <div className="vendor_login_button">
-                <a href="/login">
-                  <Button className="vender-button" variant="outlined"><span>Login</span></Button>
-                </a>
-              </div>
-            </li>
-            <li>
-              <div className="vendor_login_button">
-                <a href="/register">
-                  <Button className="vender-button" variant="outlined"><span>Register</span></Button>
-                </a>
-              </div>
-            </li>
-            {/* Scrolling images when the menu is open */}
-            {menuOpen && (
-              <div className="nav_scroll_pngs">
-                <div className="footer-marquee">
-                  <img src={nav1} alt="nav1" />
-                  <img src={nav2} alt="nav2" />
-                  <img src={nav3} alt="nav3" />
-                  <img src={nav7} alt="nav4" />
-                  <img src={nav4} alt="nav5" />
-                  <img src={nav8} alt="nav6" />
-                  <img src={nav5} alt="nav7" />
-                  <img src={nav6} alt="nav8" />
-                </div>
-              </div>
+             {/* Upload button visible only to employees and not on landing/home/login/register pages */}
+             {userRole === 'employee' && !isLandingOrRelevantPage && (
+              <li>
+                <Button style={{ color: 'white', marginTop: '-4%' }} onClick={openUploadDialog}>
+                  Upload
+                </Button>
+              </li>
+            )}
+
+
+            {/* Profile link visible only to employees and employers, and not on landing/home/login/register pages */}
+            {(userRole === 'employee' || userRole === 'employer') && !isLandingOrRelevantPage && (
+              <li>
+                <Link to="/profile" className="profile-container1">
+                  <img className="profile-avatar1" src={avatar} alt="Profile" />
+                  <p className="profile-name1">Profile</p>
+                </Link>
+              </li>
+            )}
+            {/* Show Login and Register buttons if on landing/home/login/register pages or if the user is not an employee/employer */}
+            {(isLandingOrRelevantPage || !userRole) && (
+              <>
+                <li>
+                  <div className="vendor_login_button">
+                    <Link to="/login">
+                      <Button className="vender-button" variant="outlined"><span>Login</span></Button>
+                    </Link>
+                  </div>
+                </li>
+                <li>
+                  <div className="vendor_login_button">
+                    <Link to="/register">
+                      <Button className="vender-button" variant="outlined"><span>Register</span></Button>
+                    </Link>
+                  </div>
+                </li>
+              </>
             )}
           </ul>
         </nav>
       </div>
-      {/* Background element to close the menu on click */}
+      <UploadResume open={uploadDialogOpen} onClose={closeUploadDialog} />
       {menuOpen && <div className={`background-overlay ${menuOpen ? 'visible' : ''}`} onClick={() => setMenuOpen(false)}></div>}
     </div>
   );
