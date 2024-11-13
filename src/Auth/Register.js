@@ -841,6 +841,12 @@ function Employeeregister() {
                       displayEmpty
                       fullWidth
                       style={{ marginTop: '9px' }}
+                      sx={{
+                        border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                        '&:focus': {
+                          border: '2px solid #1976d2',  // Focus border
+                        }
+                      }}
                     >
                       <MenuItem value="" disabled>
                         Select Level
@@ -1143,6 +1149,12 @@ function Employeeregister() {
                     onChange={(e) => setType(e.target.value)}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
+                    sx={{
+                      border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                      '&:focus': {
+                        border: '2px solid #1976d2',  // Focus border
+                      }
+                    }}
                   >
                     <MenuItem value="">Availability of Work</MenuItem>
                     <MenuItem value="hybrid">Hybrid</MenuItem>
@@ -1159,6 +1171,12 @@ function Employeeregister() {
                     onChange={(e) => setDisability(e.target.value)}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
+                    sx={{
+                      border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
+                      '&:focus': {
+                        border: '2px solid #1976d2',  // Focus border
+                      }
+                    }}
                   >
                     <MenuItem value="">All Disabilities</MenuItem>
                     {disabilities.map((disabilit) => (

@@ -16,7 +16,7 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-  margin-left:80%;
+  margin-left:50%;
   width: 20%; /* Ensure button takes full width */
 }
 
@@ -59,12 +59,12 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-  margin-left:80%;
+  margin-left:20%;
   width: 20%; /* Ensure button takes full width */
 }
 
 input[type="text"], textarea, select {
-  width: 100%; /* Ensure the form elements take full width within their column */
+  width: 70%; /* Ensure the form elements take full width within their column */
   padding: 10px;
   margin: 10px 0; /* Adjust margin for consistency */
   border: 1px solid #ccc;
