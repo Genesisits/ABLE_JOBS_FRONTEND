@@ -1,104 +1,106 @@
 import React, { useState } from "react";
-import { RESET_PASSWORD } from '../../endpoints.js';
-import { useNavigate} from 'react-router-dom';
-import axios from 'axios';
-import './password.css';
-import * as yup from 'yup';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "./resetpassword.css";
+import mail from '../../images/forgetPassword.jpg'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import {
+  Grid,
+  Box,
+  TextField,
+  Button,
+  Checkbox,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FORGOT_PASSWORD } from '../../endpoints';
 
-const validationSchema = yup.object().shape({
-    otp: yup.string()
-        .required("OTP is required")
-        .matches(/^\d{6}$/, 'OTP must be a 6-digit number'),
-    new_password: yup.string().required("New Password is required"),
-    confirm_password: yup.string()
-        .required("Confirm Password is required")
-        .oneOf([yup.ref('new_password'), null], 'Passwords must match')
-});
-
-export default function ResetPassword() {
-    const [resetData, setResetData] = useState({
-        otp: '',
-        new_password: '',
-        confirm_password: ''
+function ResetPassword() {
+  const [email, setEmail] = useState("");
+  let [message, setMessage] = useState('')
+  let [show, setShow] = useState(false)
+  const handleSubmit = () => {
+    let payload = {
+       "email": email
+    }
+    axios.post(`${FORGOT_PASSWORD}`,payload)
+    .then(response => {
+     setShow(true)
+     setMessage(response.data.message)
+    })
+    .catch(error => {
+      if (error.response && error.response.status === 404) {
+        setMessage('Email not found. Please check your email address and try again.');
+      } else {
+        setMessage(error.message
+           || 'An error occurred. Please try again later.');
+      }
+      setShow(true);  // To show the error message
     });
-    // const [success, setSuccess] = useState(false);
-    const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
-
-    const handleResetChange = (e) => {
-        const { name, value } = e.target;
-        setResetData(prevData => ({
-            ...prevData,
-            [name]: value
-        }));
-    }
-
-    const handleOtpChange = (e) => {
-        const { value } = e.target;
-        // Only allow numeric input for OTP
-        const numericValue = value.replace(/\D/g, '');
-        setResetData(prevData => ({
-            ...prevData,
-            otp: numericValue.slice(0, 6) // Limit to 6 characters
-        }));
-    }
-
-    const handleResetEmailSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await validationSchema.validate(resetData, { abortEarly: false });
-            const response = await axios.post(RESET_PASSWORD, { ...resetData });
-            if (response.status === 200) {
-                // setSuccess(true);
-                
-                toast.success('Password reset successful!', {
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 5000,
-                  });
-                setTimeout(() => {
-                    navigate("/login");
-                }, 5000); // Redirect after 3 seconds
-            }
-        } catch (error) {
-            const validationErrors = {};
-            if (error.response && error.response.status === 400) {
-                const errorData = error.response.data;
-                if (errorData && errorData.error === "InvalidOTP") {
-                    toast.error("Invalid OTP. Please try again.");
-                } else {
-                    error.inner.forEach(e => {
-                        validationErrors[e.path] = e.message;
-                    });
-                }
-            } else {
-                error.inner.forEach(e => {
-                    validationErrors[e.path] = e.message;
-                });
-            }
-            setErrors(validationErrors);
-        }
-    }
-
-    return (
-        <div className="reset-password-container">
-            <ToastContainer />
-            <form className='rest_password_form' onSubmit={handleResetEmailSubmit}>
-                <label className='reset_password_label1' htmlFor="otp">Enter Your OTP*</label>
-                <input className='reset_password_input1' placeholder="Enter Your OTP" type="text1" id="otp" name="otp" value={resetData.otp} onChange={handleOtpChange} maxLength={6} />
-                {errors.otp && <div className="error-message">{errors.otp}</div>}
-                <label className='reset_password_label2' htmlFor="new_password">Enter Your Password*</label>
-                <input className='reset_password_input2' placeholder="Enter Your Password" type="password" id="new_password" name="new_password" onChange={handleResetChange} />
-                {errors.new_password && <div className="error-message">{errors.new_password}</div>}
-                <label className='reset_password_label3' htmlFor="confirm_password">Confirm Your Password*</label>
-                <input className='reset_password_input3' placeholder="Confirm Your Password" type="password" id="confirm_password" name="confirm_password" onChange={handleResetChange} />
-                {errors.confirm_password && <div className="error-message">{errors.confirm_password}</div>}
-                <div>
-                    <button className='reset_password_button' type="submit">Submit</button>
-                </div>
-            </form>
-            {/* {success && <div className="success-popup">Password reset successful!</div>} */}
-        </div>
-    )
+  }
+  return (
+    <div className="resetpassword">
+      <div className="flex-item">
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+          <h3 style={{color:'blue',paddingTop:'10px'}}>Reset Password</h3>
+            <TextField
+              label="Enter your Password"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+              // margin="dense"
+              className="custom-input"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "transparent",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "transparent",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "transparent",
+                  },
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Confirm Password"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+              // margin="dense"
+              className="custom-input"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "transparent",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "transparent",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "transparent",
+                  },
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <button onClick={handleSubmit}>submit</button>
+          </Grid>
+        </Grid>
+        {/* {
+        show === true ? <p style={{color:'red'}}>{message}</p> : ''
+      } */}
+      </div>
+    </div>
+  );
 }
+
+export default ResetPassword;
