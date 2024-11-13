@@ -13,6 +13,7 @@ export const APPLY_JOB = `${BASE_URL}/apply_job/`;
 export const APPLIED_JOB = `${BASE_URL}/applied_jobs/`;
 export const SHORTLIST_JOB = `${BASE_URL}/shortlisted_jobs/`;
 export const ONBOARD_JOB = `${BASE_URL}/onboarded_jobs/`;
+export const USER_PROFILE = `${BASE_URL}/user_profile/`;
 export const CHAIR_URL = `${BASE_URL}/chairs`;
 export const DECORATION_URL = `${BASE_URL}/decoration`;
 export const CALCULATE_PRICE_URL = `${BASE_URL}/calculate_price`;
