@@ -1,30 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './profile.css'; // Import the CSS file
 import avatar from '../images/avatar.webp';
 import Layout from './sidenav/Layout';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Grid } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Grid, CircularProgress } from '@mui/material';
+import axios from 'axios';
+import { USER_PROFILE } from '../endpoints';
 
 const Profile = () => {
-  // Sample user data, in a real scenario, this could be fetched from an API
-  const initialUserData = {
-    name: 'Murali Kukka',
-    email: 'murali@genesisits.com',
-    location: 'San Francisco, CA',
-    profilePicture: avatar,
-    skills: 'JavaScript, React, Vue.Js',
-    experience: '5 Years in Software Development'
-  };
+  const [userType, setUserType] = useState('');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [openDialog, setOpenDialog] = useState(false); // State to control the dialog
 
-  // State to control the dialog
-  const [openDialog, setOpenDialog] = useState(false);
-  const [user, setUser] = useState(initialUserData);
-
-  // Function to handle opening the dialog
   const handleDialogOpen = () => {
     setOpenDialog(true);
   };
+  const accessToken = localStorage.getItem('access_token');
 
-  // Function to handle closing the dialog
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(USER_PROFILE, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+        setUserType(response.data.user_type);
+        setUser(response.data.user_profile);
+
+       
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [accessToken]);
+
+  
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
@@ -44,37 +61,106 @@ const Profile = () => {
     console.log('Profile updated:', user);
     handleDialogClose(); // Close the dialog after saving
   };
+  if (loading) {
+    return (
+      <Layout>
+        <div className="profile-container">
+          <CircularProgress />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Layout>
+        <div className="profile-container">No profile data available.</div>
+      </Layout>
+    );
+  }
+
 
   return (
     <Layout>
       <div className="profile-container">
         <div className="profile-card">
-          <img className="profile-image" src={user.profilePicture} alt="Profile" />
-          <h2 className="profile-name">{user.name}</h2>
-          <p className="profile-bio">{user.bio}</p>
-          <div className="profile-info">
-            <div className="info-item">
-              <span className="info-label">Email:</span>
-              <span className="info-value">{user.email}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Skills:</span>
-              <span className="info-value">{user.skills}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Experience:</span>
-              <span className="info-value">{user.experience}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Location:</span>
-              <span className="info-value">{user.location}</span>
-            </div>
-          </div>
+        <img
+  className="profile-image"
+  src={
+    user.company_logo1
+      ? user.company_logo1.startsWith('http')
+        ? user.company_logo1
+        : `http://3.86.53.72:8000/${user.company_logo1}`
+      : avatar
+  }
+  alt="Profile"
+/>
+
+          {userType === 'Employee' && (
+            <>
+              <h2 className="profile-name">{`${user.first_name} ${user.last_name}`}</h2>
+              <div className="profile-info">
+                <div className="info-item">
+                  <span className="info-label">Mobile Number:</span>
+                  <span className="info-value">{user.mobile_number}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Country:</span>
+                  <span className="info-value">{user.country}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">State:</span>
+                  <span className="info-value">{user.state}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Address:</span>
+                  <span className="info-value">{user.address}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Skills:</span>
+                  <span className="info-value">{user.skills}</span>
+                </div>
+              </div>
+            </>
+          )}
+          
+          {userType === 'Employer' && (
+            <>
+              <h2 className="profile-name">{user.company_name}</h2>
+              <div className="profile-info">
+                <div className="info-item">
+                  <span className="info-label">Email:</span>
+                  <span className="info-value">{user.email}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Contact:</span>
+                  <span className="info-value">{user.company_contact}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Industry:</span>
+                  <span className="info-value">{user.industry}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Location:</span>
+                  <span className="info-value">{user.location}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Website:</span>
+                  <span className="info-value">
+                    <a href={user.company_website} target="_blank" rel="noopener noreferrer">
+                      {user.company_website}
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
           <button className="edit-button" onClick={handleDialogOpen}>
-            Update Profile
+            View Profile
           </button>
         </div>
       </div>
+
 
       {/* Dialog for updating profile */}
       <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
