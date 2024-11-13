@@ -1,3 +1,29 @@
+.login-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; /* Align items to the left */
+    gap: 0px;
+    justify-content: space-between; /* Align the items to the left */
+    align-items: center;
+    width: 100%;
+}
+
+.forgot-password-link {
+    display: inline-block;
+    margin-left: 10px; /* Add some space between the link and the button */
+   
+}
+
+.forgot-password-link a {
+    color: #007bff;
+    text-decoration: underline;
+    font-size: large;
+    margin-left: 80px;
+}
+
+.forgot-password-link a:hover {
+    text-decoration: underline;
+}
 
 
 .container {
@@ -12,7 +38,7 @@
     flex: 1; 
     height: 90%;
     /* width: 50% 50%; */
-    text-align: center; 
+    text-align:center; 
     /* background-color: rgb(184, 233, 181);  */
     /* border: 1px solid #ccc;  */
     margin: 20px 50px; 
@@ -20,7 +46,7 @@
 
 .imageDetails {
     width: 100%;
-    height: auto;
+    height:auto;
 }
 
 .container input[type="password"],
@@ -34,7 +60,7 @@ input[type="text"] {
 }
 
 .eye-icon, .login-button {
-    margin-right: 10px; /* Space between elements */
+    margin-right: 80px; /* Space between elements */
     padding: 10px; /* Adjust padding as needed */
     cursor: pointer; /* Indicate clickable */
 }

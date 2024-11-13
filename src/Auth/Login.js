@@ -111,11 +111,15 @@ function Login() {
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </span>
                 </div>
-                <button type='button' onClick={handleSubmit} disabled={loading}>
-                    {loading ? 'Logging in...' : 'Login'}
-                </button>
+                <div className="login-actions">
+                    <p className="forgot-password-link" style={{ marginLeft: '10px' }}>
+                        <Link to='/forgetpassword'>Forgot password?</Link>
+                    </p>
+                    <button type='button' onClick={handleSubmit} disabled={loading} >
+                        {loading ? 'Logging in...' : 'Login'}
+                    </button>
+                </div>
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                <p><Link to='/forgetpassword'>Forget password?</Link></p>
             </div>
             <div className='flex-item'>
                 <img src={mail} alt="Mail" className='imageDetails' />
