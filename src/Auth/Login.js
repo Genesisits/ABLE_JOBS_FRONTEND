@@ -103,13 +103,15 @@ function Login() {
             <div className='flex-item'>
              
                 <h3>Able Jobs</h3>
-                <input
-                    type='text'
-                    placeholder='username'
-                    value={username}
-                    onChange={handleUname}
-                     
-                />
+                <div className="input-container1">
+    <input
+        type='text'
+        placeholder='Username'
+        value={username}
+        onChange={handleUname}
+        className="username-input"
+    />
+</div>
                 <div className="password-container">
                     <input
                         type={showPassword ? 'text' : 'password'}
@@ -126,9 +128,9 @@ function Login() {
                     <p className="forgot-password-link" style={{ marginLeft: '10px' }}>
                         <Link to='/forgetpassword'>Forgot password?</Link>
                     </p>
-                    <button type='button' onClick={handleSubmit} disabled={loading} >
+                    <button1 type='button' onClick={handleSubmit} disabled={loading} >
                         {loading ? 'Logging in...' : 'Login'}
-                    </button>
+                    </button1>
                 </div>
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
             </div>
