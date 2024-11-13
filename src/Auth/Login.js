@@ -89,7 +89,6 @@ function Login() {
     };
 
     return (
- fix/css_changes_resetpassword
         <div className='container-login'>
             {/* Full page loading spinner */}
             {loading && (
@@ -136,6 +135,8 @@ function Login() {
             <div className='flex-item-login'>
                 <img src={mail} alt="Mail" className='imageDetails' />
             </div>
+        </div>
+        </div>
         </div>
     );
 }

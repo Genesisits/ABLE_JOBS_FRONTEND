@@ -129,6 +129,7 @@ const departments = [
 
 export default function Jobs() {
   const [page, setPage] = useState(0);
+  const [row, setRows] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
