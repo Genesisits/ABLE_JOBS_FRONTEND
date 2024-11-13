@@ -33,7 +33,7 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import "./jobs.css";
-import { CREATE_JOB, DELETE_JOB, GET_JOB, UPDATE_JOB } from "../../endpoints";
+import { CREATE_JOB, DELETE_JOB, GET_JOB, UPDATE_JOB, APPLIED_CANDIDATES, ACTIVATE_JOB } from "../../endpoints";
 import { PDFReader } from "reactjs-pdf-reader";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -54,8 +54,8 @@ const customStyles = {
   p: 4,
 };
 
-function createresumesData(name, calories, fat, carbs, resume, checked) {
-  return { name, calories, fat, carbs, resume, checked };
+function createresumesData(first_name, last_name, email, mobile_number) {
+  return {first_name, last_name, email, mobile_number };
 }
 
 const columns = [
@@ -181,8 +181,20 @@ export default function Jobs() {
     setRowToDelete(null); // Reset the rowToDelete when closing the dialog
   };
 
-  const handleClickOpen = () => {
+  const getResumes = (getres) => {
+    let config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    };
+    axios.get(`${APPLIED_CANDIDATES}${getres.code}`,config).then((response) => {
+      setResumes(response.data)
+    });
+  }
+
+  const handleClickOpen = (row) => {
     setOpen(true);
+    getResumes(row)
   };
 
   const handleClose = () => {
@@ -287,24 +299,26 @@ export default function Jobs() {
   const handleSwitch = (event, index) => {
     const updatedResumes = [...resumes];
     updatedResumes[index].checked = event.target.checked;
-    setResumes(updatedResumes);
-    console.log(resumes);
+    // setResumes(updatedResumes);
+    // console.log(resumes);
   };
 
-  const handleActive = (data) => {
+  const handleActive = (row) => {
+    const updatedStatus = !row.activation_status;
     let config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     };
-    const payload = {
-      // job_code:data.code,
-      active: true,
-    };
+  
     axios
-      .put(`${UPDATE_JOB}${data.code}/`, payload, config)
+      .put(`${ACTIVATE_JOB}${row.code}/`,{ activation_status: updatedStatus },config)
       .then((response) => {
-        console.log(response);
+        setRows(prevRows =>
+          prevRows.map(r => 
+            r.code === row.code ? { ...r, activation_status: updatedStatus } : r
+          )
+        );
       });
   };
 
@@ -485,25 +499,25 @@ export default function Jobs() {
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Name</StyledTableCell>
-                <StyledTableCell align="right">Calories</StyledTableCell>
-                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+                <StyledTableCell>First Name</StyledTableCell>
+                <StyledTableCell align="right">Last Name</StyledTableCell>
+                <StyledTableCell align="right">Email</StyledTableCell>
+                <StyledTableCell align="right">Mobile Number</StyledTableCell>
                 <StyledTableCell align="right">Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {resumes.map((resume, index) => (
-                <StyledTableRow key={resume.name}>
+                <StyledTableRow key={resume.first_name}>
                   <StyledTableCell component="th" scope="row">
-                    {resume.name}
+                    {resume.first_name}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    {resume.calories}
+                    {resume.last_name}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{resume.fat}</StyledTableCell>
+                  <StyledTableCell align="right">{resume.email}</StyledTableCell>
                   <StyledTableCell align="right">
-                    {resume.carbs}
+                    {resume.mobile_number}
                   </StyledTableCell>
                   <StyledTableCell align="right">
                     <VisibilityIcon
@@ -586,7 +600,7 @@ export default function Jobs() {
                         return (
                           <TableCell key={column.id}>
                             <VisibilityIcon
-                              onClick={handleClickOpen}
+                              onClick={() => handleClickOpen(row)}
                               style={{ cursor: "pointer", marginRight: "2px" }}
                               fontSize="small"
                             />
@@ -596,8 +610,8 @@ export default function Jobs() {
                               fontSize="small"
                             />
                             <Switch
-                              checked={column.checked}
-                              onChange={(event) => handleActive(row)}
+                              checked={row.activation_status}
+                              onChange={() => handleActive(row)}
                               inputProps={{ "aria-label": "controlled" }}
                                size="small"
                             />
