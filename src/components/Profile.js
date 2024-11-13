@@ -4,7 +4,7 @@ import avatar from '../images/avatar.webp';
 import Layout from './sidenav/Layout';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Grid, CircularProgress } from '@mui/material';
 import axios from 'axios';
-import { USER_PROFILE } from '../endpoints';
+import { USER_PROFILE ,PROFILE_UPDATE } from '../endpoints';
 
 const Profile = () => {
   const [userType, setUserType] = useState('');
@@ -28,7 +28,14 @@ const Profile = () => {
         });
 
         setUserType(response.data.user_type);
-        setUser(response.data.user_profile);
+        setUser({
+          ...response.data.user_profile,
+          name: response.data.user_profile.first_name || '', // Default to empty if not present
+          email: response.data.user_profile.email || '',
+          skills: response.data.user_profile.skills || '',
+          experience: response.data.user_profile.experience || '',
+          location: response.data.user_profile.location || '',
+        });
 
        
       } catch (error) {
@@ -56,10 +63,30 @@ const Profile = () => {
   };
 
   // Function to handle saving the changes (optional)
-  const handleSaveChanges = () => {
-    // You can add logic to save the updated profile (e.g., making an API call)
-    console.log('Profile updated:', user);
-    handleDialogClose(); // Close the dialog after saving
+  const handleSaveChanges = async () => {
+    setLoading(true); // Show loading while updating
+    try {
+      // Make the PATCH API call to update the profile
+      const response = await axios.patch(
+        PROFILE_UPDATE,
+        user, // Pass the updated user data
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      // Handle successful response
+      console.log('Profile updated successfully:', response.data);
+      setUser(response.data.user_profile); // Update local state with new data
+      handleDialogClose(); // Close the dialog
+    } catch (error) {
+      console.error('Error updating profile:', error.response || error.message);
+    } finally {
+      setLoading(false); // Hide loading
+    }
   };
   if (loading) {
     return (
@@ -169,11 +196,11 @@ const Profile = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Name"
+                label="First Name"
                 variant="outlined"
                 fullWidth
-                name="name"
-                value={user.name}
+                name="first_name"
+                value={user.first_name || ''}
                 onChange={handleInputChange}
                 margin="normal"
                 sx={{
@@ -193,11 +220,11 @@ const Profile = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Email"
+                label="Mobile Number"
                 variant="outlined"
                 fullWidth
-                name="email"
-                value={user.email}
+                name="mobile_number"
+                value={user.mobile_number || ''}
                 onChange={handleInputChange}
                 margin="normal"
                 sx={{
@@ -221,7 +248,7 @@ const Profile = () => {
                 variant="outlined"
                 fullWidth
                 name="skills"
-                value={user.skills}
+                value={user.country}
                 onChange={handleInputChange}
                 margin="normal"
                 sx={{
@@ -245,7 +272,7 @@ const Profile = () => {
                 variant="outlined"
                 fullWidth
                 name="experience"
-                value={user.experience}
+                value={user.state}
                 onChange={handleInputChange}
                 margin="normal"
                 sx={{
@@ -269,7 +296,7 @@ const Profile = () => {
                 variant="outlined"
                 fullWidth
                 name="location"
-                value={user.location}
+                value={user.skills}
                 onChange={handleInputChange}
                 margin="normal"
                 sx={{
