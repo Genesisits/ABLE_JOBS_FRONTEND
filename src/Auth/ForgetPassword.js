@@ -88,7 +88,7 @@ function ForgetPassword() {
         {show === true ? <p style={{ color: 'red' }}>{message}</p> : ''}
       </div>
       <div className="flex-item-fp">
-        <img src={mail} alt="Mail" className="imageDetails" />
+        <img src={mail} alt="Mail" className="imageDetails1" />
       </div>
     </div>
   );

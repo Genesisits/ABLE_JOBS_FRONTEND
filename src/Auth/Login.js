@@ -103,7 +103,7 @@ function Login() {
             <div className='flex-item'>
              
                 <h3>Able Jobs</h3>
-                <div className="input-container1">
+                <div className="input-container2">
     <input
         type='text'
         placeholder='Username'
@@ -128,7 +128,7 @@ function Login() {
                     <p className="forgot-password-link" style={{ marginLeft: '10px' }}>
                         <Link to='/forgetpassword'>Forgot password?</Link>
                     </p>
-                    <button1 type='button' onClick={handleSubmit} disabled={loading} >
+                    <button1 type='button' onClick={handleSubmit} disabled={loading}  >
                         {loading ? 'Logging in...' : 'Login'}
                     </button1>
                 </div>
