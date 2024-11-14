@@ -28,9 +28,9 @@
   margin-left: -1%;
   height: 30px;
 }
-.navbar-menu{
+/* .navbar-menu{
   margin-left: 73%;
-}
+} */
 .toggle-button {
   background: #881008;
   border: none;
@@ -662,4 +662,39 @@ button3:hover {
   font-size: 10px; /* Smaller font size */
   line-height: 1; /* Reduces line height to minimize text height */
   margin: 0; /* Ensures no extra margin */
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-left: 2%;
+}
+
+.header-logo {
+  height: 50px;
+  width: auto;
+  cursor: pointer;
+  
+}
+.navbar-menu {
+  margin-left: 0; /* Remove or set to 0 to align the menu to the left */
+  display: flex;
+  justify-content: flex-start; /* Align items to the left */
+  align-items: center; /* Align the items vertically */
+  padding: 0; /* Remove any extra padding */
+}
+
+.navbar-menu li {
+  margin-right: 70px; /* Optional: Adjust spacing between items */
+  margin-left: -5%;
+}
+
+@media (max-width: 768px) {
+  .navbar-menu {
+    flex-direction: column; /* Stack items vertically on small screens */
+    margin-left: 0; /* Ensure it's aligned to the left on mobile */
+  }
+
+  .navbar-menu li {
+    margin: 15px 0; /* Adjust spacing for mobile */
+  }
 }
