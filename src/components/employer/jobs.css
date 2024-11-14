@@ -85,3 +85,24 @@ textarea {
 .experience-group input {
   width: 48%; /* Ensure both fields are next to each other and aligned */
 }
+.employ-row {
+  display: flex;
+  gap: 1rem; /* Adjust the gap between fields */
+  margin-bottom: 1rem; /* Space between rows */
+}
+
+.employ-row input,
+.employ-row select {
+  flex: 1; /* Makes all inputs in the row have equal width */
+  padding: 0.5rem; /* Adds padding for better UX */
+  border: 1px solid #ccc; /* Adds a border to inputs */
+  border-radius: 4px; /* Adds rounded corners */
+}
+
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
