@@ -17,6 +17,7 @@ import Switch from "@mui/material/Switch";
 import axios from "axios";
 import "./jobs.css";
 import Postajob from "./postajob"; // Import the Postajob component
+import AppliedCandidatesDialog from "./Appliedcandidates"; 
 
 const columns = [
   { id: "job_title", label: "Job Role", minWidth: 100 },
@@ -33,8 +34,11 @@ export default function Jobs() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
 
   useEffect(() => {
+    // Fetch job data from API
     axios.get(`${GET_JOB}`).then((response) => {
       setData(response.data);
     });
@@ -49,10 +53,19 @@ export default function Jobs() {
   const openPostJobModal = () => setIsPostJobOpen(true);
   const closePostJobModal = () => setIsPostJobOpen(false);
 
+  const handleOpenDialog = (jobCode) => {
+    setSelectedJobCode(jobCode);  // Set the selected job code
+    setIsDialogOpen(true);         // Open the dialog
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false); // Close the dialog
+  };
+
   return (
     <div>
       <Layout>
-        <button style={{ marginLeft: "65%" }} onClick={openPostJobModal}>
+        <button style={{ marginLeft: "75%" }} onClick={openPostJobModal}>
           Post a Job
         </button>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -88,6 +101,7 @@ export default function Jobs() {
                               <VisibilityIcon
                                 style={{ cursor: "pointer", marginRight: "2px" }}
                                 fontSize="small"
+                                onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
                               />
                               <EditIcon
                                 style={{ cursor: "pointer", marginRight: "2px" }}
@@ -124,6 +138,13 @@ export default function Jobs() {
 
         {/* Post a Job Modal */}
         <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} />
+
+        {/* Applied Candidates Dialog */}
+        <AppliedCandidatesDialog
+          open={isDialogOpen}
+          onClose={handleCloseDialog}
+          jobCode={selectedJobCode} // Pass the jobCode to the dialog
+        />
       </Layout>
     </div>
   );
