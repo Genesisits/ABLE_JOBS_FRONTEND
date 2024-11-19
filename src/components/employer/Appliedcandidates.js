@@ -14,10 +14,12 @@ import {
   TableBody,
   TableContainer, // Import TableContainer
 } from "@mui/material";
+import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import axios from "axios";
-import { APPLIED_CANDIDATES } from "../../endpoints"; // Correct endpoint import
+import { APPLIED_CANDIDATES, SHORTLIST_CANDIDATES } from "../../endpoints"; // Correct endpoint import
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -29,7 +31,7 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
 
   // Fetch applied candidates whenever jobCode changes
   useEffect(() => {
-    if (jobCode) {
+    if (open && jobCode) {
       axios.get(`${APPLIED_CANDIDATES}${jobCode}`)
         .then((response) => {
           setAppliedCandidates(response.data);
@@ -38,7 +40,21 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
           console.error("Error fetching candidates:", error);
         });
     }
-  }, [jobCode]);
+  }, [open ,jobCode]);
+
+  const handleActive = (row) => {
+    let config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    };
+     
+    axios
+      .put(`${SHORTLIST_CANDIDATES}${row.application_code}/`,config)
+      .then((response) => {
+        console.log(response)
+      });
+  };
 
   const handleCloseDialog = () => {
     onClose();
@@ -86,8 +102,8 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
               <TableCell>Application Code</TableCell>
               <TableCell>Employee Name</TableCell>
               <TableCell>Job Title</TableCell>
-              <TableCell>Resume</TableCell>
-              <TableCell>Video Resume</TableCell>
+              <TableCell>Actions</TableCell>
+              {/* <TableCell>Video Resume</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,18 +122,20 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
                         <VisibilityIcon />
                       </IconButton>
                     )}
-                  </TableCell>
-                  <TableCell>
-                    {candidate.video_resume_url && (
-                      <IconButton
+                    <IconButton
                         onClick={() =>
                           handleOpenFile(candidate.video_resume_url, "video")
                         }
                         title="View Video Resume"
                       >
-                        <VisibilityIcon />
+                        <PlayArrowIcon />
                       </IconButton>
-                    )}
+                      <Switch
+                              checked={candidate.shortlisted_status}
+                              onChange={() => handleActive(candidate)}
+                              inputProps={{ "aria-label": "controlled" }}
+                               size="small"
+                            />
                   </TableCell>
                 </TableRow>
               ))
