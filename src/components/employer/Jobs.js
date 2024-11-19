@@ -1,7 +1,7 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
-import { GET_JOB } from "../../endpoints";
+import { GET_JOB,ACTIVATE_JOB } from "../../endpoints";
 import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -33,6 +33,7 @@ export default function Jobs() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
+  const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
@@ -50,9 +51,33 @@ export default function Jobs() {
     setPage(0);
   };
 
-  const openPostJobModal = () => setIsPostJobOpen(true);
-  const closePostJobModal = () => setIsPostJobOpen(false);
+  const handleActive = (row) => {
+    const updatedStatus = !row.activation_status;
+    let config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    };
+    setData((prevRows) => 
+      prevRows.map((item) =>
+        item.code === row.code ? { ...item, activation_status: updatedStatus } : item
+      ));
+  
+    axios
+      .put(`${ACTIVATE_JOB}${row.code}/`,{ activation_status: updatedStatus },config)
+      .then((response) => {
+        console.log(response)
+      });
+  };
 
+  const openPostJobModal = (job) => {
+    setSelectedJob(job); // Set the selected job for editing
+    setIsPostJobOpen(true); // Open the modal
+  };
+  const closePostJobModal = () => {
+    setIsPostJobOpen(false); // Close the modal
+    setSelectedJob(null); // Reset selected job
+  };
   const handleOpenDialog = (jobCode) => {
     setSelectedJobCode(jobCode);  // Set the selected job code
     setIsDialogOpen(true);         // Open the dialog
@@ -106,11 +131,14 @@ export default function Jobs() {
                               <EditIcon
                                 style={{ cursor: "pointer", marginRight: "2px" }}
                                 fontSize="small"
+                                onClick={() => openPostJobModal(row)}
                               />
                               <Switch
-                                inputProps={{ "aria-label": "controlled" }}
-                                size="small"
-                              />
+                              checked={row.activation_status}
+                              onChange={() => handleActive(row)}
+                              inputProps={{ "aria-label": "controlled" }}
+                               size="small"
+                            />
                             </TableCell>
                           );
                         }
@@ -137,7 +165,7 @@ export default function Jobs() {
         </Paper>
 
         {/* Post a Job Modal */}
-        <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} />
+        <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  />
 
         {/* Applied Candidates Dialog */}
         <AppliedCandidatesDialog
