@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState ,useEffect } from 'react';
 import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -20,7 +20,7 @@ const customStyles = {
   p: 4,
 };
 
-export default function Postajob({ modalIsOpen, closeModal }) {
+export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
   const [work_mode, setWorkmode] = useState('');
   const [company_name, setCompanyName] = useState('');
   const [job_title, setJobrole] = useState('');
@@ -39,6 +39,31 @@ export default function Postajob({ modalIsOpen, closeModal }) {
   const [number_of_positions, setNofPositions] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [jobid, setJobid] = useState('');
+
+  useEffect(() => {
+    if (selectedJob) {
+      setIsEditing(true);
+      setJobid(selectedJob.code);
+      setCompanyName(selectedJob.company_name);
+      setJobrole(selectedJob.job_title);
+      setDepartment(selectedJob.department);
+      setSalary(selectedJob.salary_offered);
+      setLocation(selectedJob.location);
+      setJobtype(selectedJob.employment_type);
+      setindustry(selectedJob.industry);
+      setState(selectedJob.state);
+      setRTS(selectedJob.skills);
+      setNofPositions(selectedJob.number_of_positions);
+      setExperiencerequired(selectedJob.experience_required);
+      setWorkmode(selectedJob.work_mode);
+      setcompanywebsite(selectedJob.company_website);
+      setdisability(selectedJob.disability_eligible);
+      setNoticeperiod(selectedJob.notice_period);
+      setJobdescription(selectedJob.description);
+    } else {
+      setIsEditing(false); // Reset for new job
+    }
+  },[selectedJob]);
 
   const handleNext = () => {
     const payload = {
