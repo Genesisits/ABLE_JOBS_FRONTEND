@@ -1,4 +1,4 @@
-input[type="text"],
+.search-container inupt[type="text"],
 input[type="password"],
 input[type="number"],
 input[type="date"],
@@ -9,4 +9,10 @@ textarea{
     /* border: 1px solid #ccc; */
     /* border-radius: 5px; */
     /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); */
+}
+
+.search-container {
+     display: 'flex';
+      align-items: 'center'; 
+      gap: '10px';
 }

@@ -42,7 +42,7 @@ function ResetPassword() {
   }
   return (
     <div className="resetpassword">
-      <div className="flex-item">
+      <div className="flex-item-reset">
         <Grid container spacing={2}>
           <Grid item xs={12}>
           <h3 style={{color:'blue',paddingTop:'10px'}}>Reset Password</h3>

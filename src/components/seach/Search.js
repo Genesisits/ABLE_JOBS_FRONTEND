@@ -9,7 +9,7 @@ export default function Search() {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <div className='search-container'>
       {/* Search input */}
       <input
         type="text"

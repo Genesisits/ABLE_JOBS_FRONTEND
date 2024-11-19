@@ -50,7 +50,7 @@ export default function Jobs() {
   const closePostJobModal = () => setIsPostJobOpen(false);
 
   return (
-    <div>
+    <div className="jobs-container">
       <Layout>
         <button style={{ marginLeft: "65%" }} onClick={openPostJobModal}>
           Post a Job
