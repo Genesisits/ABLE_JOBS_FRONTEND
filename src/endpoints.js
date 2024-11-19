@@ -7,6 +7,7 @@ export const VOLUNTEER_REGISTER = `${BASE_URL}/volunteer_signup/`
 export const CREATE_JOB = `${BASE_URL}/add_jobs/`;
 export const GET_JOB = `${BASE_URL}/jobs/`;
 export const APPLIED_CANDIDATES = `${BASE_URL}/job_applications/`;
+export const SHORTLIST_CANDIDATES = `${BASE_URL}/shortlist_application/`;
 export const DELETE_JOB = `${BASE_URL}/jobs/delete/`;
 export const UPDATE_JOB = `${BASE_URL}/jobs/edit/`
 export const ACTIVATE_JOB = `${BASE_URL}/jobs/deactivate/`
