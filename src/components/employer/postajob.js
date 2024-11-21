@@ -1,45 +1,191 @@
-import * as React from 'react';
-import { useState ,useEffect } from 'react';
-import { Button } from '@mui/material';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import axios from 'axios';
-import { CREATE_JOB, UPDATE_JOB } from '../../endpoints';
-import './jobs.css';
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import axios from "axios";
+import { CREATE_JOB, UPDATE_JOB } from "../../endpoints";
+import "./jobs.css";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const customStyles = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '70%',
-  bgcolor: 'background.paper',
-  border: '1px solid #000',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "70%",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
   boxShadow: 24,
-  height: '650px',
+  height: "650px",
   p: 4,
 };
 
-export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
-  const [work_mode, setWorkmode] = useState('');
-  const [company_name, setCompanyName] = useState('');
-  const [job_title, setJobrole] = useState('');
-  const [employment_type, setJobtype] = useState('');
-  const [department, setDepartment] = useState('');
-  const [industry, setindustry] = useState('');
-  const [state, setState] = useState('');
-  const [disability, setdisability] = useState('');
-  const [companywebsite, setcompanywebsite] = useState('');
-  const [experience_required, setExperiencerequired] = useState('');
-  const [salary_offered, setSalary] = useState('');
-  const [skills, setRTS] = useState('');
-  const [location, setLocation] = useState('');
-  const [description, setJobdescription] = useState('');
-  const [notice_period, setNoticeperiod] = useState('');
-  const [number_of_positions, setNofPositions] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
-  const [jobid, setJobid] = useState('');
+const industries = [
+  { id: "1", name: "IT and IT Services", abbreviation: "IT and IT Services" },
+  {
+    id: "1",
+    name: "Banking, Financial Service, and Insurance",
+    abbreviation: "Banking, Financial Service, and Insurance",
+  },
+  {
+    id: "1",
+    name: "Retail and E-Commerce",
+    abbreviation: "Retail and E-Commerce",
+  },
+  { id: "1", name: "FinTech", abbreviation: "FinTech" },
+  { id: "1", name: "Tele Communications", abbreviation: "Tele Communications" },
+  {
+    id: "1",
+    name: "Healthcare and pharmaceuticals",
+    abbreviation: "Healthcare and pharmaceuticals",
+  },
+  {
+    id: "1",
+    name: "Education and Training",
+    abbreviation: "Education and Training",
+  },
+];
 
+const qualifications = [
+  { id: "1", name: "10th class", abbreviation: "10th Psass" },
+  { id: "2", name: "12th class", abbreviation: "12th Pass" },
+  { id: "3", name: "Diploma", abbreviation: "Diploma" },
+  { id: "4", name: "Bachelors", abbreviation: "Bachelors" },
+  { id: "5", name: "Masters", abbreviation: "Masters" },
+  { id: "6", name: "Doctorate", abbreviation: "Doctorate" },
+];
+
+const departments = [
+  {
+    id: 1,
+    name: "IT & Information security",
+    abbreviation: "IT & Information security",
+  },
+  {
+    id: 2,
+    name: "Data Science & analytics",
+    abbreviation: "Data Science & analytics",
+  },
+  {
+    id: 3,
+    name: "Human Resource Management",
+    abbreviation: "Human Resource Management",
+  },
+  {
+    id: 4,
+    name: "Engineering(Hardware & Software)",
+    abbreviation: "Engineering(Hardware & Software)",
+  },
+  { id: 5, name: "Consulting", abbreviation: "Consulting" },
+  {
+    id: 6,
+    name: "UI, UX design and architecture",
+    abbreviation: "UI, UX design and architecture",
+  },
+];
+
+const disabilities = [
+  { id: "1", name: "Blindness", abbreviation: "Blindness" },
+  { id: "2", name: "Low vision", abbreviation: "Low vision" },
+  {
+    id: "3",
+    name: "Leprosoy cured persons",
+    abbreviation: "Leprosoy cured persons",
+  },
+  {
+    id: "4",
+    name: "Locomotor Disability",
+    abbreviation: "Locomotor Disability",
+  },
+  {
+    id: "5",
+    name: "Intellectual Disability",
+    abbreviation: "Intellectual Disability",
+  },
+  { id: "6", name: "Cerebral Palsy", abbreviation: "Cerebral Palsy" },
+  {
+    id: "7",
+    name: "Specific Learning Disabilities",
+    abbreviation: "Specific Learning Disabilities",
+  },
+  { id: "8", name: "Mental Illness", abbreviation: "Mental Illness" },
+  { id: "9", name: "Cerebral Palsy", abbreviation: "Cerebral Palsy" },
+  {
+    id: "10",
+    name: "Specific Learning Disabilities",
+    abbreviation: "Specific Learning Disabilities",
+  },
+  {
+    id: "11",
+    name: "Speech and Language disability",
+    abbreviation: "Speech and Language disability",
+  },
+  {
+    id: "12",
+    name: "Hearing Impairment(Deaf and Hard of Hearing)",
+    abbreviation: "Hearing Impairment(Deaf and Hard of Hearing)",
+  },
+  { id: "12", name: "Muscular Dystrophy", abbreviation: "Muscular Dystrophy" },
+  { id: "13", name: "Dwarfism", abbreviation: "Dwarfism" },
+  { id: "14", name: "Acid Attack Victim", abbreviation: "Acid Attack Victim" },
+  { id: "15", name: "Parkinson disease", abbreviation: "Parkinson disease" },
+  { id: "16", name: "Multiple Sclerosis", abbreviation: "Multiple Sclerosis" },
+  { id: "17", name: "Thalassemia", abbreviation: "Thalassemia" },
+  { id: "18", name: "Hemophilia", abbreviation: "Hemophilia" },
+  {
+    id: "19",
+    name: "Sickle Cell disease",
+    abbreviation: "Sickle Cell disease",
+  },
+  {
+    id: "20",
+    name: "Autism Spectrum Disorder",
+    abbreviation: "Autism Spectrum Disorder",
+  },
+  {
+    id: "21",
+    name: "Chronic Neurological conditions",
+    abbreviation: "Chronic Neurological conditions",
+  },
+  {
+    id: "22",
+    name: "Multiple Disabililties including Deaf, Blindess",
+    abbreviation: "Multiple Disabililties including Deaf, Blindess",
+  },
+  { id: "23", name: "Down Syndrome", abbreviation: "Down Syndrome" },
+  { id: "24", name: "Epilepsy", abbreviation: "Epilepsy" },
+  { id: "25", name: "Spinal Cord Injury", abbreviation: "Spinal Cord Injury" },
+  { id: "26", name: "Others", abbreviation: "Others" },
+];
+
+export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
+  const [work_mode, setWorkmode] = useState("");
+  const [company_name, setCompanyName] = useState("");
+  const [job_title, setJobrole] = useState("");
+  const [employment_type, setJobtype] = useState("");
+  const [department, setDepartment] = useState("");
+  const [industry, setindustry] = useState("");
+  const [state, setState] = useState("");
+  const [disability, setdisability] = useState("");
+  const [companywebsite, setcompanywebsite] = useState("");
+  const [experience_required, setExperiencerequired] = useState("");
+  const [salary_offered, setSalary] = useState("");
+  const [skills, setRTS] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setJobdescription] = useState("");
+  const [notice_period, setNoticeperiod] = useState("");
+  const [number_of_positions, setNofPositions] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [qualification, setQualification] = useState("");
+  const [jobid, setJobid] = useState("");
+  const [success , setSuccess] = useState(false)
+
+  // const handleSuccess = () => {
+  //   setSuccess(false)
+  // }
   useEffect(() => {
     if (selectedJob) {
       setIsEditing(true);
@@ -53,6 +199,7 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
       setindustry(selectedJob.industry);
       setState(selectedJob.state);
       setRTS(selectedJob.skills);
+      setQualification(selectedJob.qualif);
       setNofPositions(selectedJob.number_of_positions);
       setExperiencerequired(selectedJob.experience_required);
       setWorkmode(selectedJob.work_mode);
@@ -62,8 +209,26 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
       setJobdescription(selectedJob.description);
     } else {
       setIsEditing(false); // Reset for new job
+      setJobid("");
+      setCompanyName("");
+      setJobrole("");
+      setDepartment("");
+      setSalary("");
+      setLocation("");
+      setJobtype("");
+      setindustry("");
+      setState("");
+      setRTS("");
+      setNofPositions("");
+      setExperiencerequired("");
+      setWorkmode("");
+      setcompanywebsite("");
+      setdisability("");
+      setQualification("");
+      setNoticeperiod("");
+      setJobdescription("");
     }
-  },[selectedJob]);
+  }, [selectedJob]);
 
   const handleNext = () => {
     const payload = {
@@ -87,7 +252,7 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     };
 
@@ -96,20 +261,21 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
       axios
         .put(`${UPDATE_JOB}${jobid}/`, payload, config)
         .then((response) => {
-          console.log('Job updated:', response);
+          console.log("Job updated:", response);
         })
         .catch((error) => {
-          console.log('Error updating job:', error);
+          console.log("Error updating job:", error);
         });
     } else {
       // Creating new job
       axios
         .post(`${CREATE_JOB}`, payload, config)
         .then((response) => {
-          console.log('Job added:', response);
+          console.log("Job added:", response);
+          setSuccess(true)
         })
         .catch((error) => {
-          console.log('Error adding job:', error);
+          console.log("Error adding job:", error);
         });
     }
 
@@ -119,16 +285,28 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
   return (
     <Modal
       open={modalIsOpen}
-      onClose={closeModal}
+      onClose={(e, reason) => {
+        // Prevent the modal from closing when the backdrop (outside area) is clicked
+        if (reason === "backdropClick") {
+          return;
+        }
+        closeModal(); // Call your close modal function for other reasons (e.g., close button)
+      }}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
+      BackdropProps={{
+        onClick: (e) => {
+          // Prevent the backdrop click from closing the modal
+          e.stopPropagation();
+        },
+      }}
     >
       <div className="employ">
         <Box sx={customStyles}>
-          <h2 style={{ margin: '0', textAlign: 'center' }}>
-            {isEditing ? 'Edit Job' : 'Add Job'}
+          <h2 style={{ margin: "0", textAlign: "center" }}>
+            {isEditing ? "Edit Job" : "Add Job"}
           </h2>
-
+         
           {/* Row 1 */}
           <div className="employ-row">
             <input
@@ -143,12 +321,17 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
               value={job_title}
               onChange={(e) => setJobrole(e.target.value)}
             />
-            <input
-              type="text"
-              placeholder="Department"
+            <select
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
-            />
+            >
+              <option disabled>Job Type</option>
+              {departments.map((department) => (
+                <option key={department.id} value={department.abbreviation}>
+                  {department.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Row 2 */}
@@ -181,24 +364,34 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
 
           {/* Row 3 */}
           <div className="employ-row">
-            <input
-              type="text"
-              placeholder="Industry"
+            <select
               value={industry}
               onChange={(e) => setindustry(e.target.value)}
-            />
+            >
+              <option disabled>Job Type</option>
+              {industries.map((industry) => (
+                <option key={industry.id} value={industry.abbreviation}>
+                  {industry.name}
+                </option>
+              ))}
+            </select>
             <input
               type="text"
               placeholder="State"
               value={state}
               onChange={(e) => setState(e.target.value)}
             />
-            <input
-              type="text"
-              placeholder="Required Technology Stack"
-              value={skills}
-              onChange={(e) => setRTS(e.target.value)}
-            />
+            <select
+              value={qualification}
+              onChange={(e) => setQualification(e.target.value)}
+            >
+              <option disabled>Qualification</option>
+              {qualifications.map((qualif) => (
+                <option key={qualif.id} value={qualif.abbreviation}>
+                  {qualif.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Row 4 */}
@@ -238,13 +431,12 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
               value={disability}
               onChange={(e) => setdisability(e.target.value)}
             >
-              <option disabled>Disability Eligible</option>
-              <option>Visual impairment</option>
-              <option>Low vision</option>
-              <option>Mental Illness</option>
-              <option>Cerebral Palsy</option>
-              <option>Acid Attack Victim</option>
-              <option>Hemophilia</option>
+              <option disabled>Disability Type</option>
+              {disabilities.map((disable) => (
+                <option key={disable.id} value={disable.abbreviation}>
+                  {disable.name}
+                </option>
+              ))}
             </select>
             <input
               type="text"
@@ -255,20 +447,37 @@ export default function Postajob({ modalIsOpen, closeModal,selectedJob  }) {
           </div>
 
           {/* Job Description */}
-          <textarea
-            value={description}
-            onChange={(e) => setJobdescription(e.target.value)}
-            placeholder="Job Description"
-            rows="4"
-          />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: "10px",
+            }}
+          >
+            <textarea
+              value={description}
+              onChange={(e) => setJobdescription(e.target.value)}
+              placeholder="Job Description"
+              rows="3"
+            />
+            <textarea
+              placeholder="Required Technology Stack"
+              value={skills}
+              onChange={(e) => setRTS(e.target.value)}
+              rows="3"
+            />
+          </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
+          >
             <Button variant="outlined" color="secondary" onClick={closeModal}>
               Close
             </Button>
             <Button variant="contained" color="primary" onClick={handleNext}>
-              {isEditing ? 'Update' : 'Save'}
+              {isEditing ? "Update" : "Save"}
             </Button>
           </div>
         </Box>

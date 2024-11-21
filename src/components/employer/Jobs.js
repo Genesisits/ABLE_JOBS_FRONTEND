@@ -70,13 +70,13 @@ export default function Jobs() {
       });
   };
 
-  const openPostJobModal = (job) => {
-    setSelectedJob(job); // Set the selected job for editing
+  const openPostJobModal = () => {
+    setSelectedJob(null); // Set the selected job for editing
     setIsPostJobOpen(true); // Open the modal
   };
   const closePostJobModal = () => {
-    setIsPostJobOpen(false); // Close the modal
-    setSelectedJob(null); // Reset selected job
+    setSelectedJob(null); 
+    setIsPostJobOpen(false); 
   };
   const handleOpenDialog = (jobCode) => {
     setSelectedJobCode(jobCode);  // Set the selected job code
@@ -86,6 +86,11 @@ export default function Jobs() {
   const handleCloseDialog = () => {
     setIsDialogOpen(false); // Close the dialog
   };
+
+  const openEditJobModal = (job) => {
+    setSelectedJob(job); 
+    setIsPostJobOpen(true);
+  }
 
   return (
     <div>
@@ -131,7 +136,7 @@ export default function Jobs() {
                               <EditIcon
                                 style={{ cursor: "pointer", marginRight: "2px" }}
                                 fontSize="small"
-                                onClick={() => openPostJobModal(row)}
+                                onClick={() => openEditJobModal(row)}
                               />
                               <Switch
                               checked={row.activation_status}

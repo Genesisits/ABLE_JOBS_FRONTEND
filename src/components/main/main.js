@@ -47,12 +47,12 @@ const states = [
 ];
 
 const departments = [
-  { id: 1, name: "IT & Information security", abbreviation: "IT" },
-  { id: 2, name: "Data Science & analytics", abbreviation: "DS" },
-  { id: 3, name: "Human Resource Management", abbreviation: "HRM" },
-  { id: 4, name: "Engineering(Hardware & Software)", abbreviation: "Engg" },
-  { id: 5, name: "Consulting", abbreviation: "consulting" },
-  { id: 6, name: "UI, UX design and architecture", abbreviation: "ui&ux" },
+  { id: 1, name: "IT & Information security", abbreviation: "IT & Information security" },
+  { id: 2, name: "Data Science & analytics", abbreviation: "Data Science & analytics" },
+  { id: 3, name: "Human Resource Management", abbreviation: "Human Resource Management" },
+  { id: 4, name: "Engineering(Hardware & Software)", abbreviation: "Engineering(Hardware & Software)" },
+  { id: 5, name: "Consulting", abbreviation: "Consulting" },
+  { id: 6, name: "UI, UX design and architecture", abbreviation: "UI, UX design and architecture" },
 ];
 
 const industries = [
@@ -229,13 +229,27 @@ export default function Header() {
   const [disability, setDisability] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [data, setData] = useState([]);
-  
-  useEffect(() => {
-    axios.get(`${GET_JOB}`).then((response) => {
-      setData(response.data);
-    });
-  }, []);
 
+  useEffect(() => {
+    // Fetch jobs from the API
+    const fetchJobs = () => {
+      axios.get(`${GET_JOB}`).then((response) => {
+        const filteredData = response.data.filter((job) => {
+          // Check if location is selected, if so filter based on location
+          if (department.toLowerCase() && job.department.toLowerCase() !== department.toLowerCase()) {
+            return false; 
+          }
+          if(industry.toLowerCase() && job.industry.toLowerCase() !== industry.toLowerCase()) {
+            return false;
+          }
+          return true;
+        });
+        setData(filteredData);
+      });
+    };
+    fetchJobs();
+  }, [location, type, state, department, industry, qualification, company, disability]);
+  
   useEffect(() => {
     // Apply overflow: hidden to prevent horizontal overflow
     document.documentElement.style.overflowX = "hidden";
@@ -258,11 +272,10 @@ export default function Header() {
         <h1>120+ Jobs for you to explore</h1>
         <Box
           sx={{
-            
-                  minWidth: 120,
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "10px",
+            minWidth: 120,
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
           }}
         >
           <FormControl fullWidth>
@@ -272,15 +285,13 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
-             
-             
-              
-              
             >
               <MenuItem value="">All Types</MenuItem>
               <MenuItem value="hybrid">Hybrid</MenuItem>
@@ -295,12 +306,13 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
-             
             >
               <MenuItem value="">States</MenuItem>
               {states.map((state) => (
@@ -317,10 +329,12 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
             >
               <MenuItem value="">Departments</MenuItem>
@@ -338,10 +352,12 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
             >
               <MenuItem value="">Industries</MenuItem>
@@ -359,10 +375,12 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
             >
               <MenuItem value="">All Locations</MenuItem>
@@ -380,10 +398,12 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
             >
               <MenuItem value="">Qualification</MenuItem>
@@ -404,10 +424,12 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
             >
               <MenuItem value="">Companies</MenuItem>
@@ -425,10 +447,12 @@ export default function Header() {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               sx={{
-                border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                '&:focus': {
-                  border: '2px solid #1976d2',  // Focus border
-                }
+                border: type
+                  ? "2px solid #1976d2"
+                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                "&:focus": {
+                  border: "2px solid #1976d2", // Focus border
+                },
               }}
             >
               <MenuItem value="">All Disabilities</MenuItem>
@@ -441,31 +465,33 @@ export default function Header() {
           </FormControl>
         </Box>
         {/* <div style={{ margin: "10px" }}> */}
-          <Grid container spacing={1}>
-            {data.map((item) => (
-              <Grid item xs={12} key={item.id}>
-                <Item>
-                   <Grid container spacing={0}>
-                    <Grid item xs={3}>
-                      <p>{item.company_name}</p>
-                      <h6>{item.job_title}</h6>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <h6>{item.industry} - {item.department}</h6>
-                      <h6>{item.work_mode}</h6>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <h6>No Of Positions - {item.number_of_positions}</h6>
-                      <h6>Notice Period - {item.notice_period}</h6>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Button>Apply Now</Button>
-                    </Grid>
-                   </Grid>
-                </Item>
-              </Grid>
-            ))}
-          </Grid>
+        <Grid container spacing={1}>
+          {data.map((item) => (
+            <Grid item xs={12} key={item.id}>
+              <Item>
+                <Grid container spacing={0}>
+                  <Grid item xs={3}>
+                    <p>{item.company_name}</p>
+                    <h6>{item.job_title}</h6>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <h6>
+                      {item.industry} - {item.department}
+                    </h6>
+                    <h6>{item.work_mode}</h6>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <h6>No Of Positions - {item.number_of_positions}</h6>
+                    <h6>Notice Period - {item.notice_period}</h6>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Button>Apply Now</Button>
+                  </Grid>
+                </Grid>
+              </Item>
+            </Grid>
+          ))}
+        </Grid>
         {/* </div> */}
       </div>
     </div>
