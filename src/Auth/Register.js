@@ -4,7 +4,7 @@ import "./register.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { List, ListItem, Chip, Checkbox } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { Add, Label } from "@mui/icons-material";
 import { REGISTER } from "../endpoints";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -157,10 +157,13 @@ function Employeeregister() {
     "Node.js",
   ];
   const [userfname, setUserfname] = useState("");
+  const [confirmation, setConfirm] = useState(false);
+  const [confirmError, setConfirmError] = useState('');
   const [userlname, setUserlname] = useState("");
   const [filename, setFilename] = useState([]);
   const [companyname, setCompanyname] = useState("");
   const [schoolname, setSchoolname] = useState("");
+  const [confirmMessage, setConfirmMessage] = useState("")
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [country, setCountry] = useState(null);
@@ -176,7 +179,7 @@ function Employeeregister() {
   const [education3, setEducation3] = useState("");
   const [education4, setEducation4] = useState("");
   const [userpassword, setPassword] = useState("");
-  const [type, setType] = React.useState("");
+  const [type, setType] = useState("");
   const [location, setLocation] = useState("");
   const [schoolpercentage, setSchoolpercentage] = useState("");
   const [startDate, setStartDate] = useState(new Date());
@@ -197,92 +200,38 @@ function Employeeregister() {
   const [file, setFile] = useState(null);
   const [willingToRelocate, setWillingToRelocate] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [errors, setErrors] = useState({
-    fname: '',
-    lname: '',
-    email: '',
-    password: '',
-    mobile: '',
-    address: '',
-    country: '',
-    state: '',
-    
-    
-  });
-
-
-  const validate = () => {
-    let valid = true;
-    const newErrors = { userfname: '', userlname: '', useremail: '', userpassword: '', usermobile: '', useraddress: '',country: '', state: '', };
-
-    if (!userfname) {
-      newErrors.fname = 'First name is required';
-      valid = false;
-    }
-    
-
-    if (!userlname) {
-      newErrors.lname = 'Last name is required';
-      valid = false;
-    }
-    if (!useremail) {
-      newErrors.email = 'Email is required';
-      valid = false;
-    }
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (useremail && !emailPattern.test(useremail)) {
-      newErrors.email = 'Valid email is required';
-      valid = false;
-    }
-  
-    if (!userpassword) {
-      newErrors.password = 'Password is required';
-      valid = false;
-    }
-    
-    
-    if (!useraddress) {
-      newErrors.address = 'Address is required';
-      valid = false;
-    }
-
-
-    if (!userpassword) {
-      newErrors.password = 'Password is required';
-      valid = false;
-    } else if (userpassword.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-      valid = false;
-    }
-
-    
-
-    const mobilePattern = /^\d{10}$/; // Example for a 10-digit mobile number
-    if (!usermobile || !mobilePattern.test(usermobile)) {
-      newErrors.mobile = 'Valid mobile number is required';
-      valid = false;
-    }
-    if (!country) {
-      newErrors.country = 'Please select a country';
-      valid = false;
-    }
-  
-    // State validation
-    if (!state) {
-      newErrors.state = 'Please select a state';
-      valid = false;
-    }
-
-    setErrors(newErrors);
-    return valid;
-  };
-
-
-  
+  const [educations,setEducations] = useState([
+    {
+      degree_level: "SSC",
+      schoolname: "",
+      percentage: "",
+      specialization: "",
+    },
+    {
+      degree_level: "Intermediate",
+      schoolname: "",
+      percentage: "",
+      specialization: "",
+    },
+    {
+      degree_level: "B.Tech/BE/Degree",
+      schoolname: "",
+      percentage: "",
+      specialization: "",
+    },
+    {
+      degree_level: "M.Tech/PG",
+      schoolname: "",
+      percentage: "",
+      specialization: "",
+    },
+  ])
+ 
 
   const handleSkillAdd = (newSkill) => {
     if (newSkill && !selectedSkills.includes(newSkill)) {
       setSelectedSkills([...selectedSkills, newSkill]);
+      // console.log(selectedSkills.toString())
     }
   };
 
@@ -376,8 +325,6 @@ function Employeeregister() {
     { id: "26", name: "Others", abbreviation: "Others" },
   ];
 
-
-
   // Handle input change in the search bar
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -461,36 +408,9 @@ function Employeeregister() {
     "M.Tech/Post Graduate",
     "Doctorate/Ph.D",
   ];
-  const [educations, setEducations] = useState([
-    {
-      level: "",
-      schoolname: "",
-      percentage: "",
-      startDate: new Date(),
-      endDate: new Date(),
-      specialization: "",
-    },
-  ]);
 
-  const handleAddEducation = () => {
-    setEducations([
-      ...educations,
-      {
-        level: "",
-        schoolname: "",
-        percentage: "",
-        startDate: new Date(),
-        endDate: new Date(),
-        specialization: "",
-      },
-    ]);
-  };
 
-  const handleEducationChange = (index, field, value) => {
-    const newEducations = [...educations];
-    newEducations[index][field] = value;
-    setEducations(newEducations);
-  };
+
   const isStepOptional = (step) => step === 1;
 
   const isStepSkipped = (step) => skipped.has(step);
@@ -524,58 +444,72 @@ function Employeeregister() {
   const handleSetState = (e, value) => setState(value);
 
   const handleSubmit = () => {
-   const payload = {
-    educationDetails: educations.map((education) => ({
-      level: education.level,
-      schoolname: education.schoolname,
-      percentage: education.percentage,
-      startDate: education.startDate,
-      endDate: education.endDate,
-      specialization: education.specialization,
-    })),
-    experienceType: selectedOption,
-      experiences: selectedOption === "Experienced"
-        ? experienceList.map((exp) => ({
-            jobTitle: exp.jobTitle,
-            companyname: exp.companyname,
-            location: exp.location,
-            startDate: exp.startDate,
-            endDate: exp.endDate,
-            employmentType: exp.employmentType,
-          }))
-        : [],
-    first_name: userfname,
-    last_name: userlname,
-    email: useremail,
-    password: userpassword,
-    mobile_number: usermobile,
-    country: country.name,
-    state: state.name,
-    address: useraddress,
-    skills: selectedSkills,
-    workAvailability: type,
-    disabilityType: disability,
-    disabilityPercentage: disabilitypercentage,
-    willingToRelocate,
-    // disabilityCertificate: file,
-    knownLanguages: languages_known.split(',').map(lang => lang.trim()),
-    
-   }
+    const payload = {
+      educations : educations,
+      projects: [],
+      // job_experiences: selectedOption,
+      job_experiences:
+        selectedOption === "Experienced"
+          ? experienceList.map((exp) => ({
+              job_title: exp.jobTitle,
+              company_name: exp.companyname,
+              location: exp.location,
+              start_date: exp.startDate.toISOString().split("T")[0],
+              end_date: exp.endDate.toISOString().split("T")[0],
+              employment_type: exp.employmentType,
+            }))
+          : [],
+      first_name: userfname,
+      last_name: userlname,
+      email: useremail,
+      password: userpassword,
+      mobile_number: usermobile,
+      country: country.name,
+      state: state.name,
+      address: useraddress,
+      skills: selectedSkills.toString(),
+      workAvailability: type,
+      disabilityType: disability,
+      disabilityPercentage: disabilitypercentage,
+      willingToRelocate,
+      // disabilityCertificate: file,
+      knownLanguages: languages_known,
+    };
 
-   console.log(payload)
+    console.log(payload);
     axios
-      .post(`${REGISTER}`, payload, {
+      .post(`${REGISTER}`, JSON.stringify(payload), {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'application/json', // Make sure it's application/json
         },
       })
       .then((response) => {
-        // Handle success
-        console.log(response.data);
+        setConfirm(true);
+        setConfirmError('')
+        setConfirmMessage("User Successfully Created")
       })
       .catch((error) => {
-        // Handle error
-        console.error(error);
+        setConfirm(false)
+        // setConfirmerror(true);
+        if (error.response) {
+          // Handle HTTP status codes (e.g., 400, 401, 500)
+          switch (error.response.status) {
+            case 400:
+              setConfirmError('Bad Request: Please check the data you submitted.');
+              break;
+            case 401:
+              setConfirmError('Unauthorized: Please log in and try again.');
+              break;
+            case 404:
+              setConfirmError('Not Found: The requested resource could not be found.');
+              break;
+            case 500:
+              setConfirmError('Internal Server Error: Something went wrong on the server.');
+              break;
+            default:
+              setConfirmError(`Error: Something went wrong. Status code: ${error.response.status}`);
+          }
+        }
       });
   };
 
@@ -592,6 +526,11 @@ function Employeeregister() {
       employmentType: "",
     },
   ]);
+  const handleEducationChange = (index, field, value) => {
+    const updatedEducations = [...educations]; // Create a copy of the educations array
+    updatedEducations[index][field] = value; // Update the specific field in the object at the given index
+    setEducations(updatedEducations); // Set the updated array to the state
+  };
 
   const handleExperienceChange = (index, field, value) => {
     const updatedExperienceList = experienceList.map((experience, i) =>
@@ -642,7 +581,7 @@ function Employeeregister() {
           <ThemeProvider theme={theme}>
             <Box style={{ margin: "0% 10%" }}>
               <Grid container spacing={1}>
-                {" "}
+                {/* {" "} */}
                 {/* Grid container for 3 inputs in a row */}
                 <Grid item xs={6}>
                   <TextField
@@ -650,9 +589,6 @@ function Employeeregister() {
                     value={userfname}
                     onChange={(e) => setUserfname(e.target.value)}
                     fullWidth
-                    error={!!errors.fname}
-                    helperText={errors.fname}
-
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -676,9 +612,6 @@ function Employeeregister() {
                     value={userlname}
                     onChange={(e) => setUserlname(e.target.value)}
                     fullWidth
-                    error={!!errors.lname}
-                    helperText={errors.lname}
-
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -702,9 +635,6 @@ function Employeeregister() {
                     value={useremail}
                     onChange={(e) => setEmail(e.target.value)}
                     fullWidth
-                    error={!!errors.useremil}
-                    helperText={errors.useremail}
-
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -728,9 +658,6 @@ function Employeeregister() {
                     value={userpassword}
                     onChange={(e) => setPassword(e.target.value)}
                     fullWidth
-                    error={!!errors.userpassword}
-                    helperText={errors.userpassword}
-
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -754,9 +681,6 @@ function Employeeregister() {
                     value={usermobile}
                     onChange={(e) => setMobile(e.target.value)}
                     fullWidth
-                    error={!!errors.usermobile}
-                    helperText={errors.usermobile}
-
                     // margin="dense"
                     className="custom-input"
                     sx={{
@@ -789,10 +713,12 @@ function Employeeregister() {
                         searchable
                         value={country}
                         onChange={handleSetCountry}
-                        style={{color:'black',width:'240px',marginRight:'10px'}}
+                        style={{
+                          color: "black",
+                          width: "240px",
+                          marginRight: "10px",
+                        }}
                       />
-                       {errors.country && <span style={{ color: 'red' }}>{errors.country}</span>}
-
                     </span>
                     <span>
                       <StateDropdown
@@ -801,10 +727,8 @@ function Employeeregister() {
                         country={country}
                         value={state}
                         onChange={handleSetState}
-                        style={{color:'black',width:'240px'}}
+                        style={{ color: "black", width: "240px" }}
                       />
-                       {errors.state && <span style={{ color: 'red' }}>{errors.state}</span>}
-
                     </span>
                   </div>
                 </Grid>
@@ -818,9 +742,6 @@ function Employeeregister() {
                   margin="dense"
                   multiline
                   rows={4} // Specifies 4 rows
-                  error={!!errors.useraddress}
-                  helperText={errors.useraddress}
-
                 />
               </Grid>
             </Box>
@@ -829,125 +750,79 @@ function Employeeregister() {
       case 1:
         return (
           <div className="education">
-            <Box style={{ margin: "0% 2%" }}>
-              {educations.map((education, index) => (
-                <Grid container spacing={2} key={index}>
-                  <Grid item xs={2}>
-                    <Select
-                      value={education.level}
-                      onChange={(e) =>
-                        handleEducationChange(index, "level", e.target.value)
-                      }
-                      displayEmpty
-                      fullWidth
-                      style={{ marginTop: '9px' }}
-                      sx={{
-                        border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                        '&:focus': {
-                          border: '2px solid #1976d2',  // Focus border
-                        }
-                      }}
-                    >
-                      <MenuItem value="" disabled>
-                        Select Level
-                      </MenuItem>
-                      {educationLevels.map((level, i) => (
-                        <MenuItem key={i} value={level}>
-                          {level}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      placeholder="School Name/College Name"
-                      value={education.schoolname}
-                      onChange={(e) =>
-                        handleEducationChange(
-                          index,
-                          "schoolname",
-                          e.target.value
-                        )
-                      }
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      placeholder="Percentage"
-                      value={education.percentage}
-                      onChange={(e) =>
+          <Box style={{ margin: "0% 2%" }}>
+            {/* Map through the educations data and create dynamic static fields */}
+            {educations.map((education, index) => (
+              <Grid container spacing={2} key={index}>
+                <Grid item xs={3}>
+                  <input
+                    type="text"
+                    placeholder="Education Level"
+                    value={education.degree_level}
+                    disabled
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <input
+                    type="text"
+                    placeholder="School/College Name"
+                    value={education.schoolname}
+                    onChange={(e) =>
+                      handleEducationChange(
+                        index,
+                        "schoolname",
+                        e.target.value
+                      )
+                    }
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <input
+                    type="text"
+                    placeholder="Percentage"
+                    value={education.percentage}
+                    fullWidth
+                    onChange={(e) =>
                         handleEducationChange(
                           index,
                           "percentage",
                           e.target.value
                         )
                       }
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <DatePicker
-                      selected={education.startDate}
-                      onChange={(date) =>
-                        handleEducationChange(index, "startDate", date)
-                      }
-                      dateFormat="yyyy/MM/dd"
-                      placeholderText="Start Date"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <DatePicker
-                      selected={education.endDate}
-                      onChange={(date) =>
-                        handleEducationChange(index, "endDate", date)
-                      }
-                      dateFormat="yyyy/MM/dd"
-                      placeholderText="End Date"
-                      fullWidth
-                    />
-                  </Grid>
-                  {education.level !== "SSC/X" && (
-                    <Grid item xs={2}>
-                      <input
-                        type="text"
-                        placeholder="Specialization"
-                        value={education.specialization}
-                        onChange={(e) =>
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <input
+                    type="text"
+                    placeholder="Specialization"
+                    disabled={education.level === "SSC"} 
+                    value={education.specialization}
+                    fullWidth
+                     onChange={(e) =>
                           handleEducationChange(
                             index,
                             "specialization",
                             e.target.value
                           )
                         }
-                        fullWidth
-                      />
-                    </Grid>
-                  )}
+                  />
                 </Grid>
-              ))}
-              <div style={{ marginTop: "10px", cursor: "pointer" }}>
-                <Add
-                  style={{ color: "#1976d2" }}
-                  onClick={handleAddEducation}
-                />
-                <span style={{ marginLeft: "10px" }}>Add more education</span>
-              </div>
-            </Box>
-          </div>
+              </Grid>
+            ))}
+          </Box>
+        </div>
         );
       case 2:
         return (
-          <Box style={{ margin: "0% 6%" }}>
+          <Box style={{ margin: "0% 5%" }}>
             <Grid container spacing={6}>
               <Grid item sx={6}>
                 <label>
                   <input
                     type="radio"
-                    name="experience"
+                    name="fresher"
                     value="Fresher"
                     checked={selectedOption === "Fresher"}
                     onChange={handleRadioChange}
@@ -971,190 +846,174 @@ function Employeeregister() {
 
             {selectedOption === "Experienced" &&
               experienceList.map((experience, index) => (
-                <Grid container spacing={4} key={index}>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      value={experience.jobTitle}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "jobTitle",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Job Title"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      value={experience.companyname}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "companyname",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Company name"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      value={experience.location}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "location",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Location"
-                    />
-                  </Grid>
-                  <Grid item xs={1}>
-                    <DatePicker
-                      selected={experience.startDate}
-                      onChange={(date) =>
-                        handleExperienceChange(index, "startDate", date)
-                      }
-                      dateFormat="yyyy/MM/dd"
-                      placeholderText="Start Date"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={1}>
-                    <DatePicker
-                      selected={experience.endDate}
-                      onChange={(date) =>
-                        handleExperienceChange(index, "endDate", date)
-                      }
-                      dateFormat="yyyy/MM/dd"
-                      placeholderText="End Date"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <select
-                      value={experience.employmentType}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "employmentType",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Employment Type"
-                      style={{ width: "100%" }}
-                    >
-                      <option value="">Select Employment Type</option>
-                      <option value="Full-Time">Full-Time</option>
-                      <option value="Part-Time">Part-Time</option>
-                      <option value="Contract">Contract</option>
-                      <option value="Internship">Internship</option>
-                      <option value="Freelance">Freelance</option>
-                    </select>
-                  </Grid>
-                  {index === experienceList.length - 1 && (
-                    <Grid item xs={2}>
-                      <AddIcon
-                        style={{
-                          margin: "20px 0px 0px 0px",
-                          cursor: "pointer",
-                        }}
-                        onClick={addExperienceFields}
-                      />
-                    </Grid>
-                  )}
+                <Grid container spacing={0} key={index} direction="row">
+                <Grid item xs={2}>
+                  <input
+                    type="text"
+                    value={experience.jobTitle}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "jobTitle", e.target.value)
+                    }
+                    placeholder="Job Title"
+                  />
                 </Grid>
+                <Grid item xs={2}>
+                  <input
+                    type="text"
+                    value={experience.companyname}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "companyname", e.target.value)
+                    }
+                    placeholder="Company name"
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <input
+                    type="text"
+                    value={experience.location}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "location", e.target.value)
+                    }
+                    placeholder="Location"
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <DatePicker
+                    selected={experience.startDate}
+                    onChange={(date) =>
+                      handleExperienceChange(index, "startDate", date)
+                    }
+                    dateFormat="yyyy/MM/dd"
+                    placeholderText="Start Date"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <DatePicker
+                    selected={experience.endDate}
+                    onChange={(date) =>
+                      handleExperienceChange(index, "endDate", date)
+                    }
+                    dateFormat="yyyy/MM/dd"
+                    placeholderText="End Date"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <select
+                    value={experience.employmentType}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "employmentType", e.target.value)
+                    }
+                    placeholder="Employment Type"
+                    style={{ width: "100%" }}
+                  >
+                    <option value="">Select Employment Type</option>
+                    <option value="Full-Time">Full-Time</option>
+                    <option value="Part-Time">Part-Time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Internship">Internship</option>
+                    <option value="Freelance">Freelance</option>
+                  </select>
+                </Grid>
+                {index === experienceList.length - 1 && (
+                  <Grid item xs={1}>
+                    <AddIcon
+                      style={{
+                        margin: "20px 0px 0px 0px",
+                        cursor: "pointer",
+                      }}
+                      onClick={addExperienceFields}
+                    />
+                  </Grid>
+                )}
+              </Grid>
+              
               ))}
           </Box>
         );
       case 3:
         return (
           <div className="skills">
-          <Box sx={{ margin: "20px", width: "100%" }}>
-        <Autocomplete
-          multiple
-          freeSolo
-          options={skillOptions}
-          value={selectedSkills}
-          onChange={(event, newValue) => {
-            setSelectedSkills([...new Set(newValue)]);
-          }}
-          renderTags={() => null}
-          inputValue={inputValue}
-          onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && inputValue) {
-              handleSkillAdd(inputValue);
-              setInputValue("");
-              event.preventDefault();
-            }
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Add or Select Skills"
-              placeholder="Type and press Enter to add"
-              fullWidth
-              InputProps={{
-                ...params.InputProps,
-                disableUnderline: true,
-              }}
-              sx={{
-                'width': '75%',
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    border: "none",
-                  },
-                },
-              }}
-            />
-          )}
-          sx={{ display: "block", width: "100%" }} 
-        />
-        
-        <Box sx={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}>
-          {selectedSkills.map((skill, index) => (
-            <Chip
-              key={index}
-              label={skill}
-              onDelete={() => handleSkillRemove(skill)}
-              sx={{
-                backgroundColor: "#4E1B9A",
-                color: "white",
-                marginRight: "10px",
-                marginBottom: "10px",
-                "& .MuiChip-deleteIcon": {
-                  color: "white",
-                },
-              }}
-            />
-          ))}
-        </Box>
-      </Box>
+            <Box sx={{ margin: "20px", width: "100%" }}>
+              <Autocomplete
+                multiple
+                freeSolo
+                options={skillOptions}
+                value={selectedSkills}
+                onChange={(event, newValue) => {
+                  setSelectedSkills([...new Set(newValue)]);
+                }}
+                renderTags={() => null}
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) =>
+                  setInputValue(newInputValue)
+                }
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && inputValue) {
+                    handleSkillAdd(inputValue);
+                    setInputValue("");
+                    event.preventDefault();
+                  }
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Add or Select Skills"
+                    placeholder="Type and press Enter to add"
+                    fullWidth
+                    InputProps={{
+                      ...params.InputProps,
+                      disableUnderline: true,
+                    }}
+                    sx={{
+                      width: "75%",
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          border: "none",
+                        },
+                      },
+                    }}
+                  />
+                )}
+                sx={{ display: "block", width: "100%" }}
+              />
+
+              <Box
+                sx={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}
+              >
+                {selectedSkills.map((skill, index) => (
+                  <Chip
+                    key={index}
+                    label={skill}
+                    onDelete={() => handleSkillRemove(skill)}
+                    sx={{
+                      backgroundColor: "#4E1B9A",
+                      color: "white",
+                      marginRight: "10px",
+                      marginBottom: "10px",
+                      "& .MuiChip-deleteIcon": {
+                        color: "white",
+                      },
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
           </div>
         );
       case 4:
         return (
+          <div className="special-considerations">
           <Box style={{ margin: "2% 5%" }}>
             <Grid container spacing={4}>
-              <Grid item xs={3}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    sx={{
-                      border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                      '&:focus': {
-                        border: '2px solid #1976d2',  // Focus border
-                      }
-                    }}
                   >
                     <MenuItem value="">Availability of Work</MenuItem>
                     <MenuItem value="hybrid">Hybrid</MenuItem>
@@ -1163,7 +1022,7 @@ function Employeeregister() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Select
                     value={disability}
@@ -1171,12 +1030,6 @@ function Employeeregister() {
                     onChange={(e) => setDisability(e.target.value)}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    sx={{
-                      border: type ? '2px solid #1976d2' : '1px solid rgba(0, 0, 0, 0.23)', // Border changes based on selection
-                      '&:focus': {
-                        border: '2px solid #1976d2',  // Focus border
-                      }
-                    }}
                   >
                     <MenuItem value="">All Disabilities</MenuItem>
                     {disabilities.map((disabilit) => (
@@ -1190,7 +1043,8 @@ function Employeeregister() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={3}>
+              <Grid container spacing={6}>
+              <Grid item xs={4}>
                 <input
                   type="text"
                   placeholder="Disability Percentage"
@@ -1198,7 +1052,15 @@ function Employeeregister() {
                   onChange={(e) => setDisabilitypercentage(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
+                <input
+                  type="text"
+                  value={languages_known}
+                  onChange={(e) => setLanguagesknow(e.target.value)}
+                  placeholder="Please enter known languages with comma"
+                />
+              </Grid>
+              <Grid item xs={4}>
                 <FormControlLabel
                   required
                   control={
@@ -1213,7 +1075,11 @@ function Employeeregister() {
                   }}
                 />
               </Grid>
+              </Grid>
             </Grid>
+            {/* <Grid container spacing={1} style={{ margin: "2%" }}> */}
+             
+            {/* </Grid> */}
             {/* <Grid container spacing={6}>
               <Grid item xs={4}>
                 <label>Disability Certificate</label>
@@ -1247,12 +1113,8 @@ function Employeeregister() {
                 />
               </Grid>
             </Grid> */}
-            <Grid container spacing={1} style={{ margin: "2%" }}>
-                  <Grid item>
-                    <input type="text" value={languages_known} onChange={(e) => setLanguagesknow(e.target.value)} placeholder="Please enter known languages with comma"/>
-                  </Grid>
-            </Grid>
           </Box>
+          </div>
         );
       default:
         return null;
@@ -1299,7 +1161,7 @@ function Employeeregister() {
       {activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you're finished
+          {confirmMessage && {confirmMessage}}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
