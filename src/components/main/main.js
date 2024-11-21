@@ -22,6 +22,7 @@ import { Button, InputLabel, Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Footer from "../footer/footer";
 import BackGround from "../background/background";
+import CircularProgress from "@mui/material/CircularProgress";
 // import ReactGA from "react-ga4";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -40,19 +41,39 @@ const Item = styled(Paper)(({ theme }) => ({
 const images = [one, two, three, four];
 const images2 = [bridge1, bridge2, bridge3, bridge4, bridge5, bridge6];
 const states = [
-  { id: 1, name: "Andhra Pradesh", abbreviation: "AP" },
-  { id: 2, name: "Telangana", abbreviation: "TG" },
-  { id: 3, name: "Karnataka", abbreviation: "KA" },
-  { id: 4, name: "Tamil Nadu", abbreviation: "TN" },
+  { id: 1, name: "Andhra Pradesh", abbreviation: "Andhra Pradesh" },
+  { id: 2, name: "Telangana", abbreviation: "Telangana" },
+  { id: 3, name: "Karnataka", abbreviation: "Karnataka" },
+  { id: 4, name: "Tamil Nadu", abbreviation: "Tamilnadu" },
 ];
 
 const departments = [
-  { id: 1, name: "IT & Information security", abbreviation: "IT & Information security" },
-  { id: 2, name: "Data Science & analytics", abbreviation: "Data Science & analytics" },
-  { id: 3, name: "Human Resource Management", abbreviation: "Human Resource Management" },
-  { id: 4, name: "Engineering(Hardware & Software)", abbreviation: "Engineering(Hardware & Software)" },
+  {
+    id: 1,
+    name: "IT & Information security",
+    abbreviation: "IT & Information security",
+  },
+  {
+    id: 2,
+    name: "Data Science & analytics",
+    abbreviation: "Data Science & analytics",
+  },
+  {
+    id: 3,
+    name: "Human Resource Management",
+    abbreviation: "Human Resource Management",
+  },
+  {
+    id: 4,
+    name: "Engineering(Hardware & Software)",
+    abbreviation: "Engineering(Hardware & Software)",
+  },
   { id: 5, name: "Consulting", abbreviation: "Consulting" },
-  { id: 6, name: "UI, UX design and architecture", abbreviation: "UI, UX design and architecture" },
+  {
+    id: 6,
+    name: "UI, UX design and architecture",
+    abbreviation: "UI, UX design and architecture",
+  },
 ];
 
 const industries = [
@@ -216,6 +237,7 @@ const companies = [
   { id: "17", name: "Indigo", abbreviation: "indigo" },
   { id: "18", name: "JK Cement", abbreviation: "jk_cement" },
   { id: "19", name: "JLL", abbreviation: "jll" },
+  { id: "20", name: "Expert Aid Techn", abbreviation: "expert aid tech" },
 ];
 export default function Header() {
   const [currentImage, setCurrentImage] = useState(0);
@@ -229,27 +251,51 @@ export default function Header() {
   const [disability, setDisability] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     // Fetch jobs from the API
     const fetchJobs = () => {
       axios.get(`${GET_JOB}`).then((response) => {
         const filteredData = response.data.filter((job) => {
-          // Check if location is selected, if so filter based on location
-          if (department.toLowerCase() && job.department.toLowerCase() !== department.toLowerCase()) {
-            return false; 
-          }
-          if(industry.toLowerCase() && job.industry.toLowerCase() !== industry.toLowerCase()) {
-            return false;
-          }
-          return true;
+          const matchDepartment = department ? job.department.toLowerCase().includes(department.toLowerCase()) : true;
+          
+          const matchWorkmode = type ? job.work_mode.toLowerCase().includes(type.toLowerCase()) : true
+          
+          const matchIndustry = industry ? job.industry.toLowerCase().includes(industry.toLowerCase()) : true;
+
+          const matchesCompany = company ? job.company_name.toLowerCase().includes(company.toLowerCase()) : true;
+    
+          const matchesState = state ? job.state.toLowerCase().includes(state.toLowerCase()) : true;
+
+          const matchesLocation = location ? job.location.toLowerCase().includes(location.toLowerCase()) : true;
+    
+          const matchesDisability = disability ? job.disability_eligible.toLowerCase().includes(disability.toLowerCase()) : true;
+    
+          return  matchesCompany && matchesState && matchesDisability && matchDepartment && matchIndustry 
+                  && matchWorkmode && matchesLocation;
         });
         setData(filteredData);
+      }).catch((error) => {
+        console.error(error.response?.data);
+      })
+      .finally(() => {
+        setLoading(false); 
       });
     };
     fetchJobs();
-  }, [location, type, state, department, industry, qualification, company, disability]);
-  
+  }, [
+    location,
+    type,
+    state,
+    department,
+    industry,
+    qualification,
+    company,
+    disability,
+  ]);
+
   useEffect(() => {
     // Apply overflow: hidden to prevent horizontal overflow
     document.documentElement.style.overflowX = "hidden";
@@ -260,6 +306,11 @@ export default function Header() {
   return (
     // <div>
     <div className="my-container">
+        {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
       <div className="image-zoom-container">
         <img
           className="zoomed-image"
@@ -296,7 +347,7 @@ export default function Header() {
               <MenuItem value="">All Types</MenuItem>
               <MenuItem value="hybrid">Hybrid</MenuItem>
               <MenuItem value="remote">Remote</MenuItem>
-              <MenuItem value="location-based">Location based</MenuItem>
+              <MenuItem value="on-site">On-site</MenuItem>
             </Select>
           </FormControl>
           <FormControl fullWidth>
