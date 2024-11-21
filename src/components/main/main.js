@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./main.css";
 import one from "../../images/main.png";
@@ -18,7 +18,7 @@ import bridge6 from "../../images/d5.jpg";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Button, InputLabel, Grid } from "@mui/material";
+import { Button, InputLabel, Grid,Modal, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Footer from "../footer/footer";
 import BackGround from "../background/background";
@@ -252,6 +252,11 @@ export default function Header() {
   const [location, setLocation] = React.useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const [hoverTimeout, setHoverTimeout] = useState(null);
+  const [isModalHovered, setIsModalHovered] = useState(false);
+  const [hoverBoxPosition, setHoverBoxPosition] = useState({ top: 0, left: 0 });
+  const rowRefs = useRef([]);
 
   useEffect(() => {
     setLoading(true);
@@ -302,6 +307,36 @@ export default function Header() {
   }, []);
   const imgarray = images[currentImage % images.length];
   const imgarray2 = images2[currentImage % images2.length];
+
+  const handleMouseEnter = (item, index) => {
+    clearTimeout(hoverTimeout); // Clear any existing hide timeout
+    setHoveredItem(item); 
+    const row = rowRefs.current[index];
+    const rowRect = row.getBoundingClientRect();
+
+    // Set the position of the hover box to be relative to the row
+    setHoverBoxPosition({
+      top: rowRect.top + window.scrollY, // top of the row relative to the viewport
+      left: rowRect.left + window.scrollX, // left of the row relative to the viewport
+    });
+  };
+  
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setHoveredItem(null); // Hide the modal after a small delay
+    }, 4000); // Adjust delay as needed
+    setHoverTimeout(timeout);
+  };
+  
+  
+  const handleModalMouseEnter = () => {
+    setIsModalHovered(true); // Keep the modal open
+  };
+  
+  const handleModalMouseLeave = () => {
+    setIsModalHovered(false); // Allow closing the modal
+  };
+  
 
   return (
     // <div>
@@ -516,35 +551,86 @@ export default function Header() {
           </FormControl>
         </Box>
         {/* <div style={{ margin: "10px" }}> */}
-        <Grid container spacing={1}>
-          {data.map((item) => (
-            <Grid item xs={12} key={item.id}>
-              <Item>
-                <Grid container spacing={0}>
-                  <Grid item xs={3}>
-                    <p>{item.company_name}</p>
-                    <h6>{item.job_title}</h6>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <h6>
-                      {item.industry} - {item.department}
-                    </h6>
-                    <h6>{item.work_mode}</h6>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <h6>No Of Positions - {item.number_of_positions}</h6>
-                    <h6>Notice Period - {item.notice_period}</h6>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Button>Apply Now</Button>
-                  </Grid>
-                </Grid>
-              </Item>
+        <Grid container spacing={1} style={{ marginTop: "10px" }}>
+        {data.map((item, index) => (
+          <Grid
+            item
+            xs={12}
+            key={item.id}
+            ref={(el) => (rowRefs.current[index] = el)} // Attach ref to each row
+            onMouseEnter={() => handleMouseEnter(item, index)} // Mouse enters and shows the box
+            onMouseLeave={handleMouseLeave} // Mouse leaves and hides the box
+            style={{
+              border: "1px solid #ddd",
+              padding: "10px",
+              borderRadius: "4px",
+              cursor: "pointer",
+              transition: "box-shadow 0.3s ease",
+              position: "relative", // Ensures the small box is positioned correctly
+            }}
+          >
+            <Grid container spacing={0}>
+              <Grid item xs={3}>
+                <p>{item.company_name}</p>
+                <h6>{item.job_title}</h6>
+              </Grid>
+              <Grid item xs={3}>
+                <h6>
+                  {item.industry} - {item.department}
+                </h6>
+                <h6>{item.work_mode}</h6>
+              </Grid>
+              <Grid item xs={3}>
+                <h6>No Of Positions - {item.number_of_positions}</h6>
+                <h6>Notice Period - {item.notice_period}</h6>
+              </Grid>
+              <Grid item xs={3}>
+                <Button>Apply Now</Button>
+              </Grid>
             </Grid>
-          ))}
-        </Grid>
-        {/* </div> */}
-      </div>
+
+            {/* Hover Box (small box displayed on hover) */}
+            {hoveredItem === item && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: '50%', 
+                  left: '50%',
+                  backgroundColor: "white",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+                  minWidth: "150px",
+                  zIndex: 10,
+                  transform: "translateY(0px)", // Make sure it's right on the row
+                }}
+                onMouseEnter={handleModalMouseEnter}
+                onMouseLeave={handleModalMouseLeave}
+              >
+                <Typography variant="h6" component="h2">
+                  {item.job_title} at {item.company_name}
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                  <strong>Industry:</strong> {item.industry}
+                </Typography>
+                <Typography>
+                  <strong>Department:</strong> {item.department}
+                </Typography>
+                <Typography>
+                  <strong>Work Mode:</strong> {item.work_mode}
+                </Typography>
+                <Typography>
+                  <strong>Positions:</strong> {item.number_of_positions}
+                </Typography>
+                <Typography>
+                  <strong>Notice Period:</strong> {item.notice_period}
+                </Typography>
+              </Box>
+            )}
+          </Grid>
+        ))}
+      </Grid>
+    </div>
     </div>
   );
 }
