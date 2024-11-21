@@ -1,106 +1,127 @@
-
-.login-actions {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start; /* Align items to the left */
-    gap: 0px;
-    justify-content: space-between; /* Align the items to the left */
-    align-items: center;
-    width: 100%;
-}
-
-.forgot-password-link {
-    display: inline-block;
-    margin-left: 10px; /* Add some space between the link and the button */
-   
-}
-
-.forgot-password-link a {
-    color: #007bff;
-    text-decoration: underline;
-    font-size: large;
-    margin-left: 80px;
-}
-
-.forgot-password-link a:hover {
-    text-decoration: underline;
-}
-
-
-
-.container {
-    margin-top:5%;
+.container1 {
+    margin-top: 5%;
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;  /* Ensures the content is spread out */
     width: 90%;
     background-color: white;
 }
-/* Add this to your login.css file */
 
-.full-page-spinner {
-    position: fixed;  /* Fixed to cover the whole screen */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it overlays the content */
+.flex-item-login {
+    flex: 1 1 50%;  /* Ensure the flex item takes up 50% of the container's width */
+    height: 90%;
+    text-align: center;
+    margin: 20px 50px;
 }
 
-.flex-item-login { 
-    flex: 1; 
-    height: 90%;
-    /* width: 50% 50%; */
-    text-align:center; 
-    /* background-color: rgb(184, 233, 181);  */
-    /* border: 1px solid #ccc;  */
-    margin: 20px 50px; 
-} 
-
-.imageDetails {
-    width: 100%;
-    height:auto;
+.imageDetails_login {
+    width: 50%;  /* Make the image take up 50% of the container's width */
+    height: auto;
 }
 
 .container-login input[type="password"],
-input[type="text"] {
+.container-login input[type="text"] {
     width: 100%;
     padding: 10px;
-    margin: 10px 0px;
+    margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.eye-icon, .login-button {
-    margin-right: 80px; /* Space between elements */
-    padding: 10px; /* Adjust padding as needed */
-    cursor: pointer; /* Indicate clickable */
-}
-
 .password-container {
     position: relative;
-    margin: 15px 0; /* Adjust spacing as needed */
+    margin: 15px 0;
 }
 
 .password-input {
     width: 100%;
-    padding: 10px 40px 10px 10px; /* Space for the icon */
-    border: 1px solid #ccc; /* Adjust border style */
-    border-radius: 4px; /* Rounded corners */
+    padding: 10px 40px 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .eye-icon {
     position: absolute;
-    right: 10px; /* Positioning the icon */
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #333; /* Adjust color as needed */
-    font-size: 18px; /* Adjust size as needed */
-    margin-top: 4px;
+    color: #333;
+    font-size: 18px;
+}
+
+.full-page-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+/* Container for the login actions (button + forgot password link) */
+.login-actions {
+    display: flex;                /* Use flexbox to arrange items */
+    flex-direction: column;       /* Stack button and link vertically */
+    align-items: center;          /* Center items horizontally */
+    justify-content: center;      /* Ensure the content is vertically centered */
+    width: 100%;                  /* Ensure container takes full width */
+    max-width: 400px;             /* Optional: Limit the max width for better layout control */
+    margin-left: auto;            /* Center the login actions container horizontally */
+    margin-right: auto;           /* Center the login actions container horizontally */
+    margin-top: 20px;             /* Add space between button/link and the content above */
+    gap: 10px;                    /* Add space between the button and the link */
+}
+
+/* Button style */
+.login-actions button {
+    margin-right: 50px;
+    padding: 12px 24px;           /* Add padding to make the button larger */
+    background-color: #1976D2;    /* Blue background color */
+    color: white;                 /* White text color */
+    border: none;                 /* Remove border */
+    border-radius: 5px;           /* Rounded corners */
+    cursor: pointer;             /* Change cursor to pointer on hover */
+    font-size: 16px;              /* Font size for button text */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+    width: 100%;                  /* Make the button fill the container */
+    max-width: 300px;             /* Limit max width to prevent stretching too far */
+}
+
+/* Button hover effect */
+.login-actions button:hover {
+    background-color: #1565C0;    /* Darker blue on hover */
+}
+
+/* Button disabled state */
+.login-actions button:disabled {
+    background-color: #ccc;       /* Gray background for disabled state */
+    cursor: not-allowed;          /* Show "not-allowed" cursor when disabled */
+}
+
+/* Forgot password link style */
+.forgot-password-link {
+    font-size: 14px;              /* Font size for the link */
+    color: #007bff;               /* Blue color for the link */
+    text-decoration: none;        /* Remove underline */
+    cursor: pointer;             /* Change cursor to pointer */
+    transition: color 0.3s ease;  /* Smooth color transition on hover */
+    margin-top: 10px;             /* Space between button and link */
+}
+
+/* Link hover effect */
+.forgot-password-link:hover {
+    color: #0056b3;               /* Darker blue on hover */
+    text-decoration: underline;   /* Underline on hover */
+}
+
+/* Link focus effect */
+.forgot-password-link:focus {
+    outline: none;                /* Remove default focus outline */
+    text-decoration: underline;   /* Underline when focused */
 }
