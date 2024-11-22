@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
+import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import "./jobs.css";
 import Postajob from "./postajob"; // Import the Postajob component
@@ -36,12 +37,19 @@ export default function Jobs() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
 
   useEffect(() => {
     // Fetch job data from API
+    setLoading(true);
     axios.get(`${GET_JOB}`).then((response) => {
       setData(response.data);
+    }).catch((error) => {
+      console.error(error.response?.data);
+    })
+    .finally(() => {
+      setLoading(false); 
     });
   }, []);
 
@@ -94,6 +102,11 @@ export default function Jobs() {
 
   return (
     <div>
+      {loading &&  
+      <div className="full-page-spinner">
+      <CircularProgress color="primary" size={50} />
+    </div>
+      }
       <Layout>
         <button style={{ marginLeft: "75%" }} onClick={openPostJobModal}>
           Post a Job
