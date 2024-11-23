@@ -80,7 +80,7 @@
 
 /* Button style */
 .login-actions button {
-    margin-right: 50px;
+    margin-right: 200px;
     padding: 12px 24px;           /* Add padding to make the button larger */
     background-color: #1976D2;    /* Blue background color */
     color: white;                 /* White text color */

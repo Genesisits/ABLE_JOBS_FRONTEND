@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./main.css";
 import one from "../../images/main.png";
+import DescriptionIcon from '@mui/icons-material/Description';
 import two from "../../images/h2.jpg";
 import Paper from "@mui/material/Paper";
 import three from "../../images/h3.jfif";
@@ -9,6 +10,7 @@ import four from "../../images/h4.JPG";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
 import bridge1 from "../../images/d1.jpg";
+import Chip from '@mui/material/Chip';
 import { GET_JOB } from "../../endpoints";
 import bridge2 from "../../images/d2.jpg";
 import bridge3 from "../../images/d6.jpg";
@@ -18,11 +20,13 @@ import bridge6 from "../../images/d5.jpg";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Button, InputLabel, Grid,Modal, Typography } from "@mui/material";
+import { Button, InputLabel, Grid, Modal, Typography } from "@mui/material";
+import SchoolIcon from '@mui/icons-material/School';
 import Box from "@mui/material/Box";
 import Footer from "../footer/footer";
 import BackGround from "../background/background";
 import CircularProgress from "@mui/material/CircularProgress";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 // import ReactGA from "react-ga4";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -262,32 +266,58 @@ export default function Header() {
     setLoading(true);
     // Fetch jobs from the API
     const fetchJobs = () => {
-      axios.get(`${GET_JOB}`).then((response) => {
-        const filteredData = response.data.filter((job) => {
-          const matchDepartment = department ? job.department.toLowerCase().includes(department.toLowerCase()) : true;
-          
-          const matchWorkmode = type ? job.work_mode.toLowerCase().includes(type.toLowerCase()) : true
-          
-          const matchIndustry = industry ? job.industry.toLowerCase().includes(industry.toLowerCase()) : true;
+      axios
+        .get(`${GET_JOB}`)
+        .then((response) => {
+          const filteredData = response.data.filter((job) => {
+            const matchDepartment = department
+              ? job.department.toLowerCase().includes(department.toLowerCase())
+              : true;
 
-          const matchesCompany = company ? job.company_name.toLowerCase().includes(company.toLowerCase()) : true;
-    
-          const matchesState = state ? job.state.toLowerCase().includes(state.toLowerCase()) : true;
+            const matchWorkmode = type
+              ? job.work_mode.toLowerCase().includes(type.toLowerCase())
+              : true;
 
-          const matchesLocation = location ? job.location.toLowerCase().includes(location.toLowerCase()) : true;
-    
-          const matchesDisability = disability ? job.disability_eligible.toLowerCase().includes(disability.toLowerCase()) : true;
-    
-          return  matchesCompany && matchesState && matchesDisability && matchDepartment && matchIndustry 
-                  && matchWorkmode && matchesLocation;
+            const matchIndustry = industry
+              ? job.industry.toLowerCase().includes(industry.toLowerCase())
+              : true;
+
+            const matchesCompany = company
+              ? job.company_name.toLowerCase().includes(company.toLowerCase())
+              : true;
+
+            const matchesState = state
+              ? job.state.toLowerCase().includes(state.toLowerCase())
+              : true;
+
+            const matchesLocation = location
+              ? job.location.toLowerCase().includes(location.toLowerCase())
+              : true;
+
+            const matchesDisability = disability
+              ? job.disability_eligible
+                  .toLowerCase()
+                  .includes(disability.toLowerCase())
+              : true;
+
+            return (
+              matchesCompany &&
+              matchesState &&
+              matchesDisability &&
+              matchDepartment &&
+              matchIndustry &&
+              matchWorkmode &&
+              matchesLocation
+            );
+          });
+          setData(filteredData);
+        })
+        .catch((error) => {
+          console.error(error.response?.data);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-        setData(filteredData);
-      }).catch((error) => {
-        console.error(error.response?.data);
-      })
-      .finally(() => {
-        setLoading(false); 
-      });
     };
     fetchJobs();
   }, [
@@ -310,38 +340,35 @@ export default function Header() {
 
   const handleMouseEnter = (item, index) => {
     clearTimeout(hoverTimeout); // Clear any existing hide timeout
-    setHoveredItem(item); 
+    setHoveredItem(item);
     const row = rowRefs.current[index];
     const rowRect = row.getBoundingClientRect();
-
     // Set the position of the hover box to be relative to the row
     setHoverBoxPosition({
       top: rowRect.top + window.scrollY, // top of the row relative to the viewport
       left: rowRect.left + window.scrollX, // left of the row relative to the viewport
     });
   };
-  
+
   const handleMouseLeave = () => {
     const timeout = setTimeout(() => {
       setHoveredItem(null); // Hide the modal after a small delay
-    }, 4000); // Adjust delay as needed
+    }, 5000); // Adjust delay as needed
     setHoverTimeout(timeout);
   };
-  
-  
+
   const handleModalMouseEnter = () => {
     setIsModalHovered(true); // Keep the modal open
   };
-  
+
   const handleModalMouseLeave = () => {
     setIsModalHovered(false); // Allow closing the modal
   };
-  
 
   return (
     // <div>
     <div className="my-container">
-        {loading && (
+      {loading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
         </div>
@@ -552,85 +579,140 @@ export default function Header() {
         </Box>
         {/* <div style={{ margin: "10px" }}> */}
         <Grid container spacing={1} style={{ marginTop: "10px" }}>
-        {data.map((item, index) => (
-          <Grid
-            item
-            xs={12}
-            key={item.id}
-            ref={(el) => (rowRefs.current[index] = el)} // Attach ref to each row
-            onMouseEnter={() => handleMouseEnter(item, index)} // Mouse enters and shows the box
-            onMouseLeave={handleMouseLeave} // Mouse leaves and hides the box
-            style={{
-              border: "1px solid #ddd",
-              padding: "10px",
-              borderRadius: "4px",
-              cursor: "pointer",
-              transition: "box-shadow 0.3s ease",
-              position: "relative", // Ensures the small box is positioned correctly
-            }}
-          >
-            <Grid container spacing={0}>
-              <Grid item xs={3}>
-                <p>{item.company_name}</p>
-                <h6>{item.job_title}</h6>
+          {data.map((item, index) => (
+            <Grid
+              item
+              xs={12}
+              key={item.id}
+              ref={(el) => (rowRefs.current[index] = el)} // Attach ref to each row
+              onMouseEnter={() => handleMouseEnter(item, index)} // Mouse enters and shows the box
+              onMouseLeave={handleMouseLeave} // Mouse leaves and hides the box
+              style={{
+                border: "1px solid #ddd",
+                padding: "10px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transition: "box-shadow 0.3s ease",
+                position: "relative", // Ensures the small box is positioned correctly
+              }}
+            >
+              <Grid container spacing={0}>
+                <Grid item xs={3}>
+                  <p>{item.company_name}</p>
+                  <h6>{item.job_title}</h6>
+                </Grid>
+                <Grid item xs={3}>
+                  <h6>
+                    {item.industry} - {item.department}
+                  </h6>
+                  <h6>{item.work_mode}</h6>
+                </Grid>
+                <Grid item xs={3}>
+                  <h6>No Of Positions - {item.number_of_positions}</h6>
+                  <h6>Notice Period - {item.notice_period}</h6>
+                </Grid>
+                <Grid item xs={3}>
+                  <Button>Apply Now</Button>
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <h6>
-                  {item.industry} - {item.department}
-                </h6>
-                <h6>{item.work_mode}</h6>
-              </Grid>
-              <Grid item xs={3}>
-                <h6>No Of Positions - {item.number_of_positions}</h6>
-                <h6>Notice Period - {item.notice_period}</h6>
-              </Grid>
-              <Grid item xs={3}>
-                <Button>Apply Now</Button>
-              </Grid>
-            </Grid>
 
-            {/* Hover Box (small box displayed on hover) */}
-            {hoveredItem === item && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: '50%', 
-                  left: '50%',
-                  backgroundColor: "white",
-                  padding: "10px",
-                  borderRadius: "4px",
-                  boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                  minWidth: "150px",
-                  zIndex: 10,
-                  transform: "translateY(0px)", // Make sure it's right on the row
-                }}
-                onMouseEnter={handleModalMouseEnter}
-                onMouseLeave={handleModalMouseLeave}
-              >
-                <Typography variant="h6" component="h2">
-                  {item.job_title} at {item.company_name}
-                </Typography>
-                <Typography sx={{ mt: 1 }}>
-                  <strong>Industry:</strong> {item.industry}
-                </Typography>
-                <Typography>
-                  <strong>Department:</strong> {item.department}
-                </Typography>
-                <Typography>
-                  <strong>Work Mode:</strong> {item.work_mode}
-                </Typography>
-                <Typography>
-                  <strong>Positions:</strong> {item.number_of_positions}
-                </Typography>
-                <Typography>
-                  <strong>Notice Period:</strong> {item.notice_period}
-                </Typography>
-              </Box>
-            )}
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+              {/* Hover Box (small box displayed on hover) */}
+              {hoveredItem === item && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    backgroundColor: "white",
+                    padding: "10px",
+                    borderRadius: "4px",
+                    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+                    minWidth: "500px",
+                    maxWidth: "md",
+                    minHeight: "400px",
+                    maxHeight: "900px",
+                    zIndex: 10,
+                    transform: "translateY(0px)",
+                  }}
+                  onMouseEnter={handleModalMouseEnter}
+                  onMouseLeave={handleModalMouseLeave}
+                >
+                  <Typography variant="h6" component="h2">
+                    <strong>{item.job_title}</strong>
+                  </Typography>
+                  <Typography style={{ textDecoration: "underline" }}>
+                    {item.company_name}
+                  </Typography>
+                  <Typography style={{ fontFamily: "Serif" , margin:'10px'}}>
+                    <LocationOnIcon/> {item.location} ,{item.state}        
+                  </Typography>
+                  {/* <Typography style={{ fontFamily: "Serif" , margin:'10px'}}>
+                    <SchoolIcon/> {item.location} ,{item.state}        
+                  </Typography> */}
+                  <Typography>
+                  <Chip
+                    label={item.employment_type}
+                    sx={{
+                      backgroundColor: "grey",
+                      borderRadius:'5px',
+                      color: "black",
+                      marginRight: "10px",
+                      marginBottom: "10px"
+                    }}
+                  />
+                  <Chip
+                    label={'$'+item.salary_offered}
+                    sx={{
+                      backgroundColor: "grey",
+                      borderRadius:'5px',
+                      color: "black",
+                      marginRight: "10px",
+                      marginBottom: "10px"
+                    }}
+                  />
+                  <Chip
+                    label={item.work_mode}
+                    sx={{
+                      backgroundColor: "grey",
+                      borderRadius:'5px',
+                      color: "black",
+                      marginRight: "10px",
+                      marginBottom: "10px"
+                    }}
+                  />
+                    <Chip
+                    label={'Notice Period: ' +item.notice_period}
+                    sx={{
+                      backgroundColor: "grey",
+                      borderRadius:'5px',
+                      color: "black",
+                      marginRight: "10px",
+                      marginBottom: "10px"
+                    }}
+                  />
+                  </Typography>
+                  <Typography>
+                    {item.company_website}
+                  </Typography>
+                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
+                    <strong>Skills Required</strong> {item.skills}
+                  </Typography>
+                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
+                    <strong>Experience Required</strong> {item.experience_required}
+                  </Typography>
+                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
+                    <strong>Disability Eliigible</strong> {item.disability_eligible}
+                  </Typography>
+                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
+                    <strong>Description:</strong> 
+                    {item.description}
+                  </Typography>
+                </Box>
+              )}
+            </Grid>
+          ))}
+        </Grid>
+      </div>
     </div>
   );
 }

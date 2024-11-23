@@ -52,7 +52,7 @@ textarea {
   width: 48%; /* Each column takes up about half the width with some margin */
 }
 
-button {
+.jobs button {
   padding: 10px;
   font-size: 16px;
   background-color: #2840b7;
