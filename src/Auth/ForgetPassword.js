@@ -57,8 +57,9 @@ function ForgetPassword() {
           <Grid item xs={11}>
             <h3 style={{ color: 'blue' }}>Forget Password</h3>
             <p>Please enter your email address. You will <br />receive a link to create a new password via email.</p>
-            <TextField
-              label="Enter your email"
+            <input
+            type="text"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               fullWidth
@@ -95,3 +96,4 @@ function ForgetPassword() {
 }
 
 export default ForgetPassword;
+  

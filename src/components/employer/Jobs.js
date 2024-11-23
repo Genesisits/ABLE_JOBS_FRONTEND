@@ -95,9 +95,11 @@ export default function Jobs() {
   return (
     <div>
       <Layout>
+        <div className="jobs">
         <button style={{ marginLeft: "75%" }} onClick={openPostJobModal}>
           Post a Job
         </button>
+        </div>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
             <Table stickyHeader aria-label="sticky table">
