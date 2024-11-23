@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { CREATE_JOB, UPDATE_JOB } from "../../endpoints";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress} from "@mui/material";
 import "./jobs.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -183,7 +183,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
   const [qualification_required, setQualification] = useState("");
   const [jobid, setJobid] = useState("");
   const [success , setSuccess] = useState(false)
-
+  const [loading, setLoading] = useState(false);
   // const handleSuccess = () => {
   //   setSuccess(false)
   // }
@@ -270,7 +270,8 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
         })
         .catch((error) => {
           console.log("Error updating job:", error);
-        });
+        })
+        .finally(() => setLoading(false));
     } else {
       // Creating new job
       axios
@@ -281,10 +282,11 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
         })
         .catch((error) => {
           console.log("Error adding job:", error);
-        });
+        })
+        .finally(() => setLoading(false));
     }
 
-    closeModal(); // Close modal after submission
+    // closeModal(); 
   };
   const closeSuccessModal = () => {
     setSuccess(false);
@@ -312,6 +314,20 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
       }}
     >
       <div className="employ">
+      <Box>
+            {loading ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  minHeight: "300px",
+                }}
+              >
+                <CircularProgress />
+              </div>
+            ) : (
         <Box sx={customStyles}>
           <h2 style={{ margin: "0", textAlign: "center" }}>
             {isEditing ? "Edit Job" : "Add Job"}
@@ -319,6 +335,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
          
           {/* Row 1 */}
           <div className="employ-row">
+            
             <input
               type="text"
               placeholder="Company Name"
@@ -491,6 +508,8 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
             </Button>
           </div>
         </Box>
+        )}
+          </Box>
       </div>
     </Modal>
     <Modal

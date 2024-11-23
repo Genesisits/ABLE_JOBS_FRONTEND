@@ -5,9 +5,24 @@ import { GET_JOB,APPLY_JOB } from './../../endpoints';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { Typography, CircularProgress, Box, Modal} from "@mui/material";
 import './findajob.css';
 
-function Findjob() {
+const customStyles = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "70%",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  height: "650px",
+  p: 4,
+};
+
+
+function Findjob({ closeModal }) {
   const [rows, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [companyQuery, setCompanyQuery] = useState("");
@@ -16,6 +31,9 @@ function Findjob() {
   const [uniqueLocations, setUniqueLocations] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [success , setSuccess] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
 
   useEffect(() => {
     axios.get(GET_JOB)
@@ -58,17 +76,24 @@ function Findjob() {
       );
   
       if (response.status === 201) {
-        alert("Application successful!");
+        setSuccess(true)
       } else {
         alert("Failed to apply for the job.");
       }
     } catch (error) {
       console.error("Full error response:", error.response);
-      alert(error.response?.data?.detail || "There was an error applying for the job.");
+    
+      if (error.response?.status === 400 && error.response?.data?.error) {
+        setErrorMessage(error.response.data.error);
+        setErrorModalOpen(true);
+      } else {
+        setErrorMessage(error.response?.data?.detail || "There was an error applying for the job.");
+        setErrorModalOpen(true);
+      }
     }
   };
   
-
+  
   const filteredRows = rows.filter(job => 
     (job.job_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     job.company_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -76,7 +101,10 @@ function Findjob() {
     job.company_name.toLowerCase().includes(companyQuery.toLowerCase()) &&
     job.location.toLowerCase().includes(locationQuery.toLowerCase())
   );
-
+  const closeSuccessModal = () => {
+    setSuccess(false);
+    closeModal();
+  };
   return (
     <Layout>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -188,6 +216,72 @@ function Findjob() {
             <Button onClick={handleApplyNow} color="secondary" variant="contained">Apply Now</Button>
           </DialogActions>
         </Dialog>
+        <Modal
+        open={success}
+        onClose={closeSuccessModal}
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
+      >
+        <Box
+          sx={{
+            ...customStyles,
+            width: "40%",
+            height: "auto",
+            textAlign: "center",
+          }}
+        >
+          <Typography id="success-modal-title" variant="h6" component="h2">
+            { "Job Applied Successfully!" }
+          </Typography>
+          <Typography
+            id="success-modal-description"
+            sx={{ mt: 2, fontSize: "16px" }}
+          >
+            The job applied successfully.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={closeSuccessModal}
+            sx={{ mt: 3 }}
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
+      <Modal
+  open={errorModalOpen}
+  onClose={() => setErrorModalOpen(false)}
+  aria-labelledby="error-modal-title"
+  aria-describedby="error-modal-description"
+>
+  <Box
+    sx={{
+      ...customStyles,
+      width: "40%",
+      height: "auto",
+      textAlign: "center",
+    }}
+  >
+    <Typography id="error-modal-title" variant="h6" component="h2" color="error">
+      Error
+    </Typography>
+    <Typography
+      id="error-modal-description"
+      sx={{ mt: 2, fontSize: "16px" }}
+    >
+      {errorMessage}
+    </Typography>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => setErrorModalOpen(false)}
+      sx={{ mt: 3 }}
+    >
+      Close
+    </Button>
+  </Box>
+</Modal>
       </Paper>
     </Layout>
   );
