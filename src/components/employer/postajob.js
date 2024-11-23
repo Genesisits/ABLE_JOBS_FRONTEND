@@ -205,6 +205,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
       setExperiencerequired(selectedJob.experience_required);
       setWorkmode(selectedJob.work_mode);
       setcompanywebsite(selectedJob.company_website);
+      setQualification(selectedJob.qualification_required)
       setdisability(selectedJob.disability_eligible);
       setNoticeperiod(selectedJob.notice_period);
       setJobdescription(selectedJob.description);

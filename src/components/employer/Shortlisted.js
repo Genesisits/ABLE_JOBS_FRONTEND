@@ -1,7 +1,7 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
-import { GET_JOB,ACTIVATE_JOB } from "../../endpoints";
+import { GET_JOB,ACTIVATE_JOB, SHORTLIST_APPLICATIONS } from "../../endpoints";
 import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,6 +18,7 @@ import axios from "axios";
 import "./jobs.css";
 import Postajob from "./postajob"; // Import the Postajob component
 import AppliedCandidatesDialog from "./Appliedcandidates"; 
+import ShortListedCandidates from "./ShortListedCandidates";
 
 const columns = [
   { id: "job_title", label: "Job Role", minWidth: 100 },
@@ -40,7 +41,12 @@ export default function Shortlisted() {
 
   useEffect(() => {
     // Fetch job data from API
-    axios.get(`${GET_JOB}`).then((response) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    }
+    axios.get(`${SHORTLIST_APPLICATIONS}`,config).then((response) => {
       setData(response.data);
     });
   }, []);
@@ -159,7 +165,7 @@ export default function Shortlisted() {
         <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  />
 
         {/* Applied Candidates Dialog */}
-        <AppliedCandidatesDialog
+        <ShortListedCandidates
           open={isDialogOpen}
           onClose={handleCloseDialog}
           jobCode={selectedJobCode} // Pass the jobCode to the dialog

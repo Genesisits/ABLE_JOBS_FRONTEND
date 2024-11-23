@@ -41,20 +41,44 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
         });
     }
   }, [open ,jobCode]);
+const handleActive = (row) => {
+  // Optimistically update the local state
+  const updatedCandidates = appliedCandidates.map(candidate => {
+    if (candidate.application_code === row.application_code) {
+      return {
+        ...candidate,
+        shortlisted_status: !candidate.shortlisted_status, // Toggle status
+      };
+    }
+    return candidate;
+  });
 
-  const handleActive = (row) => {
-    let config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    };
-     
-    axios
-      .put(`${SHORTLIST_CANDIDATES}${row.application_code}/`,config)
-      .then((response) => {
-        console.log(response)
-      });
-  };
+  // Update the state with the new status
+  setAppliedCandidates(updatedCandidates);
+
+ 
+
+  axios
+    .put(`${SHORTLIST_CANDIDATES}${row.application_code}/`, {shortlisted_status:  !row.shortlisted_status})
+    .then((response) => {
+      // Optionally handle the success response
+      console.log("Candidate status updated:", response);
+    })
+    .catch((error) => {
+      // If the request fails, revert the state change
+      console.error("Error updating candidate status:", error);
+
+      // Revert the optimistic state update in case of error
+      setAppliedCandidates((prevState) =>
+        prevState.map((candidate) =>
+          candidate.application_code === row.application_code
+            ? { ...candidate, shortlisted_status: !candidate.shortlisted_status } // Revert the toggle
+            : candidate
+        )
+      );
+    });
+};
+
 
   const handleCloseDialog = () => {
     onClose();
