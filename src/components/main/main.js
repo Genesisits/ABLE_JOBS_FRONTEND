@@ -273,6 +273,9 @@ export default function Header() {
             const matchDepartment = department
               ? job.department.toLowerCase().includes(department.toLowerCase())
               : true;
+              const matchQualification = qualification
+              ? job.qualification_required.toLowerCase().includes(qualification.toLowerCase())
+              : true;
 
             const matchWorkmode = type
               ? job.work_mode.toLowerCase().includes(type.toLowerCase())
@@ -307,7 +310,8 @@ export default function Header() {
               matchDepartment &&
               matchIndustry &&
               matchWorkmode &&
-              matchesLocation
+              matchesLocation &&
+              matchQualification
             );
           });
           setData(filteredData);

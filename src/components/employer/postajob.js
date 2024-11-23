@@ -327,7 +327,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
             >
-              <option disabled>Job Type</option>
+              <option>Select Department</option>
               {departments.map((department) => (
                 <option key={department.id} value={department.abbreviation}>
                   {department.name}
@@ -354,7 +354,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
               value={employment_type}
               onChange={(e) => setJobtype(e.target.value)}
             >
-              <option disabled>Job Type</option>
+              <option>Select Job Type</option>
               <option>Full-time</option>
               <option>Part-time</option>
               <option>Contract</option>
@@ -370,7 +370,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
               value={industry}
               onChange={(e) => setindustry(e.target.value)}
             >
-              <option disabled>Job Type</option>
+              <option>Select Industry</option>
               {industries.map((industry) => (
                 <option key={industry.id} value={industry.abbreviation}>
                   {industry.name}
@@ -387,7 +387,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
               value={qualification_required}
               onChange={(e) => setQualification(e.target.value)}
             >
-              <option disabled>Qualification</option>
+              <option>Select Qualification</option>
               {qualifications.map((qualif) => (
                 <option key={qualif.id} value={qualif.abbreviation}>
                   {qualif.name}
@@ -414,7 +414,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
               value={work_mode}
               onChange={(e) => setWorkmode(e.target.value)}
             >
-              <option disabled>Mode of Work</option>
+              <option>Select Mode of Work</option>
               <option>On-site</option>
               <option>Remote</option>
               <option>Hybrid</option>
