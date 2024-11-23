@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { CREATE_JOB, UPDATE_JOB } from "../../endpoints";
+import { Typography } from "@mui/material";
 import "./jobs.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -264,6 +265,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
         .put(`${UPDATE_JOB}${jobid}/`, payload, config)
         .then((response) => {
           console.log("Job updated:", response);
+          setSuccess(true);
         })
         .catch((error) => {
           console.log("Error updating job:", error);
@@ -283,8 +285,13 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
 
     closeModal(); // Close modal after submission
   };
+  const closeSuccessModal = () => {
+    setSuccess(false);
+    closeModal();
+  };
 
   return (
+    <>
     <Modal
       open={modalIsOpen}
       onClose={(e, reason) => {
@@ -485,5 +492,39 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
         </Box>
       </div>
     </Modal>
+    <Modal
+        open={success}
+        onClose={closeSuccessModal}
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
+      >
+        <Box
+          sx={{
+            ...customStyles,
+            width: "40%",
+            height: "auto",
+            textAlign: "center",
+          }}
+        >
+          <Typography id="success-modal-title" variant="h6" component="h2">
+            {isEditing ? "Job Updated Successfully!" : "Job Created Successfully!"}
+          </Typography>
+          <Typography
+            id="success-modal-description"
+            sx={{ mt: 2, fontSize: "16px" }}
+          >
+            Your job has been {isEditing ? "updated" : "created"} successfully.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={closeSuccessModal}
+            sx={{ mt: 3 }}
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
+    </>
   );
 }
