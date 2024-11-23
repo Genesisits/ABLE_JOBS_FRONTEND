@@ -579,173 +579,142 @@ function Employeeregister() {
       case 0:
         return (
           <ThemeProvider theme={theme}>
-            <Box style={{ margin: "0% 10%" }}>
-              <Grid container spacing={1}>
-                {/* {" "} */}
-                {/* Grid container for 3 inputs in a row */}
-                <Grid item xs={6}>
-                  <TextField
-                    label="First name"
-                    value={userfname}
-                    onChange={(e) => setUserfname(e.target.value)}
-                    fullWidth
-                    // margin="dense"
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Last name"
-                    value={userlname}
-                    onChange={(e) => setUserlname(e.target.value)}
-                    fullWidth
-                    // margin="dense"
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Email"
-                    value={useremail}
-                    onChange={(e) => setEmail(e.target.value)}
-                    fullWidth
-                    // margin="dense"
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Password"
-                    value={userpassword}
-                    onChange={(e) => setPassword(e.target.value)}
-                    fullWidth
-                    // margin="dense"
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Mobile Number"
-                    value={usermobile}
-                    onChange={(e) => setMobile(e.target.value)}
-                    fullWidth
-                    // margin="dense"
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "transparent",
-                        },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      margin: "20px",
-                      justifyContent: "space-evenly",
-                    }}
-                  >
-                    <span>
-                      <CountryDropdown
-                        clearable
-                        searchable
-                        value={country}
-                        onChange={handleSetCountry}
-                        style={{
-                          color: "black",
-                          width: "240px",
-                          marginRight: "10px",
-                        }}
-                      />
-                    </span>
-                    <span>
-                      <StateDropdown
-                        clearable
-                        searchable
-                        country={country}
-                        value={state}
-                        onChange={handleSetState}
-                        style={{ color: "black", width: "240px" }}
-                      />
-                    </span>
-                  </div>
-                </Grid>
+          <Box style={{ margin: "0% 15% ",gap:'5px'}}>
+            <Grid container spacing={2} style={{marginLeft:"3%"}}>
+              {/* First name and Last name */}
+              <Grid item xs={6}>
+                <TextField
+                  label="First name"
+                  value={userfname}
+                  onChange={(e) => setUserfname(e.target.value)}
+                  fullWidth
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "transparent" },
+                      "&:hover fieldset": { borderColor: "transparent" },
+                      "&.Mui-focused fieldset": { borderColor: "transparent" },
+                    },
+                  }}
+                />
               </Grid>
-              <Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Last name"
+                  value={userlname}
+                  onChange={(e) => setUserlname(e.target.value)}
+                  fullWidth
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "transparent" },
+                      "&:hover fieldset": { borderColor: "transparent" },
+                      "&.Mui-focused fieldset": { borderColor: "transparent" },
+                    },
+                  }}
+                />
+              </Grid>
+        
+              {/* Email and Password */}
+              <Grid item xs={6}>
+                <TextField
+                  label="Email"
+                  value={useremail}
+                  onChange={(e) => setEmail(e.target.value)}
+                  fullWidth
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "transparent" },
+                      "&:hover fieldset": { borderColor: "transparent" },
+                      "&.Mui-focused fieldset": { borderColor: "transparent" },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Password"
+                  value={userpassword}
+                  onChange={(e) => setPassword(e.target.value)}
+                  fullWidth
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "transparent" },
+                      "&:hover fieldset": { borderColor: "transparent" },
+                      "&.Mui-focused fieldset": { borderColor: "transparent" },
+                    },
+                  }}
+                />
+              </Grid>
+        
+              {/* Mobile Number */}
+              <Grid item xs={6}>
+                <TextField
+                  label="Mobile Number"
+                  value={usermobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  fullWidth
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "transparent" },
+                      "&:hover fieldset": { borderColor: "transparent" },
+                      "&.Mui-focused fieldset": { borderColor: "transparent" },
+                    },
+                  }}
+                />
+              </Grid>
+        
+              {/* Country and State Dropdowns */}
+              <Grid item xs={4}>
+                <Box
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <CountryDropdown
+                    clearable
+                    searchable
+                    value={country}
+                    onChange={handleSetCountry}
+                    style={{
+                      color: "black",
+                      width: "49%", // Ensures both dropdowns fit evenly
+                    }}
+                  />
+                  <StateDropdown
+                    clearable
+                    searchable
+                    country={country}
+                    value={state}
+                    onChange={handleSetState}
+                    style={{ color: "black", width: "49%" }}
+                  />
+                </Box>
+              </Grid>
+        
+              {/* Address */}
+              <Grid item xs={12}>
                 <TextField
                   label="Address"
                   value={useraddress}
                   onChange={(e) => setAddress(e.target.value)}
-                  fullWidth
+                  // fullWidth
                   margin="dense"
                   multiline
-                  rows={4} // Specifies 4 rows
+                  rows={4}
+                  style={{width:"90%",marginLeft:"-10%"}}
                 />
               </Grid>
-            </Box>
-          </ThemeProvider>
+            </Grid>
+          </Box>
+        </ThemeProvider>
+        
+        
         );
       case 1:
         return (
