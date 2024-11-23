@@ -1,7 +1,7 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
-import { GET_JOB,ACTIVATE_JOB } from "../../endpoints";
+import { GET_JOB,ACTIVATE_JOB, GET_JOB_EMPLOYEE } from "../../endpoints";
 import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -40,7 +40,12 @@ export default function Jobs() {
 
   useEffect(() => {
     // Fetch job data from API
-    axios.get(`${GET_JOB}`).then((response) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    }
+    axios.get(`${GET_JOB_EMPLOYEE}`,config).then((response) => {
       setData(response.data);
     });
   }, []);
