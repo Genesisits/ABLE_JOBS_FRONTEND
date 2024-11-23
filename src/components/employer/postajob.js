@@ -179,7 +179,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
   const [notice_period, setNoticeperiod] = useState("");
   const [number_of_positions, setNofPositions] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [qualification, setQualification] = useState("");
+  const [qualification_required, setQualification] = useState("");
   const [jobid, setJobid] = useState("");
   const [success , setSuccess] = useState(false)
 
@@ -220,6 +220,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
       setState("");
       setRTS("");
       setNofPositions("");
+      setQualification("")
       setExperiencerequired("");
       setWorkmode("");
       setcompanywebsite("");
@@ -232,6 +233,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
 
   const handleNext = () => {
     const payload = {
+      qualification_required,
       company_name,
       employment_type,
       skills,
@@ -382,7 +384,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
               onChange={(e) => setState(e.target.value)}
             />
             <select
-              value={qualification}
+              value={qualification_required}
               onChange={(e) => setQualification(e.target.value)}
             >
               <option disabled>Qualification</option>
