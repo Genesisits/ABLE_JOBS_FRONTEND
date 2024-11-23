@@ -12,6 +12,7 @@ export const DELETE_JOB = `${BASE_URL}/jobs/delete/`;
 export const UPDATE_JOB = `${BASE_URL}/jobs/edit/`
 export const ACTIVATE_JOB = `${BASE_URL}/jobs/deactivate/`
 export const FORGOT_PASSWORD =`${BASE_URL}/forgot_password/`;
+export const RESET_PASSWORD = `${BASE_URL}/reset_password/`
 export const APPLY_JOB = `${BASE_URL}/apply_job/`;
 export const APPLIED_JOB = `${BASE_URL}/applied_jobs/`;
 export const SHORTLIST_JOB = `${BASE_URL}/shortlisted_jobs/`;
@@ -57,6 +58,5 @@ export const ADD_EVENT_ITEMS =`${BASE_URL}/add_event_items?event_id=`;
 export const EVENT_ITEMS =`${BASE_URL}/event_items?event_id=`;
 export const ASSIGN_CONTRACT =`${BASE_URL}/assign_contract`;
 export const CONTRACT_DATA =`${BASE_URL}/contract-data`;
-export const RESET_PASSWORD =`${BASE_URL}/reset_password`;
 
 

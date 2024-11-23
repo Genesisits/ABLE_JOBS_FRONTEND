@@ -15,17 +15,19 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FORGOT_PASSWORD } from '../../endpoints';
+import { FORGOT_PASSWORD, RESET_PASSWORD } from '../../endpoints';
 
 function ResetPassword() {
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm_password, setConfirmpassword] = useState("");
   let [message, setMessage] = useState('')
   let [show, setShow] = useState(false)
   const handleSubmit = () => {
     let payload = {
-       "email": email
+     new_password: password,
+     confirm_password: confirm_password
     }
-    axios.post(`${FORGOT_PASSWORD}`,payload)
+    axios.post(`${RESET_PASSWORD}`,payload)
     .then(response => {
      setShow(true)
      setMessage(response.data.message)
@@ -48,8 +50,8 @@ function ResetPassword() {
           <h3 style={{color:'blue',paddingTop:'10px'}}>Reset Password</h3>
             <TextField
               label="Enter your Password"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               fullWidth
               // margin="dense"
               className="custom-input"
@@ -71,8 +73,8 @@ function ResetPassword() {
           <Grid item xs={12}>
             <TextField
               label="Confirm Password"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={confirm_password}
+              onChange={(e) => setConfirmpassword(e.target.value)}
               fullWidth
               // margin="dense"
               className="custom-input"
