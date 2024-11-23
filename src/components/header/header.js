@@ -50,7 +50,7 @@ export default function Header() {
     }
   }, [location]);
 
-  const isLandingOrRelevantPage = ['/', '/home', '/login', '/register', '/employeeregister', '/trainer', '/volunteer', '/forgetpassword','/email'].includes(location.pathname);
+  const isLandingOrRelevantPage = ['/', '/home', '/login', '/register', '/employeeregister', '/trainer', '/volunteer', '/forgetpassword','/email','/resetpassword'].includes(location.pathname);
 
   const openUploadDialog = () => setUploadDialogOpen(true);
   const closeUploadDialog = () => setUploadDialogOpen(false);
