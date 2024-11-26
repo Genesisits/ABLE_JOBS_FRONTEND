@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import "./main.css";
 import one from "../../images/main.png";
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -261,6 +261,7 @@ export default function Header() {
   const [isModalHovered, setIsModalHovered] = useState(false);
   const [hoverBoxPosition, setHoverBoxPosition] = useState({ top: 0, left: 0 });
   const rowRefs = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -336,37 +337,49 @@ export default function Header() {
   ]);
 
   useEffect(() => {
-    // Apply overflow: hidden to prevent horizontal overflow
+    
     document.documentElement.style.overflowX = "hidden";
   }, []);
   const imgarray = images[currentImage % images.length];
   const imgarray2 = images2[currentImage % images2.length];
 
   const handleMouseEnter = (item, index) => {
-    clearTimeout(hoverTimeout); // Clear any existing hide timeout
+    clearTimeout(hoverTimeout); 
     setHoveredItem(item);
     const row = rowRefs.current[index];
     const rowRect = row.getBoundingClientRect();
-    // Set the position of the hover box to be relative to the row
+   
     setHoverBoxPosition({
-      top: rowRect.top + window.scrollY, // top of the row relative to the viewport
-      left: rowRect.left + window.scrollX, // left of the row relative to the viewport
+      top: rowRect.top + window.scrollY, 
+      left: rowRect.left + window.scrollX, 
     });
   };
 
+  const onhandleClick = () => {
+    if(localStorage.getItem('access_token')) {
+      if(localStorage.getItem('is_employee')=== 'true') {
+         navigate("/findajob") 
+      } else if(localStorage.getItem('is_employer') === 'true'){
+        navigate("/jobs") 
+      }
+    } else {
+      navigate("/login")
+    }
+  }
+
   const handleMouseLeave = () => {
     const timeout = setTimeout(() => {
-      setHoveredItem(null); // Hide the modal after a small delay
-    }, 5000); // Adjust delay as needed
+      setHoveredItem(null); 
+    }, 5000); 
     setHoverTimeout(timeout);
   };
 
   const handleModalMouseEnter = () => {
-    setIsModalHovered(true); // Keep the modal open
+    setIsModalHovered(true); 
   };
 
   const handleModalMouseLeave = () => {
-    setIsModalHovered(false); // Allow closing the modal
+    setIsModalHovered(false); 
   };
 
   return (
@@ -380,7 +393,6 @@ export default function Header() {
       <div className="image-zoom-container">
         <img
           className="zoomed-image"
-          // style={{ maxWidth: "1000px" }}`
           src={imgarray}
           alt="eventphoto"
         />
@@ -404,9 +416,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)", 
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2", 
                 },
               }}
             >
@@ -425,9 +437,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)", 
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2", 
                 },
               }}
             >
@@ -448,9 +460,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2", 
                 },
               }}
             >
@@ -471,9 +483,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)", 
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2", 
                 },
               }}
             >
@@ -494,9 +506,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)", 
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -517,9 +529,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)", 
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -543,9 +555,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)", 
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2", 
                 },
               }}
             >
@@ -566,9 +578,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", // Border changes based on selection
+                  : "1px solid rgba(0, 0, 0, 0.23)", 
                 "&:focus": {
-                  border: "2px solid #1976d2", // Focus border
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -592,6 +604,7 @@ export default function Header() {
               onMouseEnter={() => handleMouseEnter(item, index)} // Mouse enters and shows the box
               onMouseLeave={handleMouseLeave} // Mouse leaves and hides the box
               style={{
+                margin:'5px',
                 border: "1px solid #ddd",
                 padding: "10px",
                 borderRadius: "4px",
@@ -616,7 +629,7 @@ export default function Header() {
                   <h6>Notice Period - {item.notice_period}</h6>
                 </Grid>
                 <Grid item xs={3}>
-                  <Button>Apply Now</Button>
+                  <Button onClick={onhandleClick}>Apply Now</Button>
                 </Grid>
               </Grid>
 

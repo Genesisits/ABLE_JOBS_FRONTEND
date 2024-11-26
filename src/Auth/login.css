@@ -93,6 +93,23 @@
     max-width: 300px;             /* Limit max width to prevent stretching too far */
 }
 
+.links-container {
+    display: flex;
+    justify-content: space-between; /* Adjust spacing between the links */
+    align-items: center;
+  }
+  
+  .link-item {
+    margin: 2px; /* Remove default margin from <p> */
+  }
+  
+  .links-container a {
+    text-decoration: none;
+    font-size:medium;
+    font-family: serif;
+    color: blue;
+  }
+  
 /* Button hover effect */
 .login-actions button:hover {
     background-color: #1565C0;    /* Darker blue on hover */

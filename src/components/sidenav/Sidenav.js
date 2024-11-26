@@ -1,10 +1,11 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemText, Toolbar, Divider } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 export default function Sidenav() {
+    const navigate = useNavigate();
     const isEmployee = localStorage.getItem('is_employee') === 'true';
     const isEmployer = localStorage.getItem('is_employer') === 'true';
     const isAdmin = localStorage.getItem('is_admin') === 'true';
@@ -16,6 +17,17 @@ export default function Sidenav() {
         menuItems = ['Jobs',  'Shortlisted','Reports', 'Logout'];
     } else if (isAdmin) {
         menuItems = ['Dashboard', 'Find jobs', 'Job status', 'Jobs Applied', 'Profile', 'Logout'];
+    }
+
+    const handleLogout = () => {
+        // Clear relevant items from localStorage
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('is_employee');
+        localStorage.removeItem('is_employer');
+        localStorage.removeItem('is_admin');
+        // Navigate to login or home page
+        navigate('/login');
     }
 
     return (
@@ -42,8 +54,9 @@ export default function Sidenav() {
                     <ListItem
                         button
                         key={text}
-                        component={Link}
-                        to={`/${text.replace(/\s+/g, '').toLowerCase()}`}
+                        component={text === 'Logout' ? 'div' : Link}
+                        to={text === 'Logout' ? undefined : `/${text.replace(/\s+/g, '').toLowerCase()}`}
+                        onClick={text === 'Logout' ? handleLogout : undefined}
                         sx={{
                             '&:hover': {
                                 backgroundColor: '#5384c9',

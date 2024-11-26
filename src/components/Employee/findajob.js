@@ -175,7 +175,7 @@ function Findjob({ closeModal }) {
                 <p style={{ margin: 0}}>{job.job_title}</p>
                 <p style={{ margin: 0 }}>{job.company_name}</p>
               </div>
-              <div style={{ flex: 1, fontFamily: 'sans-serif', color: 'black' }}>
+              <div style={{ flex: 1, fontFamily: 'Serif', color: 'black' }}>
                 <p style={{ margin: 0 }}>{job.location}</p>
                 <p style={{ margin: 0 }}>{job.employment_type}</p>
               </div>
