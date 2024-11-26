@@ -106,3 +106,18 @@ textarea {
   border-radius: 4px;
   margin-bottom: 1rem;
 }
+.error {
+  border: 1px solid red;
+}
+.error-message {
+  color: red;
+  font-size: 12px;
+}
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+
