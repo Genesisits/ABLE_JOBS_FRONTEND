@@ -62,6 +62,7 @@ function Login() {
           // Set specific role and navigate to the appropriate page
           localStorage.setItem("access_token", response.data.access);
           localStorage.setItem("refresh_token", response.data.refresh);
+          localStorage.setItem("isLoggedIn", true);
 
           if (user_role === "Employer") {
             localStorage.setItem("is_employer", "true");
@@ -128,11 +129,18 @@ function Login() {
             <button type="button" onClick={handleSubmit} disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>
-            <p className="forgot-password-link">
-              <Link to="/forgetpassword">Forgot password?</Link>
-            </p>
+            <div className="links-container">
+              <p className="link-item">
+                <Link to="/register">Register  |</Link>  
+              </p>
+              <p className="link-item">
+                <Link to="/forgetpassword">Forgot password?</Link>
+              </p>
+            </div>
           </div>
-          {errorMessage && <p style={{ color: "red" ,fontFamily:'serif'}}>{errorMessage}</p>}
+          {errorMessage && (
+            <p style={{ color: "red", fontFamily: "serif" }}>{errorMessage}</p>
+          )}
         </div>
         <div className="flex-item-login">
           <img src={mail} alt="Mail" className="imageDetails" />
