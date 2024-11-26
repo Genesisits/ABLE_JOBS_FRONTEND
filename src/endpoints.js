@@ -23,6 +23,7 @@ export const SHORTLIST_JOB = `${BASE_URL}/shortlisted_jobs/`;
 export const ONBOARD_JOB = `${BASE_URL}/onboarded_jobs/`;
 export const UPLOAD_RESUME = `${BASE_URL}/upload_resume/`;
 export const USER_PROFILE = `${BASE_URL}/user_profile/`;
+export const PROFILE_UPDATE = `${BASE_URL}/userprofile_Update/`;
 
 export const CHAIR_URL = `${BASE_URL}/chairs`;
 export const DECORATION_URL = `${BASE_URL}/decoration`;

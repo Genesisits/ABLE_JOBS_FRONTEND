@@ -33,6 +33,7 @@ function Employerregister({ open, onClose }) {
     const [represent_mail, setRepresentMail] = useState("");
     const [represent_number, setRepresentNumber] = useState("");
     const [Pan, setPan] = useState(null);
+    const [profileimage, setProfileimage] = useState(null);
     const [registration, setRegistration] = useState(null);
     const [designation, setDesignation] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
@@ -70,6 +71,7 @@ function Employerregister({ open, onClose }) {
     const handleRepresentMail = (event) => setRepresentMail(event.target.value);
     const handleRepresentNumber = (event) => setRepresentNumber(event.target.value);
     const handleDesignation = (event) => setDesignation(event.target.value);
+    const handleProfileImage = (event) => setProfileimage(event.target.value);
     const handlePan = (event) => setPan(event.target.value);
     const handleRegistration = (event) => setRegistration(event.target.value);
     const handleDialogOpen = () => setOpenDialog(true);
@@ -199,6 +201,7 @@ function Employerregister({ open, onClose }) {
             "head_designation": designation,
             "pan": Pan,
             "registration_certificate": registration,
+            "profile_image":profileimage,
         };
         console.log(payload);
 
@@ -812,6 +815,32 @@ function Employerregister({ open, onClose }) {
                                         '& input[type="file"]': {
                                             display: 'block',
                                             cursor: 'pointer',
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <label>Upload Image</label>
+                                <TextField
+                                    // label="Company Logo"
+                                    onChange={(event) => setProfileimage(event.target.files[0])}
+                                    fullWidth
+                                    type="file"
+                                    margin="dense"
+                                    error={!!errors.profileimage}
+                                    helperText={errors.profileimage}
+                                    className="custom-input"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
                                         },
                                     }}
                                 />

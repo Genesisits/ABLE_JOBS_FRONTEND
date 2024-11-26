@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useRef} from 'react';
 import './profile.css'; // Import the CSS file
 import avatar from '../images/avatar.webp';
 import Layout from './sidenav/Layout';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Grid, CircularProgress } from '@mui/material';
 import axios from 'axios';
-import { USER_PROFILE } from '../endpoints';
+import { USER_PROFILE, PROFILE_UPDATE } from '../endpoints';
 
 const Profile = () => {
   const [userType, setUserType] = useState('');
-  const [user, setUser] = useState(null);
+  const [first_name, setUserfname] = useState('')
+  const [last_name, setUserlname] = useState('')
+  const [mobile_number, setMobilenumber] = useState('')
+  const [user, setUser] = useState({
+  // first_name: '',
+  last_name: '',
+  mobile_number: '',
+  skills: '',
+  address: '',
+});
   const [loading, setLoading] = useState(false); // State for loading indicator
   const [openDialog, setOpenDialog] = useState(false); // State to control the dialog
 
@@ -16,11 +25,12 @@ const Profile = () => {
     setOpenDialog(true);
   };
   const accessToken = localStorage.getItem('access_token');
-
+  const hasFetched = useRef(false);
   useEffect(() => {
     const fetchUserProfile = async () => {
       setLoading(true);
       try {
+        hasFetched.current = true;
         const response = await axios.get(USER_PROFILE, {
           headers: {
             Authorization: `Bearer ${accessToken}`
@@ -49,17 +59,41 @@ const Profile = () => {
   // Function to handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Field: ${name}, Value: ${value}`);
     setUser((prevUser) => ({
       ...prevUser,
       [name]: value
     }));
   };
-
-  // Function to handle saving the changes (optional)
-  const handleSaveChanges = () => {
-    // You can add logic to save the updated profile (e.g., making an API call)
-    console.log('Profile updated:', user);
-    handleDialogClose(); // Close the dialog after saving
+ 
+  const handleSaveChanges = async () => {
+    setLoading(true); // Start the loading indicator
+    try {
+      // Send the updated user data to the API
+      const response = await axios.patch(
+        PROFILE_UPDATE, // API endpoint for updating the profile
+        user, // The updated user object
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Include the token in the headers
+            'Content-Type': 'application/json', // Specify the content type
+          },
+        }
+      );
+  
+      // Check the response and update the state if necessary
+      if (response.status === 200 ) {
+        console.log('Profile updated successfully:', response.data);
+        setUser(response.data); // Update the user state with the new data
+      } else {
+        console.error('Failed to update profile:', response.status);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    } finally {
+      setLoading(false); // Stop the loading indicator
+      handleDialogClose(); // Close the dialog
+    }
   };
   if (loading) {
     return (
@@ -165,130 +199,266 @@ const Profile = () => {
       {/* Dialog for updating profile */}
       <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
       <DialogTitle>Update Profile</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Name"
-                variant="outlined"
-                fullWidth
-                name="name"
-                value={user.name}
-                onChange={handleInputChange}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&:hover fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&.Mui-focused fieldset': {
-                          borderColor: 'transparent',
-                      },
+        {/* <DialogContent> */}
+        {/* <Grid container spacing={2}> */}
+    {userType === 'Employee' && (
+      <DialogContent>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="First Name"
+            variant="outlined"
+            fullWidth
+            name="first name"
+            value={user.first_name}
+            onChange={(e) => setUserfname(e.target.value)}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
                   },
-              }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                name="email"
-                value={user.email}
-                onChange={handleInputChange}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&:hover fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&.Mui-focused fieldset': {
-                          borderColor: 'transparent',
-                      },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
                   },
-              }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Skills"
-                variant="outlined"
-                fullWidth
-                name="skills"
-                value={user.skills}
-                onChange={handleInputChange}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&:hover fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&.Mui-focused fieldset': {
-                          borderColor: 'transparent',
-                      },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
                   },
-              }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Experience"
-                variant="outlined"
-                fullWidth
-                name="experience"
-                value={user.experience}
-                onChange={handleInputChange}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&:hover fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&.Mui-focused fieldset': {
-                          borderColor: 'transparent',
-                      },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Last Name"
+            variant="outlined"
+            fullWidth
+            name="last name"
+            value={user.last_name}
+            onChange={(e) => setUserlname(e.target.value)}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
                   },
-              }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Location"
-                variant="outlined"
-                fullWidth
-                name="location"
-                value={user.location}
-                onChange={handleInputChange}
-                margin="normal"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&:hover fieldset': {
-                          borderColor: 'transparent',
-                      },
-                      '&.Mui-focused fieldset': {
-                          borderColor: 'transparent',
-                      },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
                   },
-              }}
-              />
-            </Grid>
-          </Grid>
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Mobile Number"
+            variant="outlined"
+            fullWidth
+            name="mobile number"
+            value={user.mobile_number}
+            onChange={(e) => setMobilenumber(e.target.value)}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Skills"
+            variant="outlined"
+            fullWidth
+            name="skills"
+            value={user.skills || ''}
+            onChange={handleInputChange}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Address"
+            variant="outlined"
+            fullWidth
+            name="address"
+            value={user.address || ''}
+            onChange={handleInputChange}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+      </Grid>
+    </DialogContent>
+    )}
+
+    {userType === 'Employer' && (
+      
+      <DialogContent>
+       <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Company Name"
+            variant="outlined"
+            fullWidth
+            name="company_name"
+            value={user.company_name || ''}
+            onChange={handleInputChange}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Contact"
+            variant="outlined"
+            fullWidth
+            name="company_contact"
+            value={user.company_contact || ''}
+            onChange={handleInputChange}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Industry"
+            variant="outlined"
+            fullWidth
+            name="industry"
+            value={user.industry || ''}
+            onChange={handleInputChange}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Location"
+            variant="outlined"
+            fullWidth
+            name="location"
+            value={user.location || ''}
+            onChange={handleInputChange}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Website"
+            variant="outlined"
+            fullWidth
+            name="company_website"
+            value={user.company_website || ''}
+            onChange={handleInputChange}
+            margin="normal"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                      borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                  },
+              },
+          }}
+          />
+        </Grid>
+        </Grid>
         </DialogContent>
+    )}
+  {/* </Grid> */}
+
+  
+        {/* </DialogContent> */}
         <DialogActions>
           <Button onClick={handleDialogClose} color="primary">
             Cancel
