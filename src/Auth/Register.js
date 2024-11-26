@@ -1133,76 +1133,77 @@ function Employeeregister() {
   return (
     // <Paper>
     <Box sx={{ width: "100%", margin: "5% 0%" }}>
-      <Box
-        sx={{
-          position: "sticky",
-          top: "12%",
-          zIndex: 1,
-          backgroundColor: "white",
-        }}
+    <Box
+      sx={{
+        position: "sticky",
+        top: "12%",
+        zIndex: 1,
+        backgroundColor: "white",
+      }}
+    >
+      <Stepper
+        alternativeLabel
+        activeStep={activeStep}
+        connector={<QontoConnector />}
       >
-        <Stepper
-          alternativeLabel
-          activeStep={activeStep}
-          connector={<QontoConnector />}
-        >
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            if (isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption">Optional</Typography>
-              );
-            }
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
-                  {label}
-                </StepLabel>
-              </Step>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          if (isStepOptional(index)) {
+            labelProps.optional = (
+              <Typography variant="caption">Optional</Typography>
             );
-          })}
-        </Stepper>
-      </Box>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-          {confirmMessage && {confirmMessage}}
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleSubmit}>Submit</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-          {renderForm()}
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
-          </Box>
-        </React.Fragment>
-      )}
+          }
+          if (isStepSkipped(index)) {
+            stepProps.completed = false;
+          }
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
+                {label}
+              </StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
     </Box>
+    {activeStep === steps.length ? (
+      <React.Fragment>
+        <Typography sx={{ mt: 2, mb: 1 }}>
+          {confirmMessage && confirmMessage}
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Box sx={{ flex: "1 1 auto" }} />
+          <Button onClick={handleSubmit}>Submit</Button>
+        </Box>
+      </React.Fragment>
+    ) : (
+      <React.Fragment>
+        <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+        {renderForm()}
+        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            sx={{ mr: 1 }}
+          >
+            Back
+          </Button>
+          <Box sx={{ flex: "1 1 auto" }} />
+          {isStepOptional(activeStep) && (
+            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+              Skip
+            </Button>
+          )}
+          <Button onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}>
+            {activeStep === steps.length - 1 ? "Submit" : "Next"}
+          </Button>
+        </Box>
+      </React.Fragment>
+    )}
+  </Box>
+  
     //  </Paper>
   );
 }
