@@ -15,8 +15,8 @@ function Registeras() {
   
 
   const handleEmployee = () => {
-    navigate('/employeeregister');
-    // setOpenEmployeeModal(true)
+    // navigate('/employeeregister');
+    setOpenEmployeeModal(true)
   };
   const handleTrainer = () => {
     // navigate('/trainer')
@@ -40,6 +40,9 @@ function Registeras() {
   const closeEmployerModal = () => {
     setOpenEmployerModal(false); 
   };
+  const closeEmployeeModal = () => {
+    setOpenEmployeeModal(false); 
+  };
 
   return (
     <div className='containerRegas'>
@@ -52,7 +55,7 @@ function Registeras() {
         <br/>
         <button type="submit" onClick={handleVolunteer}>Volunteer</button>
       </div>
-      {/* <Employeeregister open={openEmployeeModal} onClose={closeEmployerModal}/>  */}
+      <Employeeregister open={openEmployeeModal} onClose={closeEmployeeModal}/> 
       <Employerregister open={openEmployerModal} onClose={closeEmployerModal} />
       <Trainer open={openTrainerModal} onClose={closeTrainerModal}/>
       <Volunteer open={openVolunteerModal} onClose={closeVolunteerModal}/>

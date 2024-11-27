@@ -65,20 +65,28 @@
 }
 
 
-/* .experienced input[type="text"] {
-  width: auto;
+ .experienced input[type="text"] {
+  width: 80%;
   padding: 18px;
-  margin: '0x 10px';
+  margin: '0x 20px';
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
- 
-.experienced {
+.experienced select {
+  width: 100%; /* Ensure the form elements take full width within their column */
+  padding: 20px;
+  margin: 10px 0; /* Adjust margin for consistency */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+}
+/* .experienced {
   display: flex;
   flex-direction: row;
   gap:10px
-} */
+}  */
 
 .education {
   display: flex;

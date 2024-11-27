@@ -187,7 +187,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function Employeeregister() {
+function Employeeregister({ open, onClose }) {
   const skillOptions = [
     "React",
     "HTML",
@@ -503,8 +503,6 @@ function Employeeregister() {
       return newSkipped;
     });
   };
-  const handleSetCountry = (e, value) => setCountry(value);
-  const handleSetState = (e, value) => setState(value);
 
   const handleSubmit = () => {
     const payload = {
@@ -747,15 +745,16 @@ function Employeeregister() {
 
                 {/* Country and State Dropdowns */}
                 <Grid item xs={6}>
-                  <Box
+                  {/* <Box
                     style={{
                       display: "flex",
                       gap: "10px",
                       justifyContent: "space-between",
                     }}
-                  >
+                  > */}
                     <select
                       value={state}
+                      style={{ width: "100%" }}
                       onChange={(e) => setState(e.target.value)}
                     >
                       <option>Select State</option>
@@ -765,11 +764,11 @@ function Employeeregister() {
                         </option>
                       ))}
                     </select>
-                  </Box>
+                  {/* </Box> */}
                 </Grid>
 
                 {/* Address */}
-                <Grid item xs={12}>
+                <Grid item xs={12} >
                   <TextField
                     label="Address"
                     value={useraddress}
@@ -778,7 +777,7 @@ function Employeeregister() {
                     margin="dense"
                     multiline
                     rows={4}
-                    style={{ width: "90%", marginLeft: "-10%" }}
+                    style={{ width: "100%" }}
                   />
                 </Grid>
               </Grid>
@@ -876,7 +875,8 @@ function Employeeregister() {
         );
       case 2:
         return (
-          <Box style={{ margin: "0% 5%" }}>
+          <div className="experienced">
+          <Box style={{ margin: "0% 0%" }}>
             <Grid container spacing={6}>
               <Grid item sx={6}>
                 <label>
@@ -906,9 +906,10 @@ function Employeeregister() {
 
             {selectedOption === "Experienced" &&
               experienceList.map((experience, index) => (
-                <Grid container spacing={0} key={index} direction="row">
+                <Grid container spacing={2} key={index} direction="row">
                   <Grid item xs={2}>
                     <input
+                     fullWidth
                       type="text"
                       value={experience.jobTitle}
                       onChange={(e) =>
@@ -923,6 +924,7 @@ function Employeeregister() {
                   </Grid>
                   <Grid item xs={2}>
                     <input
+                     fullWidth
                       type="text"
                       value={experience.companyname}
                       onChange={(e) =>
@@ -938,6 +940,7 @@ function Employeeregister() {
                   <Grid item xs={2}>
                     <input
                       type="text"
+                      fullWidth
                       value={experience.location}
                       onChange={(e) =>
                         handleExperienceChange(
@@ -1006,6 +1009,7 @@ function Employeeregister() {
                 </Grid>
               ))}
           </Box>
+          </div>
         );
       case 3:
         return (
@@ -1200,89 +1204,92 @@ function Employeeregister() {
 
   return (
     // <Paper>
-    <Box sx={{ width: "100%", margin: "5% 0%" }}>
-      {showPopup && (
-        <div className="popup">
-          <p style={{fontSize:'medium',fontFamily:'sans-serif'}}>{popupMessage}</p>
-          <button onClick={() => setShowPopup(false)}>Close</button>
-        </div>
-      )}
-      <Box
-        sx={{
-          position: "sticky",
-          top: "12%",
-          zIndex: 1,
-          backgroundColor: "white",
-        }}
-      >
-        <Stepper
-          alternativeLabel
-          activeStep={activeStep}
-          connector={<QontoConnector />}
+    <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
+      <DialogTitle>Employer Registration</DialogTitle>
+      <Box sx={{ width: "100%", margin: "5% 0%" }}>
+        {showPopup && (
+          <div className="popup">
+            <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
+              {popupMessage}
+            </p>
+            <button onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        )}
+        <Box
+          sx={{
+            position: "sticky",
+            top: "12%",
+            zIndex: 1,
+            backgroundColor: "white",
+          }}
         >
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            if (isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption">Optional</Typography>
-              );
-            }
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
-                  {label}
-                </StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-      </Box>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            {confirmMessage && confirmMessage}
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleSubmit}>Submit</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-          
-          {renderForm()}
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
-            <Button
-              onClick={
-                activeStep === steps.length - 1 ? handleSubmit : handleNext
+          <Stepper
+            alternativeLabel
+            activeStep={activeStep}
+            connector={<QontoConnector />}
+          >
+            {steps.map((label, index) => {
+              const stepProps = {};
+              const labelProps = {};
+              if (isStepOptional(index)) {
+                labelProps.optional = (
+                  <Typography variant="caption">Optional</Typography>
+                );
               }
-            >
-              {activeStep === steps.length - 1 ? "Submit" : "Next"}
-            </Button>
-          </Box>
-        </React.Fragment>
-      )}
-    </Box>
-
+              if (isStepSkipped(index)) {
+                stepProps.completed = false;
+              }
+              return (
+                <Step key={label} {...stepProps}>
+                  <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
+                    {label}
+                  </StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </Box>
+        {activeStep === steps.length ? (
+          <React.Fragment>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              {confirmMessage && confirmMessage}
+            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button onClick={handleSubmit}>Submit</Button>
+            </Box>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+            {renderForm()}
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              {isStepOptional(activeStep) && (
+                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                  Skip
+                </Button>
+              )}
+              <Button
+                onClick={
+                  activeStep === steps.length - 1 ? handleSubmit : handleNext
+                }
+              >
+                {activeStep === steps.length - 1 ? "Submit" : "Next"}
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
+      </Box>
+    </Dialog>
     //  </Paper>
   );
 }
