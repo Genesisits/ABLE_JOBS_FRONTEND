@@ -63,7 +63,7 @@ textarea {
   width: 20%; /* Ensure button takes full width */
 }
 
-input[type="text"], textarea, select {
+.jobs input[type="text"], textarea, select {
   width: 70%; /* Ensure the form elements take full width within their column */
   padding: 10px;
   margin: 10px 0; /* Adjust margin for consistency */
