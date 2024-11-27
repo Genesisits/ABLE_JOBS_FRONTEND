@@ -206,12 +206,12 @@ function Employeeregister() {
   ];
   const [userfname, setUserfname] = useState("");
   const [confirmation, setConfirm] = useState(false);
-  const [confirmError, setConfirmError] = useState('');
+  const [confirmError, setConfirmError] = useState("");
   const [userlname, setUserlname] = useState("");
   const [filename, setFilename] = useState([]);
   const [companyname, setCompanyname] = useState("");
   const [schoolname, setSchoolname] = useState("");
-  const [confirmMessage, setConfirmMessage] = useState("")
+  const [confirmMessage, setConfirmMessage] = useState("");
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [country, setCountry] = useState(null);
@@ -248,33 +248,50 @@ function Employeeregister() {
   const [file, setFile] = useState(null);
   const [willingToRelocate, setWillingToRelocate] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [educations,setEducations] = useState([
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [educations, setEducations] = useState([
     {
       degree_level: "SSC",
       schoolname: "",
       percentage: "",
       specialization: "",
+      startDate: "",
+      endDate: "",
     },
     {
       degree_level: "Intermediate",
       schoolname: "",
       percentage: "",
       specialization: "",
+      startDate: "",
+      endDate: "",
     },
     {
       degree_level: "B.Tech/BE/Degree",
       schoolname: "",
       percentage: "",
       specialization: "",
+      startDate: "",
+      endDate: "",
     },
     {
       degree_level: "M.Tech/PG",
       schoolname: "",
       percentage: "",
       specialization: "",
+      startDate: "",
+      endDate: "",
     },
-  ])
- 
+    {
+      degree_level: "Doctorate",
+      schoolname: "",
+      percentage: "",
+      specialization: "",
+      startDate: "",
+      endDate: "",
+    },
+  ]);
 
   const handleSkillAdd = (newSkill) => {
     if (newSkill && !selectedSkills.includes(newSkill)) {
@@ -457,8 +474,6 @@ function Employeeregister() {
     "Doctorate/Ph.D",
   ];
 
-
-
   const isStepOptional = (step) => step === 1;
 
   const isStepSkipped = (step) => skipped.has(step);
@@ -493,7 +508,7 @@ function Employeeregister() {
 
   const handleSubmit = () => {
     const payload = {
-      educations : educations,
+      educations: educations,
       projects: [],
       // job_experiences: selectedOption,
       job_experiences:
@@ -512,52 +527,54 @@ function Employeeregister() {
       email: useremail,
       password: userpassword,
       mobile_number: usermobile,
-      country: 'India',
+      country: "India",
       state: state,
       address: useraddress,
       skills: selectedSkills.toString(),
       workAvailability: type,
       disabilityType: disability,
       disabilityPercentage: disabilitypercentage,
-      willingToRelocate,
+      willing_to_relocate: willingToRelocate,
       // disabilityCertificate: file,
-      knownLanguages: languages_known,
+      languages_known: languages_known,
     };
 
     console.log(payload);
     axios
       .post(`${REGISTER}`, JSON.stringify(payload), {
         headers: {
-          'Content-Type': 'application/json', // Make sure it's application/json
+          "Content-Type": "application/json", // Make sure it's application/json
         },
       })
       .then((response) => {
-        setConfirm(true);
-        setConfirmError('')
-        setConfirmMessage("User Successfully Created")
+        setShowPopup(true); // Show the popup
+        setPopupMessage("User successfully registered!");
       })
       .catch((error) => {
-        setConfirm(false)
-        // setConfirmerror(true);
+        let errorMessage = "An error occurred. Please try again.";
         if (error.response) {
-          // Handle HTTP status codes (e.g., 400, 401, 500)
           switch (error.response.status) {
             case 400:
-              setConfirmError('Bad Request: Please check the data you submitted.');
+              errorMessage =
+                "Bad Request: Please check the data you submitted.";
               break;
             case 401:
-              setConfirmError('Unauthorized: Please log in and try again.');
+              errorMessage = "Unauthorized: Please log in and try again.";
               break;
             case 404:
-              setConfirmError('Not Found: The requested resource could not be found.');
+              errorMessage =
+                "Not Found: The requested resource could not be found.";
               break;
             case 500:
-              setConfirmError('Internal Server Error: Something went wrong on the server.');
+              errorMessage =
+                "Internal Server Error: Something went wrong on the server.";
               break;
             default:
-              setConfirmError(`Error: Something went wrong. Status code: ${error.response.status}`);
+              errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
           }
         }
+        setShowPopup(true); // Show the popup
+        setPopupMessage(errorMessage);
       });
   };
 
@@ -576,6 +593,10 @@ function Employeeregister() {
   ]);
   const handleEducationChange = (index, field, value) => {
     const updatedEducations = [...educations]; // Create a copy of the educations array
+    if (field === "startDate" || field === "endDate") {
+      // Ensure the value is formatted as YYYY-MM-DD
+      value = new Date(value).toISOString().split("T")[0];
+    }
     updatedEducations[index][field] = value; // Update the specific field in the object at the given index
     setEducations(updatedEducations); // Set the updated array to the state
   };
@@ -627,106 +648,116 @@ function Employeeregister() {
       case 0:
         return (
           <ThemeProvider theme={theme}>
-          <Box style={{ margin: "0% 15% ",gap:'5px'}}>
-            <Grid container spacing={1} style={{marginLeft:"3%"}}>
-              {/* First name and Last name */}
-              <Grid item xs={6}>
-                <TextField
-                  label="First name"
-                  value={userfname}
-                  onChange={(e) => setUserfname(e.target.value)}
-                  fullWidth
-                  className="custom-input"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "transparent" },
-                      "&:hover fieldset": { borderColor: "transparent" },
-                      "&.Mui-focused fieldset": { borderColor: "transparent" },
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  label="Last name"
-                  value={userlname}
-                  onChange={(e) => setUserlname(e.target.value)}
-                  fullWidth
-                  className="custom-input"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "transparent" },
-                      "&:hover fieldset": { borderColor: "transparent" },
-                      "&.Mui-focused fieldset": { borderColor: "transparent" },
-                    },
-                  }}
-                />
-              </Grid>
-              {/* Email and Password */}
-              <Grid item xs={6}>
-                <TextField
-                  label="Email"
-                  value={useremail}
-                  onChange={(e) => setEmail(e.target.value)}
-                  fullWidth
-                  className="custom-input"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "transparent" },
-                      "&:hover fieldset": { borderColor: "transparent" },
-                      "&.Mui-focused fieldset": { borderColor: "transparent" },
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  label="Password"
-                  value={userpassword}
-                  onChange={(e) => setPassword(e.target.value)}
-                  fullWidth
-                  className="custom-input"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "transparent" },
-                      "&:hover fieldset": { borderColor: "transparent" },
-                      "&.Mui-focused fieldset": { borderColor: "transparent" },
-                    },
-                  }}
-                />
-              </Grid>
-        
-              {/* Mobile Number */}
-              <Grid item xs={6}>
-                <TextField
-                  label="Mobile Number"
-                  value={usermobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  fullWidth
-                  className="custom-input"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "transparent" },
-                      "&:hover fieldset": { borderColor: "transparent" },
-                      "&.Mui-focused fieldset": { borderColor: "transparent" },
-                    },
-                  }}
-                />
-              </Grid>
-        
-              {/* Country and State Dropdowns */}
-              <Grid item xs={6}>
-                <Box
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                <select
+            <Box style={{ margin: "0% 15% ", gap: "5px" }}>
+              <Grid container spacing={1} style={{ marginLeft: "3%" }}>
+                {/* First name and Last name */}
+                <Grid item xs={6}>
+                  <TextField
+                    label="First name"
+                    value={userfname}
+                    onChange={(e) => setUserfname(e.target.value)}
+                    fullWidth
+                    className="custom-input"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "transparent" },
+                        "&:hover fieldset": { borderColor: "transparent" },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "transparent",
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    label="Last name"
+                    value={userlname}
+                    onChange={(e) => setUserlname(e.target.value)}
+                    fullWidth
+                    className="custom-input"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "transparent" },
+                        "&:hover fieldset": { borderColor: "transparent" },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "transparent",
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                {/* Email and Password */}
+                <Grid item xs={6}>
+                  <TextField
+                    label="Email"
+                    value={useremail}
+                    onChange={(e) => setEmail(e.target.value)}
+                    fullWidth
+                    className="custom-input"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "transparent" },
+                        "&:hover fieldset": { borderColor: "transparent" },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "transparent",
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    label="Password"
+                    value={userpassword}
+                    onChange={(e) => setPassword(e.target.value)}
+                    fullWidth
+                    className="custom-input"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "transparent" },
+                        "&:hover fieldset": { borderColor: "transparent" },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "transparent",
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+
+                {/* Mobile Number */}
+                <Grid item xs={6}>
+                  <TextField
+                    label="Mobile Number"
+                    value={usermobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    fullWidth
+                    className="custom-input"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": { borderColor: "transparent" },
+                        "&:hover fieldset": { borderColor: "transparent" },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "transparent",
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+
+                {/* Country and State Dropdowns */}
+                <Grid item xs={6}>
+                  <Box
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <select
                       value={state}
                       onChange={(e) => setState(e.target.value)}
-                     >
+                    >
                       <option>Select State</option>
                       {allstates.map((states) => (
                         <option key={states.id} value={states.state_name}>
@@ -734,94 +765,114 @@ function Employeeregister() {
                         </option>
                       ))}
                     </select>
-                </Box>
+                  </Box>
+                </Grid>
+
+                {/* Address */}
+                <Grid item xs={12}>
+                  <TextField
+                    label="Address"
+                    value={useraddress}
+                    onChange={(e) => setAddress(e.target.value)}
+                    // fullWidth
+                    margin="dense"
+                    multiline
+                    rows={4}
+                    style={{ width: "90%", marginLeft: "-10%" }}
+                  />
+                </Grid>
               </Grid>
-        
-              {/* Address */}
-              <Grid item xs={12}>
-                <TextField
-                  label="Address"
-                  value={useraddress}
-                  onChange={(e) => setAddress(e.target.value)}
-                  // fullWidth
-                  margin="dense"
-                  multiline
-                  rows={4}
-                  style={{width:"90%",marginLeft:"-10%"}}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        </ThemeProvider>
-        
-        
+            </Box>
+          </ThemeProvider>
         );
       case 1:
         return (
           <div className="education">
-          <Box style={{ margin: "0% 2%" }}>
-            {/* Map through the educations data and create dynamic static fields */}
-            {educations.map((education, index) => (
-              <Grid container spacing={2} key={index}>
-                <Grid item xs={3}>
-                  <input
-                    type="text"
-                    placeholder="Education Level"
-                    value={education.degree_level}
-                    disabled
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <input
-                    type="text"
-                    placeholder="School/College Name"
-                    value={education.schoolname}
-                    onChange={(e) =>
-                      handleEducationChange(
-                        index,
-                        "schoolname",
-                        e.target.value
-                      )
-                    }
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <input
-                    type="text"
-                    placeholder="Percentage"
-                    value={education.percentage}
-                    fullWidth
-                    onChange={(e) =>
+            <Box style={{ margin: "0% 2%" }}>
+              {/* Map through the educations data and create dynamic static fields */}
+              {educations.map((education, index) => (
+                <Grid container spacing={2} key={index}>
+                  <Grid item xs={2}>
+                    <input
+                      type="text"
+                      placeholder="Education Level"
+                      value={education.degree_level}
+                      disabled
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <input
+                      type="text"
+                      placeholder="School/College Name"
+                      value={education.schoolname}
+                      onChange={(e) =>
+                        handleEducationChange(
+                          index,
+                          "schoolname",
+                          e.target.value
+                        )
+                      }
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <input
+                      type="text"
+                      placeholder="Percentage"
+                      value={education.percentage}
+                      fullWidth
+                      onChange={(e) =>
                         handleEducationChange(
                           index,
                           "percentage",
                           e.target.value
                         )
                       }
-                  />
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <DatePicker
+                      selected={education.startDate}
+                      onChange={(date) =>
+                        handleEducationChange(index, "startDate", date)
+                      }
+                      dateFormat="yyyy/MM/dd"
+                      placeholderText="Start Date"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <DatePicker
+                      selected={education.endDate}
+                      onChange={(date) =>
+                        handleEducationChange(index, "endDate", date)
+                      }
+                      dateFormat="yyyy/MM/dd"
+                      placeholderText="end Date"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <input
+                      type="text"
+                      placeholder="Specialization"
+                      disabled={education.degree_level === "SSC"}
+                      value={education.specialization}
+                      fullWidth
+                      onChange={(e) =>
+                        handleEducationChange(
+                          index,
+                          "specialization",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={3}>
-                  <input
-                    type="text"
-                    placeholder="Specialization"
-                    disabled={education.level === "SSC"} 
-                    value={education.specialization}
-                    fullWidth
-                     onChange={(e) =>
-                          handleEducationChange(
-                            index,
-                            "specialization",
-                            e.target.value
-                          )
-                        }
-                  />
-                </Grid>
-              </Grid>
-            ))}
-          </Box>
-        </div>
+              ))}
+            </Box>
+          </div>
         );
       case 2:
         return (
@@ -856,88 +907,103 @@ function Employeeregister() {
             {selectedOption === "Experienced" &&
               experienceList.map((experience, index) => (
                 <Grid container spacing={0} key={index} direction="row">
-                <Grid item xs={2}>
-                  <input
-                    type="text"
-                    value={experience.jobTitle}
-                    onChange={(e) =>
-                      handleExperienceChange(index, "jobTitle", e.target.value)
-                    }
-                    placeholder="Job Title"
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <input
-                    type="text"
-                    value={experience.companyname}
-                    onChange={(e) =>
-                      handleExperienceChange(index, "companyname", e.target.value)
-                    }
-                    placeholder="Company name"
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <input
-                    type="text"
-                    value={experience.location}
-                    onChange={(e) =>
-                      handleExperienceChange(index, "location", e.target.value)
-                    }
-                    placeholder="Location"
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <DatePicker
-                    selected={experience.startDate}
-                    onChange={(date) =>
-                      handleExperienceChange(index, "startDate", date)
-                    }
-                    dateFormat="yyyy/MM/dd"
-                    placeholderText="Start Date"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <DatePicker
-                    selected={experience.endDate}
-                    onChange={(date) =>
-                      handleExperienceChange(index, "endDate", date)
-                    }
-                    dateFormat="yyyy/MM/dd"
-                    placeholderText="End Date"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <select
-                    value={experience.employmentType}
-                    onChange={(e) =>
-                      handleExperienceChange(index, "employmentType", e.target.value)
-                    }
-                    placeholder="Employment Type"
-                    style={{ width: "100%" }}
-                  >
-                    <option value="">Select Employment Type</option>
-                    <option value="Full-Time">Full-Time</option>
-                    <option value="Part-Time">Part-Time</option>
-                    <option value="Contract">Contract</option>
-                    <option value="Internship">Internship</option>
-                    <option value="Freelance">Freelance</option>
-                  </select>
-                </Grid>
-                {index === experienceList.length - 1 && (
-                  <Grid item xs={1}>
-                    <AddIcon
-                      style={{
-                        margin: "20px 0px 0px 0px",
-                        cursor: "pointer",
-                      }}
-                      onClick={addExperienceFields}
+                  <Grid item xs={2}>
+                    <input
+                      type="text"
+                      value={experience.jobTitle}
+                      onChange={(e) =>
+                        handleExperienceChange(
+                          index,
+                          "jobTitle",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Job Title"
                     />
                   </Grid>
-                )}
-              </Grid>
-              
+                  <Grid item xs={2}>
+                    <input
+                      type="text"
+                      value={experience.companyname}
+                      onChange={(e) =>
+                        handleExperienceChange(
+                          index,
+                          "companyname",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Company name"
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <input
+                      type="text"
+                      value={experience.location}
+                      onChange={(e) =>
+                        handleExperienceChange(
+                          index,
+                          "location",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Location"
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <DatePicker
+                      selected={experience.startDate}
+                      onChange={(date) =>
+                        handleExperienceChange(index, "startDate", date)
+                      }
+                      dateFormat="yyyy/MM/dd"
+                      placeholderText="Start Date"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <DatePicker
+                      selected={experience.endDate}
+                      onChange={(date) =>
+                        handleExperienceChange(index, "endDate", date)
+                      }
+                      dateFormat="yyyy/MM/dd"
+                      placeholderText="End Date"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <select
+                      value={experience.employmentType}
+                      onChange={(e) =>
+                        handleExperienceChange(
+                          index,
+                          "employmentType",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Employment Type"
+                      style={{ width: "100%" }}
+                    >
+                      <option value="">Select Employment Type</option>
+                      <option value="Full-Time">Full-Time</option>
+                      <option value="Part-Time">Part-Time</option>
+                      <option value="Contract">Contract</option>
+                      <option value="Internship">Internship</option>
+                      <option value="Freelance">Freelance</option>
+                    </select>
+                  </Grid>
+                  {index === experienceList.length - 1 && (
+                    <Grid item xs={1}>
+                      <AddIcon
+                        style={{
+                          margin: "20px 0px 0px 0px",
+                          cursor: "pointer",
+                        }}
+                        onClick={addExperienceFields}
+                      />
+                    </Grid>
+                  )}
+                </Grid>
               ))}
           </Box>
         );
@@ -1014,82 +1080,84 @@ function Employeeregister() {
       case 4:
         return (
           <div className="special-considerations">
-          <Box style={{ margin: "2% 5%" }}>
-            <Grid container spacing={4}>
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <Select
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value="">Availability of Work</MenuItem>
-                    <MenuItem value="hybrid">Hybrid</MenuItem>
-                    <MenuItem value="remote">Remote</MenuItem>
-                    <MenuItem value="location-based">Location based</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <Select
-                    value={disability}
-                    F
-                    onChange={(e) => setDisability(e.target.value)}
-                    displayEmpty
-                    inputProps={{ "aria-label": "Without label" }}
-                  >
-                    <MenuItem value="">All Disabilities</MenuItem>
-                    {disabilities.map((disabilit) => (
-                      <MenuItem
-                        key={disabilit.id}
-                        value={disabilit.abbreviation}
-                      >
-                        {disabilit.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid container spacing={6}>
-              <Grid item xs={4}>
-                <input
-                  type="text"
-                  placeholder="Disability Percentage"
-                  value={disabilitypercentage}
-                  onChange={(e) => setDisabilitypercentage(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <input
-                  type="text"
-                  value={languages_known}
-                  onChange={(e) => setLanguagesknow(e.target.value)}
-                  placeholder="Please enter known languages with comma"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <FormControlLabel
-                  required
-                  control={
-                    <Checkbox
-                      hecked={willingToRelocate}
-                      onChange={(e) => setWillingToRelocate(e.target.checked)}
+            <Box style={{ margin: "2% 5%" }}>
+              <Grid container spacing={4}>
+                <Grid item xs={6}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value="">Availability of Work</MenuItem>
+                      <MenuItem value="hybrid">Hybrid</MenuItem>
+                      <MenuItem value="remote">Remote</MenuItem>
+                      <MenuItem value="location-based">Location based</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={disability}
+                      F
+                      onChange={(e) => setDisability(e.target.value)}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value="">All Disabilities</MenuItem>
+                      {disabilities.map((disabilit) => (
+                        <MenuItem
+                          key={disabilit.id}
+                          value={disabilit.abbreviation}
+                        >
+                          {disabilit.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid container spacing={6}>
+                  <Grid item xs={4}>
+                    <input
+                      type="text"
+                      placeholder="Disability Percentage"
+                      value={disabilitypercentage}
+                      onChange={(e) => setDisabilitypercentage(e.target.value)}
                     />
-                  }
-                  label="Willing to relocate"
-                  componentsProps={{
-                    typography: { color: "black" },
-                  }}
-                />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <input
+                      type="text"
+                      value={languages_known}
+                      onChange={(e) => setLanguagesknow(e.target.value)}
+                      placeholder="Please enter known languages with comma"
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <FormControlLabel
+                      required
+                      control={
+                        <Checkbox
+                          hecked={willingToRelocate}
+                          onChange={(e) =>
+                            setWillingToRelocate(e.target.checked)
+                          }
+                        />
+                      }
+                      label="Willing to relocate"
+                      componentsProps={{
+                        typography: { color: "black" },
+                      }}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
-              </Grid>
-            </Grid>
-            {/* <Grid container spacing={1} style={{ margin: "2%" }}> */}
-             
-            {/* </Grid> */}
-            {/* <Grid container spacing={6}>
+              {/* <Grid container spacing={1} style={{ margin: "2%" }}> */}
+
+              {/* </Grid> */}
+              {/* <Grid container spacing={6}>
               <Grid item xs={4}>
                 <label>Disability Certificate</label>
                 <TextField
@@ -1122,7 +1190,7 @@ function Employeeregister() {
                 />
               </Grid>
             </Grid> */}
-          </Box>
+            </Box>
           </div>
         );
       default:
@@ -1133,77 +1201,87 @@ function Employeeregister() {
   return (
     // <Paper>
     <Box sx={{ width: "100%", margin: "5% 0%" }}>
-    <Box
-      sx={{
-        position: "sticky",
-        top: "12%",
-        zIndex: 1,
-        backgroundColor: "white",
-      }}
-    >
-      <Stepper
-        alternativeLabel
-        activeStep={activeStep}
-        connector={<QontoConnector />}
+      {showPopup && (
+        <div className="popup">
+          <p style={{fontSize:'medium',fontFamily:'sans-serif'}}>{popupMessage}</p>
+          <button onClick={() => setShowPopup(false)}>Close</button>
+        </div>
+      )}
+      <Box
+        sx={{
+          position: "sticky",
+          top: "12%",
+          zIndex: 1,
+          backgroundColor: "white",
+        }}
       >
-        {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
+        <Stepper
+          alternativeLabel
+          activeStep={activeStep}
+          connector={<QontoConnector />}
+        >
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            if (isStepOptional(index)) {
+              labelProps.optional = (
+                <Typography variant="caption">Optional</Typography>
+              );
+            }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
+                  {label}
+                </StepLabel>
+              </Step>
             );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
-                {label}
-              </StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-    </Box>
-    {activeStep === steps.length ? (
-      <React.Fragment>
-        <Typography sx={{ mt: 2, mb: 1 }}>
-          {confirmMessage && confirmMessage}
-        </Typography>
-        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-          <Box sx={{ flex: "1 1 auto" }} />
-          <Button onClick={handleSubmit}>Submit</Button>
-        </Box>
-      </React.Fragment>
-    ) : (
-      <React.Fragment>
-        <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-        {renderForm()}
-        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-          <Button
-            color="inherit"
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            sx={{ mr: 1 }}
-          >
-            Back
-          </Button>
-          <Box sx={{ flex: "1 1 auto" }} />
-          {isStepOptional(activeStep) && (
-            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-              Skip
+          })}
+        </Stepper>
+      </Box>
+      {activeStep === steps.length ? (
+        <React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            {confirmMessage && confirmMessage}
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button onClick={handleSubmit}>Submit</Button>
+          </Box>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+          {renderForm()}
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
             </Button>
-          )}
-          <Button onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}>
-            {activeStep === steps.length - 1 ? "Submit" : "Next"}
-          </Button>
-        </Box>
-      </React.Fragment>
-    )}
-  </Box>
-  
+            <Box sx={{ flex: "1 1 auto" }} />
+            {isStepOptional(activeStep) && (
+              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                Skip
+              </Button>
+            )}
+            <Button
+              onClick={
+                activeStep === steps.length - 1 ? handleSubmit : handleNext
+              }
+            >
+              {activeStep === steps.length - 1 ? "Submit" : "Next"}
+            </Button>
+          </Box>
+        </React.Fragment>
+      )}
+    </Box>
+
     //  </Paper>
   );
 }
