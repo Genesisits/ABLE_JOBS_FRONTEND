@@ -1217,31 +1217,13 @@ function Employeeregister({ open, onClose }) {
           <CircularProgress color="primary" size={50} />
         </div>
       )}
-
-      <Box
-        sx={{
-          position: "sticky",
-          top: "12%",
-          zIndex: 1,
-          backgroundColor: "white",
-        }}
-      >
-        <Stepper
-          alternativeLabel
-          activeStep={activeStep}
-          connector={<QontoConnector />}
-
       <Box sx={{ width: "100%", margin: "5% 0%" }}>
         {showPopup && (
           <div className="popup">
             <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
               {popupMessage}
             </p>
-
-            <button style={{marginLeft:'35%',width:'30%'}} onClick={() => setShowPopup(false)}>Close</button>
-
             <button onClick={() => setShowPopup(false)}>Close</button>
-
           </div>
         )}
         <Box
@@ -1251,7 +1233,6 @@ function Employeeregister({ open, onClose }) {
             zIndex: 1,
             backgroundColor: "white",
           }}
-
         >
           <Stepper
             alternativeLabel
