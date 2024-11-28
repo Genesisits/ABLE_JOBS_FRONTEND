@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import Paper from "@mui/material/Paper";
+import { CircularProgress } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Check from "@mui/icons-material/Check";
 import Radio from "@mui/material/Radio";
@@ -188,6 +189,7 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 function Employeeregister({ open, onClose }) {
+  const [isLoading, setisLoading] = useState(false)
   const skillOptions = [
     "React",
     "HTML",
@@ -505,6 +507,7 @@ function Employeeregister({ open, onClose }) {
   };
 
   const handleSubmit = () => {
+    setisLoading(true);
     const payload = {
       educations: educations,
       projects: [],
@@ -529,8 +532,8 @@ function Employeeregister({ open, onClose }) {
       state: state,
       address: useraddress,
       skills: selectedSkills.toString(),
-      workAvailability: type,
-      disabilityType: disability,
+      availability_of_work: type,
+      disability: disability,
       disabilityPercentage: disabilitypercentage,
       willing_to_relocate: willingToRelocate,
       // disabilityCertificate: file,
@@ -573,6 +576,8 @@ function Employeeregister({ open, onClose }) {
         }
         setShowPopup(true); // Show the popup
         setPopupMessage(errorMessage);
+      }).finally (() => {
+        setisLoading(false);
       });
   };
 
@@ -1206,6 +1211,12 @@ function Employeeregister({ open, onClose }) {
     // <Paper>
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogTitle>Employer Registration</DialogTitle>
+      {/* Full-page loading spinner */}
+      {isLoading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
       <Box sx={{ width: "100%", margin: "5% 0%" }}>
         {showPopup && (
           <div className="popup">
@@ -1278,6 +1289,11 @@ function Employeeregister({ open, onClose }) {
                   Skip
                 </Button>
               )}
+              <Button
+                onClick={onClose}
+              >
+                {activeStep === steps.length-1 ? "Cancel" : ""}
+              </Button>
               <Button
                 onClick={
                   activeStep === steps.length - 1 ? handleSubmit : handleNext
