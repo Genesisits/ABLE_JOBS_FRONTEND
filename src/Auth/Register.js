@@ -1207,6 +1207,7 @@ function Employeeregister() {
           <button onClick={() => setShowPopup(false)}>Close</button>
         </div>
       )}
+<<<<<<< Updated upstream
       <Box
         sx={{
           position: "sticky",
@@ -1219,6 +1220,24 @@ function Employeeregister() {
           alternativeLabel
           activeStep={activeStep}
           connector={<QontoConnector />}
+=======
+      <Box sx={{ width: "100%", margin: "5% 0%" }}>
+        {showPopup && (
+          <div className="popup">
+            <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
+              {popupMessage}
+            </p>
+            <button style={{marginLeft:'35%',width:'30%'}} onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        )}
+        <Box
+          sx={{
+            position: "sticky",
+            top: "12%",
+            zIndex: 1,
+            backgroundColor: "white",
+          }}
+>>>>>>> Stashed changes
         >
           {steps.map((label, index) => {
             const stepProps = {};
