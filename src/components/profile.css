@@ -19,7 +19,7 @@ body {
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    min-width: 350px;
+    min-width: 950px;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
@@ -55,6 +55,11 @@ body {
     margin-top: 20px;
     text-align: left;
     margin-left: 20%;
+  }
+  .profile-info1 {
+    margin-top: 20px;
+    text-align: left;
+    margin-left: 10%;
   }
   
   .info-item {

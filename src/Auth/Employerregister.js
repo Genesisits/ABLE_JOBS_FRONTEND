@@ -819,10 +819,10 @@ function Employerregister({ open, onClose }) {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            {/* <Grid item xs={4}>
                                 <label>Upload Image</label>
                                 <TextField
-                                    // label="Company Logo"
+                                    label="Company Logo"
                                     onChange={(event) => setProfileimage(event.target.files[0])}
                                     fullWidth
                                     type="file"
@@ -844,7 +844,7 @@ function Employerregister({ open, onClose }) {
                                         },
                                     }}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                         </Grid>
                     </DialogContent>
