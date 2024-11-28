@@ -101,7 +101,7 @@ export default function Header() {
               </li>
             )}
             {/* Show Login and Register buttons if on landing/home/login/register pages or if the user is not an employee/employer */}
-            {(isLandingOrRelevantPage || !userRole) && (
+            {(isLandingOrRelevantPage && !userRole) && (
               <>
                 <li>
                   <div className="vendor_login_button">

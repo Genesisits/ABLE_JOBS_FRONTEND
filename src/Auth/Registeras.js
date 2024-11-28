@@ -2,28 +2,46 @@ import React, { useState } from 'react';
 import './registeras.css';
 import { useNavigate } from 'react-router-dom';
 import Employerregister from './Employerregister';
+import Employeeregister from './Register';
+import Trainer from './Trainer';
+import Volunteer from './Volunteer';
 
 function Registeras() {
   const navigate = useNavigate();
   const [openEmployerModal, setOpenEmployerModal] = useState(false);
+  const [openEmployeeModal, setOpenEmployeeModal] = useState(false);
+  const [openTrainerModal, setOpenTrainerModal] = useState(false);
+  const [openVolunteerModal, setOpenVolunteerModal] = useState(false);
+  
 
   const handleEmployee = () => {
-    navigate('/employeeregister');
+    // navigate('/employeeregister');
+    setOpenEmployeeModal(true)
   };
   const handleTrainer = () => {
-    navigate('/trainer')
+    // navigate('/trainer')
+    setOpenTrainerModal(true)
   }
 
   const handleVolunteer = () => {
-    navigate('/volunteer')
+    // navigate('/volunteer')
+    setOpenVolunteerModal(true)
   }
 
   const handleEmployer = () => {
-    setOpenEmployerModal(true); // Open Employer Modal
+    setOpenEmployerModal(true); 
   };
-
+  const closeTrainerModal = () => {
+    setOpenTrainerModal(false)
+  }
+  const closeVolunteerModal = () => {
+    setOpenVolunteerModal(false)
+  }
   const closeEmployerModal = () => {
-    setOpenEmployerModal(false); // Close Employer Modal
+    setOpenEmployerModal(false); 
+  };
+  const closeEmployeeModal = () => {
+    setOpenEmployeeModal(false); 
   };
 
   return (
@@ -37,7 +55,10 @@ function Registeras() {
         <br/>
         <button type="submit" onClick={handleVolunteer}>Volunteer</button>
       </div>
+      <Employeeregister open={openEmployeeModal} onClose={closeEmployeeModal}/> 
       <Employerregister open={openEmployerModal} onClose={closeEmployerModal} />
+      <Trainer open={openTrainerModal} onClose={closeTrainerModal}/>
+      <Volunteer open={openVolunteerModal} onClose={closeVolunteerModal}/>
     </div>
   );
 }

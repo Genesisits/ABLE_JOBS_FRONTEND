@@ -4,10 +4,13 @@ import {
   Grid,
   Box,
   TextField,
+  Dialog,
+  DialogActions,
   Button,
   Checkbox,
   Select,
   MenuItem,
+  DialogTitle
 } from "@mui/material";
 import { CountryDropdown, StateDropdown } from "react-country-state-dropdown";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -15,8 +18,215 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { TRAINER_REGISTER } from "../endpoints";
 import { Password } from "@mui/icons-material";
-
-function Trainer() {
+const countryStateData = {
+  USA: [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming",
+  ],
+  Canada: [
+    "Alberta",
+    "British Columbia",
+    "Manitoba",
+    "New Brunswick",
+    "Newfoundland and Labrador",
+    "Nova Scotia",
+    "Ontario",
+    "Prince Edward Island",
+    "Quebec",
+    "Saskatchewan",
+  ],
+  India: [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Lakshadweep",
+    "Puducherry",
+    "Ladakh",
+  ],
+  Australia: [
+    "New South Wales",
+    "Victoria",
+    "Queensland",
+    "Western Australia",
+    "South Australia",
+    "Tasmania",
+    "Northern Territory",
+    "Australian Capital Territory",
+  ],
+  UnitedKingdom: ["England", "Scotland", "Wales", "Northern Ireland"],
+  Germany: [
+    "Baden-Württemberg",
+    "Bavaria",
+    "Berlin",
+    "Brandenburg",
+    "Bremen",
+    "Hamburg",
+    "Hesse",
+    "Lower Saxony",
+    "Mecklenburg-Western Pomerania",
+    "North Rhine-Westphalia",
+    "Rhineland-Palatinate",
+    "Saarland",
+    "Saxony",
+    "Saxony-Anhalt",
+    "Schleswig-Holstein",
+    "Thuringia",
+  ],
+  China: [
+    "Anhui",
+    "Beijing",
+    "Chongqing",
+    "Fujian",
+    "Gansu",
+    "Guangdong",
+    "Guangxi",
+    "Guizhou",
+    "Hainan",
+    "Hebei",
+    "Heilongjiang",
+    "Henan",
+    "Hong Kong",
+    "Hubei",
+    "Hunan",
+    "Inner Mongolia",
+    "Jiangsu",
+    "Jiangxi",
+    "Jilin",
+    "Liaoning",
+    "Macau",
+    "Ningxia",
+    "Qinghai",
+    "Shaanxi",
+    "Shandong",
+    "Shanghai",
+    "Shanxi",
+    "Sichuan",
+    "Tianjin",
+    "Tibet",
+    "Xinjiang",
+    "Yunnan",
+    "Zhejiang",
+  ],
+  Brazil: [
+    "Acre",
+    "Alagoas",
+    "Amapá",
+    "Amazonas",
+    "Bahia",
+    "Ceará",
+    "Distrito Federal",
+    "Espírito Santo",
+    "Goiás",
+    "Maranhão",
+    "Mato Grosso",
+    "Mato Grosso do Sul",
+    "Minas Gerais",
+    "Pará",
+    "Paraíba",
+    "Paraná",
+    "Pernambuco",
+    "Piauí",
+    "Rio de Janeiro",
+    "Rio Grande do Norte",
+    "Rio Grande do Sul",
+    "Rondônia",
+    "Roraima",
+    "Santa Catarina",
+    "São Paulo",
+    "Sergipe",
+    "Tocantins",
+  ],
+  SouthAfrica: [
+    "Eastern Cape",
+    "Free State",
+    "Gauteng",
+    "KwaZulu-Natal",
+    "Limpopo",
+    "Mpumalanga",
+    "North West",
+    "Northern Cape",
+    "Western Cape",
+  ],
+};
+function Trainer({ open, onClose }) {
   const theme = createTheme();
   const [userfname, setUserfname] = useState("");
   const [userlname, setUserlname] = useState("");
@@ -26,6 +236,7 @@ function Trainer() {
   const [userpassword, setPassword] = useState("");
   const [country, setCountry] = useState(null);
   const [state, setState] = useState(null);
+  const [states, setStates] = useState([]);
   const [resume, setResume] = useState(null);
   const [Adhar, setAadhar] = useState(null);
   const [qualification, setQualification] = useState("");
@@ -37,6 +248,14 @@ function Trainer() {
   const [availability_of_work, setWorkAvailability] = useState("");
   const handleSetCountry = (e, value) => setCountry(value);
   const handleSetState = (e, value) => setState(value);
+
+  
+  const handleCountryChange = (e) => {
+    const country = e.target.value;
+    setCountry(country);
+    setStates(countryStateData[country] || []); // Update states based on selected country
+    setState(""); // Reset state selection
+  };
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -72,9 +291,11 @@ function Trainer() {
   };
 
   return (
-    <div style={{ marginTop: "2%" }}>
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+        <DialogTitle>Employer Registration</DialogTitle>
+    <div>
       <ThemeProvider theme={theme}>
-        <Box style={{ margin: "5% 10%" }}>
+        <Box style={{ margin: "1% 10%" }}>
           <Grid container spacing={1}>
             <Grid item xs={6}>
               <TextField
@@ -191,40 +412,53 @@ function Trainer() {
                 }}
               />
             </Grid>
-            <Grid>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  margin: "20px",
-                  justifyContent: "space-evenly",
-                }}
-              >
-                <span>
-                  <CountryDropdown
-                    clearable
-                    searchable
-                    value={country}
-                    onChange={handleSetCountry}
-                    style={{
-                      color: "black",
-                      width: "240px",
-                      marginRight: "10px",
+            <Grid item xs={3}>
+                <FormControl fullWidth>
+                  <Select
+                    value={country || ""}
+                    onChange={handleCountryChange}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Select Country" }}
+                    sx={{
+                      margin: "10px 0px",
+                      height: 45, // Adjust the height
+                      padding: "4px 10px", // Reduce padding
+                      fontSize: "0.875rem", // Adjust font size if needed
                     }}
-                  />
-                </span>
-                <span>
-                  <StateDropdown
-                    clearable
-                    searchable
-                    country={country}
-                    value={state}
-                    onChange={handleSetState}
-                    style={{ color: "black", width: "240px" }}
-                  />
-                </span>
-              </div>
-            </Grid>
+                  >
+                    <MenuItem value="">Select Country</MenuItem>
+                    {Object.keys(countryStateData).map((countryName) => (
+                      <MenuItem key={countryName} value={countryName}>
+                        {countryName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={3}>
+                <FormControl fullWidth>
+                  <Select
+                    value={state || ""}
+                    onChange={(e) => setState(e.target.value)}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Select State" }}
+                    disabled={!country}
+                    sx={{
+                      margin: "10px 0px",
+                      height: 45, // Adjust the height
+                      padding: "4px 10px", // Reduce padding
+                      fontSize: "0.875rem", // Adjust font size if needed
+                    }}
+                  >
+                    <MenuItem value="">Select State</MenuItem>
+                    {states.map((stateName) => (
+                      <MenuItem key={stateName} value={stateName}>
+                        {stateName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             <Grid item xs={4}>
               <TextField
                 label="Languages Known"
@@ -460,10 +694,15 @@ function Trainer() {
             rows={3} // Specifies 4 rows
           />
           {/* </Grid> */}
-          <Button onClick={handleSubmit}>Register</Button>
+          {/* <Button onClick={handleSubmit}>Register</Button> */}
+          <DialogActions>
+                        <Button onClick={onClose} color="secondary">Cancel</Button>
+                        <Button onClick={handleSubmit} color="primary">Register</Button>
+                    </DialogActions>
         </Box>
       </ThemeProvider>
     </div>
+    </Dialog>
   );
 }
 

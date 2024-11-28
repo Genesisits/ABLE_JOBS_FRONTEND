@@ -16,7 +16,7 @@ export default function Sidenav() {
     } else if (isEmployer) {
         menuItems = ['Jobs',  'Shortlisted','Reports', 'Logout'];
     } else if (isAdmin) {
-        menuItems = ['Dashboard', 'Find jobs', 'Job status', 'Jobs Applied', 'Profile', 'Logout'];
+        menuItems = ['Dashboard', 'Employers','Volunteers', 'Logout'];
     }
 
     const handleLogout = () => {
