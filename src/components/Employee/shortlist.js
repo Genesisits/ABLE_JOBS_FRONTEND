@@ -19,7 +19,7 @@ const columns = [
   { id: "job_title", label: "Job Title", minWidth: 100 },
   { id: "company_name", label: "Company Name", minWidth: 100 },
   { id: "location", label: "Location", minWidth: 100 },
-  { id: "number_of_positions", label: "Employment Type", minWidth: 100 },
+  { id: "number_of_positions", label: "Number of Positions", minWidth: 100 },
 ];
 
 function Shortlist() {

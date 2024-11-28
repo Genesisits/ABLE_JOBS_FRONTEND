@@ -133,6 +133,7 @@ const Profile = () => {
           {userType === 'Employee' && (
             <>
               <h2 className="profile-name">{`${user.first_name} ${user.last_name}`}</h2>
+              <div style={{display:'flex'}}>
               <div className="profile-info">
                 <div className="info-item">
                   <span className="info-label">Mobile Number:</span>
@@ -155,6 +156,29 @@ const Profile = () => {
                   <span className="info-value">{user.skills}</span>
                 </div>
               </div>
+              <div className="profile-info1">
+                <div className="info-item">
+                  <span className="info-label">Availability of Work:</span>
+                  <span className="info-value">{user.availability_of_work}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Disability:</span>
+                  <span className="info-value">{user.disability}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Job Experiences:</span>
+                  <span className="info-value">{user.job_experiences}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Languages Known:</span>
+                  <span className="info-value">{user.languages_known}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">willing to relocate:</span>
+                  <span className="info-value">{user.willing_to_relocate}</span>
+                </div>
+                </div>
+                </div>
             </>
           )}
           
