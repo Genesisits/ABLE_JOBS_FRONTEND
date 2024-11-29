@@ -1,8 +1,16 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
-import { GET_JOB,ACTIVATE_JOB, GET_JOB_EMPLOYEE } from "../../endpoints";
+import {
+  GET_JOB,
+  ACTIVATE_JOB,
+  GET_JOB_EMPLOYEE,
+  VOLUNTEERS_LIST,
+} from "../../endpoints";
 import { useState, useEffect } from "react";
+import Aadhar from "../../images/aadharcard.png";
+import Pancard from "../../images/pancard.webp";
+import Resume from "../../images/resume.png";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -17,15 +25,15 @@ import Switch from "@mui/material/Switch";
 import axios from "axios";
 // import "./jobs.css";
 // import Postajob from "./postajob";
-// import AppliedCandidatesDialog from "./Appliedcandidates"; 
+// import AppliedCandidatesDialog from "./Appliedcandidates";
 
 const columns = [
-  { id: "job_title", label: "Job Role", minWidth: 100 },
-  { id: "experience_required", label: "Experience", minWidth: 100 },
-  { id: "salary_offered", label: "Salary", minWidth: 100 },
-  { id: "skills", label: "Required Technology Stack", minWidth: 100 },
-  { id: "location", label: "Location", minWidth: 100 },
-  { id: "description", label: "Job Description", minWidth: 100 },
+  { id: "first_name", label: "First Name", minWidth: 100 },
+  { id: "last_name", label: "Last Name", minWidth: 100 },
+  { id: "email", label: "Email", minWidth: 100 },
+  { id: "mobile_number", label: "Mobile Number", minWidth: 100 },
+  { id: "state", label: "State", minWidth: 100 },
+  // { id: "description", label: "Job Description", minWidth: 100 },
   { id: "status", label: "Actions", minWidth: 150 },
 ];
 
@@ -44,8 +52,8 @@ export default function Volunteers() {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
-    }
-    axios.get(`${GET_JOB_EMPLOYEE}`,config).then((response) => {
+    };
+    axios.get(`${VOLUNTEERS_LIST}`).then((response) => {
       setData(response.data);
     });
   }, []);
@@ -63,15 +71,22 @@ export default function Volunteers() {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     };
-    setData((prevRows) => 
+    setData((prevRows) =>
       prevRows.map((item) =>
-        item.code === row.code ? { ...item, activation_status: updatedStatus } : item
-      ));
-  
+        item.code === row.code
+          ? { ...item, activation_status: updatedStatus }
+          : item
+      )
+    );
+
     axios
-      .put(`${ACTIVATE_JOB}${row.code}/`,{ activation_status: updatedStatus },config)
+      .put(
+        `${ACTIVATE_JOB}${row.code}/`,
+        { activation_status: updatedStatus },
+        config
+      )
       .then((response) => {
-        console.log(response)
+        console.log(response);
       });
   };
 
@@ -80,12 +95,12 @@ export default function Volunteers() {
     setIsPostJobOpen(true); // Open the modal
   };
   const closePostJobModal = () => {
-    setSelectedJob(null); 
-    setIsPostJobOpen(false); 
+    setSelectedJob(null);
+    setIsPostJobOpen(false);
   };
   const handleOpenDialog = (jobCode) => {
-    setSelectedJobCode(jobCode);  // Set the selected job code
-    setIsDialogOpen(true);         // Open the dialog
+    setSelectedJobCode(jobCode); // Set the selected job code
+    setIsDialogOpen(true); // Open the dialog
   };
 
   const handleCloseDialog = () => {
@@ -93,15 +108,14 @@ export default function Volunteers() {
   };
 
   const openEditJobModal = (job) => {
-    setSelectedJob(job); 
+    setSelectedJob(job);
     setIsPostJobOpen(true);
-  }
+  };
 
   return (
     <div>
       <Layout>
-        <div className="jobs">
-        </div>
+        <div className="jobs"></div>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
             <Table stickyHeader aria-label="sticky table">
@@ -132,22 +146,58 @@ export default function Volunteers() {
                         if (column.id === "status") {
                           return (
                             <TableCell key={column.id}>
-                              <VisibilityIcon
-                                style={{ cursor: "pointer", marginRight: "2px" }}
-                                fontSize="small"
-                                onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
-                              />
-                              <EditIcon
-                                style={{ cursor: "pointer", marginRight: "2px" }}
-                                fontSize="small"
-                                onClick={() => openEditJobModal(row)}
-                              />
-                              <Switch
-                              checked={row.activation_status}
-                              onChange={() => handleActive(row)}
-                              inputProps={{ "aria-label": "controlled" }}
-                               size="small"
-                            />
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  margin: "0",
+                                }}
+                              >
+                                <button
+                                onClick={(e)=>window.open(row.aadhar_card)}
+                                  style={{
+                                    padding:'0',
+                                    border: "none",
+                                    background: "none",
+                                    margin: "0",
+                                  }}
+                                >
+                                  <img
+                                    src={Aadhar}
+                                    style={{ width: "25px", height: "25px",margin:'0', }}
+                                  />
+                                </button>
+
+                                <button
+                                onClick={(e)=>window.open(row.pan_card)}
+                                  style={{
+                                    padding:'0',
+                                    border: "none",
+                                    background: "none",
+                                    margin: "0",
+                                  }}
+                                >
+                                  <img
+                                    src={Pancard}
+                                    style={{ width: "25px", height: "25px",margin:'0', }}
+                                  />
+                                </button>
+                                <button
+                                onClick={(e) => window.open(row.resume)}
+                                  style={{
+                                    padding:'0',
+                                    border: "none",
+                                    background: "none",
+                                    margin: "0",
+                                  }}
+                                >
+                                  <img
+                                  
+                                    src={Resume}
+                                    style={{ width: "25px", height: "25px",margin:'0', }}
+                                  />
+                                </button>
+                              </div>
                             </TableCell>
                           );
                         }
