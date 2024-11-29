@@ -16,6 +16,7 @@ export const VOLUNTEERS_LIST = `${BASE_URL}/volunteers_list/`;
 export const EMPLOYEES_LIST = `${BASE_URL}/employees_list/`;
 export const EMPLOYERS_LIST = `${BASE_URL}/employers_list/`;
 export const TRAINERS_LIST = `${BASE_URL}/trainers_list/`;
+export const JOBS_LIST_BASED_ON_EMPLOYER =  `${BASE_URL}/A_employerJobsView/`;
 export const DELETE_JOB = `${BASE_URL}/jobs/delete/`;
 export const UPDATE_JOB = `${BASE_URL}/jobs/edit/`
 export const ACTIVATE_JOB = `${BASE_URL}/jobs/deactivate/`
