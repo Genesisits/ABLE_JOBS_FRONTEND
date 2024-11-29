@@ -16,7 +16,13 @@ import {
 import axios from 'axios';
 import { USER_PROFILE, PROFILE_UPDATE, PROFILE_UPDATE_IMAGE } from '../endpoints';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-
+const textFieldStyles = {
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': { borderColor: 'transparent' },
+    '&:hover fieldset': { borderColor: 'transparent' },
+    '&.Mui-focused fieldset': { borderColor: 'transparent' },
+  },
+};
 const Profile = () => {
   const [userType, setUserType] = useState('');
   const [user, setUser] = useState({
@@ -32,7 +38,7 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null); // For handling image upload
   const accessToken = localStorage.getItem('access_token');
   const hasFetched = useRef(false);
-
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       setLoading(true);
@@ -74,12 +80,11 @@ const Profile = () => {
   };
 
   const handleSaveChanges = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await axios.patch(PROFILE_UPDATE, user, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -89,7 +94,7 @@ const Profile = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
       handleDialogClose();
     }
   };
@@ -116,19 +121,25 @@ const Profile = () => {
       const response = await axios.post(PROFILE_UPDATE_IMAGE, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data',
         },
       });
 
       if (response.status === 200) {
-        const { PROFILE_UPDATE } = response.data;
+        const { profile_image_url } = response.data;
+
+        // Update the user's profile image in the state
         setUser((prevUser) => ({
           ...prevUser,
-          profile_image: PROFILE_UPDATE,
+          profile_image: profile_image_url,
         }));
+
+        alert('Profile image updated successfully!');
+      } else {
+        console.error('Unexpected response:', response);
       }
     } catch (error) {
       console.error('Error uploading profile image:', error);
+      alert('Failed to upload image. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -156,11 +167,16 @@ const Profile = () => {
     <Layout>
       <div className="profile-container">
         <div className="profile-card">
-          <img
-            className="profile-image"
-            src={user.profile_image ? `${user.profile_image}?t=${new Date().getTime()}` : avatar}
-            alt="Profile"
-          />
+        <div className="profile-image-container">
+  <img
+    className="profile-image"
+    src={user.profile_image ? `${user.profile_image}?t=${new Date().getTime()}` : avatar}
+    alt="Profile"
+  />
+  <label htmlFor="image-upload-input" className="camera-icon">
+    <CameraAltIcon />
+  </label>
+</div>
           <div className="image-upload">
             <input
               accept="image/*"
@@ -169,23 +185,124 @@ const Profile = () => {
               style={{ display: 'none' }}
               onChange={handleImageChange}
             />
-            <label htmlFor="image-upload-input">
-              <IconButton component="span">
-                <CameraAltIcon />
+            {/* <label htmlFor="image-upload-input">
+              <IconButton component="span" >
+                <CameraAltIcon className='camera-icon'/>
               </IconButton>
-            </label>
+            </label> */}
           </div>
-          <h2 className="profile-name">{`${user.first_name} ${user.last_name}`}</h2>
-          <div className="profile-info">
-            <div className="info-item">
-              <span className="info-label">Mobile Number:</span>
-              <span className="info-value">{user.mobile_number}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Skills:</span>
-              <span className="info-value">{user.skills}</span>
-            </div>
-          </div>
+          {userType === 'Employee' && (
+            <>
+              <h2 className="profile-name">{`${user.first_name} ${user.last_name}`}</h2>
+              <div style={{display:'flex'}}>
+              <div className="profile-info">
+                <div className="info-item">
+                  <span className="info-label">Mobile Number:</span>
+                  <span className="info-value">{user.mobile_number}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Country:</span>
+                  <span className="info-value">{user.country}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">State:</span>
+                  <span className="info-value">{user.state}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Address:</span>
+                  <span className="info-value">{user.address}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Skills:</span>
+                  <span className="info-value">{user.skills}</span>
+                </div>
+              </div>
+              <div className="profile-info1">
+                <div className="info-item">
+                  <span className="info-label">Availability of Work:</span>
+                  <span className="info-value">{user.availability_of_work}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Disability:</span>
+                  <span className="info-value">{user.disability}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Job Experiences:</span>
+                  <span className="info-value">{user.job_experiences}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Languages Known:</span>
+                  <span className="info-value">{user.languages_known}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">willing to relocate:</span>
+                  <span className="info-value">{user.willing_to_relocate}</span>
+                </div>
+                </div>
+                </div>
+            </>
+          )}
+          
+          {userType === 'Employer' && (
+            <>
+              <h2 className="profile-name">{user.company_name}</h2>
+              <div style={{display:'flex'}}>
+              <div className="profile-info">
+                <div className="info-item">
+                  <span className="info-label">Email:</span>
+                  <span className="info-value">{user.email}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Contact:</span>
+                  <span className="info-value">{user.company_contact}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Industry:</span>
+                  <span className="info-value">{user.industry}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Location:</span>
+                  <span className="info-value">{user.location}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Website:</span>
+                  <span className="info-value">
+                    <a href={user.company_website} target="_blank" rel="noopener noreferrer">
+                      {user.company_website}
+                    </a>
+                  </span>
+                  </div>
+                </div>
+                <div className="profile-info1">
+                <div className="info-item">
+                  <span className="info-label">Company Head FirstName:</span>
+                  <span className="info-value">{user.head_first_name}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Company Head LastName:</span>
+                  <span className="info-value">{user.head_last_name}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Head Designation:</span>
+                  <span className="info-value">{user.head_designation}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Head Contact:</span>
+                  <span className="info-value">{user.head_contact}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Linkedin Link:</span>
+                  <span className="info-value">
+                    <a href={user.linkedinlink} target="_blank" rel="noopener noreferrer">
+                      {user.linkedinlink}
+                    </a>
+                  </span>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
           <button className="edit-button" onClick={handleDialogOpen}>
             Edit Profile
           </button>
@@ -199,6 +316,7 @@ const Profile = () => {
 
       <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
         <DialogTitle>Update Profile</DialogTitle>
+        {userType === 'Employee' && (
         <DialogContent>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -208,6 +326,7 @@ const Profile = () => {
                 value={user.first_name}
                 name="first_name"
                 onChange={handleInputChange}
+                sx={textFieldStyles}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -217,42 +336,115 @@ const Profile = () => {
                 value={user.last_name}
                 name="last_name"
                 onChange={handleInputChange}
+                sx={textFieldStyles}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Mobile Number"
                 fullWidth
                 value={user.mobile_number}
                 name="mobile_number"
                 onChange={handleInputChange}
+                sx={textFieldStyles}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Skills"
                 fullWidth
                 value={user.skills}
                 name="skills"
                 onChange={handleInputChange}
+                sx={textFieldStyles}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Address"
                 fullWidth
                 value={user.address}
                 name="address"
                 onChange={handleInputChange}
+                sx={textFieldStyles}
               />
             </Grid>
           </Grid>
         </DialogContent>
+         )}
+
+{userType === 'Employer' && (
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Company Name"
+                fullWidth
+                value={user.company_name}
+                name="company name"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Location"
+                fullWidth
+                value={user.location}
+                name="location"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Email"
+                fullWidth
+                value={user.email}
+                name="email"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Contact"
+                fullWidth
+                value={user.company_contact}
+                name="skills"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Industry"
+                fullWidth
+                value={user.industry}
+                name="industry"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Website"
+                fullWidth
+                value={user.company_website}
+                name="company website"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+         )}
+
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleSaveChanges} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : 'Save'}
-          </Button>
+          <Button onClick={handleSaveChanges} color="primary">
+            Save Changes
+          </Button> 
         </DialogActions>
       </Dialog>
     </Layout>
