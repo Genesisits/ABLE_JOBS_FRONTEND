@@ -24,6 +24,7 @@ export const ONBOARD_JOB = `${BASE_URL}/onboarded_jobs/`;
 export const UPLOAD_RESUME = `${BASE_URL}/upload_resume/`;
 export const USER_PROFILE = `${BASE_URL}/user_profile/`;
 export const PROFILE_UPDATE = `${BASE_URL}/userprofile_Update/`;
+export const PROFILE_UPDATE_IMAGE = `${BASE_URL}/upload-profile-image/`;
 
 export const CHAIR_URL = `${BASE_URL}/chairs`;
 export const DECORATION_URL = `${BASE_URL}/decoration`;
