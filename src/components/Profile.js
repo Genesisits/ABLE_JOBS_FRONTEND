@@ -38,6 +38,7 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null); // For handling image upload
   const accessToken = localStorage.getItem('access_token');
   const hasFetched = useRef(false);
+  const [showSubmit,setshowSubmit] = useState(false)
   
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -101,6 +102,7 @@ const Profile = () => {
 
   // Handle profile image upload
   const handleImageChange = (e) => {
+    setshowSubmit(true)
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
@@ -306,9 +308,9 @@ const Profile = () => {
           <button className="edit-button" onClick={handleDialogOpen}>
             Edit Profile
           </button>
-          {imageFile && (
+          {showSubmit && (
             <Button onClick={handleImageUpload} variant="contained" color="primary">
-              Upload Image
+              Submit
             </Button>
           )}
         </div>
