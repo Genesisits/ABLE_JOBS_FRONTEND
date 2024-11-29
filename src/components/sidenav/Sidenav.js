@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import { Drawer, List, ListItem, ListItemText, Toolbar, Divider, Accordion, AccordionSummary, AccordionDetails, Checkbox, FormControlLabel } from '@mui/material';
-import { Link, useNavigate ,useLocation} from 'react-router-dom';
+import { Link, useNavigate ,useLocation, Route, Routes} from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { EMPLOYERS_LIST } from '../../endpoints';
+import Employers from '../admin/Employers';
 
 const drawerWidth = 240;
 
 export default function Sidenav() {
     const [selectedEmployer, handleEmployerSelect] = useState("");
+    const [selectedEmployerID, setEmployerID] = useState("")
     const [employers, setEmployers] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
@@ -17,18 +21,13 @@ export default function Sidenav() {
 
     useEffect(() => {
         if (isAdmin) {
-            // Mock API call to fetch employer company names
-            setEmployers([
-                { id: 1, name: "Genesis IT Solutions" },
-                { id: 2, name: "Cluster IT Solutions" },
-                { id: 3, name: "Expert Aid Technologies" },
-                { id: 4, name: "Accenture" },
-                { id: 5, name: "Tech M" },
-                { id: 6, name: "TCS" },
-                { id: 7, name: "Waverock" },
-                { id: 8, name: "Infosys" },
-                { id: 9, name: "IDX Technologies" },
-            ]);
+            axios.get(`${EMPLOYERS_LIST}`).then((response) => {
+                let employers_data = []
+                for(let j in response.data) {
+                    employers_data.push({name:response.data[j].company_name,id:response.data[j].code})
+                }
+                setEmployers(employers_data)
+              });
         }
     }, [isAdmin]);
 
@@ -37,6 +36,15 @@ export default function Sidenav() {
         menuItems = ['Find a Job', 'Applied', 'Shortlist', 'On Board', 'Logout'];
     } else if (isEmployer) {
         menuItems = ['Jobs', 'Shortlisted', 'Reports', 'Logout'];
+    }
+
+    const handleEmployer = (empname, empId) => {
+        handleEmployerSelect(empname)
+        setEmployerID(empId)
+        navigate(`/employers/${empId}`);
+        // console.log(selectedEmployer)
+        // localStorage.setItem('selectedEmployer', empId)
+        // navigate('/employers')
     }
 
     const handleLogout = () => {
@@ -166,8 +174,8 @@ export default function Sidenav() {
                                                 control={
                                                     <Checkbox
                                                     size="small"
-                                                        checked={selectedEmployer === employer.id}
-                                                        onChange={() => handleEmployerSelect(employer.name)}
+                                                        checked={selectedEmployerID === employer.id}
+                                                        onChange={()=>handleEmployer(employer.name,employer.id)}
                                                         sx={{
                                                             color: 'white',
                                                             '&.Mui-checked': { color: '#ffffff' },
@@ -233,6 +241,8 @@ export default function Sidenav() {
                     </>
                 ) : null}
             </List>
+            {selectedEmployerID && 
+            <Employers Employer={selectedEmployerID} /> }
         </Drawer>
     );
 }

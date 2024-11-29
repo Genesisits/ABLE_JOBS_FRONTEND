@@ -1,7 +1,12 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
-import { GET_JOB,ACTIVATE_JOB, GET_JOB_EMPLOYEE } from "../../endpoints";
+import {
+  GET_JOB,
+  ACTIVATE_JOB,
+  GET_JOB_EMPLOYEE,
+  JOBS_LIST_BASED_ON_EMPLOYER,
+} from "../../endpoints";
 import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,9 +20,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 // import "./jobs.css";
 // import Postajob from "./postajob";
-// import AppliedCandidatesDialog from "./Appliedcandidates"; 
+// import AppliedCandidatesDialog from "./Appliedcandidates";
 
 const columns = [
   { id: "job_title", label: "Job Role", minWidth: 100 },
@@ -26,10 +32,10 @@ const columns = [
   { id: "skills", label: "Required Technology Stack", minWidth: 100 },
   { id: "location", label: "Location", minWidth: 100 },
   { id: "description", label: "Job Description", minWidth: 100 },
-  { id: "status", label: "Actions", minWidth: 150 },
+  // { id: "status", label: "Actions", minWidth: 150 },
 ];
 
-export default function Employers() {
+export default function Employers({ Employer }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
@@ -37,18 +43,33 @@ export default function Employers() {
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
+  console.log(Employer);
+  const { id } = useParams();
+  console.log(id);
 
   useEffect(() => {
-    // Fetch job data from API
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    }
-    axios.get(`${GET_JOB_EMPLOYEE}`,config).then((response) => {
-      setData(response.data);
+    if(id) {
+    let payload = {
+      code: id,
+    };
+    axios.post(`${JOBS_LIST_BASED_ON_EMPLOYER}`, payload).then((response) => {
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        // If data is an array and contains jobs
+        setData(response.data);
+      } else if (response.data.message === "No jobs posted by this employer.") {
+        // If the response contains the specific message
+        setData([]); // Set rows to an empty array
+      } else {
+        // Handle unexpected response structure
+        console.error("Unexpected response format", response.data);
+        setData([]); // Fallback to an empty array
+      }
     });
-  }, []);
+  }
+  }, [id]);
+  useEffect(() => {
+    console.log(rows);
+  }, [rows]);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -63,15 +84,22 @@ export default function Employers() {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     };
-    setData((prevRows) => 
+    setData((prevRows) =>
       prevRows.map((item) =>
-        item.code === row.code ? { ...item, activation_status: updatedStatus } : item
-      ));
-  
+        item.code === row.code
+          ? { ...item, activation_status: updatedStatus }
+          : item
+      )
+    );
+
     axios
-      .put(`${ACTIVATE_JOB}${row.code}/`,{ activation_status: updatedStatus },config)
+      .put(
+        `${ACTIVATE_JOB}${row.code}/`,
+        { activation_status: updatedStatus },
+        config
+      )
       .then((response) => {
-        console.log(response)
+        console.log(response);
       });
   };
 
@@ -80,12 +108,12 @@ export default function Employers() {
     setIsPostJobOpen(true); // Open the modal
   };
   const closePostJobModal = () => {
-    setSelectedJob(null); 
-    setIsPostJobOpen(false); 
+    setSelectedJob(null);
+    setIsPostJobOpen(false);
   };
   const handleOpenDialog = (jobCode) => {
-    setSelectedJobCode(jobCode);  // Set the selected job code
-    setIsDialogOpen(true);         // Open the dialog
+    setSelectedJobCode(jobCode); // Set the selected job code
+    setIsDialogOpen(true); // Open the dialog
   };
 
   const handleCloseDialog = () => {
@@ -93,15 +121,14 @@ export default function Employers() {
   };
 
   const openEditJobModal = (job) => {
-    setSelectedJob(job); 
+    setSelectedJob(job);
     setIsPostJobOpen(true);
-  }
+  };
 
   return (
     <div>
       <Layout>
-        <div className="jobs">
-        </div>
+        <div className="jobs"></div>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
             <Table stickyHeader aria-label="sticky table">
@@ -119,46 +146,62 @@ export default function Employers() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.company_name}
-                    >
-                      {columns.map((column) => {
-                        if (column.id === "status") {
+                {rows.length === 0 ? (
+                  // Display message if no data is available
+                  <TableRow>
+                    <TableCell colSpan={columns.length} align="center">
+                      No jobs posted by this employer.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  // Render rows if data is available
+                  rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.company_name}
+                      >
+                        {columns.map((column) => {
+                          if (column.id === "status") {
+                            return (
+                              <TableCell key={column.id}>
+                                <VisibilityIcon
+                                  style={{
+                                    cursor: "pointer",
+                                    marginRight: "2px",
+                                  }}
+                                  fontSize="small"
+                                  onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
+                                />
+                                <EditIcon
+                                  style={{
+                                    cursor: "pointer",
+                                    marginRight: "2px",
+                                  }}
+                                  fontSize="small"
+                                  onClick={() => openEditJobModal(row)}
+                                />
+                                <Switch
+                                  checked={row.activation_status}
+                                  onChange={() => handleActive(row)}
+                                  inputProps={{ "aria-label": "controlled" }}
+                                  size="small"
+                                />
+                              </TableCell>
+                            );
+                          }
                           return (
                             <TableCell key={column.id}>
-                              <VisibilityIcon
-                                style={{ cursor: "pointer", marginRight: "2px" }}
-                                fontSize="small"
-                                onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
-                              />
-                              <EditIcon
-                                style={{ cursor: "pointer", marginRight: "2px" }}
-                                fontSize="small"
-                                onClick={() => openEditJobModal(row)}
-                              />
-                              <Switch
-                              checked={row.activation_status}
-                              onChange={() => handleActive(row)}
-                              inputProps={{ "aria-label": "controlled" }}
-                               size="small"
-                            />
+                              {row[column.id]}
                             </TableCell>
                           );
-                        }
-                        return (
-                          <TableCell key={column.id}>
-                            {row[column.id]}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  ))}
+                        })}
+                      </TableRow>
+                    ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

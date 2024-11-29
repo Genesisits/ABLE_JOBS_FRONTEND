@@ -93,7 +93,7 @@ export default function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/verify" element={<VerifyOTP />} />
           <Route path="/services" element={<Services/>} />
-          <Route path="/employers" element={<Employers/>} />
+          <Route path="/employers/:id" element={<Employers />} />
           <Route path="/volunteers" element={<Volunteers/>} />
           <Route path="/trainers" element={<Trainers/>} />
           <Route path="/login" element={<Login/>} />
