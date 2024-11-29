@@ -1223,7 +1223,7 @@ function Employeeregister({ open, onClose }) {
             <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
               {popupMessage}
             </p>
-            <button onClick={() => setShowPopup(false)}>Close</button>
+            <button style={{marginLeft:"35%",width:"30%"}} onClick={() => setShowPopup(false)}>Close</button>
           </div>
         )}
         <Box

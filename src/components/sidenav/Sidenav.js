@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, List, ListItem, ListItemText, Toolbar, Divider, Accordion, AccordionSummary, AccordionDetails, Checkbox, FormControlLabel } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate ,useLocation} from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const drawerWidth = 240;
@@ -9,6 +9,8 @@ export default function Sidenav() {
     const [selectedEmployer, handleEmployerSelect] = useState("");
     const [employers, setEmployers] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+
     const isEmployee = localStorage.getItem('is_employee') === 'true';
     const isEmployer = localStorage.getItem('is_employer') === 'true';
     const isAdmin = localStorage.getItem('is_admin') === 'true';
@@ -46,7 +48,7 @@ export default function Sidenav() {
         localStorage.removeItem('is_admin');
         // Navigate to login or home page
         navigate('/login');
-    }
+    };
 
     // Now rendering Drawer based on user role
     return (
