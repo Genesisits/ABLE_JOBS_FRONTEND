@@ -42,7 +42,7 @@ const Profile = () => {
   
   useEffect(() => {
     const fetchUserProfile = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         if (!hasFetched.current) {
           const response = await axios.get(USER_PROFILE, {
