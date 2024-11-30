@@ -136,6 +136,7 @@ const Profile = () => {
         }));
 
         alert('Profile image updated successfully!');
+        setshowSubmit(false);
       } else {
         console.error('Unexpected response:', response);
       }
@@ -371,6 +372,76 @@ const Profile = () => {
                 sx={textFieldStyles}
               />
             </Grid>
+            {/* <Grid item xs={12} sm={6}>
+              <TextField
+                label="Country"
+                fullWidth
+                value={user.country}
+                name="country"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="state"
+                fullWidth
+                value={user.state}
+                name="state"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Avalibility of work"
+                fullWidth
+                value={user.availability_of_work}
+                name="availability_of_work"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Disability"
+                fullWidth
+                value={user.disability}
+                name="disability"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Job Experiences"
+                fullWidth
+                value={user.job_experiences}
+                name="job_experiences"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Languages Known"
+                fullWidth
+                value={user.languages_known}
+                name="languages_known"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Willing to elocate"
+                fullWidth
+                value={user.willing_to_relocate}
+                name="willing_to_relocate"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid> */}
           </Grid>
         </DialogContent>
          )}
@@ -434,6 +505,66 @@ const Profile = () => {
                 fullWidth
                 value={user.company_website}
                 name="company website"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Head FirstName"
+                fullWidth
+                value={user.head_first_name}
+                name="head_first_name"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Head LastName"
+                fullWidth
+                value={user.head_last_name}
+                name="head_last_name"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Head email"
+                fullWidth
+                value={user.head_email}
+                name="head_email"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Head Contact"
+                fullWidth
+                value={user.head_contact}
+                name="head_contact"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Head Designation"
+                fullWidth
+                value={user.head_designation}
+                name="head_designation"
+                onChange={handleInputChange}
+                sx={textFieldStyles}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Linkedin Link"
+                fullWidth
+                value={user.linkedinlink}
+                name="linkedinlink"
                 onChange={handleInputChange}
                 sx={textFieldStyles}
               />
