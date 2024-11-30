@@ -200,6 +200,20 @@ export default function Sidenav() {
                         <ListItem
                             button
                             component={Link}
+                            to="/employee"
+                            sx={{
+                                '&:hover': {
+                                    backgroundColor: '#5384c9',
+                                },
+                                py: 0.5,
+                                px: 1,
+                            }}
+                        >
+                            <ListItemText primary="Employee" sx={{ color: 'white' }} />
+                        </ListItem>
+                        <ListItem
+                            button
+                            component={Link}
                             to="/volunteers"
                             sx={{
                                 '&:hover': {

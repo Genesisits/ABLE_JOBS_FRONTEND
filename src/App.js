@@ -57,6 +57,7 @@ import Email from './Auth/emailsuccess';
 import Employers from "./components/admin/Employers";
 import Volunteers from "./components/admin/Volunteers";
 import Trainers from "./components/admin/Trainers";
+import EmployeeList from "./components/admin/employeelist";
 const TRACKING_ID = 'G-3Z5SJGDL7N';
 
 ReactGA.initialize(TRACKING_ID);
@@ -130,6 +131,7 @@ export default function App() {
           <Route path="/uploadresume" element={<UploadResume/>} />
           <Route path="/onboard" element={<Onboarded/>} />
           <Route path="/email" element={<Email/>} />
+          <Route path="/employee" element={<EmployeeList/>} />
         </Routes>
       </div>
     </Router>
