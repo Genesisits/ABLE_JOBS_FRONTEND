@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
-import { Drawer, List, ListItem, ListItemText, Toolbar, Divider, Accordion, AccordionSummary, AccordionDetails, Checkbox, FormControlLabel } from '@mui/material';
-import { Link, useNavigate ,useLocation, Route, Routes} from 'react-router-dom';
+import axios from 'axios';
+import {
+    Drawer,
+    List,
+    ListItem,
+    ListItemText,
+    Toolbar,
+    Divider,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Checkbox,
+    FormControlLabel,
+} from '@mui/material';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { EMPLOYERS_LIST } from '../../endpoints';
 import Employers from '../admin/Employers';
@@ -9,8 +21,7 @@ import Employers from '../admin/Employers';
 const drawerWidth = 240;
 
 export default function Sidenav() {
-    const [selectedEmployer, handleEmployerSelect] = useState("");
-    const [selectedEmployerID, setEmployerID] = useState("")
+    const [selectedEmployerID, setEmployerID] = useState('');
     const [employers, setEmployers] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,12 +33,12 @@ export default function Sidenav() {
     useEffect(() => {
         if (isAdmin) {
             axios.get(`${EMPLOYERS_LIST}`).then((response) => {
-                let employers_data = []
-                for(let j in response.data) {
-                    employers_data.push({name:response.data[j].company_name,id:response.data[j].code})
-                }
-                setEmployers(employers_data)
-              });
+                const employersData = response.data.map((employer) => ({
+                    name: employer.company_name,
+                    id: employer.code,
+                }));
+                setEmployers(employersData);
+            });
         }
     }, [isAdmin]);
 
@@ -39,13 +50,9 @@ export default function Sidenav() {
     }
 
     const handleEmployer = (empname, empId) => {
-        handleEmployerSelect(empname)
-        setEmployerID(empId)
+        setEmployerID(empId);
         navigate(`/employers/${empId}`);
-        // console.log(selectedEmployer)
-        // localStorage.setItem('selectedEmployer', empId)
-        // navigate('/employers')
-    }
+    };
 
     const handleLogout = () => {
         // Clear relevant items from localStorage
@@ -58,7 +65,6 @@ export default function Sidenav() {
         navigate('/login');
     };
 
-    // Now rendering Drawer based on user role
     return (
         <Drawer
             variant="permanent"
@@ -79,26 +85,32 @@ export default function Sidenav() {
             <Toolbar />
             <Divider />
             <List>
-                {isEmployee || isEmployer ? (
-                    menuItems.map((text) => (
-                        <ListItem
-                            button
-                            key={text}
-                            component={text === 'Logout' ? 'div' : Link}
-                            to={text === 'Logout' ? undefined : `/${text.replace(/\s+/g, '').toLowerCase()}`}
-                            onClick={text === 'Logout' ? handleLogout : undefined}
-                            sx={{
-                                '&:hover': {
-                                    backgroundColor: '#5384c9',
-                                },
-                            }}
-                        >
-                            <ListItemText primary={text} sx={{ color: 'white' }} />
-                        </ListItem>
-                    ))
-                ) : isAdmin ? (
+                {(isEmployee || isEmployer) &&
+                    menuItems.map((text) => {
+                        const path = `/${text.replace(/\s+/g, '').toLowerCase()}`;
+                        const isActive = location.pathname === path;
+
+                        return (
+                            <ListItem
+                                button
+                                key={text}
+                                component={text === 'Logout' ? 'div' : Link}
+                                to={text === 'Logout' ? undefined : path}
+                                onClick={text === 'Logout' ? handleLogout : undefined}
+                                sx={{
+                                    backgroundColor: isActive ? '#0056b3' : 'transparent',
+                                    '&:hover': {
+                                        backgroundColor: '#5384c9',
+                                    },
+                                }}
+                            >
+                                <ListItemText primary={text} sx={{ color: 'white' }} />
+                            </ListItem>
+                        );
+                    })}
+
+                {isAdmin && (
                     <>
-                        {/* Admin-specific menu items */}
                         <ListItem
                             button
                             component={Link}
@@ -107,6 +119,7 @@ export default function Sidenav() {
                                 '&:hover': {
                                     backgroundColor: '#5384c9',
                                 },
+                                backgroundColor: location.pathname === '/dashboard' ? '#0056b3' : 'transparent',
                                 py: 0.5,
                                 px: 1,
                             }}
@@ -127,9 +140,9 @@ export default function Sidenav() {
                                 aria-controls="employer-content"
                                 id="employer-header"
                                 sx={{
-                                    textAlign: 'left', // Align text to the left
+                                    textAlign: 'left',
                                     '& .MuiAccordionSummary-content': {
-                                        marginLeft: 0, // Ensure left alignment
+                                        marginLeft: 0,
                                     },
                                 }}
                             >
@@ -164,8 +177,8 @@ export default function Sidenav() {
                                                     backgroundColor: '#5384c9',
                                                     borderRadius: '2px',
                                                 },
-                                                margin:'0',
-                                                padding:'0',
+                                                margin: '0',
+                                                padding: '0',
                                                 py: 0.5,
                                                 px: 1,
                                             }}
@@ -173,13 +186,13 @@ export default function Sidenav() {
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                    size="small"
+                                                        size="small"
                                                         checked={selectedEmployerID === employer.id}
-                                                        onChange={()=>handleEmployer(employer.name,employer.id)}
+                                                        onChange={() => handleEmployer(employer.name, employer.id)}
                                                         sx={{
                                                             color: 'white',
                                                             '&.Mui-checked': { color: '#ffffff' },
-                                                            marginLeft: 0, // Align checkbox to the left
+                                                            marginLeft: 0,
                                                         }}
                                                     />
                                                 }
@@ -196,7 +209,6 @@ export default function Sidenav() {
                             </AccordionDetails>
                         </Accordion>
 
-                        {/* Other Admin menu items */}
                         <ListItem
                             button
                             component={Link}
@@ -205,6 +217,7 @@ export default function Sidenav() {
                                 '&:hover': {
                                     backgroundColor: '#5384c9',
                                 },
+                                backgroundColor: location.pathname === '/employee' ? '#0056b3' : 'transparent',
                                 py: 0.5,
                                 px: 1,
                             }}
@@ -219,25 +232,12 @@ export default function Sidenav() {
                                 '&:hover': {
                                     backgroundColor: '#5384c9',
                                 },
+                                backgroundColor: location.pathname === '/volunteers' ? '#0056b3' : 'transparent',
                                 py: 0.5,
                                 px: 1,
                             }}
                         >
                             <ListItemText primary="Volunteers" sx={{ color: 'white' }} />
-                        </ListItem>
-                        <ListItem
-                            button
-                            component={Link}
-                            to="/trainers"
-                            sx={{
-                                '&:hover': {
-                                    backgroundColor: '#5384c9',
-                                },
-                                py: 0.5,
-                                px: 0.5,
-                            }}
-                        >
-                            <ListItemText primary="Trainers" sx={{ color: 'white' }} />
                         </ListItem>
                         <ListItem
                             button
@@ -253,10 +253,9 @@ export default function Sidenav() {
                             <ListItemText primary="Logout" sx={{ color: 'white' }} />
                         </ListItem>
                     </>
-                ) : null}
+                )}
             </List>
-            {selectedEmployerID && 
-            <Employers Employer={selectedEmployerID} /> }
+            {selectedEmployerID && <Employers Employer={selectedEmployerID} />}
         </Drawer>
     );
 }
