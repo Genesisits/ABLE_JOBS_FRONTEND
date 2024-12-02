@@ -81,25 +81,42 @@ const Profile = () => {
   };
 
   const handleSaveChanges = async () => {
-    // setLoading(true);
     try {
-      const response = await axios.patch(PROFILE_UPDATE, user, {
+      // Create a FormData object
+      const formData = new FormData();
+  
+      // Exclude specific file fields from the user object
+      const restrictedFields = [
+        'company_logo',
+        'gst_file',
+        'pan',
+        'registration_certificate',
+      ];
+  
+      // Add all fields except the restricted ones
+      Object.entries(user).forEach(([key, value]) => {
+        if (!restrictedFields.includes(key)) {
+          formData.append(key, value); // Attach only non-restricted fields
+        }
+      });
+  
+      const response = await axios.patch(PROFILE_UPDATE, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data', // Required for FormData
         },
       });
-
+  
       if (response.status === 200) {
-        setUser(response.data);
+        setUser(response.data); // Update the state with the new user data
       }
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {
-      // setLoading(false);
-      handleDialogClose();
+      handleDialogClose(); // Close the dialog
     }
   };
-
+  
   // Handle profile image upload
   const handleImageChange = (e) => {
     setshowSubmit(true)
@@ -143,6 +160,7 @@ const Profile = () => {
     } catch (error) {
       console.error('Error uploading profile image:', error);
       alert('Failed to upload image. Please try again.');
+      setshowSubmit(false);
     } finally {
       setLoading(false);
     }
@@ -454,7 +472,7 @@ const Profile = () => {
                 label="Company Name"
                 fullWidth
                 value={user.company_name}
-                name="company name"
+                name="company_name"
                 onChange={handleInputChange}
                 sx={textFieldStyles}
               />
@@ -484,7 +502,7 @@ const Profile = () => {
                 label="Contact"
                 fullWidth
                 value={user.company_contact}
-                name="skills"
+                name="company_contact"
                 onChange={handleInputChange}
                 sx={textFieldStyles}
               />
@@ -504,7 +522,7 @@ const Profile = () => {
                 label="Website"
                 fullWidth
                 value={user.company_website}
-                name="company website"
+                name="company_website"
                 onChange={handleInputChange}
                 sx={textFieldStyles}
               />
