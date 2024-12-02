@@ -12,6 +12,8 @@ import {
   Grid,
   CircularProgress,
   IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import axios from 'axios';
 import { USER_PROFILE, PROFILE_UPDATE, PROFILE_UPDATE_IMAGE } from '../endpoints';
@@ -22,6 +24,13 @@ const textFieldStyles = {
     '&:hover fieldset': { borderColor: 'transparent' },
     '&.Mui-focused fieldset': { borderColor: 'transparent' },
   },
+};
+const snackbarStyles = {
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  zIndex: 1400, // Ensures it's above other elements
 };
 const Profile = () => {
   const [userType, setUserType] = useState('');
@@ -38,8 +47,8 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null); // For handling image upload
   const accessToken = localStorage.getItem('access_token');
   const hasFetched = useRef(false);
-  const [showSubmit,setshowSubmit] = useState(false)
-  
+  const [showSubmit,setshowSubmit] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: '' });
   useEffect(() => {
     const fetchUserProfile = async () => {
       // setLoading(true);
@@ -81,6 +90,18 @@ const Profile = () => {
   };
 
   const handleSaveChanges = async () => {
+    setLoading(true)
+    const requiredFields = ['first_name', 'last_name', 'mobile_number', 'skills', 'address'];
+  const emptyFields = requiredFields.filter((field) => !user[field].trim());
+
+  if (emptyFields.length > 0) {
+    setSnackbar({
+      open: true,
+      message: `Please fill in all required fields: ${emptyFields.join(', ')}`,
+      severity: 'error',
+    });
+    return;
+  }
     try {
       // Create a FormData object
       const formData = new FormData();
@@ -92,46 +113,58 @@ const Profile = () => {
         'pan',
         'registration_certificate',
       ];
-  
-      // Add all fields except the restricted ones
+
       Object.entries(user).forEach(([key, value]) => {
         if (!restrictedFields.includes(key)) {
           formData.append(key, value); // Attach only non-restricted fields
         }
       });
-  
+      
       const response = await axios.patch(PROFILE_UPDATE, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'multipart/form-data', // Required for FormData
         },
       });
-  
+      
       if (response.status === 200) {
-        setUser(response.data); // Update the state with the new user data
+        setUser(response.data);
+        setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      setSnackbar({ open: true, message: 'Failed to update profile', severity: 'error' });
     } finally {
-      handleDialogClose(); // Close the dialog
+      handleDialogClose();
+      setLoading(false)
     }
   };
   
   // Handle profile image upload
   const handleImageChange = (e) => {
-    setshowSubmit(true)
     const file = e.target.files[0];
-    if (file) {
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  
+    if (file && validImageTypes.includes(file.type)) {
       setImageFile(file);
+      setshowSubmit(true);
+    } else {
+      setSnackbar({
+        open: true,
+        message: 'Please upload a valid image file (JPEG, PNG, WEBP, or GIF).',
+        severity: 'error',
+      });
     }
   };
 
   const handleImageUpload = async () => {
     if (!imageFile) {
-      alert('Please select an image to upload.');
+      setSnackbar({ open: true, message: 'Please select an image to upload', severity: 'warning' });
       return;
     }
-
+   
     const formData = new FormData();
     formData.append('image', imageFile);
 
@@ -145,27 +178,25 @@ const Profile = () => {
 
       if (response.status === 200) {
         const { profile_image_url } = response.data;
-
-        // Update the user's profile image in the state
         setUser((prevUser) => ({
           ...prevUser,
           profile_image: profile_image_url,
         }));
-
-        alert('Profile image updated successfully!');
+        setSnackbar({ open: true, message: 'Profile image updated successfully', severity: 'success' });
         setshowSubmit(false);
       } else {
-        console.error('Unexpected response:', response);
+        setSnackbar({ open: true, message: 'Unexpected response', severity: 'error' });
       }
     } catch (error) {
-      console.error('Error uploading profile image:', error);
-      alert('Failed to upload image. Please try again.');
-      setshowSubmit(false);
+      setSnackbar({ open: true, message: 'Failed to upload image', severity: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbar({ open: false, message: '', severity: '' });
+  };
   if (loading) {
     return (
       <Layout>
@@ -212,6 +243,20 @@ const Profile = () => {
               </IconButton>
             </label> */}
           </div>
+          <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: '100%' }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
           {userType === 'Employee' && (
             <>
               <h2 className="profile-name">{`${user.first_name} ${user.last_name}`}</h2>
@@ -390,7 +435,7 @@ const Profile = () => {
                 sx={textFieldStyles}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Country"
                 fullWidth
@@ -459,7 +504,7 @@ const Profile = () => {
                 onChange={handleInputChange}
                 sx={textFieldStyles}
               />
-            </Grid> */}
+            </Grid>
           </Grid>
         </DialogContent>
          )}
