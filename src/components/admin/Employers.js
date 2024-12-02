@@ -1,26 +1,31 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
-import Paper from "@mui/material/Paper";
 import {
   GET_JOB,
   ACTIVATE_JOB,
   GET_JOB_EMPLOYEE,
   JOBS_LIST_BASED_ON_EMPLOYER,
 } from "../../endpoints";
+import {
+  Table,
+  Paper,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Box,
+} from "@mui/material";
 import { useState, useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import OnboardCandidates from "./OnboardCandidates";
 // import "./jobs.css";
 // import Postajob from "./postajob";
 // import AppliedCandidatesDialog from "./Appliedcandidates";
@@ -36,40 +41,38 @@ const columns = [
 ];
 
 export default function Employers({ Employer }) {
+  const [tabValue, setTabvalue] = useState("1");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
   const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
-  console.log(Employer);
   const { id } = useParams();
-  console.log(id);
-
+  const handleTabchange = (event, newValue) => {
+    setTabvalue(newValue);
+  };
   useEffect(() => {
-    if(id) {
-    let payload = {
-      code: id,
-    };
-    axios.post(`${JOBS_LIST_BASED_ON_EMPLOYER}`, payload).then((response) => {
-      if (Array.isArray(response.data) && response.data.length > 0) {
-        // If data is an array and contains jobs
-        setData(response.data);
-      } else if (response.data.message === "No jobs posted by this employer.") {
-        // If the response contains the specific message
-        setData([]); // Set rows to an empty array
-      } else {
-        // Handle unexpected response structure
-        console.error("Unexpected response format", response.data);
-        setData([]); // Fallback to an empty array
-      }
-    });
-  }
+    if (id) {
+      let payload = {
+        code: id,
+      };
+      axios.post(`${JOBS_LIST_BASED_ON_EMPLOYER}`, payload).then((response) => {
+        if (Array.isArray(response.data) && response.data.length > 0) {
+          setData(response.data);
+        } else if (
+          response.data.message === "No jobs posted by this employer."
+        ) {
+          setData([]);
+        } else {
+          console.error("Unexpected response format", response.data);
+          setData([]);
+        }
+      });
+    }
   }, [id]);
-  useEffect(() => {
-    console.log(rows);
-  }, [rows]);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -103,6 +106,10 @@ export default function Employers({ Employer }) {
       });
   };
 
+  const handleRowClick = (row) => {
+    setSelectedRow(row); // Update state with the selected row data
+  };
+
   const openPostJobModal = () => {
     setSelectedJob(null); // Set the selected job for editing
     setIsPostJobOpen(true); // Open the modal
@@ -112,6 +119,7 @@ export default function Employers({ Employer }) {
     setIsPostJobOpen(false);
   };
   const handleOpenDialog = (jobCode) => {
+    setSelectedRow(jobCode);
     setSelectedJobCode(jobCode); // Set the selected job code
     setIsDialogOpen(true); // Open the dialog
   };
@@ -126,106 +134,85 @@ export default function Employers({ Employer }) {
   };
 
   return (
-    <div>
-      <Layout>
-        <div className="jobs"></div>
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
-          <TableContainer sx={{ maxHeight: 400 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
+    <Layout>
+      <Typography variant="h6" gutterBottom>
+        Employers
+      </Typography>
+      <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "2%" }}>
+        <TableContainer sx={{ maxHeight: 400 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ backgroundColor: "#2840b7", color: "white" }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.length === 0 ? (
+                // Display message if no data is available
                 <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      style={{ minWidth: column.minWidth }}
-                      sx={{ backgroundColor: "#2840b7", color: "white" }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
+                  <TableCell colSpan={columns.length} align="center">
+                    No jobs posted by this employer.
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.length === 0 ? (
-                  // Display message if no data is available
-                  <TableRow>
-                    <TableCell colSpan={columns.length} align="center">
-                      No jobs posted by this employer.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  // Render rows if data is available
-                  rows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.company_name}
-                      >
-                        {columns.map((column) => {
-                          if (column.id === "status") {
-                            return (
-                              <TableCell key={column.id}>
-                                <VisibilityIcon
-                                  style={{
-                                    cursor: "pointer",
-                                    marginRight: "2px",
-                                  }}
-                                  fontSize="small"
-                                  onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
-                                />
-                                <EditIcon
-                                  style={{
-                                    cursor: "pointer",
-                                    marginRight: "2px",
-                                  }}
-                                  fontSize="small"
-                                  onClick={() => openEditJobModal(row)}
-                                />
-                                <Switch
-                                  checked={row.activation_status}
-                                  onChange={() => handleActive(row)}
-                                  inputProps={{ "aria-label": "controlled" }}
-                                  size="small"
-                                />
-                              </TableCell>
-                            );
-                          }
+              ) : (
+                rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <TableRow
+                      onClick={() => handleOpenDialog(row)}
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.company_name}
+                      sx={{
+                        cursor: 'pointer',
+                        '&:hover': { backgroundColor: '#f5f5f5' },
+                      }}
+                    >
+                      {columns.map((column) => {
+                        if (column.id === "status") {
                           return (
                             <TableCell key={column.id}>
-                              {row[column.id]}
+                             
+                            
+                           
                             </TableCell>
                           );
-                        })}
-                      </TableRow>
-                    ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-
-        {/* Post a Job Modal */}
-        {/* <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  /> */}
-
-        {/* Applied Candidates Dialog */}
-        {/* <AppliedCandidatesDialog
-          open={isDialogOpen}
-          onClose={handleCloseDialog}
-          jobCode={selectedJobCode} // Pass the jobCode to the dialog
-        /> */}
-      </Layout>
-    </div>
+                        }
+                        return (
+                          <TableCell key={column.id}>
+                            {row[column.id]}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {selectedRow && (
+        <OnboardCandidates open={isDialogOpen}
+        onClose={handleCloseDialog} selectedRow={selectedRow}/>
+        )}
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </Layout>
   );
 }

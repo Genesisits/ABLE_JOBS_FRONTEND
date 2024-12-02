@@ -58,6 +58,7 @@ import Employers from "./components/admin/Employers";
 import Volunteers from "./components/admin/Volunteers";
 import Trainers from "./components/admin/Trainers";
 import EmployeeList from "./components/admin/employeelist";
+import OnboardCandidates from "./components/admin/OnboardCandidates";
 const TRACKING_ID = 'G-3Z5SJGDL7N';
 
 ReactGA.initialize(TRACKING_ID);
@@ -91,6 +92,7 @@ export default function App() {
           <Route path="/careers" element={<Careers />} />
           <Route path="/forgetpassword" element={<ForgetPassword/>} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/onboardedcandidates" element={<OnboardCandidates />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/verify" element={<VerifyOTP />} />
           <Route path="/services" element={<Services/>} />
