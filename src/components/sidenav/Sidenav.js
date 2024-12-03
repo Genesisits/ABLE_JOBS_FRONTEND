@@ -63,11 +63,7 @@ export default function Sidenav() {
 
   const handleEmployer = (empname, empId) => {
     handleEmployerSelect(empname);
-    setEmployerID(empId);
     navigate(`/employers/${empId}`);
-    // console.log(selectedEmployer)
-    // localStorage.setItem('selectedEmployer', empId)
-    // navigate('/employers')
   };
 
   const filteredEmployers = employers.filter((emp) =>
@@ -200,7 +196,7 @@ export default function Sidenav() {
                   }}
                 />
                 <List component="div" disablePadding>
-                  {employers.map((employer) => (
+                  {filteredEmployers.map((employer) => (
                     <ListItem
                       key={employer.id}
                       button
