@@ -49,8 +49,8 @@ const columns = [
 export default function Employers({ Employer }) {
   const [tabValue, setTabvalue] = useState("1");
   const [page, setPage] = useState(0);
-  const [endDate, setEnddate] = useState(new Date());
-  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEnddate] = useState();
+  const [startDate, setStartDate] = useState();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
   const [filteredRows, setFilteredRows] = useState([]); // Filtered data
@@ -86,7 +86,6 @@ export default function Employers({ Employer }) {
       });
     }
   }, [id]);
-
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -150,31 +149,103 @@ export default function Employers({ Employer }) {
   const handleSearchChange = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
-    setFilteredRows(
-      rows.filter((row) =>
-        Object.values(row).some(
-          (value) =>
-            value &&
-            value.toString().toLowerCase().includes(query)
-        )
-      )
-    );
+
+    if (query === "") {
+      // Reset to full rows when the query is empty
+      setFilteredRows(rows);
+    } else {
+      // Filter specific fields
+      setFilteredRows(
+        rows.filter((row) => {
+          const fieldsToSearch = [
+            row.job_title,
+            row.employment_type,
+            row.disability_eligible,
+            row.location,
+            row.industry,
+            row.department,
+            row.description,
+            row.work_mode,
+            row.employment_type,
+            row.skills,
+            row.salary_offered,
+            row.experience_required,
+          ];
+          return fieldsToSearch.some(
+            (field) => field && field.toString().toLowerCase().includes(query)
+          );
+        })
+      );
+    }
+  };
+
+  const handleFilterSubmit = () => {
+    // Combine both search and date filtering
+    
+    const filterBySearch = rows.filter((row) => {
+      const query = searchQuery.toLowerCase();
+      const fieldsToSearch = [
+        row.job_title,
+        row.employment_type,
+        row.disability_eligible,
+        row.location,
+        row.industry,
+        row.department,
+        row.description,
+        row.work_mode,
+        row.skills,
+        row.salary_offered,
+        row.experience_required,
+      ];
+  
+      return fieldsToSearch.some(
+        (field) => field && field.toString().toLowerCase().includes(query)
+      );
+    });
+  
+    // Date filtering
+    const filterByDate = filterBySearch.filter((row) => {
+      const rowDate = new Date(row.posted_date).setHours(0, 0, 0, 0); // Normalize to midnight
+      const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : null;
+      const end = endDate ? new Date(endDate).setHours(0, 0, 0, 0) : null;
+  
+      if (start && end) {
+        return rowDate >= start && rowDate <= end;
+      } else if (start) {
+        return rowDate >= start;
+      } else if (end) {
+        return rowDate <= end;
+      }
+  
+      return true; // No date filter applied
+    });
+  
+    // Update the filtered rows
+    setFilteredRows(filterByDate);
   };
 
   return (
     <Layout>
-      <Box style={{margin:'0px 10%'}}>
-        <Grid container sx={{ marginBottom: 1 }}>
-          <Grid item xs={4}>
-           <TextField
+      <Box style={{ margin: "0px 5%" }}>
+        <Grid container spacing={1} sx={{ marginBottom: 1 }}>
+          <Grid item xs={6}>
+            <TextField
               fullWidth
               variant="outlined"
-              placeholder="Search jobs"
+              placeholder="Search jobs with experience, skills, job role,etc"
               value={searchQuery}
               onChange={handleSearchChange}
+              sx={{
+                width: "100%",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: "none",
+                  },
+                },
+              }}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <DatePicker
               label="Start Date"
               selected={startDate}
@@ -184,10 +255,10 @@ export default function Employers({ Employer }) {
               popperPlacement="right-start"
               popperClassName="react-datepicker-popper" // Aligns the dropdown on the right
               fullWidth
+              maxDate={new Date()}
             />
           </Grid>
-
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <DatePicker
               selected={endDate}
               onChange={(date) => setEnddate(date)}
@@ -196,7 +267,11 @@ export default function Employers({ Employer }) {
               popperPlacement="right-start"
               popperClassName="react-datepicker-popper"
               fullWidth
+              maxDate={new Date()}
             />
+          </Grid>
+          <Grid item xs={2}>
+            <button style={{width:'80%'}} onClick={handleFilterSubmit}>submit</button>
           </Grid>
         </Grid>
       </Box>
@@ -220,38 +295,30 @@ export default function Employers({ Employer }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.length === 0 ? (
-                // Display message if no data is available
+              {filteredRows.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={columns.length} align="center">
                     No jobs posted by this employer.
                   </TableCell>
                 </TableRow>
               ) : (
-                rows
+                filteredRows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <TableRow
+                      key={row.code} // Ensure the key is unique
                       onClick={() => handleOpenDialog(row)}
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.company_name}
                       sx={{
                         cursor: "pointer",
                         "&:hover": { backgroundColor: "#f5f5f5" },
                       }}
                     >
-                      {columns.map((column) => {
-                        if (column.id === "status") {
-                          return <TableCell key={column.id}></TableCell>;
-                        }
-                        return (
-                          <TableCell key={column.id}>
-                            {row[column.id]}
-                          </TableCell>
-                        );
-                      })}
+                      {columns.map((column) => (
+                        <TableCell key={column.id}>{row[column.id]}</TableCell>
+                      ))}
                     </TableRow>
                   ))
               )}
