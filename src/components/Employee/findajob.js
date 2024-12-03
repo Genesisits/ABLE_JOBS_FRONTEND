@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { Typography, CircularProgress, Box, Modal} from "@mui/material";
 import './findajob.css';
+import { useLocation } from 'react-router-dom';
 
 const customStyles = {
   position: "absolute",
@@ -34,7 +35,15 @@ function Findjob({ closeModal }) {
   const [success , setSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
   const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const location = useLocation();
 
+  useEffect(() => {
+    
+    if (location.state?.fromLogin && !localStorage.getItem('findjobReloaded')) {
+        localStorage.setItem('findjobReloaded', 'true'); // Set reload flag
+        window.location.reload(); // Reload the page
+    }
+}, [location.state]);
   useEffect(() => {
     axios.get(GET_JOB)
       .then(response => {

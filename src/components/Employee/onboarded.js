@@ -79,7 +79,7 @@ useEffect(() => {
   align="center"
   sx={{ color: "red", fontStyle: "italic" }}
 >
-  No On On Boarded jobs found
+  No On Boarded jobs found
 </TableCell>
     </TableRow>
   ) : (

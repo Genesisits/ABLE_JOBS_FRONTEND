@@ -69,7 +69,7 @@ function Login() {
             navigate("/jobs");
           } else if (user_role === "Employee") {
             localStorage.setItem("is_employee", "true");
-            navigate("/findajob");
+            navigate("/findajob",{ state: { fromLogin: true } });
           } else if (user_role === "Admin") {
             localStorage.setItem("is_admin", "true");
             navigate("/dashboard");
