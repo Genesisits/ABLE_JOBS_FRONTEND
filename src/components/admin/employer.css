@@ -1,0 +1,21 @@
+/* Add this to employer.css or a similar file */
+.react-datepicker-popper {
+    z-index: 1050 !important; /* Ensure it appears above the table */
+  }
+  
+  .react-datepicker {
+    font-size: 14px;
+  }
+  
+  .react-datepicker__day {
+    width: 1.5rem;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    font-size: 12px; /* Adjust for a smaller look */
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #2840b7;
+    color: white;
+  }
+  

@@ -1,5 +1,8 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import "./employer.css";
 import {
   GET_JOB,
   ACTIVATE_JOB,
@@ -7,6 +10,7 @@ import {
   JOBS_LIST_BASED_ON_EMPLOYER,
 } from "../../endpoints";
 import {
+  Grid,
   Table,
   Paper,
   TableBody,
@@ -16,6 +20,7 @@ import {
   TableRow,
   Typography,
   Box,
+  TextField,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import TablePagination from "@mui/material/TablePagination";
@@ -26,6 +31,7 @@ import Switch from "@mui/material/Switch";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import OnboardCandidates from "./OnboardCandidates";
+import { Label } from "@mui/icons-material";
 // import "./jobs.css";
 // import Postajob from "./postajob";
 // import AppliedCandidatesDialog from "./Appliedcandidates";
@@ -43,8 +49,12 @@ const columns = [
 export default function Employers({ Employer }) {
   const [tabValue, setTabvalue] = useState("1");
   const [page, setPage] = useState(0);
+  const [endDate, setEnddate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
+  const [filteredRows, setFilteredRows] = useState([]); // Filtered data
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -62,17 +72,21 @@ export default function Employers({ Employer }) {
       axios.post(`${JOBS_LIST_BASED_ON_EMPLOYER}`, payload).then((response) => {
         if (Array.isArray(response.data) && response.data.length > 0) {
           setData(response.data);
+          setFilteredRows(response.data); // Initialize filteredRows
         } else if (
           response.data.message === "No jobs posted by this employer."
         ) {
           setData([]);
+          setFilteredRows([]);
         } else {
           console.error("Unexpected response format", response.data);
           setData([]);
+          setFilteredRows([]);
         }
       });
     }
   }, [id]);
+
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -133,8 +147,59 @@ export default function Employers({ Employer }) {
     setIsPostJobOpen(true);
   };
 
+  const handleSearchChange = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredRows(
+      rows.filter((row) =>
+        Object.values(row).some(
+          (value) =>
+            value &&
+            value.toString().toLowerCase().includes(query)
+        )
+      )
+    );
+  };
+
   return (
     <Layout>
+      <Box style={{margin:'0px 10%'}}>
+        <Grid container sx={{ marginBottom: 1 }}>
+          <Grid item xs={4}>
+           <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search jobs"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <DatePicker
+              label="Start Date"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              dateFormat="yyyy/MM/dd"
+              placeholderText="Start Date"
+              popperPlacement="right-start"
+              popperClassName="react-datepicker-popper" // Aligns the dropdown on the right
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={4}>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEnddate(date)}
+              dateFormat="yyyy/MM/dd"
+              placeholderText="End Date"
+              popperPlacement="right-start"
+              popperClassName="react-datepicker-popper"
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+      </Box>
       <Typography variant="h6" gutterBottom>
         Employers
       </Typography>
@@ -173,19 +238,13 @@ export default function Employers({ Employer }) {
                       tabIndex={-1}
                       key={row.company_name}
                       sx={{
-                        cursor: 'pointer',
-                        '&:hover': { backgroundColor: '#f5f5f5' },
+                        cursor: "pointer",
+                        "&:hover": { backgroundColor: "#f5f5f5" },
                       }}
                     >
                       {columns.map((column) => {
                         if (column.id === "status") {
-                          return (
-                            <TableCell key={column.id}>
-                             
-                            
-                           
-                            </TableCell>
-                          );
+                          return <TableCell key={column.id}></TableCell>;
                         }
                         return (
                           <TableCell key={column.id}>
@@ -200,8 +259,11 @@ export default function Employers({ Employer }) {
           </Table>
         </TableContainer>
         {selectedRow && (
-        <OnboardCandidates open={isDialogOpen}
-        onClose={handleCloseDialog} selectedRow={selectedRow}/>
+          <OnboardCandidates
+            open={isDialogOpen}
+            onClose={handleCloseDialog}
+            selectedRow={selectedRow}
+          />
         )}
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
