@@ -61,8 +61,8 @@ export default function Sidenav() {
     menuItems = ["Jobs", "Shortlisted", "Reports", "Logout"];
   }
 
-  const handleEmployer = (empname, empId) => {
-    handleEmployerSelect(empname);
+  const handleEmployer = (empId) => {
+    // handleEmployerSelect(empname);
     navigate(`/employers/${empId}`);
   };
 
@@ -214,16 +214,14 @@ export default function Sidenav() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            size="small"
-                            checked={selectedEmployerID === employer.id}
-                            onChange={(e) => {
-                              handleEmployer(employer.name,employer.id);
-                              setEmployerID(e.target.checked ? employer.id : '')
+                            checked={selectedEmployer === employer.id}
+                            onChange={() => {
+                              handleEmployerSelect(employer.id);
+                              handleEmployer(employer.id);
                             }}
                             sx={{
                               color: "white",
                               "&.Mui-checked": { color: "#ffffff" },
-                              marginLeft: 0,
                             }}
                           />
                         }
