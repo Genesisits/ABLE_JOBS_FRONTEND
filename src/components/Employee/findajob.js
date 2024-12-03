@@ -153,40 +153,63 @@ function Findjob({ closeModal }) {
           </div>
         </div>
 
-        <div style={{ 
-          maxHeight: '500px', 
-          overflowY: 'scroll',
-          marginTop: '20px', 
-          padding: '0 20px' 
-        }}>
-           {filteredRows.map(job => (
-            <div 
-              key={job.id} 
-              style={{ 
-                border: '1px solid #6c757d', 
-                margin: '20px 50px', 
-                display: 'flex', 
-                flexDirection: 'row', 
-                justifyContent: 'space-evenly', 
-                borderRadius: '5px' 
-              }}
-            >
-              <div style={{ flex: 0.5, fontFamily: 'sans-serif', color: 'black' }}>
-                <p style={{ margin: 0}}>{job.job_title}</p>
-                <p style={{ margin: 0 }}>{job.company_name}</p>
-              </div>
-              <div style={{ flex: 1, fontFamily: 'Serif', color: 'black' }}>
-                <p style={{ margin: 0 }}>{job.location}</p>
-                <p style={{ margin: 0 }}>{job.employment_type}</p>
-              </div>
-              <div style={{ flex: 0.5, textAlign: 'center' }}>
-                <button className='findajob_button' style={{ marginTop: '5%' ,marginLeft:'-5%' }}
-                 onClick={() => handleOpenDialog(job)}
-                >View</button>
-              </div>
-            </div>
-          ))}
+        <div
+  style={{
+    maxHeight: '500px',
+    overflowY: 'scroll',
+    marginTop: '20px',
+    padding: '0 20px',
+  }}
+>
+  {filteredRows.length > 0 ? (
+    filteredRows.map((job) => (
+      <div
+        key={job.id}
+        style={{
+          border: '1px solid #6c757d',
+          margin: '20px 50px',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          borderRadius: '5px',
+        }}
+      >
+        <div style={{ flex: 0.5, fontFamily: 'sans-serif', color: 'black' }}>
+          <p style={{ margin: 0 }}>{job.job_title}</p>
+          <p style={{ margin: 0 }}>{job.company_name}</p>
         </div>
+        <div style={{ flex: 1, fontFamily: 'Serif', color: 'black' }}>
+          <p style={{ margin: 0 }}>{job.location}</p>
+          <p style={{ margin: 0 }}>{job.employment_type}</p>
+        </div>
+        <div style={{ flex: 0.5, textAlign: 'center' }}>
+          <button
+            className="findajob_button"
+            style={{ marginTop: '5%', marginLeft: '-5%' }}
+            onClick={() => handleOpenDialog(job)}
+          >
+            View
+          </button>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        color: 'red',
+        fontFamily: 'sans-serif',
+        fontSize: '18px',
+        fontStyle: "italic"
+      }}
+    >
+      No Jobs Found Here
+    </div>
+  )}
+</div>
         
         <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="lg" fullWidth>
           <DialogTitle>Job Details</DialogTitle>

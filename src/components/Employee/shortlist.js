@@ -72,7 +72,18 @@ useEffect(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
+            {rows.length === 0 ? (
+    <TableRow>
+      <TableCell
+  colSpan={columns.length}
+  align="center"
+  sx={{ color: "red", fontStyle: "italic" }}
+>
+  No short listed jobs found
+</TableCell>
+    </TableRow>
+  ) : (
+    rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow
@@ -99,14 +110,11 @@ useEffect(() => {
                           </TableCell>
                         );
                       }
-                      return (
-                        <TableCell key={column.id}>
-                          {row[column.id]}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
+                    return <TableCell key={column.id}>{row[column.id]}</TableCell>;
+                  })}
+                </TableRow>
+              ))
+          )}
             </TableBody>
           </Table>
         </TableContainer>
