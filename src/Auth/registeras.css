@@ -1,19 +1,33 @@
-.containerRegas {
-    margin: 5% 10% 10% 0%;
+.container1 {
+    margin-top: 5%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-    /* align-items: center; */
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;  /* Ensures the content is spread out */
+    width: 90%;
+    background-color: white;
 }
 
-.containerRegas button {
-    background-color: #3d40cc;
-    cursor: pointer;
-    padding: 30px;
-    margin: 30px;
-    width: 40%;
-    /* height: 20px; */
-    align-items: center;
+.flex-item-login {
+    flex: 1 1 50%;  /* Ensure the flex item takes up 50% of the container's width */
+    height: 90%;
+    text-align: center;
+    margin: 20px 50px;
+}
+
+.imageDetails_login {
+    width: 50%;  /* Make the image take up 50% of the container's width */
+    height: auto;
+}
+
+
+/* Button style */
+
+
+
+
+
+.container1 button {
+    width: 50%;
+    padding: 20px;
 }
