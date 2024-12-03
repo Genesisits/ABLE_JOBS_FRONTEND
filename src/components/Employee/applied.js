@@ -72,42 +72,46 @@ useEffect(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.company_name}
+            {rows.length === 0 ? (
+    <TableRow>
+      <TableCell
+  colSpan={columns.length}
+  align="center"
+  sx={{ color: "red", fontStyle: "italic" }}
+>
+  No applied jobs found
+</TableCell>
+    </TableRow>
+  ) : (
+    rows
+      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      .map((row) => (
+        <TableRow hover role="checkbox" tabIndex={-1} key={row.company_name}>
+          {columns.map((column) => {
+            if (column.id === "status") {
+              return (
+                <TableCell key={column.id}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      padding: "4px 8px",
+                      minHeight: "14px",
+                      fontSize: "0.675rem",
+                    }}
                   >
-                    {columns.map((column) => {
-                      if (column.id === "status") {
-                        return (
-                          <TableCell key={column.id}>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              sx={{
-                                padding: '4px 8px',
-                                minHeight: '14px',
-                                fontSize: '0.675rem',
-                              }}
-                            >
-                              View
-                            </Button>
-                          </TableCell>
-                        );
-                      }
-                      return (
-                        <TableCell key={column.id}>
-                          {row[column.id]}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-            </TableBody>
+                    View
+                  </Button>
+                </TableCell>
+              );
+            }
+            return <TableCell key={column.id}>{row[column.id]}</TableCell>;
+          })}
+        </TableRow>
+      ))
+  )}
+</TableBody>
+
           </Table>
         </TableContainer>
         <TablePagination
