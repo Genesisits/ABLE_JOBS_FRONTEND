@@ -103,7 +103,7 @@ function Findjob({ closeModal }) {
   );
   const closeSuccessModal = () => {
     setSuccess(false);
-    closeModal();
+    // closeModal();
   };
   return (
     <Layout>
