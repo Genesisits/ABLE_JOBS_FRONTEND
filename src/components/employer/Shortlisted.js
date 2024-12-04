@@ -19,6 +19,7 @@ import "./jobs.css";
 import Postajob from "./postajob"; // Import the Postajob component
 import AppliedCandidatesDialog from "./Appliedcandidates"; 
 import ShortListedCandidates from "./ShortListedCandidates";
+import { CircularProgress } from "@mui/material";
 
 const columns = [
   { id: "job_title", label: "Job Role", minWidth: 100 },
@@ -31,6 +32,7 @@ const columns = [
 ];
 
 export default function Shortlisted() {
+  const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
@@ -41,6 +43,7 @@ export default function Shortlisted() {
 
   useEffect(() => {
     // Fetch job data from API
+    setLoading(true)
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -48,7 +51,11 @@ export default function Shortlisted() {
     }
     axios.get(`${SHORTLIST_APPLICATIONS}`,config).then((response) => {
       setData(response.data);
-    });
+    }).catch((error) => {
+      console.log(error)
+    }).finally(() => {
+      setLoading(false)
+    })
   }, []);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -101,6 +108,11 @@ export default function Shortlisted() {
   return (
     <div>
       <Layout>
+      {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
             <Table stickyHeader aria-label="sticky table">

@@ -15,7 +15,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
-import { Tooltip } from "@mui/material";
+import { CircularProgress, Tooltip } from "@mui/material";
 import "./jobs.css";
 import Postajob from "./postajob"; // Import the Postajob component
 import AppliedCandidatesDialog from "./Appliedcandidates"; 
@@ -33,6 +33,7 @@ const columns = [
 export default function Jobs() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [loading, setLoading] = useState(false)
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
@@ -41,6 +42,7 @@ export default function Jobs() {
 
   useEffect(() => {
     // Fetch job data from API
+    setLoading(true)
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -48,7 +50,11 @@ export default function Jobs() {
     }
     axios.get(`${GET_JOB_EMPLOYEE}`,config).then((response) => {
       setData(response.data);
-    });
+    }).catch((error) => {
+        console.log(error)
+    }).finally(() => {
+      setLoading(false)
+    })
   }, []);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -101,6 +107,11 @@ export default function Jobs() {
   return (
     <div>
       <Layout>
+      {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
         <div className="jobs">
         <button style={{ marginLeft: "75%" }} onClick={openPostJobModal}>
           Post a Job
