@@ -292,7 +292,7 @@ function Trainer({ open, onClose }) {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-        <DialogTitle>Employer Registration</DialogTitle>
+        <DialogTitle style={{textAlign:'center'}}>Trainer Registration</DialogTitle>
     <div>
       <ThemeProvider theme={theme}>
         <Box style={{ margin: "1% 10%" }}>

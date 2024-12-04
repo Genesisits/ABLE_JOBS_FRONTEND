@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './employerregister.css';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Grid ,IconButton} from '@mui/material';
+import { Button, TextField, Dialog, DialogActions,Box, DialogContent, DialogTitle, MenuItem, Grid ,IconButton} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { EMPLOYER_REGISTER } from '../endpoints';
@@ -237,7 +237,7 @@ function Employerregister({ open, onClose }) {
                
 
             <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-            <DialogTitle>Employer Registration</DialogTitle>
+            <DialogTitle style={{textAlign:'center'}}>Employer Registration</DialogTitle>
                     <DialogContent>
                         <Grid container spacing={2} rowSpacing={0}> {/* Grid container for 3 inputs in a row */}
                             <Grid item xs={4}>

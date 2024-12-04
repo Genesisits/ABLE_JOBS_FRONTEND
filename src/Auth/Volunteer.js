@@ -297,7 +297,7 @@ function Volunteer({ open, onClose }) {
   return (
     <div style={{ marginTop: "2%" }}>
        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-       <DialogTitle>Volunteer Registration</DialogTitle>
+       <DialogTitle style={{textAlign:'center'}}>Volunteer Registration</DialogTitle>
         <ThemeProvider theme={theme}>
           <Box style={{ margin: "2% 5%" }}>
             <Grid container spacing={1}>
