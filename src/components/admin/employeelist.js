@@ -156,7 +156,7 @@ export default function Trainers() {
                                     padding:'0',
                                     border: "none",
                                     background: "none",
-                                    margin: "0",
+                                    margin: "1px",
                                   }}
                                 >
                                   <img
@@ -170,7 +170,7 @@ export default function Trainers() {
                                     padding:'0',
                                     border: "none",
                                     background: "none",
-                                    margin: "0",
+                                    margin: "1px",
                                   }}
                                 >
                                   <img
