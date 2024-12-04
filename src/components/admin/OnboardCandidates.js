@@ -28,9 +28,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function OnboardCandidates({ open, onClose, selectedRow }) {
   const [appliedCandidates, setAppliedCandidates] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   // Fetch applied candidates whenever jobCode changes
   useEffect(() => {
+    setLoading(true)
     if (open && selectedRow) {
       axios
         .get(`${ONBOARDED_LIST}${selectedRow.code}`)
@@ -39,7 +41,9 @@ export default function OnboardCandidates({ open, onClose, selectedRow }) {
         })
         .catch((error) => {
           console.error("Error fetching candidates:", error);
-        });
+        }).finally(()=> {
+          setLoading(false)
+        })
     }
   }, [open, selectedRow]);
 
