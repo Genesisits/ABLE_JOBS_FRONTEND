@@ -15,6 +15,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
+import { Tooltip } from "@mui/material";
 import "./jobs.css";
 import Postajob from "./postajob"; // Import the Postajob component
 import AppliedCandidatesDialog from "./Appliedcandidates"; 
@@ -135,22 +136,27 @@ export default function Jobs() {
                         if (column.id === "status") {
                           return (
                             <TableCell key={column.id}>
+                              <Tooltip title="View">
                               <VisibilityIcon
-                                style={{ cursor: "pointer", marginRight: "2px" }}
+                                style={{ cursor: "pointer", marginRight: "2px",color:'blue' }}
                                 fontSize="small"
                                 onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
                               />
+                              </Tooltip>
+                              <Tooltip title="Edit">
                               <EditIcon
-                                style={{ cursor: "pointer", marginRight: "2px" }}
-                                fontSize="small"
+                                style={{ cursor: "pointer", marginRight: "2px",color:'blue' }}
                                 onClick={() => openEditJobModal(row)}
                               />
+                              </Tooltip>
+                              <Tooltip title={row.activation_status ? "Deactivate Job" : 'Activate Job'} arrow>
                               <Switch
                               checked={row.activation_status}
                               onChange={() => handleActive(row)}
                               inputProps={{ "aria-label": "controlled" }}
                                size="small"
                             />
+                            </Tooltip>
                             </TableCell>
                           );
                         }
