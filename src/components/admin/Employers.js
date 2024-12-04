@@ -2,6 +2,7 @@ import * as React from "react";
 import Layout from "../sidenav/Layout";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import CircularProgress from "@mui/material/CircularProgress";
 import "./employer.css";
 import {
   GET_JOB,
@@ -21,6 +22,7 @@ import {
   Typography,
   Box,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import TablePagination from "@mui/material/TablePagination";
@@ -61,10 +63,12 @@ export default function Employers({ Employer }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
   const { id } = useParams();
+  const [loading, setLoading] = useState(false)
   const handleTabchange = (event, newValue) => {
     setTabvalue(newValue);
   };
   useEffect(() => {
+    setLoading(true)
     if (id) {
       let payload = {
         code: id,
@@ -83,7 +87,11 @@ export default function Employers({ Employer }) {
           setData([]);
           setFilteredRows([]);
         }
-      });
+      }).catch((error) => {
+        console.log(error)
+      }).finally(()=> {
+        setLoading(false)
+      })
     }
   }, [id]);
 
@@ -226,6 +234,11 @@ export default function Employers({ Employer }) {
 
   return (
     <Layout>
+       {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
       <Box style={{ margin: "0px 5%" }}>
         <Grid container spacing={1} sx={{ marginBottom: 1 }}>
           <Grid item xs={6}>
@@ -305,6 +318,7 @@ export default function Employers({ Employer }) {
                 filteredRows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
+                    <Tooltip title="Click anywhere to see onboarded candidates for this job" arrow>
                     <TableRow
                       key={row.code} // Ensure the key is unique
                       onClick={() => handleOpenDialog(row)}
@@ -312,7 +326,7 @@ export default function Employers({ Employer }) {
                       role="checkbox"
                       tabIndex={-1}
                       sx={{
-                        cursor: "pointer",
+                        cursor: "pointer",  
                         "&:hover": { backgroundColor: "#f5f5f5" },
                       }}
                     >
@@ -320,6 +334,7 @@ export default function Employers({ Employer }) {
                         <TableCell key={column.id}>{row[column.id]}</TableCell>
                       ))}
                     </TableRow>
+                    </Tooltip>
                   ))
               )}
             </TableBody>

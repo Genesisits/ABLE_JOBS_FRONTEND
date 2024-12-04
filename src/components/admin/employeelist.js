@@ -1,9 +1,7 @@
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
-import {
-  ADIMN_EMPLOYEE_LIST
-} from "../../endpoints";
+import { ADIMN_EMPLOYEE_LIST } from "../../endpoints";
 import { useState, useEffect } from "react";
 import Aadhar from "../../images/aadharcard.png";
 import Pancard from "../../images/pancard.webp";
@@ -21,7 +19,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
 
-
 const columns = [
   { id: "first_name", label: "First Name", minWidth: 100 },
   { id: "last_name", label: "Last Name", minWidth: 100 },
@@ -38,9 +35,9 @@ export default function Trainers() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [isPostJobOpen, setIsPostJobOpen] = useState(false); 
+  const [isPostJobOpen, setIsPostJobOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedJobCode, setSelectedJobCode] = useState(null); 
+  const [selectedJobCode, setSelectedJobCode] = useState(null);
 
   useEffect(() => {
     // Fetch job data from API
@@ -87,20 +84,20 @@ export default function Trainers() {
   };
 
   const openPostJobModal = () => {
-    setSelectedJob(null); 
-    setIsPostJobOpen(true); 
+    setSelectedJob(null);
+    setIsPostJobOpen(true);
   };
   const closePostJobModal = () => {
     setSelectedJob(null);
     setIsPostJobOpen(false);
   };
   const handleOpenDialog = (jobCode) => {
-    setSelectedJobCode(jobCode); 
-    setIsDialogOpen(true); 
+    setSelectedJobCode(jobCode);
+    setIsDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false); 
+    setIsDialogOpen(false);
   };
 
   const openEditJobModal = (job) => {
@@ -149,34 +146,22 @@ export default function Trainers() {
                                   margin: "0",
                                 }}
                               >
-                               
                                 <button
-                                onClick={(e)=>window.open(row.pan_card)}
+                                  onClick={(e) => window.open(row.resume)}
                                   style={{
-                                    padding:'0',
+                                    padding: "0",
                                     border: "none",
                                     background: "none",
                                     margin: "1px",
                                   }}
                                 >
                                   <img
-                                    src={Pancard}
-                                    style={{ width: "25px", height: "25px",margin:'0', }}
-                                  />
-                                </button>
-                                <button
-                                onClick={(e) => window.open(row.resume)}
-                                  style={{
-                                    padding:'0',
-                                    border: "none",
-                                    background: "none",
-                                    margin: "1px",
-                                  }}
-                                >
-                                  <img
-                                  
                                     src={Resume}
-                                    style={{ width: "25px", height: "25px",margin:'0', }}
+                                    style={{
+                                      width: "25px",
+                                      height: "25px",
+                                      margin: "0",
+                                    }}
                                   />
                                 </button>
                               </div>
