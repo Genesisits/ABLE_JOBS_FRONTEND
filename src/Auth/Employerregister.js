@@ -237,7 +237,7 @@ function Employerregister({ open, onClose }) {
                
 
             <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-            <DialogTitle>Employer Registration</DialogTitle>
+            <DialogTitle style={{textAlign:'center'}}>Employer Registration</DialogTitle>
                     <DialogContent>
                         <Grid container spacing={2} rowSpacing={0}> {/* Grid container for 3 inputs in a row */}
                             <Grid item xs={4}>

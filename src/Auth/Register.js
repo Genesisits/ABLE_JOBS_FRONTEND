@@ -1210,7 +1210,7 @@ function Employeeregister({ open, onClose }) {
   return (
     // <Paper>
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
-      <DialogTitle>Employer Registration</DialogTitle>
+      <DialogTitle style={{textAlign:'center'}}>Employee Registration</DialogTitle>
       {/* Full-page loading spinner */}
       {isLoading && (
         <div className="full-page-spinner">
