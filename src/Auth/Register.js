@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import "./register.css";
 import { useNavigate } from "react-router-dom";
+import { Snackbar } from "@mui/material";
 import axios from "axios";
 import { List, ListItem, Chip, Checkbox } from "@mui/material";
 import { Add, Label } from "@mui/icons-material";
@@ -189,7 +190,7 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 function Employeeregister({ open, onClose }) {
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   const skillOptions = [
     "React",
     "HTML",
@@ -252,44 +253,47 @@ function Employeeregister({ open, onClose }) {
   const [inputValue, setInputValue] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
+  const [error, setError] = useState(null);
+  const [errorRadio, setErrorRadio] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [educations, setEducations] = useState([
     {
       degree_level: "SSC",
-      schoolname: "",
+      college: "",
       percentage: "",
-      specialization: "",
+      field_of_study: "",
       startDate: "",
       endDate: "",
     },
     {
       degree_level: "Intermediate",
-      schoolname: "",
+      college: "",
       percentage: "",
-      specialization: "",
+      field_of_study: "",
       startDate: "",
       endDate: "",
     },
     {
       degree_level: "B.Tech/BE/Degree",
-      schoolname: "",
+      college: "",
       percentage: "",
-      specialization: "",
+      field_of_study: "",
       startDate: "",
       endDate: "",
     },
     {
       degree_level: "M.Tech/PG",
-      schoolname: "",
+      college: "",
       percentage: "",
-      specialization: "",
+      field_of_study: "",
       startDate: "",
       endDate: "",
     },
     {
       degree_level: "Doctorate",
-      schoolname: "",
+      college: "",
       percentage: "",
-      specialization: "",
+      field_of_study: "",
       startDate: "",
       endDate: "",
     },
@@ -427,6 +431,7 @@ function Employeeregister({ open, onClose }) {
 
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value);
+    setErrorRadio(false);
   };
   const [educationFields, setEducationFields] = useState([
     {
@@ -480,7 +485,90 @@ function Employeeregister({ open, onClose }) {
 
   const isStepSkipped = (step) => skipped.has(step);
 
+  const validateForm = () => {
+    if (!userfname) {
+      setError("First name is required.");
+      return false;
+    }
+    if (!userlname) {
+      setError("Last name is required.");
+      return false;
+    }
+    if (!useremail || !/\S+@\S+\.\S+/.test(useremail)) {
+      setError("A valid email is required.");
+      return false;
+    }
+    if (!userpassword || userpassword.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return false;
+    }
+    if (!usermobile || !/^\d{10}$/.test(usermobile)) {
+      setError("A valid 10-digit mobile number is required.");
+      return false;
+    }
+    if (!state || state === "Select State") {
+      setError("State selection is required.");
+      return false;
+    }
+    if (!useraddress) {
+      setError("Address is required.");
+      return false;
+    }
+    return true;
+  };
+
+  const validateEducation = () => {
+    for (let i = 0; i < educations.length; i++) {
+      const education = educations[i];
+      if (!education.college) {
+        setError(`School/College Name is required for entry ${i + 1}.`);
+        return false;
+      }
+      if (!education.percentage || isNaN(education.percentage)) {
+        setError(`Valid Percentage is required for entry ${i + 1}.`);
+        return false;
+      }
+      if (!education.startDate) {
+        setError(`Start Date is required for entry ${i + 1}.`);
+        return false;
+      }
+      if (!education.endDate) {
+        setError(`End Date is required for entry ${i + 1}.`);
+        return false;
+      }
+      if (education.startDate >= education.endDate) {
+        setError(
+          `Start Date must be earlier than End Date for entry ${i + 1}.`
+        );
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleNext = () => {
+    if (activeStep === 0 && !validateForm()) {
+      setSnackbarOpen(true);
+      return;
+    }
+    if (activeStep === 1 && !validateEducation()) {
+      setSnackbarOpen(true);
+      return;
+    }
+    if (activeStep === 2 && !validateExperienceSection()) {
+      return; // Stop if validation fails
+    }
+    if (activeStep === 2 && !validateExperience()) {
+      // Assuming this is step 3
+      setSnackbarOpen(true);
+      return;
+    }
+    if (activeStep === 3 && !validateSkills()) {
+      // Assuming activeStep 2 corresponds to the skills step
+      setSnackbarOpen(true);
+      return;
+    }
+
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -507,6 +595,11 @@ function Employeeregister({ open, onClose }) {
   };
 
   const handleSubmit = () => {
+    if (!validateSpecialConsiderations()) {
+      setSnackbarOpen(true); // Show error in Snackbar if validation fails
+      return;
+    }
+
     setisLoading(true);
     const payload = {
       educations: educations,
@@ -515,7 +608,7 @@ function Employeeregister({ open, onClose }) {
       job_experiences:
         selectedOption === "Experienced"
           ? experienceList.map((exp) => ({
-              job_title: exp.jobTitle,
+              job_role: exp.jobTitle,
               company_name: exp.companyname,
               location: exp.location,
               start_date: exp.startDate.toISOString().split("T")[0],
@@ -576,7 +669,8 @@ function Employeeregister({ open, onClose }) {
         }
         setShowPopup(true); // Show the popup
         setPopupMessage(errorMessage);
-      }).finally (() => {
+      })
+      .finally(() => {
         setisLoading(false);
       });
   };
@@ -627,6 +721,77 @@ function Employeeregister({ open, onClose }) {
   const navigate = useNavigate();
   const handleOTP = () => {
     // navigate('/verify')
+  };
+  const validateSkills = () => {
+    if (selectedSkills.length === 0) {
+      setError("Please add at least one skill.");
+      return false;
+    }
+    return true;
+  };
+  const validateSpecialConsiderations = () => {
+    if (!type) {
+      setError("Please select an Availability of Work option.");
+      return false;
+    }
+
+    if (!disability) {
+      setError("Please select a disability type.");
+      return false;
+    }
+
+    if (disabilitypercentage === '') {
+      const percentage = parseFloat(disabilitypercentage);
+      
+      // Check if it is a valid number and in the range 0-100
+      if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+        setError('Disability Percentage must be a number between 0 and 100.');
+        return false;
+      }
+    }
+
+    if (!languages_known || languages_known.trim() === "") {
+      setError("Please specify at least one known language.");
+      return false;
+    }
+
+    // if (!willingToRelocate) {
+    //   setError("You must confirm willingness to relocate.");
+    //   return false;
+    // }
+
+    return true;
+  };
+  const validateExperienceSection = () => {
+    if (!selectedOption) {
+      setErrorRadio(true);
+      return false;
+    }
+    return true;
+  };
+
+  const validateExperience = () => {
+    if (selectedOption === "Experienced") {
+      for (const experience of experienceList) {
+        if (
+          !experience.jobTitle ||
+          !experience.companyname ||
+          !experience.location ||
+          !experience.startDate ||
+          !experience.endDate ||
+          !experience.employmentType
+        ) {
+          setError("Please fill out all fields for each experience entry.");
+          return false;
+        }
+
+        if (experience.startDate >= experience.endDate) {
+          setError("Start date must be earlier than the end date.");
+          return false;
+        }
+      }
+    }
+    return true;
   };
 
   const Register = () => {
@@ -757,23 +922,23 @@ function Employeeregister({ open, onClose }) {
                       justifyContent: "space-between",
                     }}
                   > */}
-                    <select
-                      value={state}
-                      style={{ width: "100%" }}
-                      onChange={(e) => setState(e.target.value)}
-                    >
-                      <option>Select State</option>
-                      {allstates.map((states) => (
-                        <option key={states.id} value={states.state_name}>
-                          {states.state_name}
-                        </option>
-                      ))}
-                    </select>
+                  <select
+                    value={state}
+                    style={{ width: "100%" }}
+                    onChange={(e) => setState(e.target.value)}
+                  >
+                    <option>Select State</option>
+                    {allstates.map((states) => (
+                      <option key={states.id} value={states.state_name}>
+                        {states.state_name}
+                      </option>
+                    ))}
+                  </select>
                   {/* </Box> */}
                 </Grid>
 
                 {/* Address */}
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                   <TextField
                     label="Address"
                     value={useraddress}
@@ -809,11 +974,11 @@ function Employeeregister({ open, onClose }) {
                     <input
                       type="text"
                       placeholder="School/College Name"
-                      value={education.schoolname}
+                      value={education.college}
                       onChange={(e) =>
                         handleEducationChange(
                           index,
-                          "schoolname",
+                          "college",
                           e.target.value
                         )
                       }
@@ -838,6 +1003,7 @@ function Employeeregister({ open, onClose }) {
                   <Grid item xs={2}>
                     <DatePicker
                       selected={education.startDate}
+                      maxDate={new Date()} 
                       onChange={(date) =>
                         handleEducationChange(index, "startDate", date)
                       }
@@ -849,6 +1015,7 @@ function Employeeregister({ open, onClose }) {
                   <Grid item xs={2}>
                     <DatePicker
                       selected={education.endDate}
+                      maxDate={new Date()} 
                       onChange={(date) =>
                         handleEducationChange(index, "endDate", date)
                       }
@@ -862,12 +1029,12 @@ function Employeeregister({ open, onClose }) {
                       type="text"
                       placeholder="Specialization"
                       disabled={education.degree_level === "SSC"}
-                      value={education.specialization}
+                      value={education.field_of_study}
                       fullWidth
                       onChange={(e) =>
                         handleEducationChange(
                           index,
-                          "specialization",
+                          "field_of_study",
                           e.target.value
                         )
                       }
@@ -881,139 +1048,144 @@ function Employeeregister({ open, onClose }) {
       case 2:
         return (
           <div className="experienced">
-          <Box style={{ margin: "0% 0%" }}>
-            <Grid container spacing={6}>
-              <Grid item sx={6}>
-                <label>
-                  <input
-                    type="radio"
-                    name="fresher"
-                    value="Fresher"
-                    checked={selectedOption === "Fresher"}
-                    onChange={handleRadioChange}
-                  />
-                  Fresher
-                </label>
+            <Box style={{ margin: "0% 0%" }}>
+              <Grid container spacing={6}>
+                <Grid item sx={6}>
+                  <label>
+                    <input
+                      type="radio"
+                      name="fresher"
+                      value="Fresher"
+                      checked={selectedOption === "Fresher"}
+                      onChange={handleRadioChange}
+                    />
+                    Fresher
+                  </label>
+                </Grid>
+                <Grid item sx={6}>
+                  <label>
+                    <input
+                      type="radio"
+                      name="experience"
+                      value="Experienced"
+                      checked={selectedOption === "Experienced"}
+                      onChange={handleRadioChange}
+                    />
+                    Experienced
+                  </label>
+                </Grid>
               </Grid>
-              <Grid item sx={6}>
-                <label>
-                  <input
-                    type="radio"
-                    name="experience"
-                    value="Experienced"
-                    checked={selectedOption === "Experienced"}
-                    onChange={handleRadioChange}
-                  />
-                  Experienced
-                </label>
-              </Grid>
-            </Grid>
+              {errorRadio && (
+                <div style={{ color: "red", marginTop: "10px" }}>
+                  Please select either Fresher or Experienced.
+                </div>
+              )}
 
-            {selectedOption === "Experienced" &&
-              experienceList.map((experience, index) => (
-                <Grid container spacing={2} key={index} direction="row">
-                  <Grid item xs={2}>
-                    <input
-                     fullWidth
-                      type="text"
-                      value={experience.jobTitle}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "jobTitle",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Job Title"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <input
-                     fullWidth
-                      type="text"
-                      value={experience.companyname}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "companyname",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Company name"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      fullWidth
-                      value={experience.location}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "location",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Location"
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <DatePicker
-                      selected={experience.startDate}
-                      onChange={(date) =>
-                        handleExperienceChange(index, "startDate", date)
-                      }
-                      dateFormat="yyyy/MM/dd"
-                      placeholderText="Start Date"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <DatePicker
-                      selected={experience.endDate}
-                      onChange={(date) =>
-                        handleExperienceChange(index, "endDate", date)
-                      }
-                      dateFormat="yyyy/MM/dd"
-                      placeholderText="End Date"
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <select
-                      value={experience.employmentType}
-                      onChange={(e) =>
-                        handleExperienceChange(
-                          index,
-                          "employmentType",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Employment Type"
-                      style={{ width: "100%" }}
-                    >
-                      <option value="">Select Employment Type</option>
-                      <option value="Full-Time">Full-Time</option>
-                      <option value="Part-Time">Part-Time</option>
-                      <option value="Contract">Contract</option>
-                      <option value="Internship">Internship</option>
-                      <option value="Freelance">Freelance</option>
-                    </select>
-                  </Grid>
-                  {index === experienceList.length - 1 && (
-                    <Grid item xs={1}>
-                      <AddIcon
-                        style={{
-                          margin: "20px 0px 0px 0px",
-                          cursor: "pointer",
-                        }}
-                        onClick={addExperienceFields}
+              {selectedOption === "Experienced" &&
+                experienceList.map((experience, index) => (
+                  <Grid container spacing={2} key={index} direction="row">
+                    <Grid item xs={2}>
+                      <input
+                        fullWidth
+                        type="text"
+                        value={experience.jobTitle}
+                        onChange={(e) =>
+                          handleExperienceChange(
+                            index,
+                            "jobTitle",
+                            e.target.value
+                          )
+                        }
+                        placeholder="Job Title"
                       />
                     </Grid>
-                  )}
-                </Grid>
-              ))}
-          </Box>
+                    <Grid item xs={2}>
+                      <input
+                        fullWidth
+                        type="text"
+                        value={experience.companyname}
+                        onChange={(e) =>
+                          handleExperienceChange(
+                            index,
+                            "companyname",
+                            e.target.value
+                          )
+                        }
+                        placeholder="Company name"
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <input
+                        type="text"
+                        fullWidth
+                        value={experience.location}
+                        onChange={(e) =>
+                          handleExperienceChange(
+                            index,
+                            "location",
+                            e.target.value
+                          )
+                        }
+                        placeholder="Location"
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <DatePicker
+                        selected={experience.startDate}
+                        onChange={(date) =>
+                          handleExperienceChange(index, "startDate", date)
+                        }
+                        dateFormat="yyyy/MM/dd"
+                        placeholderText="Start Date"
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <DatePicker
+                        selected={experience.endDate}
+                        onChange={(date) =>
+                          handleExperienceChange(index, "endDate", date)
+                        }
+                        dateFormat="yyyy/MM/dd"
+                        placeholderText="End Date"
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <select
+                        value={experience.employmentType}
+                        onChange={(e) =>
+                          handleExperienceChange(
+                            index,
+                            "employmentType",
+                            e.target.value
+                          )
+                        }
+                        placeholder="Employment Type"
+                        style={{ width: "100%" }}
+                      >
+                        <option value="">Select Employment Type</option>
+                        <option value="Full-Time">Full-Time</option>
+                        <option value="Part-Time">Part-Time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Freelance">Freelance</option>
+                      </select>
+                    </Grid>
+                    {index === experienceList.length - 1 && (
+                      <Grid item xs={1}>
+                        <AddIcon
+                          style={{
+                            margin: "20px 0px 0px 0px",
+                            cursor: "pointer",
+                          }}
+                          onClick={addExperienceFields}
+                        />
+                      </Grid>
+                    )}
+                  </Grid>
+                ))}
+            </Box>
           </div>
         );
       case 3:
@@ -1210,20 +1382,27 @@ function Employeeregister({ open, onClose }) {
   return (
     // <Paper>
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
-      <DialogTitle style={{textAlign:'center'}}>Employee Registration</DialogTitle>
+      <DialogTitle style={{ textAlign: "center" }}>
+        Employee Registration
+      </DialogTitle>
       {/* Full-page loading spinner */}
       {isLoading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
         </div>
       )}
-      <Box sx={{ width: "100%", margin: "5% 0%" }}>
+      <Box sx={{ width: "100%", margin: "0%" }}>
         {showPopup && (
           <div className="popup">
             <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
               {popupMessage}
             </p>
-            <button style={{marginLeft:"35%",width:"30%"}} onClick={() => setShowPopup(false)}>Close</button>
+            <button
+              style={{ marginLeft: "35%", width: "30%" }}
+              onClick={() => setShowPopup(false)}
+            >
+              Close
+            </button>
           </div>
         )}
         <Box
@@ -1273,6 +1452,13 @@ function Employeeregister({ open, onClose }) {
         ) : (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+            <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={4000}
+              onClose={() => setSnackbarOpen(false)}
+              message={error}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            />
             {renderForm()}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
@@ -1289,10 +1475,8 @@ function Employeeregister({ open, onClose }) {
                   Skip
                 </Button>
               )}
-              <Button
-                onClick={onClose}
-              >
-                {activeStep === steps.length-1 ? "Cancel" : ""}
+              <Button onClick={onClose}>
+                {activeStep === steps.length - 1 ? "Cancel" : ""}
               </Button>
               <Button
                 onClick={
