@@ -12,7 +12,8 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TableContainer, // Import TableContainer
+  TableContainer,
+  CircularProgress, // Import TableContainer
 } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
@@ -26,19 +27,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function ShortListedCandidates({ open, onClose, jobCode }) {
+  const [loading, setLoading] = useState(false)
   const [appliedCandidates, setAppliedCandidates] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
 
   // Fetch applied candidates whenever jobCode changes
   useEffect(() => {
     if (open && jobCode) {
+      setLoading(true)
       axios.get(`${SHORTLIST_ONBOARD}${jobCode}`)
         .then((response) => {
           setAppliedCandidates(response.data);
         })
         .catch((error) => {
           console.error("Error fetching candidates:", error);
-        });
+        }).finally(() => {
+          setLoading(false)
+        })
     }
   }, [open ,jobCode]);
 
@@ -110,6 +115,11 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
       onClose={handleCloseDialog}
       TransitionComponent={Transition}
     >
+       {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <IconButton
