@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Button } from "@mui/material";
+import { Button, Snackbar, Alert } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
@@ -184,6 +184,11 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
   const [jobid, setJobid] = useState("");
   const [success , setSuccess] = useState(false)
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
   // const handleSuccess = () => {
   //   setSuccess(false)
   // }
@@ -234,6 +239,44 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
   }, [selectedJob]);
 
   const handleNext = () => {
+    const missingFields = [];
+
+    if (!job_title) missingFields.push("Job Title");
+    if (!company_name) missingFields.push("Company Name");
+    if (!skills) missingFields.push("Skills");
+    if (!department) missingFields.push("Department");
+    if (!employment_type)missingFields.push("Employment Type");
+    if (!work_mode) missingFields.push("Work Mode");
+    if (!salary_offered)missingFields.push("Salary Offered");
+    if (!location) missingFields.push("Location");
+    if (!description) missingFields.push("Job Description");
+    if (!qualification_required) missingFields.push("Qualification Required");
+    if (!disability) missingFields.push("Disability Eligible");
+    if (!experience_required) missingFields.push("Experience Required");
+    if (!companywebsite) missingFields.push("Company Website");
+    if (!notice_period) missingFields.push("Notice Period");
+    if (!industry) missingFields.push("Industry");
+    if (!state) missingFields.push("State");
+    if (!number_of_positions) missingFields.push("Number of Positions");
+  
+    const urlRegex = /^(https:\/\/www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/.*)?$/;
+    const regex = /^\d+$/;
+    if (!companywebsite.match(urlRegex)) { 
+      setErrorMessage('Company website must follow the format: https://www.companyname.com');
+      setOpenSnackbar(true);
+      return;
+    }
+    if (!salary_offered.match(regex)) { 
+      setErrorMessage('In Salary Field Allow Only Numbers');
+      setOpenSnackbar(true);
+      return;
+    }
+    if (missingFields.length > 0) {
+      // Set error message and show Snackbar
+      setErrorMessage(`Please fill in the following fields: ${missingFields.join(", ")}`);
+      setOpenSnackbar(true);
+      return;
+    }
     const payload = {
       qualification_required,
       company_name,
@@ -507,6 +550,16 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
               {isEditing ? "Update" : "Save"}
             </Button>
           </div>
+          <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+          <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
         </Box>
         )}
           </Box>
