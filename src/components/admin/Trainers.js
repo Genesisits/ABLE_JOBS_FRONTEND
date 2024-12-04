@@ -20,6 +20,7 @@ import Button from "@mui/material/Button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
+import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 // import "./jobs.css";
 // import Postajob from "./postajob";
@@ -37,6 +38,7 @@ const columns = [
 ];
 
 export default function Trainers() {
+  const [loading,setLoading] = useState(false)
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
@@ -47,6 +49,7 @@ export default function Trainers() {
 
   useEffect(() => {
     // Fetch job data from API
+    setLoading(true)
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -54,7 +57,12 @@ export default function Trainers() {
     };
     axios.get(`${TRAINERS_LIST}`).then((response) => {
       setData(response.data);
-    });
+    }).catch(() => {
+
+
+    }).finally(() => {
+      setLoading(false)
+    })
   }, []);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -114,6 +122,11 @@ export default function Trainers() {
   return (
     <div>
       <Layout>
+      {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
         <div className="jobs"></div>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
