@@ -12,6 +12,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
+import CircularProgress from "@mui/material/CircularProgress";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -34,6 +35,7 @@ export default function Trainers() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
+  const [loading, setLoading] = useState(false)
   const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -41,6 +43,7 @@ export default function Trainers() {
 
   useEffect(() => {
     // Fetch job data from API
+    setLoading(true)
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -48,7 +51,11 @@ export default function Trainers() {
     };
     axios.get(`${ADIMN_EMPLOYEE_LIST}`).then((response) => {
       setData(response.data);
-    });
+    }).catch((error) => {
+      console.log(error)
+    }).finally(() => {
+      setLoading(false)
+    })
   }, []);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -108,6 +115,11 @@ export default function Trainers() {
   return (
     <div>
       <Layout>
+      {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
         <div className="jobs"></div>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>

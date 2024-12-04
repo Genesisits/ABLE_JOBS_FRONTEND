@@ -7,6 +7,7 @@ import {
   GET_JOB_EMPLOYEE,
   VOLUNTEERS_LIST,
 } from "../../endpoints";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useState, useEffect } from "react";
 import Aadhar from "../../images/aadharcard.png";
 import Pancard from "../../images/pancard.webp";
@@ -40,6 +41,7 @@ const columns = [
 export default function Volunteers() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [loading, setLoading] = useState(false)
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
@@ -48,6 +50,7 @@ export default function Volunteers() {
 
   useEffect(() => {
     // Fetch job data from API
+    setLoading(true)
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -55,7 +58,11 @@ export default function Volunteers() {
     };
     axios.get(`${VOLUNTEERS_LIST}`).then((response) => {
       setData(response.data);
-    });
+    }).catch((error) => {
+      console.log(error)
+    }).finally(()=> {
+      setLoading(false)
+    })
   }, []);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -115,6 +122,11 @@ export default function Volunteers() {
   return (
     <div>
       <Layout>
+      {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
         <div className="jobs"></div>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
