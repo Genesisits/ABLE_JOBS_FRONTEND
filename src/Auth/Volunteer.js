@@ -10,7 +10,10 @@ import {
   MenuItem,
   Dialog,
   DialogActions,
-  DialogTitle
+  DialogTitle,
+  Snackbar,
+  Alert,
+  CircularProgress
 } from "@mui/material";
 import { CountryDropdown, StateDropdown } from "react-country-state-dropdown";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -243,6 +246,10 @@ function Volunteer({ open, onClose }) {
   const [purpose, setPurpose] = useState("");
   const [Adhar, setAadhar] = useState(null);
   const [qualification, setQualification] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
+  const [loading, setLoading] = useState(false)
   //   const [languages_known, setKnownLanguages] = useState("");
   const [pancard, setPancard] = useState(null);
   const [no_of_hours, setNOH] = useState("");
@@ -253,6 +260,7 @@ function Volunteer({ open, onClose }) {
   const handleSetCountry = (e, value) => setCountry(value);
   const handleSetState = (e, value) => setState(value);
 
+  const handleSnackbarClose = () => setOpenSnackbar(false);
   const handleCountryChange = (e) => {
     const country = e.target.value;
     setCountry(country);
@@ -260,6 +268,13 @@ function Volunteer({ open, onClose }) {
     setState(""); // Reset state selection
   };
   const handleSubmit = () => {
+    setLoading(true)
+    if (!resume || !Adhar || !pancard || !userfname || !userlname || !useremail || !userpassword || !usermobile || !useraddress || !country || !state || !qualification || !purpose || !no_of_hours) {
+      setSnackbarMessage("Please fill all the required fields.");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+      return;
+    }
     const formData = new FormData();
     formData.append("first_name", userfname);
     formData.append("last_name", userlname);
@@ -288,15 +303,46 @@ function Volunteer({ open, onClose }) {
       })
       .then((response) => {
         console.log(response.data);
+        if (response.status === 201) {
+          // Success - Show a message
+          setSnackbarMessage("Registration successful! You have been successfully registered.");
+          setSnackbarSeverity("success");
+          setOpenSnackbar(true);
+          onClose(); // Close dialog on success
+        }
       })
       .catch((error) => {
         console.error(error);
-      });
+        if (error.response && error.response.status === 400) {
+          // Check if the error is due to email already existing
+          if (error.response.data.email && error.response.data.email[0] === "volunteer with this email already exists.") {
+            setSnackbarMessage("Email already exists. Please use a different email.");
+            setSnackbarSeverity("error");
+            setOpenSnackbar(true);
+          } else {
+            setSnackbarMessage("Registration failed. Please try again.");
+            setSnackbarSeverity("error");
+            setOpenSnackbar(true);
+          }
+        } else {
+          setSnackbarMessage("Registration failed. Please try again.");
+          setSnackbarSeverity("error");
+          setOpenSnackbar(true);
+        }
+      }).finally(()=> {
+        setLoading(false)
+      })
   };
 
   return (
     <div style={{ marginTop: "2%" }}>
+      
        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+       {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
        <DialogTitle style={{textAlign:'center'}}>Volunteer Registration</DialogTitle>
         <ThemeProvider theme={theme}>
           <Box style={{ margin: "2% 5%" }}>
@@ -649,6 +695,15 @@ function Volunteer({ open, onClose }) {
           </Box>
         </ThemeProvider>
       </Dialog>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
