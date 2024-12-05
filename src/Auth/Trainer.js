@@ -10,7 +10,10 @@ import {
   Checkbox,
   Select,
   MenuItem,
-  DialogTitle
+  DialogTitle,
+  Snackbar,
+  Alert,
+  CircularProgress
 } from "@mui/material";
 import { CountryDropdown, StateDropdown } from "react-country-state-dropdown";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -248,7 +251,11 @@ function Trainer({ open, onClose }) {
   const [availability_of_work, setWorkAvailability] = useState("");
   const handleSetCountry = (e, value) => setCountry(value);
   const handleSetState = (e, value) => setState(value);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error"); 
+  const handleSnackbarClose = () => setSnackbarOpen(false);
+  const [loading, setLoading] = useState(false)
   
   const handleCountryChange = (e) => {
     const country = e.target.value;
@@ -258,6 +265,73 @@ function Trainer({ open, onClose }) {
   };
 
   const handleSubmit = () => {
+    if (!userfname || !userlname) {
+      setSnackbarMessage("First and Last name are required!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!useremail.includes("@")) {
+      setSnackbarMessage("Invalid email format!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!userpassword || userpassword.length < 6) {
+      setSnackbarMessage("Password must be at least 6 characters long!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!usermobile || usermobile.length < 10) {
+      setSnackbarMessage("Enter a valid mobile number!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!languages_known) {
+      setSnackbarMessage("Enter atleast one language");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!qualification) {
+      setSnackbarMessage("Enter your qualification");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!experience) {
+      setSnackbarMessage("Enter your experience");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!skills) {
+      setSnackbarMessage("Enter atleast one skill");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!country || !state) {
+      setSnackbarMessage("Please select both country and state!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!resume || !pancard || !Adhar) {
+      setSnackbarMessage("Upload all required documents (Resume, PAN, Aadhaar)!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    if (!useraddress) {
+      setSnackbarMessage("Enter Address");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+    setLoading(true)
     const formData = new FormData();
     formData.append("first_name", userfname);
     formData.append("last_name", userlname);
@@ -283,11 +357,22 @@ function Trainer({ open, onClose }) {
       },
     })
     .then((response) => {
+      setSnackbarMessage("Registration successful!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      setTimeout(()=> {
+        onClose(false)
+      },1000)
       console.log(response.data);
     })
     .catch((error) => {
+      setSnackbarMessage("Registration failed. Try again!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       console.error(error);
-    });
+    }).finally(() => {
+      setLoading(false)
+    })
   };
 
   return (
@@ -295,6 +380,20 @@ function Trainer({ open, onClose }) {
         <DialogTitle style={{textAlign:'center'}}>Trainer Registration</DialogTitle>
     <div>
       <ThemeProvider theme={theme}>
+      {loading && (
+        <div className="full-page-spinner">
+          <CircularProgress color="primary" size={50} />
+        </div>
+      )}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
         <Box style={{ margin: "1% 10%" }}>
           <Grid container spacing={1}>
             <Grid item xs={6}>

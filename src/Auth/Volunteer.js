@@ -268,13 +268,14 @@ function Volunteer({ open, onClose }) {
     setState(""); // Reset state selection
   };
   const handleSubmit = () => {
-    setLoading(true)
+    
     if (!resume || !Adhar || !pancard || !userfname || !userlname || !useremail || !userpassword || !usermobile || !useraddress || !country || !state || !qualification || !purpose || !no_of_hours) {
       setSnackbarMessage("Please fill all the required fields.");
       setSnackbarSeverity("error");
       setOpenSnackbar(true);
       return;
     }
+    setLoading(true)
     const formData = new FormData();
     formData.append("first_name", userfname);
     formData.append("last_name", userlname);
