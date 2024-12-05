@@ -121,6 +121,7 @@ const handleActive = (row) => {
             color="inherit"
             onClick={handleCloseDialog}
             aria-label="close"
+            style={{width:'3%'}}
           >
             <CloseIcon />
           </IconButton>

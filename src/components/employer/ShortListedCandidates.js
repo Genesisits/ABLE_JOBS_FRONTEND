@@ -127,6 +127,7 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
             color="inherit"
             onClick={handleCloseDialog}
             aria-label="close"
+            style={{width:'4%'}}
           >
             <CloseIcon />
           </IconButton>
