@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { CREATE_JOB, UPDATE_JOB } from "../../endpoints";
-import { Typography, CircularProgress} from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 import "./jobs.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -182,7 +182,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
   const [isEditing, setIsEditing] = useState(false);
   const [qualification_required, setQualification] = useState("");
   const [jobid, setJobid] = useState("");
-  const [success , setSuccess] = useState(false)
+  const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -245,9 +245,9 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
     if (!company_name) missingFields.push("Company Name");
     if (!skills) missingFields.push("Skills");
     if (!department) missingFields.push("Department");
-    if (!employment_type)missingFields.push("Employment Type");
+    if (!employment_type) missingFields.push("Employment Type");
     if (!work_mode) missingFields.push("Work Mode");
-    if (!salary_offered)missingFields.push("Salary Offered");
+    if (!salary_offered) missingFields.push("Salary Offered");
     if (!location) missingFields.push("Location");
     if (!description) missingFields.push("Job Description");
     if (!qualification_required) missingFields.push("Qualification Required");
@@ -258,22 +258,29 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
     if (!industry) missingFields.push("Industry");
     if (!state) missingFields.push("State");
     if (!number_of_positions) missingFields.push("Number of Positions");
-  
-    const urlRegex = /^(https:\/\/www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/.*)?$/;
-    const regex = /^\d+$/;
-    if (!companywebsite.match(urlRegex)) { 
-      setErrorMessage('Company website must follow the format: https://www.companyname.com');
+
+    if (missingFields.length > 0) {
+      // Set error message and show Snackbar
+      setErrorMessage(`Please fill in the following fields: ${missingFields.join(", ")}`);
       setOpenSnackbar(true);
       return;
     }
-    if (!salary_offered.match(regex)) { 
+    const urlRegex = /^(https:\/\/www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/.*)?$/;
+    const regex = /^[0-9]*\.?[0-9]+$/;
+    const regex1 = /^\d+$/;
+    if (!salary_offered.match(regex)) {
       setErrorMessage('In Salary Field Allow Only Numbers');
       setOpenSnackbar(true);
       return;
     }
-    if (missingFields.length > 0) {
-      // Set error message and show Snackbar
-      setErrorMessage(`Please fill in the following fields: ${missingFields.join(", ")}`);
+    if (!number_of_positions.match(regex1)) {
+      setErrorMessage('In Number of Positions Field Allow Only Numbers');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (!companywebsite.match(urlRegex)) {
+      setErrorMessage('Company website must follow the format: https://www.companyname.com');
       setOpenSnackbar(true);
       return;
     }
@@ -338,26 +345,26 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
 
   return (
     <>
-    <Modal
-      open={modalIsOpen}
-      onClose={(e, reason) => {
-        // Prevent the modal from closing when the backdrop (outside area) is clicked
-        if (reason === "backdropClick") {
-          return;
-        }
-        closeModal(); // Call your close modal function for other reasons (e.g., close button)
-      }}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-      BackdropProps={{
-        onClick: (e) => {
-          // Prevent the backdrop click from closing the modal
-          e.stopPropagation();
-        },
-      }}
-    >
-      <div className="employ">
-      <Box>
+      <Modal
+        open={modalIsOpen}
+        onClose={(e, reason) => {
+          // Prevent the modal from closing when the backdrop (outside area) is clicked
+          if (reason === "backdropClick") {
+            return;
+          }
+          closeModal(); // Call your close modal function for other reasons (e.g., close button)
+        }}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        BackdropProps={{
+          onClick: (e) => {
+            // Prevent the backdrop click from closing the modal
+            e.stopPropagation();
+          },
+        }}
+      >
+        <div className="employ">
+          <Box>
             {loading ? (
               <div
                 style={{
@@ -371,201 +378,201 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
                 <CircularProgress />
               </div>
             ) : (
-        <Box sx={customStyles}>
-          <h2 style={{ margin: "0", textAlign: "center" }}>
-            {isEditing ? "Edit Job" : "Add Job"}
-          </h2>
-         
-          {/* Row 1 */}
-          <div className="employ-row">
-            
-            <input
-              type="text"
-              placeholder="Company Name"
-              value={company_name}
-              onChange={(e) => setCompanyName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Job Role"
-              value={job_title}
-              onChange={(e) => setJobrole(e.target.value)}
-            />
-            <select
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-            >
-              <option>Select Department</option>
-              {departments.map((department) => (
-                <option key={department.id} value={department.abbreviation}>
-                  {department.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              <Box sx={customStyles}>
+                <h2 style={{ margin: "0", textAlign: "center" }}>
+                  {isEditing ? "Edit Job" : "Add Job"}
+                </h2>
 
-          {/* Row 2 */}
-          <div className="employ-row">
-            <input
-              type="text"
-              placeholder="Salary"
-              value={salary_offered}
-              onChange={(e) => setSalary(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-            <select
-              value={employment_type}
-              onChange={(e) => setJobtype(e.target.value)}
-            >
-              <option>Select Job Type</option>
-              <option>Full-time</option>
-              <option>Part-time</option>
-              <option>Contract</option>
-              <option>Freelance</option>
-              <option>Temporary</option>
-              <option>Internship</option>
-            </select>
-          </div>
+                {/* Row 1 */}
+                <div className="employ-row">
 
-          {/* Row 3 */}
-          <div className="employ-row">
-            <select
-              value={industry}
-              onChange={(e) => setindustry(e.target.value)}
-            >
-              <option>Select Industry</option>
-              {industries.map((industry) => (
-                <option key={industry.id} value={industry.abbreviation}>
-                  {industry.name}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder="State"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-            />
-            <select
-              value={qualification_required}
-              onChange={(e) => setQualification(e.target.value)}
-            >
-              <option>Select Qualification</option>
-              {qualifications.map((qualif) => (
-                <option key={qualif.id} value={qualif.abbreviation}>
-                  {qualif.name}
-                </option>
-              ))}
-            </select>
-          </div>
+                  <input
+                    type="text"
+                    placeholder="Company Name"
+                    value={company_name}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Job Role"
+                    value={job_title}
+                    onChange={(e) => setJobrole(e.target.value)}
+                  />
+                  <select
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                  >
+                    <option value="" disabled hidden>Select Department</option>
+                    {departments.map((department) => (
+                      <option key={department.id} value={department.abbreviation}>
+                        {department.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-          {/* Row 4 */}
-          <div className="employ-row">
-            <input
-              type="text"
-              placeholder="Number of Positions"
-              value={number_of_positions}
-              onChange={(e) => setNofPositions(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Experience Required"
-              value={experience_required}
-              onChange={(e) => setExperiencerequired(e.target.value)}
-            />
-            <select
-              value={work_mode}
-              onChange={(e) => setWorkmode(e.target.value)}
-            >
-              <option>Select Mode of Work</option>
-              <option>On-site</option>
-              <option>Remote</option>
-              <option>Hybrid</option>
-            </select>
-          </div>
+                {/* Row 2 */}
+                <div className="employ-row">
+                  <input
+                    type="text"
+                    placeholder="Salary"
+                    value={salary_offered}
+                    onChange={(e) => setSalary(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                  <select
+                    value={employment_type}
+                    onChange={(e) => setJobtype(e.target.value)}
+                  >
+                    <option value="" disabled hidden>Select Job Type</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="contract">Contract</option>
+                    <option value="freelance">Freelance</option>
+                    <option value="temporary">Temporary</option>
+                    <option value="internship">Internship</option>
+                  </select>
+                </div>
 
-          {/* Row 5 */}
-          <div className="employ-row">
-            <input
-              type="text"
-              placeholder="Company Website"
-              value={companywebsite}
-              onChange={(e) => setcompanywebsite(e.target.value)}
-            />
-            <select
-              value={disability}
-              onChange={(e) => setdisability(e.target.value)}
-            >
-              <option disabled>Disability Type</option>
-              {disabilities.map((disable) => (
-                <option key={disable.id} value={disable.abbreviation}>
-                  {disable.name}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={notice_period}
-              onChange={(e) => setNoticeperiod(e.target.value)}
-              placeholder="Notice Period"
-            />
-          </div>
+                {/* Row 3 */}
+                <div className="employ-row">
+                  <select
+                    value={industry}
+                    onChange={(e) => setindustry(e.target.value)}
+                  >
+                    <option value="" disabled hidden>Select Industry</option>
+                    {industries.map((industry) => (
+                      <option key={industry.id} value={industry.abbreviation}>
+                        {industry.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="State"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                  />
+                  <select
+                    value={qualification_required}
+                    onChange={(e) => setQualification(e.target.value)}
+                  >
+                    <option value="" disabled hidden>Select Qualification</option>
+                    {qualifications.map((qualif) => (
+                      <option key={qualif.id} value={qualif.abbreviation}>
+                        {qualif.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-          {/* Job Description */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              gap: "10px",
-            }}
-          >
-            <textarea
-              value={description}
-              onChange={(e) => setJobdescription(e.target.value)}
-              placeholder="Job Description"
-              rows="3"
-            />
-            <textarea
-              placeholder="Required Technology Stack"
-              value={skills}
-              onChange={(e) => setRTS(e.target.value)}
-              rows="3"
-            />
-          </div>
+                {/* Row 4 */}
+                <div className="employ-row">
+                  <input
+                    type="text"
+                    placeholder="Number of Positions"
+                    value={number_of_positions}
+                    onChange={(e) => setNofPositions(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Experience Required"
+                    value={experience_required}
+                    onChange={(e) => setExperiencerequired(e.target.value)}
+                  />
+                  <select
+                    value={work_mode}
+                    onChange={(e) => setWorkmode(e.target.value)}
+                  >
+                    <option value="" disabled hidden>Select Mode of Work</option>
+                    <option>On-site</option>
+                    <option>Remote</option>
+                    <option>Hybrid</option>
+                  </select>
+                </div>
 
-          {/* Action Buttons */}
-          <div
-            style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
-          >
-            <Button variant="outlined" color="secondary" onClick={closeModal}>
-              Close
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleNext}>
-              {isEditing ? "Update" : "Save"}
-            </Button>
-          </div>
-          <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-          <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
-        </Box>
-        )}
+                {/* Row 5 */}
+                <div className="employ-row">
+                  <input
+                    type="text"
+                    placeholder="Company Website"
+                    value={companywebsite}
+                    onChange={(e) => setcompanywebsite(e.target.value)}
+                  />
+                  <select
+                    value={disability}
+                    onChange={(e) => setdisability(e.target.value)}
+                  >
+                    <option value="" disabled hidden>Disability Type</option>
+                    {disabilities.map((disable) => (
+                      <option key={disable.id} value={disable.abbreviation}>
+                        {disable.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    value={notice_period}
+                    onChange={(e) => setNoticeperiod(e.target.value)}
+                    placeholder="Notice Period"
+                  />
+                </div>
+
+                {/* Job Description */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                  }}
+                >
+                  <textarea
+                    value={description}
+                    onChange={(e) => setJobdescription(e.target.value)}
+                    placeholder="Job Description"
+                    rows="3"
+                  />
+                  <textarea
+                    placeholder="Required Technology Stack"
+                    value={skills}
+                    onChange={(e) => setRTS(e.target.value)}
+                    rows="3"
+                  />
+                </div>
+
+                {/* Action Buttons */}
+                <div
+                  style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
+                >
+                  <Button variant="outlined" color="secondary" onClick={closeModal}>
+                    Close
+                  </Button>
+                  <Button variant="contained" color="primary" onClick={handleNext}>
+                    {isEditing ? "Update" : "Save"}
+                  </Button>
+                </div>
+                <Snackbar
+                  open={openSnackbar}
+                  autoHideDuration={6000}
+                  onClose={handleCloseSnackbar}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                  <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
+                    {errorMessage}
+                  </Alert>
+                </Snackbar>
+              </Box>
+            )}
           </Box>
-      </div>
-    </Modal>
-    <Modal
+        </div>
+      </Modal>
+      <Modal
         open={success}
         onClose={closeSuccessModal}
         aria-labelledby="success-modal-title"
