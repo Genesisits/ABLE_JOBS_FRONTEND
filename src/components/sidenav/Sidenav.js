@@ -102,201 +102,210 @@ export default function Sidenav() {
       <Toolbar />
       <Divider />
       <List>
-        {isEmployee || isEmployer ? (
-          menuItems.map((text) => (
-            <ListItem
-              button
-              key={text}
-              component={text === "Logout" ? "div" : Link}
-              to={
-                text === "Logout"
-                  ? undefined
-                  : `/${text.replace(/\s+/g, "").toLowerCase()}`
-              }
-              onClick={text === "Logout" ? handleLogout : undefined}
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#5384c9",
-                },
-              }}
-            >
-              <ListItemText primary={text} sx={{ color: "white" }} />
-            </ListItem>
-          ))
-        ) : isAdmin ? (
-          <>
-            {/* Admin-specific menu items */}
-            <ListItem
-              button
-              component={Link}
-              to="/dashboard"
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#5384c9",
-                },
-                py: 0.5,
-                px: 1,
-              }}
-            >
-              <ListItemText primary="Dashboard" sx={{ color: "white" }} />
-            </ListItem>
+  {isEmployee || isEmployer ? (
+    menuItems.map((text) => {
+      const route = `/${text.replace(/\s+/g, "").toLowerCase()}`;
+      const isActive = location.pathname === route;
 
-            <Accordion
-              sx={{
-                backgroundColor: "#1976D2",
-                color: "white",
-                boxShadow: "none",
-                "&:before": { display: "none" },
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-                aria-controls="employer-content"
-                id="employer-header"
+      return (
+        <ListItem
+          button
+          key={text}
+          component={text === "Logout" ? "div" : Link}
+          to={text === "Logout" ? undefined : route}
+          onClick={text === "Logout" ? handleLogout : undefined}
+          sx={{
+            backgroundColor: isActive ? "#0056b3" : "transparent",
+            "&:hover": {
+              backgroundColor: "#5384c9",
+            },
+          }}
+        >
+          <ListItemText primary={text} sx={{ color: "white" }} />
+        </ListItem>
+      );
+    })
+  ) : isAdmin ? (
+    <>
+      {/* Admin-specific menu items */}
+      <ListItem
+        button
+        component={Link}
+        to="/dashboard"
+        sx={{
+          backgroundColor: location.pathname === "/dashboard" ? "#5384c9" : "transparent",
+          "&:hover": {
+            backgroundColor: "#5384c9",
+          },
+          py: 0.5,
+          px: 1,
+        }}
+      >
+        <ListItemText primary="Dashboard" sx={{ color: "white" }} />
+      </ListItem>
+
+      <Accordion
+        sx={{
+          backgroundColor: "#1976D2",
+          color: "white",
+          boxShadow: "none",
+          "&:before": { display: "none" },
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+          aria-controls="employer-content"
+          id="employer-header"
+          sx={{
+            textAlign: "left",
+            "& .MuiAccordionSummary-content": {
+              marginLeft: 0,
+            },
+          }}
+        >
+          <ListItemText primary="Employers" />
+        </AccordionSummary>
+        <AccordionDetails
+          sx={{
+            maxHeight: "200px",
+            overflowY: "auto",
+            padding: 0,
+            scrollbarWidth: "thin",
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#5384c9",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#e0e0e0",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          <TextField
+            placeholder="Search Employers"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            label="Search Employers"
+            sx={{
+              width: "80%",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  border: "none",
+                },
+              },
+            }}
+          />
+          <List component="div" disablePadding>
+            {filteredEmployers.map((employer) => (
+              <ListItem
+                key={employer.id}
+                button
                 sx={{
-                  textAlign: "left", // Align text to the left
-                  "& .MuiAccordionSummary-content": {
-                    marginLeft: 0, // Ensure left alignment
-                  },
-                }}
-              >
-                <ListItemText primary="Employers" />
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{
-                  maxHeight: "200px",
-                  overflowY: "auto",
-                  padding: 0,
-                  scrollbarWidth: "thin",
-                  "&::-webkit-scrollbar": {
-                    width: "8px",
-                  },
-                  "&::-webkit-scrollbar-thumb": {
+                  backgroundColor:
+                    selectedEmployer === employer.id ? "#5384c9" : "transparent",
+                  "&:hover": {
                     backgroundColor: "#5384c9",
-                    borderRadius: "10px",
+                    borderRadius: "2px",
                   },
-                  "&::-webkit-scrollbar-track": {
-                    backgroundColor: "#e0e0e0",
-                    borderRadius: "10px",
-                  },
+                  margin: "0",
+                  padding: "0",
+                  py: 0.5,
+                  px: 1,
                 }}
               >
-                <TextField
-                  placeholder="Search Employers"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  label="Search Employers"
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={selectedEmployer === employer.id}
+                      onChange={() => {
+                        handleEmployerSelect(employer.id);
+                        handleEmployer(employer.id);
+                      }}
+                      sx={{
+                        color: "white",
+                        "&.Mui-checked": { color: "#ffffff" },
+                      }}
+                    />
+                  }
+                  label={employer.name}
                   sx={{
-                    width: "80%",
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        border: "none",
-                      },
-                    },
+                    color: "white",
+                    margin: "0px",
+                    fontSize: "0.4rem",
                   }}
                 />
-                <List component="div" disablePadding>
-                  {filteredEmployers.map((employer) => (
-                    <ListItem
-                      key={employer.id}
-                      button
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "#5384c9",
-                          borderRadius: "2px",
-                        },
-                        margin: "0",
-                        padding: "0",
-                        py: 0.5,
-                        px: 1,
-                      }}
-                    >
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={selectedEmployer === employer.id}
-                            onChange={() => {
-                              handleEmployerSelect(employer.id);
-                              handleEmployer(employer.id);
-                            }}
-                            sx={{
-                              color: "white",
-                              "&.Mui-checked": { color: "#ffffff" },
-                            }}
-                          />
-                        }
-                        label={employer.name}
-                        sx={{
-                          color: "white",
-                          margin: "0px",
-                          fontSize: "0.4rem",
-                        }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </AccordionDetails>
-            </Accordion>
+              </ListItem>
+            ))}
+          </List>
+        </AccordionDetails>
+      </Accordion>
 
-            {/* Other Admin menu items */}
-            <ListItem
-              button
-              component={Link}
-              to="/employee"
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#5384c9",
-                },
-                py: 0.5,
-                px: 1,
-              }}
-            >
-              <ListItemText primary="Employee" sx={{ color: "white" }} />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/volunteers"
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#5384c9",
-                },
-                py: 0.5,
-                px: 1,
-              }}
-            >
-              <ListItemText primary="Volunteers" sx={{ color: "white" }} />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/trainers"
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#5384c9",
-                },
-                py: 0.5,
-                px: 0.5,
-              }}
-            >
-              <ListItemText primary="Trainers" sx={{ color: "white" }} />
-            </ListItem>
-            <ListItem
-              button
-              onClick={handleLogout}
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#5384c9",
-                },
-                py: 0.5,
-                px: 1,
-              }}
-            >
-              <ListItemText primary="Logout" sx={{ color: "white" }} />
-            </ListItem>
-          </>
-        ) : null}
-      </List>
+      {/* Other Admin menu items */}
+      <ListItem
+        button
+        component={Link}
+        to="/employee"
+        sx={{
+          backgroundColor: location.pathname === "/employee" ? "#5384c9" : "transparent",
+          "&:hover": {
+            backgroundColor: "#5384c9",
+          },
+          py: 0.5,
+          px: 1,
+        }}
+      >
+        <ListItemText primary="Employee" sx={{ color: "white" }} />
+      </ListItem>
+      <ListItem
+        button
+        component={Link}
+        to="/volunteers"
+        sx={{
+          backgroundColor: location.pathname === "/volunteers" ? "#5384c9" : "transparent",
+          "&:hover": {
+            backgroundColor: "#5384c9",
+          },
+          py: 0.5,
+          px: 1,
+        }}
+      >
+        <ListItemText primary="Volunteers" sx={{ color: "white" }} />
+      </ListItem>
+      <ListItem
+        button
+        component={Link}
+        to="/trainers"
+        sx={{
+          backgroundColor: location.pathname === "/trainers" ? "#5384c9" : "transparent",
+          "&:hover": {
+            backgroundColor: "#5384c9",
+          },
+          py: 0.5,
+          px: 0.5,
+        }}
+      >
+        <ListItemText primary="Trainers" sx={{ color: "white" }} />
+      </ListItem>
+      <ListItem
+        button
+        onClick={handleLogout}
+        sx={{
+          "&:hover": {
+            backgroundColor: "#5384c9",
+          },
+          py: 0.5,
+          px: 1,
+        }}
+      >
+        <ListItemText primary="Logout" sx={{ color: "white" }} />
+      </ListItem>
+    </>
+  ) : null}
+</List>
+
       {selectedEmployerID && <Employers Employer={selectedEmployerID} />}
     </Drawer>
   );
