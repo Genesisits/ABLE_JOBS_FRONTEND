@@ -79,6 +79,7 @@ export default function Sidenav() {
     localStorage.removeItem("is_admin");
     // Navigate to login or home page
     navigate("/login");
+    window.location.reload();
   };
 
   // Now rendering Drawer based on user role
@@ -133,7 +134,7 @@ export default function Sidenav() {
         component={Link}
         to="/dashboard"
         sx={{
-          backgroundColor: location.pathname === "/dashboard" ? "#5384c9" : "transparent",
+          backgroundColor: location.pathname === "/dashboard" ? "#0056b3" : "transparent",
           "&:hover": {
             backgroundColor: "#5384c9",
           },
@@ -205,7 +206,7 @@ export default function Sidenav() {
                 button
                 sx={{
                   backgroundColor:
-                    selectedEmployer === employer.id ? "#5384c9" : "transparent",
+                    selectedEmployer === employer.id ? "#0056b3" : "transparent",
                   "&:hover": {
                     backgroundColor: "#5384c9",
                     borderRadius: "2px",
@@ -249,7 +250,7 @@ export default function Sidenav() {
         component={Link}
         to="/employee"
         sx={{
-          backgroundColor: location.pathname === "/employee" ? "#5384c9" : "transparent",
+          backgroundColor: location.pathname === "/employee" ? "#0056b3" : "transparent",
           "&:hover": {
             backgroundColor: "#5384c9",
           },
@@ -264,7 +265,7 @@ export default function Sidenav() {
         component={Link}
         to="/volunteers"
         sx={{
-          backgroundColor: location.pathname === "/volunteers" ? "#5384c9" : "transparent",
+          backgroundColor: location.pathname === "/volunteers" ? "#0056b3" : "transparent",
           "&:hover": {
             backgroundColor: "#5384c9",
           },
@@ -279,7 +280,7 @@ export default function Sidenav() {
         component={Link}
         to="/trainers"
         sx={{
-          backgroundColor: location.pathname === "/trainers" ? "#5384c9" : "transparent",
+          backgroundColor: location.pathname === "/trainers" ? "#0056b3" : "transparent",
           "&:hover": {
             backgroundColor: "#5384c9",
           },

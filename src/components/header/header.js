@@ -18,11 +18,15 @@ export default function Header() {
   useEffect(() => {
     const isEmployee = localStorage.getItem('is_employee') === 'true';
     const isEmployer = localStorage.getItem('is_employer') === 'true';
+    const isAdmin = localStorage.getItem('Admin') === 'true';
+
 
     if (isEmployee) {
       setUserRole('employee');
     } else if (isEmployer) {
       setUserRole('employer');
+    }else if (isAdmin) {
+      setUserRole('Admin');
     } else {
       setUserRole(null);
     }
@@ -50,7 +54,7 @@ export default function Header() {
     }
   }, [location]);
 
-  const isLandingOrRelevantPage = ['/', '/home', '/login', '/register', '/employeeregister', '/trainer', '/volunteer', '/forgetpassword','/email','/resetpassword'].includes(location.pathname);
+  const isLandingOrRelevantPage = ['/', '/home', '/login', '/register', '/employeeregister', '/trainer', '/volunteer', '/forgetpassword','/email','/resetpassword'];
 
   const openUploadDialog = () => setUploadDialogOpen(true);
   const closeUploadDialog = () => setUploadDialogOpen(false);
@@ -77,49 +81,71 @@ export default function Header() {
           </Link>
         </div>
           <ul className="navbar-menu">
+    {userRole === 'admin' ? (
+      <li>
+        <Link to="/">
+          <Button className="vender-button" variant="standard">
+            <span>Home</span>
+          </Button>
+        </Link>
+      </li>
+    ) : (
+      <>
+        {/* Show Home for other roles */}
+        <li>
+          <Link to="/">
+            <Button className="vender-button" variant="standard">
+              <span>Home</span>
+            </Button>
+          </Link>
+        </li>
+  
+        {/* Upload button visible only to employees */}
+        {userRole === 'employee' && !isLandingOrRelevantPage.includes(location.pathname) && (
+          <li>
+            <Button style={{ color: 'white', marginTop: '-4%' }} onClick={openUploadDialog}>
+              Upload
+            </Button>
+          </li>
+        )}
+  
+        {/* Profile link visible only to employees and employers */}
+        {(userRole === 'employee' || userRole === 'employer') && 
+         !isLandingOrRelevantPage.includes(location.pathname) && (
+          <li>
+            <Link to="/profile" className="profile-container1">
+              <img className="profile-avatar1" src={avatar} alt="Profile" />
+              <p className="profile-name1">Profile</p>
+            </Link>
+          </li>
+        )}
+  
+        {/* Login and Register buttons for unauthenticated users */}
+        {isLandingOrRelevantPage.includes(location.pathname) && !userRole && (
+          <>
             <li>
-              <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
-                <Button className="vender-button" variant="standard"><span>Home</span></Button>
-              </Link>
-            </li>
-            {/* Upload button visible only to employees and not on landing/home/login/register pages */}
-            {userRole === 'employee' && !isLandingOrRelevantPage && (
-              <li>
-                <Button style={{ color: 'white', marginTop: '-4%' }} onClick={openUploadDialog}>
-                  Upload
-                </Button>
-              </li>
-            )}
-
-            {/* Profile link visible only to employees and employers, and not on landing/home/login/register pages */}
-            {(userRole === 'employee' || userRole === 'employer') && !isLandingOrRelevantPage && (
-              <li>
-                <Link to="/profile" className="profile-container1">
-                  <img className="profile-avatar1" src={avatar} alt="Profile" />
-                  <p className="profile-name1">Profile</p>
+              <div className="vendor_login_button">
+                <Link to="/login">
+                  <Button className="vender-button" variant="outlined">
+                    <span>Login</span>
+                  </Button>
                 </Link>
-              </li>
-            )}
-            {/* Show Login and Register buttons if on landing/home/login/register pages or if the user is not an employee/employer */}
-            {(isLandingOrRelevantPage && !userRole) && (
-              <>
-                <li>
-                  <div className="vendor_login_button">
-                    <Link to="/login">
-                      <Button className="vender-button" variant="outlined"><span>Login</span></Button>
-                    </Link>
-                  </div>
-                </li>
-                <li>
-                  <div className="vendor_login_button">
-                    <Link to="/register">
-                      <Button className="vender-button" variant="outlined"><span>Register</span></Button>
-                    </Link>
-                  </div>
-                </li>
-              </>
-            )}
-          </ul>
+              </div>
+            </li>
+            <li>
+              <div className="vendor_login_button">
+                <Link to="/register">
+                  <Button className="vender-button" variant="outlined">
+                    <span>Register</span>
+                  </Button>
+                </Link>
+              </div>
+            </li>
+          </>
+        )}
+      </>
+    )}
+  </ul>
         </nav>
       </div>
       <UploadResume open={uploadDialogOpen} onClose={closeUploadDialog} />

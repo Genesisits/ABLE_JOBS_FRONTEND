@@ -37,15 +37,19 @@ function Login() {
   };
 
   const handleSubmit = () => {
-    setLoading(true); // Show the loading spinner
+    setLoading(true);
     if (username === "" && password === "") {
       setErrorMessage("Enter both username and password");
+      setLoading(false);
     } else if (username === "") {
       setErrorMessage("Enter a username");
+      setLoading(false);
     } else if (password === "") {
       setErrorMessage("Enter a password");
+      setLoading(false);
     } else if (!validateUsername(username)) {
       setErrorMessage("Enter a valid email");
+      setLoading(false);
     } else {
       const payload = { email: username, password };
 
@@ -54,12 +58,12 @@ function Login() {
         .then((response) => {
           const { user_role } = response.data.user;
 
-          // Clear all role flags to avoid conflict
+
           localStorage.removeItem("is_employee");
           localStorage.removeItem("is_employer");
           localStorage.removeItem("is_admin");
 
-          // Set specific role and navigate to the appropriate page
+
           localStorage.setItem("access_token", response.data.access);
           localStorage.setItem("refresh_token", response.data.refresh);
           localStorage.setItem("isLoggedIn", true);
@@ -69,15 +73,19 @@ function Login() {
             navigate("/jobs");
           } else if (user_role === "Employee") {
             localStorage.setItem("is_employee", "true");
-            navigate("/findajob",{ state: { fromLogin: true } });
+            navigate("/findajob", { state: { fromLogin: true } });
           } else if (user_role === "Admin") {
             localStorage.setItem("is_admin", "true");
             navigate("/dashboard");
           } else {
-            // Handle unexpected roles if needed
             console.warn("Unknown job role:", user_role);
             setErrorMessage("Invalid user role");
           }
+
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         })
         .catch((error) => {
           console.error(error.response?.data);
@@ -85,7 +93,7 @@ function Login() {
           setErrorMessage("Invalid credentials");
         })
         .finally(() => {
-          setLoading(false); // Hide the spinner once the request is complete
+          setLoading(false);
         });
     }
   };
@@ -98,7 +106,7 @@ function Login() {
         </div>
       )}
 
-      {/* <div className="flex-item-login"> */}
+
       <div className="container1">
         <div className="flex-item-login">
           <h3>Able Jobs</h3>
@@ -131,7 +139,7 @@ function Login() {
             </button>
             <div className="links-container">
               <p className="link-item">
-                <Link to="/register">Register  |</Link>  
+                <Link to="/register">Register  |</Link>
               </p>
               <p className="link-item">
                 <Link to="/forgetpassword">Forgot password?</Link>
@@ -146,7 +154,7 @@ function Login() {
           <img src={mail} alt="Mail" className="imageDetails" />
         </div>
       </div>
-      {/* </div> */}
+
     </div>
   );
 }
