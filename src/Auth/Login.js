@@ -109,7 +109,7 @@ function Login() {
 
       <div className="container1">
         <div className="flex-item-login">
-          <h3>Able Jobs</h3>
+          <h3 style={{color:'blue'}}>Able Jobs</h3>
           <input
             type="text"
             placeholder="username"

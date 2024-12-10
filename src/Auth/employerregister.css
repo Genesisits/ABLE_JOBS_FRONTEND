@@ -1,18 +1,17 @@
-/* Customize the input box appearance */
+
 .custom-input input {
-  /* background-color: #f9f9f9;  */
   border: 2px solid #ccc; 
-  padding: 12px; /* Increase padding */
-  border-radius: 8px; /* Rounded corners */
-  font-size: 16px; /* Slightly larger font */
-  transition: all 0.3s ease; /* Smooth transitions for hover/focus */
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Light inner shadow */
-  outline: none !important; /* Ensure outline is removed */
+  padding: 12px; 
+  border-radius: 8px; 
+  font-size: 16px; 
+  transition: all 0.3s ease; 
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); 
+  outline: none !important;
 }
 
-/* Customize MUI-specific input styling to remove outline */
+
 .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: transparent !important; /* Remove MUI focus border */
+  border-color: transparent !important; 
 }
 
 /* Customize label appearance */
