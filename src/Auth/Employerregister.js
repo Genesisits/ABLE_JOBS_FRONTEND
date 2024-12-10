@@ -9,7 +9,31 @@ import { Password } from "@mui/icons-material";
 import { InputAdornment} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material'; // Import icons
 
-
+const industries = [
+    { id: "1", name: "IT and IT Services", abbreviation: "IT and IT Services" },
+    {
+      id: "1",
+      name: "Banking, Financial Service, and Insurance",
+      abbreviation: "Banking, Financial Service, and Insurance",
+    },
+    {
+      id: "1",
+      name: "Retail and E-Commerce",
+      abbreviation: "Retail and E-Commerce",
+    },
+    { id: "1", name: "FinTech", abbreviation: "FinTech" },
+    { id: "1", name: "Tele Communications", abbreviation: "Tele Communications" },
+    {
+      id: "1",
+      name: "Healthcare and pharmaceuticals",
+      abbreviation: "Healthcare and pharmaceuticals",
+    },
+    {
+      id: "1",
+      name: "Education and Training",
+      abbreviation: "Education and Training",
+    },
+  ];
 
 function Employerregister({ open, onClose }) {
     const navigate = useNavigate();
@@ -375,10 +399,11 @@ function Employerregister({ open, onClose }) {
 
                                     }}
                                 >
-                                    <MenuItem value="1-10">1-10</MenuItem>
-                                    <MenuItem value="11-50">11-50</MenuItem>
-                                    <MenuItem value="51-200">51-200</MenuItem>
-                                    <MenuItem value="200+">200+</MenuItem>
+                                   {industries.map((Industrie) => (
+                <MenuItem key={Industrie.id} value={Industrie.abbreviation}>
+                  {Industrie.name}
+                </MenuItem>
+              ))}
                                 </TextField>
 
                             </Grid>
@@ -442,7 +467,7 @@ function Employerregister({ open, onClose }) {
                       label="Password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                    
+                      style={{width:'110%'}}                         
                       fullWidth
                       variant="outlined"
                       error={!!errors.password}

@@ -268,7 +268,7 @@ function Volunteer({ open, onClose }) {
     setState(""); // Reset state selection
   };
   const handleSubmit = () => {
-    
+
     if (!resume || !Adhar || !pancard || !userfname || !userlname || !useremail || !userpassword || !usermobile || !useraddress || !country || !state || !qualification || !purpose || !no_of_hours) {
       setSnackbarMessage("Please fill all the required fields.");
       setSnackbarSeverity("error");
@@ -330,21 +330,21 @@ function Volunteer({ open, onClose }) {
           setSnackbarSeverity("error");
           setOpenSnackbar(true);
         }
-      }).finally(()=> {
+      }).finally(() => {
         setLoading(false)
       })
   };
 
   return (
     <div style={{ marginTop: "2%" }}>
-      
-       <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-       {loading && (
-        <div className="full-page-spinner">
-          <CircularProgress color="primary" size={50} />
-        </div>
-      )}
-       <DialogTitle style={{textAlign:'center'}}>Volunteer Registration</DialogTitle>
+
+      <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+        {loading && (
+          <div className="full-page-spinner">
+            <CircularProgress color="primary" size={50} />
+          </div>
+        )}
+        <DialogTitle style={{ textAlign: 'center' }}>Volunteer Registration</DialogTitle>
         <ThemeProvider theme={theme}>
           <Box style={{ margin: "2% 5%" }}>
             <Grid container spacing={1}>
@@ -498,9 +498,15 @@ function Volunteer({ open, onClose }) {
                         display: "flex",
                         alignItems: "center",
                         // margin: "10px 0px",
-                        height: 45, // Adjust the height
-                        padding: "4px 10px", // Reduce padding
-                        fontSize: "0.875rem", // Adjust font size if needed
+                        height: 45,
+                        padding: "4px 10px",
+                        fontSize: "0.875rem",
+                        "&.Mui-focused": {
+                          outline: "2px solid #3f51b5",
+                          outlineOffset: "2px",
+                        },
+                        height: "40px",
+                        backgroundColor: "#fff",
                       }}
                     >
                       <MenuItem value="">Qualification</MenuItem>
@@ -525,9 +531,15 @@ function Volunteer({ open, onClose }) {
                       inputProps={{ "aria-label": "Select Country" }}
                       sx={{
                         margin: "10px 0px",
-                        height: 45, // Adjust the height
-                        padding: "4px 10px", // Reduce padding
-                        fontSize: "0.875rem", // Adjust font size if needed
+                        height: 45,
+                        padding: "4px 10px",
+                        fontSize: "0.875rem",
+                        "&.Mui-focused": {
+                          outline: "2px solid #3f51b5",
+                          outlineOffset: "2px",
+                        },
+                        height: "40px",
+                        backgroundColor: "#fff",
                       }}
                     >
                       <MenuItem value="">Select Country</MenuItem>
@@ -549,9 +561,15 @@ function Volunteer({ open, onClose }) {
                       disabled={!country}
                       sx={{
                         margin: "10px 0px",
-                        height: 45, // Adjust the height
-                        padding: "4px 10px", // Reduce padding
-                        fontSize: "0.875rem", // Adjust font size if needed
+                        height: 45,
+                        padding: "4px 10px",
+                        fontSize: "0.875rem",
+                        "&.Mui-focused": {
+                          outline: "2px solid #3f51b5",
+                          outlineOffset: "2px",
+                        },
+                        height: "40px",
+                        backgroundColor: "#fff",
                       }}
                     >
                       <MenuItem value="">Select State</MenuItem>

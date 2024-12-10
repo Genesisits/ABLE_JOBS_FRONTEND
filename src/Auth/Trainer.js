@@ -253,10 +253,10 @@ function Trainer({ open, onClose }) {
   const handleSetState = (e, value) => setState(value);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("error"); 
+  const [snackbarSeverity, setSnackbarSeverity] = useState("error");
   const handleSnackbarClose = () => setSnackbarOpen(false);
   const [loading, setLoading] = useState(false)
-  
+
   const handleCountryChange = (e) => {
     const country = e.target.value;
     setCountry(country);
@@ -346,172 +346,172 @@ function Trainer({ open, onClose }) {
     formData.append("qualification", qualification)
     formData.append("availability_of_work", availability_of_work);
     formData.append("job_experience", experience);
-    formData.append("skills",skills)
+    formData.append("skills", skills)
     formData.append("aadhaar_card", Adhar);
     formData.append("pan_card", pancard);
     formData.append("resume", resume);
     axios
-    .post(`${TRAINER_REGISTER}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then((response) => {
-      setSnackbarMessage("Registration successful!");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-      setTimeout(()=> {
-        onClose(false)
-      },1000)
-      console.log(response.data);
-    })
-    .catch((error) => {
-      setSnackbarMessage("Registration failed. Try again!");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-      console.error(error);
-    }).finally(() => {
-      setLoading(false)
-    })
+      .post(`${TRAINER_REGISTER}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setSnackbarMessage("Registration successful!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          onClose(false)
+        }, 1000)
+        console.log(response.data);
+      })
+      .catch((error) => {
+        setSnackbarMessage("Registration failed. Try again!");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+        console.error(error);
+      }).finally(() => {
+        setLoading(false)
+      })
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-        <DialogTitle style={{textAlign:'center'}}>Trainer Registration</DialogTitle>
-    <div>
-      <ThemeProvider theme={theme}>
-      {loading && (
-        <div className="full-page-spinner">
-          <CircularProgress color="primary" size={50} />
-        </div>
-      )}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={4000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-        <Box style={{ margin: "1% 10%" }}>
-          <Grid container spacing={1}>
-            <Grid item xs={6}>
-              <TextField
-                label="First name"
-                value={userfname}
-                onChange={(e) => setUserfname(e.target.value)}
-                fullWidth
-                // margin="dense"
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
+      <DialogTitle style={{ textAlign: 'center' }}>Trainer Registration</DialogTitle>
+      <div>
+        <ThemeProvider theme={theme}>
+          {loading && (
+            <div className="full-page-spinner">
+              <CircularProgress color="primary" size={50} />
+            </div>
+          )}
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={4000}
+            onClose={handleSnackbarClose}
+          >
+            <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+          <Box style={{ margin: "1% 10%" }}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
+                <TextField
+                  label="First name"
+                  value={userfname}
+                  onChange={(e) => setUserfname(e.target.value)}
+                  fullWidth
+                  // margin="dense"
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
                     },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Last name"
+                  value={userlname}
+                  onChange={(e) => setUserlname(e.target.value)}
+                  fullWidth
+                  // margin="dense"
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
                     },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Email"
+                  value={useremail}
+                  onChange={(e) => setEmail(e.target.value)}
+                  fullWidth
+                  // margin="dense"
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
                     },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Last name"
-                value={userlname}
-                onChange={(e) => setUserlname(e.target.value)}
-                fullWidth
-                // margin="dense"
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Password"
+                  value={userpassword}
+                  onChange={(e) => setPassword(e.target.value)}
+                  fullWidth
+                  // margin="dense"
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
                     },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Mobile Number"
+                  value={usermobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  fullWidth
+                  // margin="dense"
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
                     },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Email"
-                value={useremail}
-                onChange={(e) => setEmail(e.target.value)}
-                fullWidth
-                // margin="dense"
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Password"
-                value={userpassword}
-                onChange={(e) => setPassword(e.target.value)}
-                fullWidth
-                // margin="dense"
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Mobile Number"
-                value={usermobile}
-                onChange={(e) => setMobile(e.target.value)}
-                fullWidth
-                // margin="dense"
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={3}>
+                  }}
+                />
+              </Grid>
+              <Grid item xs={3}>
                 <FormControl fullWidth>
                   <Select
                     value={country || ""}
@@ -520,9 +520,15 @@ function Trainer({ open, onClose }) {
                     inputProps={{ "aria-label": "Select Country" }}
                     sx={{
                       margin: "10px 0px",
-                      height: 45, // Adjust the height
-                      padding: "4px 10px", // Reduce padding
-                      fontSize: "0.875rem", // Adjust font size if needed
+                      height: 45,
+                      padding: "4px 10px",
+                      fontSize: "0.875rem",
+                      "&.Mui-focused": {
+                        outline: "2px solid #3f51b5",
+                        outlineOffset: "2px",
+                      },
+                      height: "40px",
+                      backgroundColor: "#fff",
                     }}
                   >
                     <MenuItem value="">Select Country</MenuItem>
@@ -544,9 +550,15 @@ function Trainer({ open, onClose }) {
                     disabled={!country}
                     sx={{
                       margin: "10px 0px",
-                      height: 45, // Adjust the height
-                      padding: "4px 10px", // Reduce padding
-                      fontSize: "0.875rem", // Adjust font size if needed
+                      height: 45,
+                      padding: "4px 10px",
+                      fontSize: "0.875rem",
+                      "&.Mui-focused": {
+                        outline: "2px solid #3f51b5",
+                        outlineOffset: "2px",
+                      },
+                      height: "40px",
+                      backgroundColor: "#fff",
                     }}
                   >
                     <MenuItem value="">Select State</MenuItem>
@@ -558,249 +570,262 @@ function Trainer({ open, onClose }) {
                   </Select>
                 </FormControl>
               </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Languages Known"
-                value={languages_known}
-                onChange={(e) => setKnownLanguages(e.target.value)}
-                fullWidth
-                // margin="dense"
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Experience"
-                value={experience}
-                onChange={(e) => setExperience(e.target.value)}
-                // margin="dense"
-                fullWidth
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="skills"
-                value={skills}
-                onChange={(e) => setSkills(e.target.value)}
-                // margin="dense"
-                fullWidth
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "transparent",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "transparent",
-                    },
-                  },
-                }}
-              />
-            </Grid>           
-            <Grid item xs={4}>
-              <FormControl fullWidth>
-                <Select
-                  value={availability_of_work}
-                  onChange={(e) => setWorkAvailability(e.target.value)}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
+              <Grid item xs={4}>
+                <TextField
+                  label="Languages Known"
+                  value={languages_known}
+                  onChange={(e) => setKnownLanguages(e.target.value)}
+                  fullWidth
+                  // margin="dense"
+                  className="custom-input"
                   sx={{
-                    margin: "10px 0px",
-                    height: 45, // Adjust the height
-                    padding: "4px 10px", // Reduce padding
-                    fontSize: "0.875rem", // Adjust font size if needed
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
+                    },
                   }}
-                >
-                  <MenuItem value="">Availability of Work</MenuItem>
-                  <MenuItem value="hybrid">Hybrid</MenuItem>
-                  <MenuItem value="remote">Remote</MenuItem>
-                  <MenuItem value="location-based">Location based</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-            <FormControl fullWidth>
-                <Select
-                  value={qualification}
-                  onChange={(e) => setQualification(e.target.value)}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Experience"
+                  value={experience}
+                  onChange={(e) => setExperience(e.target.value)}
+                  // margin="dense"
+                  fullWidth
+                  className="custom-input"
                   sx={{
-                    margin: "10px 0px",
-                    height: 45, // Adjust the height
-                    padding: "4px 10px", // Reduce padding
-                    fontSize: "0.875rem", // Adjust font size if needed
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
+                    },
                   }}
-                >
-                  <MenuItem value="">Qualification</MenuItem>
-                  <MenuItem value="10th equivalent">10th/ Equivalent</MenuItem>
-                  <MenuItem value="12th equivalent">12th /Equivalent</MenuItem>
-                  <MenuItem value="degree equivalent">Degree/ Equivalent</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-              <FormControlLabel
-                required
-                control={
-                  <Checkbox
-                    hecked={willing_to_relocate}
-                    onChange={(e) => setWillingToRelocate(e.target.checked)}
-                  />
-                }
-                label="Willing to relocate"
-                componentsProps={{
-                  typography: { color: "black" },
-                }}
-              />
-            </Grid>
-          </Grid>
-          
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="skills"
+                  value={skills}
+                  onChange={(e) => setSkills(e.target.value)}
+                  // margin="dense"
+                  fullWidth
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "transparent",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "transparent",
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <FormControl fullWidth>
+                  <Select
+                    value={availability_of_work}
+                    onChange={(e) => setWorkAvailability(e.target.value)}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
 
-          <Grid container spacing={6}>
-            <Grid item xs={4}>
-              <label>Pan Card</label>
-              <TextField
-                type="file"
-                onChange={(event) => setPancard(event.target.files[0])}
-                fullWidth
-                margin="dense"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    backgroundColor: "#fff",
-                    "& fieldset": {
-                      borderColor: "#ccc",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#888",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#000",
-                    },
-                  },
-                  '& input[type="file"]': {
-                    display: "block",
-                    cursor: "pointer",
-                  },
-                }}
-              />
+                    sx={{
+                      margin: "10px 0px",
+                      height: 45,
+                      padding: "4px 10px",
+                      fontSize: "0.875rem",
+                      "&.Mui-focused": {
+                        outline: "2px solid #3f51b5",
+                        outlineOffset: "2px",
+                      },
+                      height: "40px",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <MenuItem value="">Availability of Work</MenuItem>
+                    <MenuItem value="hybrid">Hybrid</MenuItem>
+                    <MenuItem value="remote">Remote</MenuItem>
+                    <MenuItem value="location-based">Location based</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={4}>
+                <FormControl fullWidth>
+                  <Select
+                    value={qualification}
+                    onChange={(e) => setQualification(e.target.value)}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
+                    sx={{
+                      margin: "10px 0px",
+                      height: 45,
+                      padding: "4px 10px",
+                      fontSize: "0.875rem",
+                      "&.Mui-focused": {
+                        outline: "2px solid #3f51b5",
+                        outlineOffset: "2px",
+                      },
+                      height: "40px",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <MenuItem value="">Qualification</MenuItem>
+                    <MenuItem value="10th equivalent">10th/ Equivalent</MenuItem>
+                    <MenuItem value="12th equivalent">12th /Equivalent</MenuItem>
+                    <MenuItem value="degree equivalent">Degree/ Equivalent</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={4}>
+                <FormControlLabel
+                  required
+                  control={
+                    <Checkbox
+                      hecked={willing_to_relocate}
+                      onChange={(e) => setWillingToRelocate(e.target.checked)}
+                    />
+                  }
+                  label="Willing to relocate"
+                  componentsProps={{
+                    typography: { color: "black" },
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <label>Adhar Card</label>
-              <TextField
-                type="file"
-                onChange={(event) => setAadhar(event.target.files[0])}
-                fullWidth
-                margin="dense"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    backgroundColor: "#fff",
-                    "& fieldset": {
-                      borderColor: "#ccc",
+
+
+            <Grid container spacing={6}>
+              <Grid item xs={4}>
+                <label>Pan Card</label>
+                <TextField
+                  type="file"
+                  onChange={(event) => setPancard(event.target.files[0])}
+                  fullWidth
+                  margin="dense"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "#fff",
+                      "& fieldset": {
+                        borderColor: "#ccc",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#888",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#000",
+                      },
                     },
-                    "&:hover fieldset": {
-                      borderColor: "#888",
+                    '& input[type="file"]': {
+                      display: "block",
+                      cursor: "pointer",
                     },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#000",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <label>Adhar Card</label>
+                <TextField
+                  type="file"
+                  onChange={(event) => setAadhar(event.target.files[0])}
+                  fullWidth
+                  margin="dense"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "#fff",
+                      "& fieldset": {
+                        borderColor: "#ccc",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#888",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#000",
+                      },
                     },
-                  },
-                  '& input[type="file"]': {
-                    display: "block",
-                    cursor: "pointer",
-                  },
-                }}
-              />
+                    '& input[type="file"]': {
+                      display: "block",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <label>Resume</label>
+                <TextField
+                  type="file"
+                  onChange={(event) => setResume(event.target.files[0])}
+                  fullWidth
+                  margin="dense"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className="custom-input"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "#fff",
+                      "& fieldset": {
+                        borderColor: "#ccc",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#888",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#000",
+                      },
+                    },
+                    '& input[type="file"]': {
+                      display: "block",
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <label>Resume</label>
-              <TextField
-                type="file"
-                onChange={(event) => setResume(event.target.files[0])}
-                fullWidth
-                margin="dense"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                className="custom-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    backgroundColor: "#fff",
-                    "& fieldset": {
-                      borderColor: "#ccc",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#888",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#000",
-                    },
-                  },
-                  '& input[type="file"]': {
-                    display: "block",
-                    cursor: "pointer",
-                  },
-                }}
-              />
-            </Grid>
-          </Grid>
-          {/* <Grid item xs={}> */}
-          <TextField
-            label="Address"
-            value={useraddress}
-            onChange={(e) => setAddress(e.target.value)}
-            fullWidth
-            margin="dense"
-            multiline
-            rows={3} // Specifies 4 rows
-          />
-          {/* </Grid> */}
-          {/* <Button onClick={handleSubmit}>Register</Button> */}
-          <DialogActions>
-                        <Button onClick={onClose} color="secondary">Cancel</Button>
-                        <Button onClick={handleSubmit} color="primary">Register</Button>
-                    </DialogActions>
-        </Box>
-      </ThemeProvider>
-    </div>
+            {/* <Grid item xs={}> */}
+            <TextField
+              label="Address"
+              value={useraddress}
+              onChange={(e) => setAddress(e.target.value)}
+              fullWidth
+              margin="dense"
+              multiline
+              rows={3} // Specifies 4 rows
+            />
+            {/* </Grid> */}
+            {/* <Button onClick={handleSubmit}>Register</Button> */}
+            <DialogActions>
+              <Button onClick={onClose} color="secondary">Cancel</Button>
+              <Button onClick={handleSubmit} color="primary">Register</Button>
+            </DialogActions>
+          </Box>
+        </ThemeProvider>
+      </div>
     </Dialog>
   );
 }

@@ -1262,79 +1262,108 @@ function Employeeregister({ open, onClose }) {
         return (
           <div className="special-considerations">
             <Box style={{ margin: "2% 5%" }}>
-              <Grid container spacing={4}>
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <Select
-                      value={type}
-                      onChange={(e) => setType(e.target.value)}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem value="">Availability of Work</MenuItem>
-                      <MenuItem value="hybrid">Hybrid</MenuItem>
-                      <MenuItem value="remote">Remote</MenuItem>
-                      <MenuItem value="location-based">Location based</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <Select
-                      value={disability}
-                      F
-                      onChange={(e) => setDisability(e.target.value)}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem value="">All Disabilities</MenuItem>
-                      {disabilities.map((disabilit) => (
-                        <MenuItem
-                          key={disabilit.id}
-                          value={disabilit.abbreviation}
-                        >
-                          {disabilit.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid container spacing={6}>
-                  <Grid item xs={4}>
-                    <input
-                      type="text"
-                      placeholder="Disability Percentage"
-                      value={disabilitypercentage}
-                      onChange={(e) => setDisabilitypercentage(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <input
-                      type="text"
-                      value={languages_known}
-                      onChange={(e) => setLanguagesknow(e.target.value)}
-                      placeholder="Please enter known languages with comma"
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <FormControlLabel
-                      required
-                      control={
-                        <Checkbox
-                          hecked={willingToRelocate}
-                          onChange={(e) =>
-                            setWillingToRelocate(e.target.checked)
-                          }
-                        />
-                      }
-                      label="Willing to relocate"
-                      componentsProps={{
-                        typography: { color: "black" },
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
+            <Grid container spacing={4}>
+  <Grid item xs={12} sm={6}>
+    <FormControl fullWidth>
+      <Select
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        displayEmpty
+        inputProps={{ "aria-label": "Without label" }}
+        sx={{
+          "&.Mui-focused": {
+            outline: "2px solid #3f51b5",
+            outlineOffset: "2px",
+          },
+          height: "40px", 
+          backgroundColor: "#fff", 
+        }}
+      >
+        <MenuItem value="">Availability of Work</MenuItem>
+        <MenuItem value="hybrid">Hybrid</MenuItem>
+        <MenuItem value="remote">Remote</MenuItem>
+        <MenuItem value="location-based">Location based</MenuItem>
+      </Select>
+    </FormControl>
+  </Grid>
+
+  <Grid item xs={12} sm={6}>
+    <FormControl fullWidth>
+      <Select
+        value={disability}
+        onChange={(e) => setDisability(e.target.value)}
+        displayEmpty
+        inputProps={{ "aria-label": "Without label" }}
+        sx={{
+          "&.Mui-focused": {
+            outline: "2px solid #3f51b5", 
+            outlineOffset: "2px",
+          },
+          height: "40px",
+          backgroundColor: "#fff",
+        }}
+      >
+        <MenuItem value="">All Disabilities</MenuItem>
+        {disabilities.map((disabilit) => (
+          <MenuItem key={disabilit.id} value={disabilit.abbreviation}>
+            {disabilit.name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  </Grid>
+
+  <Grid item xs={12} sm={6}>
+    <input
+      type="text"
+      placeholder="Disability Percentage"
+      value={disabilitypercentage}
+      onChange={(e) => setDisabilitypercentage(e.target.value)}
+      style={{
+        width: "100%",
+        height: "40px", // Match Select height
+        padding: "8px",
+        border: "1px solid #ccc",
+        borderRadius: "4px",
+        boxSizing: "border-box",
+      }}
+    />
+  </Grid>
+
+  <Grid item xs={12} sm={6}>
+    <input
+      type="text"
+      value={languages_known}
+      onChange={(e) => setLanguagesknow(e.target.value)}
+      placeholder="Please enter known languages with comma"
+      style={{
+        width: "100%",
+        height: "40px", // Match Select height
+        padding: "8px",
+        border: "1px solid #ccc",
+        borderRadius: "4px",
+        boxSizing: "border-box",
+      }}
+    />
+  </Grid>
+
+  <Grid item xs={12} sm={6}>
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={willingToRelocate}
+          onChange={(e) => setWillingToRelocate(e.target.checked)}
+        />
+      }
+      label="Willing to relocate"
+      componentsProps={{
+        typography: { color: "black" },
+      }}
+    />
+  </Grid>
+</Grid>
+
+
               {/* <Grid container spacing={1} style={{ margin: "2%" }}> */}
 
               {/* </Grid> */}
