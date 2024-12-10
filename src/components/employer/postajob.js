@@ -273,11 +273,11 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
       setOpenSnackbar(true);
       return;
     }
-    if (!number_of_positions.match(regex1)) {
+    if (!number_of_positions || !String(number_of_positions).match(regex1)) {
       setErrorMessage('In Number of Positions Field Allow Only Numbers');
       setOpenSnackbar(true);
       return;
-    }
+  }
 
     if (!companywebsite.match(urlRegex)) {
       setErrorMessage('Company website must follow the format: https://www.companyname.com');
