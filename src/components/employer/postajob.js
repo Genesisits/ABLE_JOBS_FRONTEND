@@ -317,6 +317,9 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
         .then((response) => {
           console.log("Job updated:", response);
           setSuccess(true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         })
         .catch((error) => {
           console.log("Error updating job:", error);
@@ -329,6 +332,9 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
         .then((response) => {
           console.log("Job added:", response);
           setSuccess(true)
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         })
         .catch((error) => {
           console.log("Error adding job:", error);
