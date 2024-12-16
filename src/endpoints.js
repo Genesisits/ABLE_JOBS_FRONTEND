@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.ablejobshub.com/api';
+export const BASE_URL = 'http://148.135.136.60:8000/api';
 export const LOGIN= `${BASE_URL}/user_login/`;
 export const REGISTER = `${BASE_URL}/employee_signup/`;
 export const EMPLOYER_REGISTER = `${BASE_URL}/employer_signup/`
