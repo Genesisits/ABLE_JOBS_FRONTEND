@@ -60,6 +60,8 @@ import { ThemeConsume } from "styled-components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Select } from "@mui/material";
 import { blue } from "@mui/material/colors";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { InputAdornment} from '@mui/material';
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -256,6 +258,7 @@ function Employeeregister({ open, onClose }) {
   const [error, setError] = useState(null);
   const [errorRadio, setErrorRadio] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [educations, setEducations] = useState([
     {
       degree_level: "SSC",
@@ -424,7 +427,13 @@ function Employeeregister({ open, onClose }) {
       selectedSkills.filter((skill) => skill !== skillToRemove)
     );
   };
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword); // Toggle password visibility
+  };
 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+  };
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
@@ -583,9 +592,21 @@ function Employeeregister({ open, onClose }) {
   };
 
   const handleSkip = () => {
+    if (activeStep === 1) {
+      // Check if at least one entry has valid data
+      const hasValidEntry = educations.some((education) => education.college.trim() !== "");
+      
+      if (!hasValidEntry) {
+        setError("At least one valid School/College Name is required to skip.");
+        setSnackbarOpen(true); // Show error message
+        return;
+      }
+    }
+  
     if (!isStepOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
+  
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped((prevSkipped) => {
       const newSkipped = new Set(prevSkipped.values());
@@ -593,10 +614,9 @@ function Employeeregister({ open, onClose }) {
       return newSkipped;
     });
   };
-
   const handleSubmit = () => {
     if (!validateSpecialConsiderations()) {
-      setSnackbarOpen(true); // Show error in Snackbar if validation fails
+      setSnackbarOpen(true); 
       return;
     }
 
@@ -637,12 +657,16 @@ function Employeeregister({ open, onClose }) {
     axios
       .post(`${REGISTER}`, JSON.stringify(payload), {
         headers: {
-          "Content-Type": "application/json", // Make sure it's application/json
+          "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        setShowPopup(true); // Show the popup
-        setPopupMessage("User successfully registered!");
+        setShowPopup(true);
+        setPopupMessage(`User successfully registered! Please check "${useremail}"!`);
+        setTimeout(() => {
+          setShowPopup(false);
+          navigate('/login');
+        }, 4000); 
       })
       .catch((error) => {
         let errorMessage = "An error occurred. Please try again.";
@@ -650,7 +674,7 @@ function Employeeregister({ open, onClose }) {
           switch (error.response.status) {
             case 400:
               errorMessage =
-                "Bad Request: Please check the data you submitted.";
+                "Bad Request: Email already registered.";
               break;
             case 401:
               errorMessage = "Unauthorized: Please log in and try again.";
@@ -740,15 +764,15 @@ function Employeeregister({ open, onClose }) {
       return false;
     }
 
-    if (disabilitypercentage === '') {
-      const percentage = parseFloat(disabilitypercentage);
+    // if (disabilitypercentage === '') {
+    //   const percentage = parseFloat(disabilitypercentage);
       
-      // Check if it is a valid number and in the range 0-100
-      if (isNaN(percentage) || percentage < 0 || percentage > 100) {
-        setError('Disability Percentage must be a number between 0 and 100.');
-        return false;
-      }
-    }
+    //   // Check if it is a valid number and in the range 0-100
+    //   if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+    //     setError('Disability Percentage must be a number between 0 and 100.');
+    //     return false;
+    //   }
+    // }
 
     if (!languages_known || languages_known.trim() === "") {
       setError("Please specify at least one known language.");
@@ -880,7 +904,36 @@ function Employeeregister({ open, onClose }) {
                     value={userpassword}
                     onChange={(e) => setPassword(e.target.value)}
                     fullWidth
-                    className="custom-input"
+                    className="custom-input" type={showPassword ? 'text' : 'password'} // Toggle password field type
+                    style={{width:'105%'}}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            onClick={handleClickShowPassword}  // Toggle password visibility
+                            onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                            edge="end"
+                            sx={{
+                              padding: 0, // Remove default padding to keep icon within the input field
+                              color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
+                              fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                             
+                              display: 'flex', // Ensure the icon is vertically centered
+                              alignItems: 'center', // Align the icon vertically within the field
+                              justifyContent: 'center', // Align the icon horizontall
+                              marginLeft: '-16px',
+                              
+                              
+                              
+                            
+                            }}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": { borderColor: "transparent" },
