@@ -23,11 +23,16 @@
 
 /* Button style */
 
-
-
-
-
 .container1 button {
-    width: 50%;
+    width: 80%;
     padding: 20px;
 }
+.button-row button{
+    margin: 25px 15px;
+    box-shadow: 4px -4px 5px rgba(0, 0, 0, 0.4);
+  }
+  .button-row button:hover {
+    background-color: #406aa1;
+    box-shadow: 8px -8px 7px rgba(0, 0, 0, 0.6);
+    transform: scale(1.05);
+  }
