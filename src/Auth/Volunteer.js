@@ -255,28 +255,25 @@ function Volunteer({ open, onClose }) {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
   const [loading, setLoading] = useState(false)
-  //   const [languages_known, setKnownLanguages] = useState("");
+  
   const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [error, setError] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
-      setShowPassword(!showPassword); // Toggle password visibility
+      setShowPassword(!showPassword); 
     };
     const navigate = useNavigate();
     const handleOTP = () => {
-        // navigate('/verify')
+        
       };
   
     const handleMouseDownPassword = (event) => {
-      event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+      event.preventDefault(); 
     };
   const [pancard, setPancard] = useState(null);
   const [no_of_hours, setNOH] = useState("");
-  //   const [experience, setExperience] = useState("");
-  //   const [skills, setSkills] = useState("")
-  //   const [willing_to_relocate, setWillingToRelocate] = useState(false);
-  //   const [availability_of_work, setWorkAvailability] = useState("");
+  
   const handleSetCountry = (e, value) => setCountry(value);
   const handleSetState = (e, value) => setState(value);
 
@@ -284,8 +281,8 @@ function Volunteer({ open, onClose }) {
   const handleCountryChange = (e) => {
     const country = e.target.value;
     setCountry(country);
-    setStates(countryStateData[country] || []); // Update states based on selected country
-    setState(""); // Reset state selection
+    setStates(countryStateData[country] || []); 
+    setState(""); 
   };
   const handleSubmit = () => {
 
@@ -305,12 +302,9 @@ function Volunteer({ open, onClose }) {
     formData.append("address", useraddress);
     formData.append("country", country.name);
     formData.append("state", state.name);
-    // formData.append("willing_to_relocate", willing_to_relocate);
-    // formData.append("languages_known", languages_known);
+    
     formData.append("qualification", qualification);
-    // formData.append("availability_of_work", availability_of_work);
-    // formData.append("job_experience", experience);
-    // formData.append("skills",skills)
+    
     formData.append("purpose", purpose);
     formData.append("no_of_hours", no_of_hours);
     formData.append("aadhaar_card", Adhar);
@@ -354,7 +348,7 @@ function Volunteer({ open, onClose }) {
               errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
           }
         }
-        setShowPopup(true); // Show the popup
+        setShowPopup(true); 
         setPopupMessage(errorMessage);
       })
       .finally(() => {
@@ -403,7 +397,7 @@ function Volunteer({ open, onClose }) {
                   value={userfname}
                   onChange={(e) => setUserfname(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                  
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -426,7 +420,7 @@ function Volunteer({ open, onClose }) {
                   value={userlname}
                   onChange={(e) => setUserlname(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                  
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -449,7 +443,7 @@ function Volunteer({ open, onClose }) {
                   value={useremail}
                   onChange={(e) => setEmail(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                 
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -472,24 +466,24 @@ function Volunteer({ open, onClose }) {
                   value={userpassword}
                   onChange={(e) => setPassword(e.target.value)}
                   fullWidth
-                  // margin="dense"
-                  className="custom-input" type={showPassword ? 'text' : 'password'} // Toggle password field type
+                 
+                  className="custom-input" type={showPassword ? 'text' : 'password'} 
                                     style={{width:'105%'}}
                                     InputProps={{
                                       endAdornment: (
                                         <InputAdornment position="start">
                                           <IconButton
-                                            onClick={handleClickShowPassword}  // Toggle password visibility
-                                            onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                                            onClick={handleClickShowPassword}  
+                                            onMouseDown={handleMouseDownPassword}  
                                             edge="end"
                                             sx={{
-                                              padding: 0, // Remove default padding to keep icon within the input field
-                                              color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
-                                              fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                                              padding: 0, 
+                                              color: 'rgba(0, 0, 0, 0.54)', 
+                                              fontSize: '1.5rem',
                                              
-                                              display: 'flex', // Ensure the icon is vertically centered
-                                              alignItems: 'center', // Align the icon vertically within the field
-                                              justifyContent: 'center', // Align the icon horizontall
+                                              display: 'flex', 
+                                              alignItems: 'center',
+                                              justifyContent: 'center', 
                                               marginLeft: '-16px',
                                               
                                               
@@ -497,7 +491,7 @@ function Volunteer({ open, onClose }) {
                                             
                                             }}
                                           >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                                            {showPassword ? <VisibilityOff /> : <Visibility />} 
                                           </IconButton>
                                         </InputAdornment>
                                       ),
@@ -521,7 +515,7 @@ function Volunteer({ open, onClose }) {
                   value={usermobile}
                   onChange={(e) => setMobile(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                  
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -544,7 +538,7 @@ function Volunteer({ open, onClose }) {
                   value={no_of_hours}
                   onChange={(e) => setNOH(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                  
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -572,7 +566,7 @@ function Volunteer({ open, onClose }) {
                       sx={{
                         display: "flex",
                         alignItems: "center",
-                        // margin: "10px 0px",
+                        
                         height: 45,
                         padding: "4px 10px",
                         fontSize: "0.875rem",
@@ -761,7 +755,7 @@ function Volunteer({ open, onClose }) {
                   fullWidth
                   margin="dense"
                   multiline
-                  rows={3} // Specifies 4 rows
+                  rows={3} 
                 />
               </Grid>
               <Grid item xs={6}>
@@ -772,12 +766,12 @@ function Volunteer({ open, onClose }) {
                   fullWidth
                   margin="dense"
                   multiline
-                  rows={3} // Specifies 4 rows
+                  rows={3} 
                 />
               </Grid>
             </Grid>
 
-            {/* <Button onClick={handleSubmit}>Register</Button> */}
+            
             <DialogActions>
               <Button onClick={onClose} color="secondary">
                 Cancel

@@ -3,25 +3,25 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;  /* Ensures the content is spread out */
+    justify-content: space-between;  
     width: 90%;
     background-color: white;
 }
 
 .flex-item-login {
-    flex: 1 1 50%;  /* Ensure the flex item takes up 50% of the container's width */
+    flex: 1 1 50%; 
     height: 90%;
     text-align: center;
     margin: 20px 50px;
 }
 
 .imageDetails_login {
-    width: 50%;  /* Make the image take up 50% of the container's width */
+    width: 50%;  
     height: auto;
 }
 
 
-/* Button style */
+
 
 .container1 button {
     width: 80%;

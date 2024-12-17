@@ -265,22 +265,22 @@ function Trainer({ open, onClose }) {
   const [error, setError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword); // Toggle password visibility
+    setShowPassword(!showPassword);
   };
   const navigate = useNavigate();
   const handleOTP = () => {
-      // navigate('/verify')
+      
     };
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+    event.preventDefault(); 
   };
 
   const handleCountryChange = (e) => {
     const country = e.target.value;
     setCountry(country);
-    setStates(countryStateData[country] || []); // Update states based on selected country
-    setState(""); // Reset state selection
+    setStates(countryStateData[country] || []); 
+    setState(""); 
   };
 
   const handleSubmit = () => {
@@ -407,7 +407,7 @@ function Trainer({ open, onClose }) {
               errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
           }
         }
-        setShowPopup(true); // Show the popup
+        setShowPopup(true);
         setPopupMessage(errorMessage);
       })
       .finally(() => {
@@ -464,7 +464,7 @@ function Trainer({ open, onClose }) {
                   value={userfname}
                   onChange={(e) => setUserfname(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                 
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -487,7 +487,7 @@ function Trainer({ open, onClose }) {
                   value={userlname}
                   onChange={(e) => setUserlname(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                  
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -510,7 +510,7 @@ function Trainer({ open, onClose }) {
                   value={useremail}
                   onChange={(e) => setEmail(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                 
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -533,24 +533,24 @@ function Trainer({ open, onClose }) {
                   value={userpassword}
                   onChange={(e) => setPassword(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                  
                   className="custom-input" type={showPassword ? 'text' : 'password'} // Toggle password field type
                   style={{width:'105%'}}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="start">
                         <IconButton
-                          onClick={handleClickShowPassword}  // Toggle password visibility
-                          onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                          onClick={handleClickShowPassword} 
+                          onMouseDown={handleMouseDownPassword}  
                           edge="end"
                           sx={{
-                            padding: 0, // Remove default padding to keep icon within the input field
-                            color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
-                            fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                            padding: 0, 
+                            color: 'rgba(0, 0, 0, 0.54)', 
+                            fontSize: '1.5rem',
                            
-                            display: 'flex', // Ensure the icon is vertically centered
-                            alignItems: 'center', // Align the icon vertically within the field
-                            justifyContent: 'center', // Align the icon horizontall
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
                             marginLeft: '-16px',
                             
                             
@@ -558,7 +558,7 @@ function Trainer({ open, onClose }) {
                           
                           }}
                         >
-                          {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                          {showPassword ? <VisibilityOff /> : <Visibility />} 
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -582,7 +582,7 @@ function Trainer({ open, onClose }) {
                   value={usermobile}
                   onChange={(e) => setMobile(e.target.value)}
                   fullWidth
-                  // margin="dense"
+                  
                   className="custom-input"
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -686,7 +686,7 @@ function Trainer({ open, onClose }) {
                   label="Experience"
                   value={experience}
                   onChange={(e) => setExperience(e.target.value)}
-                  // margin="dense"
+                 
                   fullWidth
                   className="custom-input"
                   sx={{
@@ -709,7 +709,7 @@ function Trainer({ open, onClose }) {
                   label="skills"
                   value={skills}
                   onChange={(e) => setSkills(e.target.value)}
-                  // margin="dense"
+                 
                   fullWidth
                   className="custom-input"
                   sx={{
@@ -895,7 +895,7 @@ function Trainer({ open, onClose }) {
                 />
               </Grid>
             </Grid>
-            {/* <Grid item xs={}> */}
+            
             <TextField
               label="Address"
               value={useraddress}
@@ -903,10 +903,9 @@ function Trainer({ open, onClose }) {
               fullWidth
               margin="dense"
               multiline
-              rows={3} // Specifies 4 rows
+              rows={3} 
             />
-            {/* </Grid> */}
-            {/* <Button onClick={handleSubmit}>Register</Button> */}
+            
             <DialogActions>
               <Button onClick={onClose} color="secondary">Cancel</Button>
               <Button onClick={handleSubmit} color="primary">Register</Button>
