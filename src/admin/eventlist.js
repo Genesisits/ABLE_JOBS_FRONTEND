@@ -24,7 +24,7 @@ const EventList = () => {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [hoveredEvent1, setHoveredEvent1] = useState(null);
   const [hoveredEvent2, setHoveredEvent2] = useState(null); 
-  // const [hoveredEvent3, setHoveredEvent3] = useState(null); 
+
 
   useEffect(() => {
     axios.get(EVENTS_LIST)
@@ -82,7 +82,7 @@ const EventList = () => {
   const handleDeactivated = (eventId) => {
     axios.post(DEACTVATE_EVENT, { event_id: eventId })
       .then(response => {
-        // Handle success if needed
+        
         console.log('Message sent successfully:', response);
       })
       .catch(error => console.error('Error sending message:', error));
@@ -90,43 +90,37 @@ const EventList = () => {
   const handleSendMessage = (eventId, message) => {
     if (!message.trim()) {
       console.error('Error: Message cannot be empty');
-      return; // Do not proceed further if the message is empty
+      return; 
     }
     axios.post(EVENT_MESSAGE, {
       event_id: eventId,
       message: message
     })
       .then(response => {
-        // Handle success if needed
+        
         console.log('Message sent successfully:', response);
         console.log(eventId);
       })
       .catch(error => console.error('Error sending message:', error));
   };
 
-  // const handleStatusToggle = (eventId) => {
-  //   const updatedEventList = eventListData.map((event) =>
-  //     event.code === eventId ? { ...event, status: event.status === 'assigned' ? 'unassigned' : 'assigned' } : event
-  //   );
   
-  //   setEventListData(updatedEventList);
-  // };
   const indexOfLastItem = activePage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = eventListData.slice(indexOfFirstItem, indexOfLastItem);
-  // Define the handleAddButtonClick function to receive the event_id parameter
+ 
 const handleAddButtonClick = (eventId) => {
-  // Save the event_id to session storage
+  
   sessionStorage.setItem("selectedEventId", eventId);
   sessionStorage.setItem("ItemEventId", eventId);
   console.log("ItemEventId:", eventId)
-  // Optionally, you can also navigate to another page or perform any other action here
+  
 };
 const handleAddButtonsClick = (eventId) => {
-  // Save the event_id to session storage
+  
   sessionStorage.setItem("ItemEventId", eventId);
   console.log("ItemEventId:", eventId)
-  // Optionally, you can also navigate to another page or perform any other action here
+ 
 };
 
   return (
@@ -193,7 +187,7 @@ const handleAddButtonsClick = (eventId) => {
             <div className="button-container">
             <div 
   className={`switch-button ${event.status === 'assigned' ? "on" : "off"}`} 
-  // onClick={() => handleStatusToggle(event.code)}
+  
   style={{
     width: '25px', 
     height: '10px', 
@@ -206,14 +200,14 @@ const handleAddButtonsClick = (eventId) => {
     <div 
       className="switch-handle" 
       style={{
-        width: '10px', // Adjust the width of the handle
-      height: '10px', // Adjust the height of the handle
-      borderRadius: '50%', // Make the handle circular
-      backgroundColor: '#fff', // Set background color of the handle
-      position: 'absolute', // Set position to absolute to position the handle within the button
-      left: event.status === 'assigned' ? 'calc(100% - 12px)' : '2px', // Position the handle based on status
-      top: '50%', // Center vertically
-      transform: 'translateY(-50%)', // Center vertically using translateY
+        width: '10px', 
+      height: '10px', 
+      borderRadius: '50%', 
+      backgroundColor: '#fff', 
+      position: 'absolute', 
+      left: event.status === 'assigned' ? 'calc(100% - 12px)' : '2px', 
+      top: '50%', 
+      transform: 'translateY(-50%)', 
       transition: 'left 0.2s ease', 
       }}
     ></div>
@@ -222,14 +216,14 @@ const handleAddButtonsClick = (eventId) => {
     <div 
       className="switch-handle" 
       style={{
-        width: '10px', // Adjust the width of the handle
-        height: '10px', // Adjust the height of the handle
-        borderRadius: '50%', // Make the handle circular
-        backgroundColor: '#fff', // Set background color of the handle
-        position: 'absolute', // Set position to absolute to position the handle within the button
-        left: '2px', // Position the handle to the left side
-        top: '50%', // Center vertically
-        transform: 'translateY(-50%)', // Center vertically using translateY
+        width: '10px', 
+        height: '10px',
+        borderRadius: '50%', 
+        backgroundColor: '#fff', 
+        position: 'absolute', 
+        left: '2px', 
+        top: '50%', 
+        transform: 'translateY(-50%)', 
         transition: 'left 0.2s ease', 
       }}
     ></div>
@@ -248,11 +242,11 @@ const handleAddButtonsClick = (eventId) => {
           cursor: 'pointer', 
           marginRight: '5px',
         }}
-        onMouseEnter={() => setHoveredEvent(event.code)} // Set the hovered event code
-        onMouseLeave={() => setHoveredEvent(null)} // Clear the hovered event code
+        onMouseEnter={() => setHoveredEvent(event.code)} 
+        onMouseLeave={() => setHoveredEvent(null)} 
       />
      
-      {hoveredEvent === event.code && ( // Show text only if the event code matches the hovered event
+      {hoveredEvent === event.code && ( 
         <span 
           className="event_items_assign_text"
           style={{ 
@@ -278,9 +272,9 @@ const handleAddButtonsClick = (eventId) => {
                 onClick={() => handleDeactivated(event.code)}>
                   
   <FontAwesomeIcon icon={faTimes} 
-  onMouseEnter={() => setHoveredEvent1(event.code)} // Set the hovered event code
+  onMouseEnter={() => setHoveredEvent1(event.code)} 
   onMouseLeave={() => setHoveredEvent1(null)} />
-  {hoveredEvent1 === event.code && ( // Show text only if the event code matches the hovered event
+  {hoveredEvent1 === event.code && ( 
         <span 
           className="event_items_assign_text"
           style={{ 
@@ -302,9 +296,9 @@ const handleAddButtonsClick = (eventId) => {
   to="/caddevent"
   className="add-event-button" 
   style={{ 
-    // display: 'inline-block', 
+     
     padding: '10px 20px', 
-    // backgroundColor: '#4CAF50', 
+     
     color: 'green', 
     textDecoration: 'none',
     background: 'none',
@@ -317,10 +311,10 @@ const handleAddButtonsClick = (eventId) => {
 >
 <FaPlus style={{width:'20px',
    height:'20px',}}
-   onMouseEnter={() => setHoveredEvent2(event.code)} // Set the hovered event code
+   onMouseEnter={() => setHoveredEvent2(event.code)} 
    onMouseLeave={() => setHoveredEvent2(null)} 
    />
-    {hoveredEvent2 === event.code && ( // Show text only if the event code matches the hovered event
+    {hoveredEvent2 === event.code && ( 
         <span 
           className="event_items_assign_text"
           style={{ 
@@ -328,7 +322,7 @@ const handleAddButtonsClick = (eventId) => {
             top: '-15%', 
             marginLeft: '-70%',
             transform: 'translateY(-50%)', 
-            opacity: 1, // Always show text when hovered
+            opacity: 1, 
             transition: 'opacity 0.3s ease-in-out', 
             whiteSpace:'nowrap'
           }}

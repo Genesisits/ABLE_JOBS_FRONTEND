@@ -1,4 +1,4 @@
-/* VenderList.css */
+
 
 .event-list-container {
     margin: 20px;
@@ -88,17 +88,7 @@
     position: relative;
   }
   
-  /* .hover-text {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    padding: 5px;
-    border-radius: 5px;
-  }
-   */
+  
   .details-button:hover .hover-text {
     display: block;
   }
@@ -147,7 +137,7 @@
   }
   
   .scrollable-content {
-    max-height: calc(100vh - 150px); /* Adjust according to your layout */
+    max-height: calc(100vh - 150px); 
     overflow-y: auto;
   }
   .event_items_assign{

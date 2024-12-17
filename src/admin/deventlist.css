@@ -1,4 +1,4 @@
-/* VenderList.css */
+
 
 .devent-list-container {
     margin: 20px;
@@ -35,13 +35,5 @@
 }
 
   }
-  /* @media screen and (max-width: 1024px) {
-    .devent-table {
-      overflow-x: auto;
-      display: block;
-      white-space: nowrap;
-      width: 120%;
-  }
-
-  } */
+  
   
