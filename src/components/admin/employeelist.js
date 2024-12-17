@@ -27,7 +27,7 @@ const columns = [
   { id: "skills", label: "Skills", minWidth: 100 },
   { id: "mobile_number", label: "Mobile Number", minWidth: 100 },
   { id: "state", label: "State", minWidth: 100 },
-  // { id: "description", label: "Job Description", minWidth: 100 },
+ 
   { id: "status", label: "Actions", minWidth: 150 },
 ];
 
@@ -42,7 +42,7 @@ export default function Trainers() {
   const [selectedJobCode, setSelectedJobCode] = useState(null);
 
   useEffect(() => {
-    // Fetch job data from API
+    
     setLoading(true)
     const config = {
       headers: {
@@ -79,15 +79,7 @@ export default function Trainers() {
       )
     );
 
-    // axios
-    //   .put(
-    //     `${ACTIVATE_JOB}${row.code}/`,
-    //     { activation_status: updatedStatus },
-    //     config
-    //   )
-    //   .then((response) => {
-    //     console.log(response);
-    //   });
+   
   };
 
   const openPostJobModal = () => {
@@ -202,15 +194,7 @@ export default function Trainers() {
           />
         </Paper>
 
-        {/* Post a Job Modal */}
-        {/* <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  /> */}
-
-        {/* Applied Candidates Dialog */}
-        {/* <AppliedCandidatesDialog
-          open={isDialogOpen}
-          onClose={handleCloseDialog}
-          jobCode={selectedJobCode} // Pass the jobCode to the dialog
-        /> */}
+        
       </Layout>
     </div>
   );

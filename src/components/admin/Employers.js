@@ -34,9 +34,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import OnboardCandidates from "./OnboardCandidates";
 import { Label } from "@mui/icons-material";
-// import "./jobs.css";
-// import Postajob from "./postajob";
-// import AppliedCandidatesDialog from "./Appliedcandidates";
+
 
 const columns = [
   { id: "job_title", label: "Job Role", minWidth: 100 },
@@ -45,7 +43,7 @@ const columns = [
   { id: "skills", label: "Required Technology Stack", minWidth: 100 },
   { id: "location", label: "Location", minWidth: 100 },
   { id: "description", label: "Job Description", minWidth: 100 },
-  // { id: "status", label: "Actions", minWidth: 150 },
+ 
 ];
 
 export default function Employers({ Employer }) {
@@ -128,12 +126,12 @@ export default function Employers({ Employer }) {
   };
 
   const handleRowClick = (row) => {
-    setSelectedRow(row); // Update state with the selected row data
+    setSelectedRow(row); 
   };
 
   const openPostJobModal = () => {
-    setSelectedJob(null); // Set the selected job for editing
-    setIsPostJobOpen(true); // Open the modal
+    setSelectedJob(null); 
+    setIsPostJobOpen(true); 
   };
   const closePostJobModal = () => {
     setSelectedJob(null);
@@ -141,12 +139,12 @@ export default function Employers({ Employer }) {
   };
   const handleOpenDialog = (jobCode) => {
     setSelectedRow(jobCode);
-    setSelectedJobCode(jobCode); // Set the selected job code
-    setIsDialogOpen(true); // Open the dialog
+    setSelectedJobCode(jobCode); 
+    setIsDialogOpen(true); 
   };
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false); // Close the dialog
+    setIsDialogOpen(false); 
   };
 
   const openEditJobModal = (job) => {
@@ -159,10 +157,10 @@ export default function Employers({ Employer }) {
     setSearchQuery(query);
 
     if (query === "") {
-      // Reset to full rows when the query is empty
+      
       setFilteredRows(rows);
     } else {
-      // Filter specific fields
+      
       setFilteredRows(
         rows.filter((row) => {
           const fieldsToSearch = [
@@ -188,7 +186,7 @@ export default function Employers({ Employer }) {
   };
 
   const handleFilterSubmit = () => {
-    // Combine both search and date filtering
+    
     
     const filterBySearch = rows.filter((row) => {
       const query = searchQuery.toLowerCase();
@@ -211,9 +209,9 @@ export default function Employers({ Employer }) {
       );
     });
   
-    // Date filtering
+    
     const filterByDate = filterBySearch.filter((row) => {
-      const rowDate = new Date(row.posted_date).setHours(0, 0, 0, 0); // Normalize to midnight
+      const rowDate = new Date(row.posted_date).setHours(0, 0, 0, 0); 
       const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : null;
       const end = endDate ? new Date(endDate).setHours(0, 0, 0, 0) : null;
   
@@ -225,10 +223,10 @@ export default function Employers({ Employer }) {
         return rowDate <= end;
       }
   
-      return true; // No date filter applied
+      return true; 
     });
   
-    // Update the filtered rows
+    
     setFilteredRows(filterByDate);
   };
 
@@ -266,7 +264,7 @@ export default function Employers({ Employer }) {
               dateFormat="yyyy/MM/dd"
               placeholderText="Start Date"
               popperPlacement="right-start"
-              popperClassName="react-datepicker-popper" // Aligns the dropdown on the right
+              popperClassName="react-datepicker-popper" 
               fullWidth
               maxDate={new Date()}
             />
@@ -320,7 +318,7 @@ export default function Employers({ Employer }) {
                   .map((row) => (
                     <Tooltip title="Click anywhere to see onboarded candidates for this job" arrow>
                     <TableRow
-                      key={row.code} // Ensure the key is unique
+                      key={row.code} 
                       onClick={() => handleOpenDialog(row)}
                       hover
                       role="checkbox"

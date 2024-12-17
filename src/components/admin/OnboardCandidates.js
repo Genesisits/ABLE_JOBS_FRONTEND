@@ -12,14 +12,14 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TableContainer, // Import TableContainer
+  TableContainer,
 } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import axios from "axios";
-import { ONBOARD_CANDIDATE, ONBOARDED_LIST } from "../../endpoints"; // Correct endpoint import
+import { ONBOARD_CANDIDATE, ONBOARDED_LIST } from "../../endpoints"; 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -30,7 +30,7 @@ export default function OnboardCandidates({ open, onClose, selectedRow }) {
   const [selectedJob, setSelectedJob] = useState(null);
   const [loading, setLoading] = useState(false)
 
-  // Fetch applied candidates whenever jobCode changes
+  
   useEffect(() => {
     setLoading(true)
     if (open && selectedRow) {
@@ -48,10 +48,10 @@ export default function OnboardCandidates({ open, onClose, selectedRow }) {
   }, [open, selectedRow]);
 
   const handleActive = (row) => {
-    // Optimistically update the local state
+    
     const updatedCandidates = appliedCandidates.map((candidate) => {
       if (candidate.application_code === row.application_code) {
-        // Toggle the onboarded status locally
+        
         return {
           ...candidate,
           onboarded_status: !candidate.onboarded_status,
@@ -60,10 +60,10 @@ export default function OnboardCandidates({ open, onClose, selectedRow }) {
       return candidate;
     });
 
-    // Update the state with the new values
+    
     setAppliedCandidates(updatedCandidates);
 
-    // Now make the API call to update the backend
+    
     let config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -73,13 +73,13 @@ export default function OnboardCandidates({ open, onClose, selectedRow }) {
     axios
       .put(`${ONBOARD_CANDIDATE}${row.application_code}/`)
       .then((response) => {
-        // Optionally handle the success response
+        
         console.log(response);
       })
       .catch((error) => {
-        // If API call fails, revert the local state change
+        
         console.error("Error onboarding candidate:", error);
-        // Revert the switch state if the API call fails
+        
         setAppliedCandidates((prevState) =>
           prevState.map((candidate) =>
             candidate.application_code === row.application_code
@@ -138,7 +138,7 @@ export default function OnboardCandidates({ open, onClose, selectedRow }) {
               <TableCell>Employee Name</TableCell>
               <TableCell>Job Title</TableCell>
               <TableCell>Actions</TableCell>
-              {/* <TableCell>Video Resume</TableCell> */}
+              
             </TableRow>
           </TableHead>
           <TableBody>

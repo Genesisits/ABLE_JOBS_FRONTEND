@@ -24,9 +24,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
-// import "./jobs.css";
-// import Postajob from "./postajob";
-// import AppliedCandidatesDialog from "./Appliedcandidates";
+
 
 const columns = [
   { id: "first_name", label: "First Name", minWidth: 100 },
@@ -34,7 +32,7 @@ const columns = [
   { id: "email", label: "Email", minWidth: 100 },
   { id: "mobile_number", label: "Mobile Number", minWidth: 100 },
   { id: "state", label: "State", minWidth: 100 },
-  // { id: "description", label: "Job Description", minWidth: 100 },
+ 
   { id: "status", label: "Actions", minWidth: 150 },
 ];
 
@@ -44,12 +42,11 @@ export default function Volunteers() {
   const [loading, setLoading] = useState(false)
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
+  const [isPostJobOpen, setIsPostJobOpen] = useState(false); 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
-
+  const [selectedJobCode, setSelectedJobCode] = useState(null); 
   useEffect(() => {
-    // Fetch job data from API
+    
     setLoading(true)
     const config = {
       headers: {
@@ -98,20 +95,20 @@ export default function Volunteers() {
   };
 
   const openPostJobModal = () => {
-    setSelectedJob(null); // Set the selected job for editing
-    setIsPostJobOpen(true); // Open the modal
+    setSelectedJob(null); 
+    setIsPostJobOpen(true);
   };
   const closePostJobModal = () => {
     setSelectedJob(null);
     setIsPostJobOpen(false);
   };
   const handleOpenDialog = (jobCode) => {
-    setSelectedJobCode(jobCode); // Set the selected job code
-    setIsDialogOpen(true); // Open the dialog
+    setSelectedJobCode(jobCode); 
+    setIsDialogOpen(true); 
   };
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false); // Close the dialog
+    setIsDialogOpen(false);
   };
 
   const openEditJobModal = (job) => {

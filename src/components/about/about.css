@@ -1,6 +1,4 @@
-/* about.css */
 
-/* Default styles */
 
 .about-img1 {
   width: 100%;
@@ -101,7 +99,7 @@ color:#881008;
 /* Tablet styles */
 @media screen and (max-width: 1024px) {
   .about-img1 {
-      max-width: 100%; /* Limit image width on tablets */
+      max-width: 100%;
       height: 400px;
   }
   .about-container2 h1{

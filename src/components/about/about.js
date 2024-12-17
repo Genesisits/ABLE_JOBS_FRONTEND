@@ -39,12 +39,10 @@ export default function About() {
                                                         </h5>
                                                 </div>
                                                 <div>
-                                                        {/* <div>
-                                                        <div className="about_sec_home_right"> */}
+                                                        
                                                 <img className="about_img2" src={img1} alt="about_img" />
                                                 <img className="about_img3" src={img2} alt="about_img" />
-                                        {/* </div>
-                                                        </div> */}
+                                        
 
                                                 </div>
 
