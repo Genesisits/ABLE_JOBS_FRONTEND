@@ -14,60 +14,60 @@
   border-color: transparent !important; 
 }
 
-/* Customize label appearance */
+
 .custom-input label {
-  font-size: 14px; /* Smaller label */
-  color: #666; /* Soft gray label color */
+  font-size: 14px; 
+  color: #666; 
 }
 
-/* On hover, change the border color */
+
 .custom-input:hover input {
-  border-color: #007BFF; /* Blue border on hover */
+  border-color: #007BFF; 
 }
 
-/* On focus, change border and background color */
+
 .custom-input input:focus {
-  border-color: #007BFF !important; /* Blue border on focus */
-  background-color: #fff; /* White background on focus */
-  outline: none !important; /* Ensure outline is removed */
-  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4); /* Glow effect on focus */
+  border-color: #007BFF !important; 
+  background-color: #fff; 
+  outline: none !important; 
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4); 
 }
 
-/* Style the MenuItem for company size select */
+
 .MuiMenuItem-root {
   font-size: 26px;
 }
 
-/* Style the TextField select dropdown */
+
 .custom-input select {
-  /* background-color: #f9f9f9; */
+  
   border-radius: 8px;
   padding: 10px;
   border: 2px solid #ccc;
   transition: all 0.3s ease;
-  outline: none !important; /* Remove default outline */
+  outline: none !important; 
 }
 
-/* Hover effects for the dropdown */
+
 .custom-input:hover select {
   border-color: #007BFF;
 }
 
-/* Focus effects for the dropdown */
+
 .custom-input select:focus {
   border-color: #007BFF;
   box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
-  outline: none !important; /* Ensure outline is removed */
+  outline: none !important; 
 }
 
-/* Additional padding and alignment for dialog content */
+
 .MuiDialog-paper {
   padding: 20px;
-  max-width: 900px; /* Adjust width if needed */
+  max-width: 900px; 
   margin: auto;
 }
 
-/* Button styling for better spacing */
+
 .MuiButton-root {
   margin-top: 20px;
   display: block;
@@ -75,17 +75,17 @@
   margin-right: auto;
 }
 .custom-input1 .MuiOutlinedInput-root {
-  background-color: #fff; /* White background */
+  background-color: #fff; 
   border-radius: 8px;
-  border: 2px solid #ccc; /* Visible border */
+  border: 2px solid #ccc; 
 }
 
-/* Retain border and background on focus */
+
 .custom-input1 .MuiOutlinedInput-root.Mui-focused {
-  border-color: #007BFF; /* Blue border on focus */
+  border-color: #007BFF; 
 }
 
-/* MenuItem styling */
+
 .MuiMenuItem-root {
   font-size: 16px;
 }
