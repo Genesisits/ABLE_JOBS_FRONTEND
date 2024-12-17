@@ -13,7 +13,8 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  CircularProgress
+  CircularProgress,
+  IconButton,
 } from "@mui/material";
 import { CountryDropdown, StateDropdown } from "react-country-state-dropdown";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -21,6 +22,9 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { TRAINER_REGISTER } from "../endpoints";
 import { Password } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { InputAdornment} from '@mui/material';
+import { useNavigate } from "react-router-dom";
 const countryStateData = {
   USA: [
     "Alabama",
@@ -256,6 +260,21 @@ function Trainer({ open, onClose }) {
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
   const handleSnackbarClose = () => setSnackbarOpen(false);
   const [loading, setLoading] = useState(false)
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword); // Toggle password visibility
+  };
+  const navigate = useNavigate();
+  const handleOTP = () => {
+      // navigate('/verify')
+    };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+  };
 
   const handleCountryChange = (e) => {
     const country = e.target.value;
@@ -357,20 +376,41 @@ function Trainer({ open, onClose }) {
         },
       })
       .then((response) => {
-        setSnackbarMessage("Registration successful!");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
+        setShowPopup(true);
+        setPopupMessage(`User successfully registered! Please check "${useremail}"!`);
         setTimeout(() => {
-          onClose(false)
-        }, 1000)
-        console.log(response.data);
+          setShowPopup(false);
+          navigate('/login');
+        }, 4000); 
       })
+      
       .catch((error) => {
-        setSnackbarMessage("Registration failed. Try again!");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-        console.error(error);
-      }).finally(() => {
+        let errorMessage = "An error occurred. Please try again.";
+        if (error.response) {
+          switch (error.response.status) {
+            case 400:
+              errorMessage =
+                "Bad Request: Email already registered.";
+              break;
+            case 401:
+              errorMessage = "Unauthorized: Please log in and try again.";
+              break;
+            case 404:
+              errorMessage =
+                "Not Found: The requested resource could not be found.";
+              break;
+            case 500:
+              errorMessage =
+                "Internal Server Error: Something went wrong on the server.";
+              break;
+            default:
+              errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
+          }
+        }
+        setShowPopup(true); // Show the popup
+        setPopupMessage(errorMessage);
+      })
+      .finally(() => {
         setLoading(false)
       })
   };
@@ -385,6 +425,28 @@ function Trainer({ open, onClose }) {
               <CircularProgress color="primary" size={50} />
             </div>
           )}
+          <Box sx={{ width: "100%", margin: "0%" }}>
+                  {showPopup && (
+                    <div className="popup">
+                      <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
+                        {popupMessage}
+                      </p>
+                      <button
+                        style={{ marginLeft: "35%", width: "30%" }}
+                        onClick={() => setShowPopup(false)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  )}
+                  <Box
+                    sx={{
+                      position: "sticky",
+                      top: "12%",
+                      zIndex: 1,
+                      backgroundColor: "white",
+                    }}
+                  ></Box>
           <Snackbar
             open={snackbarOpen}
             autoHideDuration={4000}
@@ -472,20 +534,46 @@ function Trainer({ open, onClose }) {
                   onChange={(e) => setPassword(e.target.value)}
                   fullWidth
                   // margin="dense"
-                  className="custom-input"
+                  className="custom-input" type={showPassword ? 'text' : 'password'} // Toggle password field type
+                  style={{width:'105%'}}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton
+                          onClick={handleClickShowPassword}  // Toggle password visibility
+                          onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                          edge="end"
+                          sx={{
+                            padding: 0, // Remove default padding to keep icon within the input field
+                            color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
+                            fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                           
+                            display: 'flex', // Ensure the icon is vertically centered
+                            alignItems: 'center', // Align the icon vertically within the field
+                            justifyContent: 'center', // Align the icon horizontall
+                            marginLeft: '-16px',
+                            
+                            
+                            
+                          
+                          }}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderColor: "transparent",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "transparent",
-                      },
+                      "& fieldset": { borderColor: "transparent" },
+                      "&:hover fieldset": { borderColor: "transparent" },
                       "&.Mui-focused fieldset": {
                         borderColor: "transparent",
                       },
                     },
                   }}
+                  
                 />
               </Grid>
               <Grid item xs={6}>
@@ -824,6 +912,7 @@ function Trainer({ open, onClose }) {
               <Button onClick={handleSubmit} color="primary">Register</Button>
             </DialogActions>
           </Box>
+</Box>          
         </ThemeProvider>
       </div>
     </Dialog>
