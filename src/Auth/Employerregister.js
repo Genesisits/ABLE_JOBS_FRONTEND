@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Grid ,IconButton} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import {Box,Snackbar,Alert,CircularProgress} from "@mui/material";
 import { EMPLOYER_REGISTER } from '../endpoints';
 import { Password } from "@mui/icons-material";
 import { InputAdornment} from '@mui/material';
@@ -62,7 +63,14 @@ function Employerregister({ open, onClose }) {
     const [designation, setDesignation] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
     const [errors, setErrors] = useState({});
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const [snackbarSeverity, setSnackbarSeverity] = useState("error");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const handleSnackbarClose = () => setSnackbarOpen(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);
 };
@@ -194,15 +202,8 @@ function Employerregister({ open, onClose }) {
     
     
       };
-      
-    
-
-  
-  
-
- 
-
-    const Register = () => {
+      const Register = () => {
+        setLoading(true);
         let payload = {
             "company_name": companyName,
             "email": company_email,
@@ -235,15 +236,43 @@ function Employerregister({ open, onClose }) {
             }
         })
         .then(response => {
-            // Handle success
-            console.log('Registration successful:',response.data);
-            onClose();
-        })
-        .catch(error => {
-            // Handle error
-            console.error(error);
-        });
-    };
+            setShowPopup(true);
+            setPopupMessage(`User successfully registered! Please check "${company_email}"!`);
+            setTimeout(() => {
+              setShowPopup(false);
+              navigate('/login');
+            }, 4000); 
+          })
+        .catch((error) => {
+        let errorMessage = "An error occurred. Please try again.";
+        if (error.response) {
+          switch (error.response.status) {
+            case 400:
+              errorMessage =
+                "Bad Request: Email already registered.";
+              break;
+            case 401:
+              errorMessage = "Unauthorized: Please log in and try again.";
+              break;
+            case 404:
+              errorMessage =
+                "Not Found: The requested resource could not be found.";
+              break;
+            case 500:
+              errorMessage =
+                "Internal Server Error: Something went wrong on the server.";
+              break;
+            default:
+              errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
+          }
+        }
+        setShowPopup(true); // Show the popup
+        setPopupMessage(errorMessage);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
     
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -256,12 +285,47 @@ function Employerregister({ open, onClose }) {
     const theme = createTheme();
 
     return (
-        <ThemeProvider theme={theme}>
+        
             <div>
-               
-
-            <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+             <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
             <DialogTitle style={{textAlign:'center'}}>Employer Registration</DialogTitle>
+            <ThemeProvider theme={theme}>
+            {loading && (
+            <div className="full-page-spinner">
+              <CircularProgress color="primary" size={50} />
+            </div>
+          )}
+          <Box sx={{ width: "100%", margin: "0%" }}>
+                  {showPopup && (
+                    <div className="popup">
+                      <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
+                        {popupMessage}
+                      </p>
+                      <button
+                        style={{ marginLeft: "35%", width: "30%" }}
+                        onClick={() => setShowPopup(false)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  )}
+                  <Box
+                    sx={{
+                      position: "sticky",
+                      top: "12%",
+                      zIndex: 1,
+                      backgroundColor: "white",
+                    }}
+                  ></Box>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={4000}
+            onClose={handleSnackbarClose}
+          >
+            <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
                     <DialogContent>
                         <Grid container spacing={2} rowSpacing={0}> {/* Grid container for 3 inputs in a row */}
                             <Grid item xs={4}>
@@ -877,9 +941,10 @@ function Employerregister({ open, onClose }) {
                         <Button onClick={onClose} color="secondary">Cancel</Button>
                         <Button onClick={handleSubmit} color="primary">Register</Button>
                     </DialogActions>
+                    </Box>
+                    </ThemeProvider>
                 </Dialog>
             </div>
-        </ThemeProvider>
     );
 }
 
