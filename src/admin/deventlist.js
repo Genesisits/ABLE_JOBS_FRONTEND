@@ -44,9 +44,9 @@ const DeventList = () => {
             <th>S.No</th>
               <th> Name</th>
               <th>Code</th>
-              {/* <th>Email</th> */}
+              
               <th>location</th>
-              {/* <th>Category</th> */}
+              
               <th>Date</th>
               <th>Status</th>
             </tr>
@@ -57,9 +57,9 @@ const DeventList = () => {
                <td>{indexOfFirstItem + index + 1}</td>
                 <td>{devent.name}</td>
                 <td>{devent.code}</td>
-                {/* <td>{devent.email}</td> */}
+                
                 <td>{devent.location}</td>
-                {/* <td>{devent.category}</td> */}
+                
                 <td>{devent.date}</td>
                 <td>{devent.status}</td>
               </tr>

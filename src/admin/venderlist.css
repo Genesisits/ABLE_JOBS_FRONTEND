@@ -1,8 +1,8 @@
-/* VenderList.css */
+
 
 .vender-list-container {
   margin: 20px;
-  overflow-x: auto; /* Add horizontal scroll for small screens */
+  overflow-x: auto; 
 }
 
 .vender-table {
@@ -30,13 +30,13 @@
   background-color: #881008;
   color: #fff;
   border-radius: 4px;
-  /* cursor: pointer; */
+  
   height: 10px;
 }
-/* Media Query for Responsive Table */
+
 @media (max-width: 600px) {
   .vender-table {
-    overflow-x: auto; /* Add horizontal scroll for small screens */
+    overflow-x: auto;
     display: block;
     white-space: nowrap;
     width: 120%;

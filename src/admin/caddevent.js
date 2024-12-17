@@ -9,16 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import * as yup from 'yup';
 
-// const validationSchema = yup.object().shape({
-//   eventtype: yup.string().required("Select Event Type"),
-
-// });
 
 const ITEMS_PER_PAGE = 5;
 export default function AddEvent() {
-  // const [errors, setErrors] = useState({});
+ 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedEventType, setSelectedEventType] = useState('');
   const [selectedOption, setSelectedOption] = useState("Events");
@@ -114,7 +109,7 @@ export default function AddEvent() {
       })
       .catch(error => {
         console.error('Error fetching decoration data:', error);
-        setLoadingDecoration(false); // Set loading state to false in case of error
+        setLoadingDecoration(false); 
       });
     }
     if (visibility.food) {
@@ -126,7 +121,7 @@ export default function AddEvent() {
       })
       .catch(error => {
         console.error('Error fetching decoration data:', error);
-        setLoadingFood(false); // Set loading state to false in case of error
+        setLoadingFood(false); 
       });
     }
    
@@ -139,7 +134,7 @@ export default function AddEvent() {
       })
       .catch(error => {
         console.error('Error fetching decoration data:', error);
-        setLoadingMakeup(false); // Set loading state to false in case of error
+        setLoadingMakeup(false); 
       });
     }
     
@@ -273,7 +268,7 @@ export default function AddEvent() {
     }));
     setSelectedCategory(newCategory);
 
-    // Filter vendors based on the selected category
+    
 
     setVisibility({
       ...Object.fromEntries(Object.entries(visibility).map(([key]) => [key, false])),
@@ -285,7 +280,7 @@ export default function AddEvent() {
     const selectedEmail = event.target.value;
     const isChecked = event.target.checked;
 
-    // Update the selected emails in addeventformData
+    
     setAddeventFormData((prevFormData) => {
       const updatedEmails = isChecked
         ? [...prevFormData.email, selectedEmail]
@@ -467,10 +462,10 @@ export default function AddEvent() {
   const handleAddEventSubmit = (e) => {
     e.preventDefault();
     
-    // validationSchema.validate(addeventformData, { abortEarly: false })
+    
     const { email } = addeventformData;
 
-    // Get selected items (chairs and decoration)
+    
     const selectedItems = [
       ...selectedChairs.map(item => ({ code: item.code, quantity: item.quantity || 1 })),
       ...(selectedDecoration ? [{ code: selectedDecoration.code, quantity: selectedDecoration.quantity || 1 }] : []),
@@ -492,7 +487,7 @@ export default function AddEvent() {
         className: 'custom-toast-info',
       });
 
-      // Send data to the backend
+      
       const selectedEventId = sessionStorage.getItem("selectedEventId");
       
       axios.post(ADD_EVENT_ITEMS + selectedEventId, { category: selectedEventType, items: selectedItems, emails: email })
@@ -501,7 +496,7 @@ export default function AddEvent() {
             sessionStorage.setItem("email", email);
             console.log('Form submitted:', addeventformData);
             navigate("/admin");
-            // Get selected vendors
+            
 
           }
         })
@@ -521,7 +516,7 @@ export default function AddEvent() {
   return (
 
     <div className="event-modal">
-      {/* <NavigationBar handleOptionClick={handleOptionClick} />  */}
+      
       <h2 style={{ marginTop: '6%' }}>Add Contract of Event</h2>
       <Link to="/admin" className="back-button">
         <FontAwesomeIcon icon={faArrowLeft} style={{ color: 'green' }} />
@@ -608,7 +603,7 @@ export default function AddEvent() {
               <div>
                <input
                   type="checkbox"
-                  // style={{ width: '15px', height: '15px' }}
+                  
                   checked={selectedDecoration?.item_id === item.item_id}
                   onChange={() => handleDecorationSelection(item)}
                   />
@@ -935,7 +930,7 @@ export default function AddEvent() {
               </label>
             </div>
           ))}
-          {/* Pagination */}
+          
           <div className="e-pagination">
             {Array.from({ length: totalPages }, (_, i) => (
               <button key={i + 1} onClick={() => handlePageChange(i + 1)}>{i + 1}</button>

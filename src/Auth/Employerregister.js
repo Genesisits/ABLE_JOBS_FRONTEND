@@ -8,7 +8,7 @@ import {Box,Snackbar,Alert,CircularProgress} from "@mui/material";
 import { EMPLOYER_REGISTER } from '../endpoints';
 import { Password } from "@mui/icons-material";
 import { InputAdornment} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material'; // Import icons
+import { Visibility, VisibilityOff } from '@mui/icons-material'; 
 
 const industries = [
     { id: "1", name: "IT and IT Services", abbreviation: "IT and IT Services" },
@@ -49,10 +49,10 @@ function Employerregister({ open, onClose }) {
     const [confirmpassword, setCpassword] = useState("");
     const [company_size, setCompanysize] = useState("");
     const [company_logo, setCompanylogo] = useState(null);
-    // const [fblinks, setFblinks] = useState("");
-    // const [instalinks, setInstalinks] = useState("");
+    
+   
     const [linkedinlink, setLinkedinlink] = useState("");
-    // const [xlink, setXlink] = useState("");
+   
     const [head_first_name, setHeadfirstname] = useState("");
     const [head_last_name, setHeadlastname] = useState("");
     const [represent_mail, setRepresentMail] = useState("");
@@ -75,11 +75,11 @@ function Employerregister({ open, onClose }) {
     setShowPassword(prev => !prev);
 };
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword); // Toggle password visibility
+    setShowPassword(!showPassword); 
   };
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+    event.preventDefault(); 
   };
 
 
@@ -94,10 +94,9 @@ function Employerregister({ open, onClose }) {
     const handlePassword = (event) => setPassword(event.target.value);
     const handleConfirmpassword = (event) => setCpassword(event.target.value);
     const handleGst = (event) => setGst(event.target.value);
-    // const handleFblink = (event) => setFblinks(event.target.value);
-    // const handleInstalink = (event) => setInstalinks(event.target.value);
+    
     const handleLinkedinlink = (event) => setLinkedinlink(event.target.value);
-    // const handleXlink = (event) => setXlink(event.target.value);
+   
     const handleHeadFirstName = (event) => setHeadfirstname(event.target.value);
     const handleHeadLastName = (event) => setHeadlastname(event.target.value);
     const handleRepresentMail = (event) => setRepresentMail(event.target.value);
@@ -197,7 +196,7 @@ function Employerregister({ open, onClose }) {
       if (!registration) {
         newErrors.registration = "Please upload registration.";
       }
-      setErrors(newErrors); // Set the errors in state
+      setErrors(newErrors); 
         return newErrors ;
     
     
@@ -215,10 +214,9 @@ function Employerregister({ open, onClose }) {
             "password": password,
             "company_website": company_website,
             "company_logo": company_logo,
-            // "fblink": fblinks,
-            // "instalink": instalinks,
+           
             "linkedinlink": linkedinlink,
-            // "xlink": xlink,
+            
             "head_first_name": head_first_name,
             "head_last_name": head_last_name,
             "head_email": represent_mail,
@@ -266,7 +264,7 @@ function Employerregister({ open, onClose }) {
               errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
           }
         }
-        setShowPopup(true); // Show the popup
+        setShowPopup(true); 
         setPopupMessage(errorMessage);
       })
       .finally(() => {
@@ -278,7 +276,7 @@ function Employerregister({ open, onClose }) {
         event.preventDefault();
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length === 0) {
-            Register(); // Call Register if validation passes
+            Register(); 
         }
     };
 
@@ -327,7 +325,7 @@ function Employerregister({ open, onClose }) {
             </Alert>
           </Snackbar>
                     <DialogContent>
-                        <Grid container spacing={2} rowSpacing={0}> {/* Grid container for 3 inputs in a row */}
+                        <Grid container spacing={2} rowSpacing={0}> 
                             <Grid item xs={4}>
                                 <TextField
                                     label="Company Name"
@@ -445,9 +443,9 @@ function Employerregister({ open, onClose }) {
                                         '& .MuiOutlinedInput-root': {
                                             height: '43px',
                                             marginTop: '12px',
-                                            // Control the height here
+                                            
                                             '& .MuiSelect-select': {
-                                                padding: '10px', // Adjust padding to reduce the height
+                                                padding: '10px', 
                                             },
                                             backgroundColor: '#fff',
                                             '& fieldset': {
@@ -511,9 +509,9 @@ function Employerregister({ open, onClose }) {
                                         '& .MuiOutlinedInput-root': {
                                             height: '43px',
                                             marginTop: '12px',
-                                            // Control the height here
+                                            
                                             '& .MuiSelect-select': {
-                                                padding: '10px', // Adjust padding to reduce the height
+                                                padding: '10px',
                                             },
                                         },
                                     }}
@@ -538,22 +536,21 @@ function Employerregister({ open, onClose }) {
                       helperText={errors.password}
                       className="custom-input"
                       // margin="dense"
-                      type={showPassword ? 'text' : 'password'} // Toggle password field type
+                      type={showPassword ? 'text' : 'password'} 
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">
               <IconButton
-                onClick={handleClickShowPassword}  // Toggle password visibility
-                onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
-                edge="end"
+                onClick={handleClickShowPassword}  
+                onMouseDown={handleMouseDownPassword} 
                 sx={{
-                  padding: 0, // Remove default padding to keep icon within the input field
-                  color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
-                  fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                  padding: 0, 
+                  color: 'rgba(0, 0, 0, 0.54)', 
+                  fontSize: '1.5rem', 
                  
-                  display: 'flex', // Ensure the icon is vertically centered
-                  alignItems: 'center', // Align the icon vertically within the field
-                  justifyContent: 'center', // Align the icon horizontall
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
                   marginLeft: '-16px',
                   
                   
@@ -561,7 +558,7 @@ function Employerregister({ open, onClose }) {
                 
                 }}
               >
-                {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                {showPassword ? <VisibilityOff /> : <Visibility />} 
               </IconButton>
             </InputAdornment>
           ),
@@ -578,12 +575,12 @@ function Employerregister({ open, onClose }) {
                             borderColor: "transparent",
                           },
                           "& input": {
-                            padding: '10px 12px', // Adjust padding (same as email and mobile)
-                            fontSize: '0.875rem', // Smaller font size (similar to other fields)
+                            padding: '10px 12px', 
+                            fontSize: '0.875rem', 
                           },
                         },
                         '& .MuiInputBase-root': {
-                          height: '45px', // Ensure consistent height with other fields
+                          height: '45px', 
                         },
                         marginTop: '16px',
                       }}
@@ -614,11 +611,11 @@ function Employerregister({ open, onClose }) {
                                                 borderColor: 'transparent',
                                             },
                                             '& input': {
-                                                padding: '10px 12px', // Ensure consistent padding with other fields
-                                                fontSize: '0.875rem', // Matching font size
+                                                padding: '10px 12px', 
+                                                fontSize: '0.875rem', 
                                             },
                                             '& .MuiInputBase-root': {
-                height: '45px', // Ensure consistent height with the password and company size fields
+                height: '45px', 
             },
             marginTop: '8px',
                                         },
@@ -908,33 +905,7 @@ function Employerregister({ open, onClose }) {
                                     }}
                                 />
                             </Grid>
-                            {/* <Grid item xs={4}>
-                                <label>Upload Image</label>
-                                <TextField
-                                    label="Company Logo"
-                                    onChange={(event) => setProfileimage(event.target.files[0])}
-                                    fullWidth
-                                    type="file"
-                                    margin="dense"
-                                    error={!!errors.profileimage}
-                                    helperText={errors.profileimage}
-                                    className="custom-input"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                        },
-                                    }}
-                                />
-                            </Grid> */}
-
+                            
                         </Grid>
                     </DialogContent>
                     <DialogActions>
