@@ -10,7 +10,7 @@ import Pagination from "react-js-pagination";
 
 const EventItems = () => {
     const [eventData, setEventData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Add a loading state
+    const [isLoading, setIsLoading] = useState(true); 
     const [showModal, setShowModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedEmails, setSelectedEmails] = useState([]);
@@ -29,20 +29,20 @@ const EventItems = () => {
 
     useEffect(() => {
         const ItemEventId = sessionStorage.getItem("ItemEventId");
-        setIsLoading(true); // Set loading to true when starting to fetch data
+        setIsLoading(true); 
         axios.get(`${EVENT_ITEMS}${ItemEventId}`)
             .then(response => {
                 if (response.data && response.data.length > 0) {
                     setEventData(response.data);
                 } else {
-                    // Log or handle empty data case as needed
+                    
                     console.log("No items found for the given event ID");
                 }
-                setIsLoading(false); // Set loading to false after data is fetched
+                setIsLoading(false); 
             })
             .catch(error => {
                 console.error('Error fetching events data:', error);
-                setIsLoading(false); // Ensure loading is set to false even if there's an error
+                setIsLoading(false); 
             });
     }, []);
 
