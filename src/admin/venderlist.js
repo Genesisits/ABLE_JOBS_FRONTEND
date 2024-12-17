@@ -46,7 +46,7 @@ const VenderList = () => {
               <th>Email</th>
               <th>Phone</th>
               <th>Category</th>
-              {/* <th>Activation Status</th> */}
+              
               <th>Address</th>
             </tr>
           </thead>
@@ -59,7 +59,7 @@ const VenderList = () => {
                 <td>{vendor.email}</td>
                 <td>{vendor.phone}</td>
                 <td>{vendor.category}</td>
-                {/* <td>{vendor.activation_status ? 'Active' : 'Inactive'}</td> */}
+                
                 <td>{vendor.address || 'N/A'}</td>
               </tr>
             ))}

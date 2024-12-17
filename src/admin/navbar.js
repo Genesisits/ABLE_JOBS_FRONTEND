@@ -14,10 +14,10 @@ const NavigationBar = ({ handleOptionClick }) => {
   const token = localStorage.getItem("id_token");
 
   if (!token) {
-    return null; // Or show a message if you prefer
+    return null; 
   }
 
-  // Modified click handler to also set selected option
+  
   const handleClick = (option) => {
     handleOptionClick(option);
     setSelectedOption(option);
