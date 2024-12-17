@@ -3,7 +3,7 @@ import contact from '../../images/Capture1.JPG';
 import './contact.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faMap, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import Footer from '../footer/footer';
 import phone from '../../images/phone1.png';
 import map from '../../images/map.png';

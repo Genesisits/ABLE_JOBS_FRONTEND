@@ -7,14 +7,12 @@ import './careers.css';
 export default function Careers() {
   
     const inputStyle = {
-        // width: '100%',
-        // fontSize: '14px',
-        // marginBottom: '-1px',
+        
         padding: '4px 5px',
-        // outline: 'none',
+        
         backgroundColor: '#fff',
         border: '1px solid #212529',
-        // color: '#212529',
+        
         borderRadius: '6px 6px 6px 6px',
         
       };
@@ -58,7 +56,7 @@ export default function Careers() {
                     <div className="career-container">
                         <div className="careers-row1">
                             <h1 className="text">Apply Here</h1>
-                            {/* <div className="register-form"> */}
+                            
                             <form>
                                 <div className="career-controls">
                                     <div className="careers-row2">
@@ -114,7 +112,7 @@ export default function Careers() {
                                                     </div>
                                 </div>
                             </form>
-                            {/* </div> */}
+                            
                         </div>
                     </div>
                 </div>

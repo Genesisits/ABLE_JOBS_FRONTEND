@@ -6,7 +6,7 @@ import popSoundFile from '../../sound/sound.mp3';
 
 const BackGround = () => {
   useEffect(() => {
-    const delay = 3 * 1000; // 5 seconds delay
+    const delay = 3 * 1000;
 
     setTimeout(() => {
       const duration = 1 * 1000; 
@@ -39,7 +39,7 @@ const BackGround = () => {
         }
       })();
 
-      // Play the sound after the confetti animation
+
       setTimeout(() => {
         popSound.play().catch((error) => {
           console.error('Failed to play the sound:', error);

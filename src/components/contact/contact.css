@@ -4,11 +4,11 @@
 }
 .contact-heading{
     text-align: center;
-    /* margin-left: 30%; */
+    
 }
 .contact-heading1{
     text-align: center;
-    /* margin-left: 30%; */
+   
 }
 form {
     width: 50%;
@@ -46,14 +46,10 @@ textarea{
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);   
 }
 
-/* select {
-    height: 48px; 
-    width:105%;
-    font-size: large;
-} */
+
 .contact-event{
     width:105%; 
-    /* width: 100%; */
+    
     padding: 20px;
     margin-top: 10px;
     border: 1px solid #ccc;
@@ -72,10 +68,7 @@ button {
     cursor: pointer;
 }
 
-/* Style the button on hover */
-/* button:hover {
-    background-color: #0056b3;
-} */
+
 span{
     color: white;
 }
@@ -85,8 +78,8 @@ p{
 input::placeholder,
 textarea::placeholder,
 select::placeholder {
-    font-size: 18px; /* You can adjust the font size to your preference */
-    color: #999; /* You can also change the color if needed */
+    font-size: 18px; 
+    color: #999;
 }
 .text-center {
     text-align: center!important;
@@ -96,21 +89,21 @@ select::placeholder {
     min-height: 250px;
     padding: 50px 20px 20px 20px;
     transition: all 0.3s ease 0s;
-    /* background-color: #e40b7f; */
+
 }
 .single-box1 {
     border: 1px solid #0056b3;
     min-height: 250px;
     padding: 50px 20px 20px 20px;
     transition: all 0.3s ease 0s;
-    /* background-color: #e40b7f; */
+    
 }
 .single-box2 {
     border: 1px solid #0056b3;
     min-height: 250px;
     padding: 50px 20px 20px 20px;
     transition: all 0.3s ease 0s;
-    /* background-color: #e40b7f; */
+    
 }
 .single-box1 i {
     font-size: 40px;
@@ -153,14 +146,7 @@ select::placeholder {
     margin-right: auto;
     margin-left: auto;
 }
-/* .fa {
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-} */
+
 .svg-inline--fa {
     display: var(--fa-display, inline-block);
     height: 1.5em;
@@ -176,19 +162,16 @@ select::placeholder {
     color: black;
 }
 .contact-phone-icon{
-    /* margin-left: 25%;
-    height: 35px; */
+    
     filter: brightness(100%) contrast(100%) saturate(100%) hue-rotate(149deg);
     
     }
     .contact-email-icon{
-    /* margin-left: 25%;
-    height: 35px; */
+    
     filter: brightness(110%) contrast(110%) saturate(110%) hue-rotate(399deg);
     }
     .contact-map-icon{
-    /* margin-left: 25%;
-    height: 35px; */
+    
     filter: brightness(100%) contrast(100%) saturate(100%) hue-rotate(240deg);
     } 
    
@@ -198,11 +181,11 @@ select::placeholder {
         }
         form {
             width: 70%;
-            /* margin: 0 auto; */
+            
             margin-left: 8%;
         }
         .c-event {
-            /* height: 48px;  */
+            
             width:115%;
             font-size: large;
         }
@@ -244,7 +227,7 @@ select::placeholder {
     }
  @media screen and (min-width: 768px) and (max-width: 1024px) {
     .c-event {
-        /* height: 48px;  */
+        
         width:110%;
         font-size: large;
     }
@@ -254,7 +237,7 @@ select::placeholder {
     }
     @media screen and (min-width: 1024px) and (max-width: 1024px) {
         .c-event {
-            /* height: 48px;  */
+            
             width:108%;
             font-size: large;
         }

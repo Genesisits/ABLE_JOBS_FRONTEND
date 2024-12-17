@@ -8,7 +8,7 @@ function Dashboard() {
     <Layout>
     <div className='dashboardGen'>
         <h3>Welcome to Able Jobs</h3>
-        {/* <button>Contact us</button> */}
+        
     </div>
     </Layout>
   )

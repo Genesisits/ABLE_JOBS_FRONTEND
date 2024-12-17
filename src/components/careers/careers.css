@@ -12,17 +12,10 @@ padding-left: 15px;
 margin-right: auto;
 margin-left: auto;
 }
-/* .career-row {
-display: -ms-flexbox;
-display: flex;
--ms-flex-wrap: wrap;
-flex-wrap: wrap;
-margin-right: -15px;
-margin-left: -15px;
-} */
+
 .careers-row1 {
 display: -ms-flexbox;
-/* display: flex; */
+
 -ms-flex-wrap: wrap;
 flex-wrap: wrap;
 margin-right: -15px;
@@ -164,7 +157,7 @@ color:' #e3097e'
 }
 .arrow-item {
 font-size: '22px';
-/* color:#0056b3; */
+
 list-style: none;
 margin: 20px 0;
 margin-left: -2%;
@@ -180,7 +173,7 @@ margin-right: 10%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 color:#881008;
-/* content: "\f061"; */
+
 }
 .career-btn input {
 background-color: #881008 !important;
