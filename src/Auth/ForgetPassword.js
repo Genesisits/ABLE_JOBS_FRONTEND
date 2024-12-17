@@ -21,7 +21,7 @@ function ForgetPassword() {
   let [loading, setLoading] = useState(false);  // Add loading state
   
   const handleSubmit = () => {
-    setLoading(true);  // Start loading
+    setLoading(true);  
     let payload = {
       "email": email
     }
@@ -36,16 +36,16 @@ function ForgetPassword() {
         } else {
           setMessage(error.message || 'An error occurred. Please try again later.');
         }
-        setShow(true);  // Show the error message
+        setShow(true);  
       })
       .finally(() => {
-        setLoading(false);  // Stop loading
+        setLoading(false);  
       });
   };
 
   return (
     <div className="container-fp">
-      {/* Full-page loading spinner */}
+     
       {loading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
