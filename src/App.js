@@ -3,9 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 // import { useLocation } from "react-router-dom";
 import Header from "./components/header/header";
 import Main from "./components/main/main";
-import About from "./components/about/about";
-import Blog from "./components/blog/blog" ;
-import Careers from "./components/careers/careers";
 import Contact from "./components/contact/contact";
 import Gallery from "./components/gallery/gallery";
 import Services from "./components/services/services";
@@ -80,16 +77,13 @@ export default function App() {
       <Header />
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/about" element={<About />} />
           <Route path="/jobstatus" element={<Jobstatus />} />
           <Route path="/trainer" element={<Trainer/>}/>
           <Route path="/volunteer" element={<Volunteer/>}/>
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/shortlisted" element={<Shortlisted />} />
           <Route path="/register" element={<Registeras />} />
-          <Route path="/blog" element={<Blog />} />
           <Route path="/findjobs" element={<Findjobs />} />
-          <Route path="/careers" element={<Careers />} />
           <Route path="/forgetpassword" element={<ForgetPassword/>} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/onboardedcandidates" element={<OnboardCandidates />} />
