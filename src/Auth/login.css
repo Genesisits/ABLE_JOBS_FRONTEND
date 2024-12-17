@@ -3,20 +3,20 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;  /* Ensures the content is spread out */
+    justify-content: space-between; 
     width: 90%;
     background-color: white;
 }
 
 .flex-item-login {
-    flex: 1 1 50%;  /* Ensure the flex item takes up 50% of the container's width */
+    flex: 1 1 50%;  
     height: 90%;
     text-align: center;
     margin: 20px 50px;
 }
 
 .imageDetails_login {
-    width: 50%;  /* Make the image take up 50% of the container's width */
+    width: 50%;  
     height: auto;
 }
 
@@ -64,43 +64,43 @@
     align-items: center;
     z-index: 1000;
 }
-/* Container for the login actions (button + forgot password link) */
+
 .login-actions {
-    display: flex;                /* Use flexbox to arrange items */
-    flex-direction: column;       /* Stack button and link vertically */
-    align-items: center;          /* Center items horizontally */
-    justify-content: center;      /* Ensure the content is vertically centered */
-    width: 100%;                  /* Ensure container takes full width */
-    max-width: 400px;             /* Optional: Limit the max width for better layout control */
-    margin-left: auto;            /* Center the login actions container horizontally */
-    margin-right: auto;           /* Center the login actions container horizontally */
-    margin-top: 20px;             /* Add space between button/link and the content above */
-    gap: 10px;                    /* Add space between the button and the link */
+    display: flex;                
+    flex-direction: column;       
+    align-items: center;          
+    justify-content: center;      
+    width: 100%;                  
+    max-width: 400px;             
+    margin-left: auto;            
+    margin-right: auto;           
+    margin-top: 20px;             
+    gap: 10px;                    
 }
 
-/* Button style */
+
 .login-actions button {
     margin-right: 200px;
-    padding: 12px 24px;           /* Add padding to make the button larger */
-    background-color: #1976D2;    /* Blue background color */
-    color: white;                 /* White text color */
-    border: none;                 /* Remove border */
-    border-radius: 5px;           /* Rounded corners */
-    cursor: pointer;             /* Change cursor to pointer on hover */
-    font-size: 16px;              /* Font size for button text */
-    transition: background-color 0.3s ease; /* Smooth background transition */
-    width: 100%;                  /* Make the button fill the container */
-    max-width: 300px;             /* Limit max width to prevent stretching too far */
+    padding: 12px 24px;          
+    background-color: #1976D2;    
+    color: white;                 
+    border: none;                 
+    border-radius: 5px;          
+    cursor: pointer;             
+    font-size: 16px;             
+    transition: background-color 0.3s ease; 
+    width: 100%;                 
+    max-width: 300px;             
 }
 
 .links-container {
     display: flex;
-    justify-content: space-between; /* Adjust spacing between the links */
+    justify-content: space-between; 
     align-items: center;
   }
   
   .link-item {
-    margin: 2px; /* Remove default margin from <p> */
+    margin: 2px; 
   }
   
   .links-container a {
@@ -110,35 +110,35 @@
     color: blue;
   }
   
-/* Button hover effect */
+
 .login-actions button:hover {
-    background-color: #1565C0;    /* Darker blue on hover */
+    background-color: #1565C0;    
 }
 
-/* Button disabled state */
+
 .login-actions button:disabled {
-    background-color: #ccc;       /* Gray background for disabled state */
-    cursor: not-allowed;          /* Show "not-allowed" cursor when disabled */
+    background-color: #ccc;       
+    cursor: not-allowed;          
 }
 
-/* Forgot password link style */
+
 .forgot-password-link {
-    font-size: 14px;              /* Font size for the link */
-    color: #007bff;               /* Blue color for the link */
-    text-decoration: none;        /* Remove underline */
-    cursor: pointer;             /* Change cursor to pointer */
-    transition: color 0.3s ease;  /* Smooth color transition on hover */
-    margin-top: 10px;             /* Space between button and link */
+    font-size: 14px;              
+    color: #007bff;               
+    text-decoration: none;        
+    cursor: pointer;             
+    transition: color 0.3s ease;  
+    margin-top: 10px;             
 }
 
-/* Link hover effect */
+
 .forgot-password-link:hover {
-    color: #0056b3;               /* Darker blue on hover */
-    text-decoration: underline;   /* Underline on hover */
+    color: #0056b3;               
+    text-decoration: underline;   
 }
 
-/* Link focus effect */
+
 .forgot-password-link:focus {
-    outline: none;                /* Remove default focus outline */
-    text-decoration: underline;   /* Underline when focused */
+    outline: none;                
+    text-decoration: underline;   
 }
