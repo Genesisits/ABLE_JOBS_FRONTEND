@@ -305,7 +305,7 @@ function Employeeregister({ open, onClose }) {
   const handleSkillAdd = (newSkill) => {
     if (newSkill && !selectedSkills.includes(newSkill)) {
       setSelectedSkills([...selectedSkills, newSkill]);
-      // console.log(selectedSkills.toString())
+      
     }
   };
 
@@ -399,40 +399,40 @@ function Employeeregister({ open, onClose }) {
     { id: "26", name: "Others", abbreviation: "Others" },
   ];
 
-  // Handle input change in the search bar
+  
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    // Filter skills based on the search term
+    
     const filtered = skillOptions.filter((skill) =>
       skill.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredSkills(filtered);
   };
 
-  // Handle selecting a skill from the suggestions
+  
   const handleSkillSelect = (skill) => {
-    // Avoid duplicates
+    
     if (!selectedSkills.includes(skill)) {
       setSelectedSkills([...selectedSkills, skill]);
     }
-    // Clear the search term after selection
+   
     setSearchTerm("");
   };
 
-  // Handle removing a selected skill
+  
   const handleSkillRemove = (skillToRemove) => {
     setSelectedSkills(
       selectedSkills.filter((skill) => skill !== skillToRemove)
     );
   };
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword); // Toggle password visibility
+    setShowPassword(!showPassword); 
   };
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+    event.preventDefault(); 
   };
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -459,7 +459,7 @@ function Employeeregister({ open, onClose }) {
     setEducationFields(newFields);
   };
 
-  // Add a new row of fields
+  
   const addEducationField = () => {
     setEducationFields([
       ...educationFields,
@@ -474,7 +474,7 @@ function Employeeregister({ open, onClose }) {
     ]);
   };
 
-  // Remove a specific row of fields
+  
   const removeEducationField = (indexToRemove) => {
     const newFields = educationFields.filter(
       (_, index) => index !== indexToRemove
@@ -565,15 +565,15 @@ function Employeeregister({ open, onClose }) {
       return;
     }
     if (activeStep === 2 && !validateExperienceSection()) {
-      return; // Stop if validation fails
+      return; 
     }
     if (activeStep === 2 && !validateExperience()) {
-      // Assuming this is step 3
+      
       setSnackbarOpen(true);
       return;
     }
     if (activeStep === 3 && !validateSkills()) {
-      // Assuming activeStep 2 corresponds to the skills step
+      
       setSnackbarOpen(true);
       return;
     }
@@ -593,12 +593,12 @@ function Employeeregister({ open, onClose }) {
 
   const handleSkip = () => {
     if (activeStep === 1) {
-      // Check if at least one entry has valid data
+      
       const hasValidEntry = educations.some((education) => education.college.trim() !== "");
       
       if (!hasValidEntry) {
         setError("At least one valid School/College Name is required to skip.");
-        setSnackbarOpen(true); // Show error message
+        setSnackbarOpen(true);
         return;
       }
     }
@@ -624,7 +624,7 @@ function Employeeregister({ open, onClose }) {
     const payload = {
       educations: educations,
       projects: [],
-      // job_experiences: selectedOption,
+      
       job_experiences:
         selectedOption === "Experienced"
           ? experienceList.map((exp) => ({
@@ -649,7 +649,7 @@ function Employeeregister({ open, onClose }) {
       disability: disability,
       disabilityPercentage: disabilitypercentage,
       willing_to_relocate: willingToRelocate,
-      // disabilityCertificate: file,
+      
       languages_known: languages_known,
     };
 
@@ -691,7 +691,7 @@ function Employeeregister({ open, onClose }) {
               errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
           }
         }
-        setShowPopup(true); // Show the popup
+        setShowPopup(true); 
         setPopupMessage(errorMessage);
       })
       .finally(() => {
@@ -713,13 +713,13 @@ function Employeeregister({ open, onClose }) {
     },
   ]);
   const handleEducationChange = (index, field, value) => {
-    const updatedEducations = [...educations]; // Create a copy of the educations array
+    const updatedEducations = [...educations]; 
     if (field === "startDate" || field === "endDate") {
-      // Ensure the value is formatted as YYYY-MM-DD
+      
       value = new Date(value).toISOString().split("T")[0];
     }
-    updatedEducations[index][field] = value; // Update the specific field in the object at the given index
-    setEducations(updatedEducations); // Set the updated array to the state
+    updatedEducations[index][field] = value; 
+    setEducations(updatedEducations); 
   };
 
   const handleExperienceChange = (index, field, value) => {
@@ -744,7 +744,7 @@ function Employeeregister({ open, onClose }) {
   };
   const navigate = useNavigate();
   const handleOTP = () => {
-    // navigate('/verify')
+    
   };
   const validateSkills = () => {
     if (selectedSkills.length === 0) {
@@ -764,25 +764,14 @@ function Employeeregister({ open, onClose }) {
       return false;
     }
 
-    // if (disabilitypercentage === '') {
-    //   const percentage = parseFloat(disabilitypercentage);
-      
-    //   // Check if it is a valid number and in the range 0-100
-    //   if (isNaN(percentage) || percentage < 0 || percentage > 100) {
-    //     setError('Disability Percentage must be a number between 0 and 100.');
-    //     return false;
-    //   }
-    // }
+    
 
     if (!languages_known || languages_known.trim() === "") {
       setError("Please specify at least one known language.");
       return false;
     }
 
-    // if (!willingToRelocate) {
-    //   setError("You must confirm willingness to relocate.");
-    //   return false;
-    // }
+   
 
     return true;
   };
@@ -827,10 +816,10 @@ function Employeeregister({ open, onClose }) {
     axios
       .post(`${REGISTER}`, payload)
       .then((response) => {
-        // handle success
+       
       })
       .catch((error) => {
-        // handle error
+        
       });
   };
 
@@ -842,7 +831,7 @@ function Employeeregister({ open, onClose }) {
           <ThemeProvider theme={theme}>
             <Box style={{ margin: "0% 15% ", gap: "5px" }}>
               <Grid container spacing={1} style={{ marginLeft: "3%" }}>
-                {/* First name and Last name */}
+                
                 <Grid item xs={6}>
                   <TextField
                     label="First name"
@@ -879,7 +868,7 @@ function Employeeregister({ open, onClose }) {
                     }}
                   />
                 </Grid>
-                {/* Email and Password */}
+                
                 <Grid item xs={6}>
                   <TextField
                     label="Email"
@@ -910,17 +899,17 @@ function Employeeregister({ open, onClose }) {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton
-                            onClick={handleClickShowPassword}  // Toggle password visibility
-                            onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                            onClick={handleClickShowPassword} 
+                            onMouseDown={handleMouseDownPassword}  
                             edge="end"
                             sx={{
-                              padding: 0, // Remove default padding to keep icon within the input field
-                              color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
-                              fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                              padding: 0, 
+                              color: 'rgba(0, 0, 0, 0.54)', 
+                              fontSize: '1.5rem', 
                              
-                              display: 'flex', // Ensure the icon is vertically centered
-                              alignItems: 'center', // Align the icon vertically within the field
-                              justifyContent: 'center', // Align the icon horizontall
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center', 
                               marginLeft: '-16px',
                               
                               
@@ -946,7 +935,7 @@ function Employeeregister({ open, onClose }) {
                   />
                 </Grid>
 
-                {/* Mobile Number */}
+                
                 <Grid item xs={6}>
                   <TextField
                     label="Mobile Number"
@@ -966,15 +955,9 @@ function Employeeregister({ open, onClose }) {
                   />
                 </Grid>
 
-                {/* Country and State Dropdowns */}
+                
                 <Grid item xs={6}>
-                  {/* <Box
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      justifyContent: "space-between",
-                    }}
-                  > */}
+                  
                   <select
                     value={state}
                     style={{ width: "100%" }}
@@ -987,16 +970,16 @@ function Employeeregister({ open, onClose }) {
                       </option>
                     ))}
                   </select>
-                  {/* </Box> */}
+                 
                 </Grid>
 
-                {/* Address */}
+                
                 <Grid item xs={12}>
                   <TextField
                     label="Address"
                     value={useraddress}
                     onChange={(e) => setAddress(e.target.value)}
-                    // fullWidth
+                    
                     margin="dense"
                     multiline
                     rows={4}
@@ -1011,7 +994,7 @@ function Employeeregister({ open, onClose }) {
         return (
           <div className="education">
             <Box style={{ margin: "0% 2%" }}>
-              {/* Map through the educations data and create dynamic static fields */}
+              
               {educations.map((education, index) => (
                 <Grid container spacing={2} key={index}>
                   <Grid item xs={2}>
@@ -1374,7 +1357,7 @@ function Employeeregister({ open, onClose }) {
       onChange={(e) => setDisabilitypercentage(e.target.value)}
       style={{
         width: "100%",
-        height: "40px", // Match Select height
+        height: "40px", 
         padding: "8px",
         border: "1px solid #ccc",
         borderRadius: "4px",
@@ -1391,7 +1374,7 @@ function Employeeregister({ open, onClose }) {
       placeholder="Please enter known languages with comma"
       style={{
         width: "100%",
-        height: "40px", // Match Select height
+        height: "40px", 
         padding: "8px",
         border: "1px solid #ccc",
         borderRadius: "4px",
@@ -1462,12 +1445,12 @@ function Employeeregister({ open, onClose }) {
   };
 
   return (
-    // <Paper>
+    
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogTitle style={{ textAlign: "center" }}>
         Employee Registration
       </DialogTitle>
-      {/* Full-page loading spinner */}
+      
       {isLoading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
@@ -1572,7 +1555,7 @@ function Employeeregister({ open, onClose }) {
         )}
       </Box>
     </Dialog>
-    //  </Paper>
+    
   );
 }
 
