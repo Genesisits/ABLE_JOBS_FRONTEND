@@ -13,7 +13,8 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  CircularProgress
+  CircularProgress,
+  IconButton,
 } from "@mui/material";
 import { CountryDropdown, StateDropdown } from "react-country-state-dropdown";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -21,6 +22,10 @@ import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import { VOLUNTEER_REGISTER } from "../endpoints";
 import { Password } from "@mui/icons-material";
+
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { InputAdornment} from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
 const countryStateData = {
   USA: [
@@ -251,6 +256,21 @@ function Volunteer({ open, onClose }) {
   const [snackbarSeverity, setSnackbarSeverity] = useState("error");
   const [loading, setLoading] = useState(false)
   //   const [languages_known, setKnownLanguages] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
+    const [error, setError] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => {
+      setShowPassword(!showPassword); // Toggle password visibility
+    };
+    const navigate = useNavigate();
+    const handleOTP = () => {
+        // navigate('/verify')
+      };
+  
+    const handleMouseDownPassword = (event) => {
+      event.preventDefault(); // Prevent the mouse down event from triggering the input focus
+    };
   const [pancard, setPancard] = useState(null);
   const [no_of_hours, setNOH] = useState("");
   //   const [experience, setExperience] = useState("");
@@ -303,34 +323,41 @@ function Volunteer({ open, onClose }) {
         },
       })
       .then((response) => {
-        console.log(response.data);
-        if (response.status === 201) {
-          // Success - Show a message
-          setSnackbarMessage("Registration successful! You have been successfully registered.");
-          setSnackbarSeverity("success");
-          setOpenSnackbar(true);
-          onClose(); // Close dialog on success
-        }
+        setShowPopup(true);
+        setPopupMessage(`User successfully registered! Please check "${useremail}"!`);
+        setTimeout(() => {
+          setShowPopup(false);
+          navigate('/login');
+        }, 4000); 
       })
+      
       .catch((error) => {
-        console.error(error);
-        if (error.response && error.response.status === 400) {
-          // Check if the error is due to email already existing
-          if (error.response.data.email && error.response.data.email[0] === "volunteer with this email already exists.") {
-            setSnackbarMessage("Email already exists. Please use a different email.");
-            setSnackbarSeverity("error");
-            setOpenSnackbar(true);
-          } else {
-            setSnackbarMessage("Registration failed. Please try again.");
-            setSnackbarSeverity("error");
-            setOpenSnackbar(true);
+        let errorMessage = "An error occurred. Please try again.";
+        if (error.response) {
+          switch (error.response.status) {
+            case 400:
+              errorMessage =
+                "Bad Request: Email already registered.";
+              break;
+            case 401:
+              errorMessage = "Unauthorized: Please log in and try again.";
+              break;
+            case 404:
+              errorMessage =
+                "Not Found: The requested resource could not be found.";
+              break;
+            case 500:
+              errorMessage =
+                "Internal Server Error: Something went wrong on the server.";
+              break;
+            default:
+              errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
           }
-        } else {
-          setSnackbarMessage("Registration failed. Please try again.");
-          setSnackbarSeverity("error");
-          setOpenSnackbar(true);
         }
-      }).finally(() => {
+        setShowPopup(true); // Show the popup
+        setPopupMessage(errorMessage);
+      })
+      .finally(() => {
         setLoading(false)
       })
   };
@@ -344,6 +371,28 @@ function Volunteer({ open, onClose }) {
             <CircularProgress color="primary" size={50} />
           </div>
         )}
+        <Box sx={{ width: "100%", margin: "0%" }}>
+                          {showPopup && (
+                            <div className="popup">
+                              <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
+                                {popupMessage}
+                              </p>
+                              <button
+                                style={{ marginLeft: "35%", width: "30%" }}
+                                onClick={() => setShowPopup(false)}
+                              >
+                                Close
+                              </button>
+                            </div>
+                          )}
+                          <Box
+                            sx={{
+                              position: "sticky",
+                              top: "12%",
+                              zIndex: 1,
+                              backgroundColor: "white",
+                            }}
+                          ></Box>
         <DialogTitle style={{ textAlign: 'center' }}>Volunteer Registration</DialogTitle>
         <ThemeProvider theme={theme}>
           <Box style={{ margin: "2% 5%" }}>
@@ -424,20 +473,46 @@ function Volunteer({ open, onClose }) {
                   onChange={(e) => setPassword(e.target.value)}
                   fullWidth
                   // margin="dense"
-                  className="custom-input"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderColor: "transparent",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "transparent",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "transparent",
-                      },
-                    },
-                  }}
+                  className="custom-input" type={showPassword ? 'text' : 'password'} // Toggle password field type
+                                    style={{width:'105%'}}
+                                    InputProps={{
+                                      endAdornment: (
+                                        <InputAdornment position="start">
+                                          <IconButton
+                                            onClick={handleClickShowPassword}  // Toggle password visibility
+                                            onMouseDown={handleMouseDownPassword}  // Prevent focus change on mouse down
+                                            edge="end"
+                                            sx={{
+                                              padding: 0, // Remove default padding to keep icon within the input field
+                                              color: 'rgba(0, 0, 0, 0.54)', // Default icon color (can be customized)
+                                              fontSize: '1.5rem', // Adjust icon size to fit within the input field
+                                             
+                                              display: 'flex', // Ensure the icon is vertically centered
+                                              alignItems: 'center', // Align the icon vertically within the field
+                                              justifyContent: 'center', // Align the icon horizontall
+                                              marginLeft: '-16px',
+                                              
+                                              
+                                              
+                                            
+                                            }}
+                                          >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                                          </IconButton>
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                  
+                                    sx={{
+                                      "& .MuiOutlinedInput-root": {
+                                        "& fieldset": { borderColor: "transparent" },
+                                        "&:hover fieldset": { borderColor: "transparent" },
+                                        "&.Mui-focused fieldset": {
+                                          borderColor: "transparent",
+                                        },
+                                      },
+                                    }}
+                 
                 />
               </Grid>
               <Grid item xs={4}>
@@ -713,6 +788,7 @@ function Volunteer({ open, onClose }) {
             </DialogActions>
           </Box>
         </ThemeProvider>
+        </Box>
       </Dialog>
       <Snackbar
         open={openSnackbar}
