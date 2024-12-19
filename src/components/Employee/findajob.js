@@ -42,8 +42,8 @@ function Findjob({ closeModal }) {
   useEffect(() => {
 
     if (location.state?.fromLogin && !localStorage.getItem('findjobReloaded')) {
-      localStorage.setItem('findjobReloaded', 'true'); // Set reload flag
-      window.location.reload(); // Reload the page
+      localStorage.setItem('findjobReloaded', 'true'); 
+      window.location.reload(); 
     }
   }, [location.state]);
   useEffect(() => {

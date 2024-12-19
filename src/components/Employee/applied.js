@@ -32,7 +32,7 @@ function Applied() {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
-  const token = localStorage.getItem('access_token'); // Fetch the token from localStorage or wherever it is stored
+  const token = localStorage.getItem('access_token'); 
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -51,7 +51,7 @@ function Applied() {
   };
 useEffect(() => {
   if (!hasFetched.current) {
-    hasFetched.current = true; // Mark as fetched
+    hasFetched.current = true;
     axios.get(`${APPLIED_JOB}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -160,7 +160,7 @@ useEffect(() => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">Close</Button>
-          {/* <Button onClick={handleApplyNow} color="secondary" variant="contained">Apply Now</Button> */}
+         
         </DialogActions>
       </Dialog>
     </Layout>

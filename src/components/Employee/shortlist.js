@@ -38,7 +38,7 @@ function Shortlist() {
 
 useEffect(() => {
   if (!hasFetched.current) {
-    hasFetched.current = true; // Mark as fetched
+    hasFetched.current = true; 
     axios.get(`${SHORTLIST_JOB}`, {
       headers: {
         Authorization: `Bearer ${token}`,

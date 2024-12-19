@@ -27,7 +27,7 @@ function Onboarded() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
 
-  const token = localStorage.getItem('access_token'); // Fetch the token from localStorage or wherever it is stored
+  const token = localStorage.getItem('access_token'); 
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -38,7 +38,7 @@ function Onboarded() {
 
 useEffect(() => {
   if (!hasFetched.current) {
-    hasFetched.current = true; // Mark as fetched
+    hasFetched.current = true; 
     axios.get(`${ONBOARD_JOB}`, {
       headers: {
         Authorization: `Bearer ${token}`,
