@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Layout from '../sidenav/Layout'; // Import the Layout component
+import Layout from '../sidenav/Layout'; 
 
 const columns = [
   { id: 'companyname', label: 'Company Name', minWidth: 170 },

@@ -9,15 +9,15 @@ function Findjobs() {
     placeholder="Search jobs..."
     fullWidth
     sx={{
-      flex: 1, // This takes 80% of the width
-      marginRight: 1 // Add a little space between input and button
+      flex: 1, 
+      marginRight: 1 
     }}
   />
   <Button
     variant="contained"
     color="primary"
     sx={{
-      flex: 0.2 // This takes 20% of the width
+      flex: 0.2 
     }}
   >
     Search
