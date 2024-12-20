@@ -1,30 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-// import { useLocation } from "react-router-dom";
 import Header from "./components/header/header";
 import Main from "./components/main/main";
 import Contact from "./components/contact/contact";
 import Gallery from "./components/gallery/gallery";
 import Services from "./components/services/services";
 import Wedding from "./components/services/wedding";
-import CorporateEvents from "./components/services/corporateevents";
-import MiceEvents from "./components/services/mice";
 import MovieEvents from "./components/services/moviepublicity";
-import BirthdayEvents from "./components/services/birthday";
 import SportsEvents from "./components/services/sports";
-import MediaEvents from "./components/services/media";
-import CelebrityEvents from "./components/services/celebrity";
 import OccasionalEvents from "./components/services/occasional";
-import EntertainmentEvents from "./components/services/entertainment";
 import SfxEvents from "./components/services/sfxproducts";
 import VenderLogin from "./vender/vlogin";
 import Register from "./Auth/Register";
 import Registeras from "./Auth/Registeras";
-import SignupOtp from "./vender/signupotp";
 import './styles.css';
 import ReactGA from "react-ga4";
 import Admin from "./admin/admin";
-// import Vender from "./vender/vender";
 import AddEvent from "./admin/addevent";
 import AddEventItems from "./admin/caddevent";
 import EventItems from "./admin/assign";
@@ -96,25 +87,17 @@ export default function App() {
           <Route path="/login" element={<Login/>} />
           <Route path="/wedding" element={<Wedding/>} />
           <Route path="/profile" element={<Profile/>} />
-          <Route path="/corporateevents" element={<CorporateEvents/>} />
-          <Route path="/miceevents" element={<MiceEvents/>} />
           <Route path="/movieevents" element={<MovieEvents/>} />
-          <Route path="/birthdayevents" element={<BirthdayEvents/>} />
           <Route path="/jobsapplied" element={<Jobsapplied/>} />
           <Route path="/sportsevents" element={<SportsEvents/>} />
-          <Route path="/mediaevents" element={<MediaEvents/>} />
-          <Route path="/celebrityevents" element={<CelebrityEvents/>} />
           <Route path="/occasionalevents" element={<OccasionalEvents/>} />
-          <Route path="/entertainmentevents" element={<EntertainmentEvents/>} />
           <Route path="/sfxevents" element={<SfxEvents/>} />
-          <Route path="/signupotp" element={<SignupOtp/>} />
           <Route path="/login" element={<VenderLogin/>} />
           <Route path="/employeeregister" element={<Register/>} />
           <Route path="/employerregister" element={<Employerregister/>} />
           <Route path="/dashboard" element={<Dashboard/>}/>
           {shouldRedirectToAdmin ? <Navigate to="/admin" /> : null}
           <Route path="/admin" element={<Admin/>} />
-          {/* <Route path="/vender" element={<Vender/>} /> */}
           <Route path="/addevent" element={<AddEvent/>} />
           <Route path="/caddevent" element={<AddEventItems/>} />
           <Route path="/eventitem" element={<EventItems/>} />
