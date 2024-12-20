@@ -189,9 +189,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
-  // const handleSuccess = () => {
-  //   setSuccess(false)
-  // }
+  
   useEffect(() => {
     if (selectedJob) {
       setIsEditing(true);
@@ -215,7 +213,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
       setNoticeperiod(selectedJob.notice_period);
       setJobdescription(selectedJob.description);
     } else {
-      setIsEditing(false); // Reset for new job
+      setIsEditing(false); 
       setJobid("");
       setCompanyName("");
       setJobrole("");
@@ -260,7 +258,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
     if (!number_of_positions) missingFields.push("Number of Positions");
 
     if (missingFields.length > 0) {
-      // Set error message and show Snackbar
+      
       setErrorMessage(`Please fill in the following fields: ${missingFields.join(", ")}`);
       setOpenSnackbar(true);
       return;
@@ -311,7 +309,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
     };
 
     if (isEditing) {
-      // Editing existing job
+      
       axios
         .put(`${UPDATE_JOB}${jobid}/`, payload, config)
         .then((response) => {
@@ -326,7 +324,7 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
         })
         .finally(() => setLoading(false));
     } else {
-      // Creating new job
+      
       axios
         .post(`${CREATE_JOB}`, payload, config)
         .then((response) => {
@@ -354,17 +352,17 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
       <Modal
         open={modalIsOpen}
         onClose={(e, reason) => {
-          // Prevent the modal from closing when the backdrop (outside area) is clicked
+          
           if (reason === "backdropClick") {
             return;
           }
-          closeModal(); // Call your close modal function for other reasons (e.g., close button)
+          closeModal(); 
         }}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
         BackdropProps={{
           onClick: (e) => {
-            // Prevent the backdrop click from closing the modal
+            
             e.stopPropagation();
           },
         }}

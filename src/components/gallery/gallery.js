@@ -3,7 +3,7 @@ import { Gallery } from "react-grid-gallery";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Footer from '../footer/footer';
-// import { FloatingWhatsApp } from 'react-floating-whatsapp';
+
 import { images } from "./images";
 
 export default function App() {
@@ -13,8 +13,8 @@ export default function App() {
   const handleWeddingClick = (index, item) => setWeddingIndex(index);
   const handleCorporateClick = (index, item) => setCorporateIndex(index);
 
-  const fixedWidth = 700; // Set the fixed width for images
-  const fixedHeight = 700; // Set the fixed height for images
+  const fixedWidth = 700; 
+  const fixedHeight = 700; 
 
   return (
     <div>
@@ -57,14 +57,7 @@ export default function App() {
           index={corporateIndex}
           close={() => setCorporateIndex(-1)}
         />
-        {/* <FloatingWhatsApp
-          phoneNumber="9985259497"
-          accountName="Vajra Events"
-          allowEsc
-          allowClickAway
-          notification
-          notificationSound
-        /> */}
+        
       </div>
       <Footer />
     </div>

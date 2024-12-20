@@ -17,7 +17,7 @@ import Switch from "@mui/material/Switch";
 import axios from "axios";
 import { CircularProgress, Tooltip } from "@mui/material";
 import "./jobs.css";
-import Postajob from "./postajob"; // Import the Postajob component
+import Postajob from "./postajob"; 
 import AppliedCandidatesDialog from "./Appliedcandidates"; 
 
 const columns = [
@@ -36,12 +36,12 @@ export default function Jobs() {
   const [loading, setLoading] = useState(false)
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
+  const [isPostJobOpen, setIsPostJobOpen] = useState(false); 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
+  const [selectedJobCode, setSelectedJobCode] = useState(null); 
 
   useEffect(() => {
-    // Fetch job data from API
+    
     setLoading(true)
     const config = {
       headers: {
@@ -83,20 +83,20 @@ export default function Jobs() {
   };
 
   const openPostJobModal = () => {
-    setSelectedJob(null); // Set the selected job for editing
-    setIsPostJobOpen(true); // Open the modal
+    setSelectedJob(null); 
+    setIsPostJobOpen(true); 
   };
   const closePostJobModal = () => {
     setSelectedJob(null); 
     setIsPostJobOpen(false); 
   };
   const handleOpenDialog = (jobCode) => {
-    setSelectedJobCode(jobCode);  // Set the selected job code
-    setIsDialogOpen(true);         // Open the dialog
+    setSelectedJobCode(jobCode);
+    setIsDialogOpen(true);         
   };
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false); // Close the dialog
+    setIsDialogOpen(false); 
   };
 
   const openEditJobModal = (job) => {
@@ -151,7 +151,7 @@ export default function Jobs() {
                               <VisibilityIcon
                                 style={{ cursor: "pointer", marginRight: "2px",color:'blue' }}
                                 fontSize="small"
-                                onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
+                                onClick={() => handleOpenDialog(row.code)} 
                               />
                               </Tooltip>
                               <Tooltip title="Edit">
@@ -193,14 +193,14 @@ export default function Jobs() {
           />
         </Paper>
 
-        {/* Post a Job Modal */}
+        
         <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  />
 
-        {/* Applied Candidates Dialog */}
+        
         <AppliedCandidatesDialog
           open={isDialogOpen}
           onClose={handleCloseDialog}
-          jobCode={selectedJobCode} // Pass the jobCode to the dialog
+          jobCode={selectedJobCode} 
         />
       </Layout>
     </div>

@@ -42,7 +42,7 @@ export default function Shortlisted() {
   const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
 
   useEffect(() => {
-    // Fetch job data from API
+    
     setLoading(true)
     const config = {
       headers: {
@@ -84,20 +84,20 @@ export default function Shortlisted() {
   };
 
   const openPostJobModal = () => {
-    setSelectedJob(null); // Set the selected job for editing
-    setIsPostJobOpen(true); // Open the modal
+    setSelectedJob(null); 
+    setIsPostJobOpen(true); 
   };
   const closePostJobModal = () => {
     setSelectedJob(null); 
     setIsPostJobOpen(false); 
   };
   const handleOpenDialog = (jobCode) => {
-    setSelectedJobCode(jobCode);  // Set the selected job code
-    setIsDialogOpen(true);         // Open the dialog
+    setSelectedJobCode(jobCode); 
+    setIsDialogOpen(true);         
   };
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false); // Close the dialog
+    setIsDialogOpen(false); 
   };
 
   const openEditJobModal = (job) => {
@@ -146,7 +146,7 @@ export default function Shortlisted() {
                               <VisibilityIcon
                                 style={{ cursor: "pointer", marginRight: "2px" }}
                                 fontSize="small"
-                                onClick={() => handleOpenDialog(row.code)} // Pass job code to dialog
+                                onClick={() => handleOpenDialog(row.code)} 
                               />
                             </TableCell>
                           );
@@ -173,14 +173,14 @@ export default function Shortlisted() {
           />
         </Paper>
 
-        {/* Post a Job Modal */}
+        
         <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  />
 
-        {/* Applied Candidates Dialog */}
+        
         <ShortListedCandidates
           open={isDialogOpen}
           onClose={handleCloseDialog}
-          jobCode={selectedJobCode} // Pass the jobCode to the dialog
+          jobCode={selectedJobCode} 
         />
       </Layout>
     </div>
