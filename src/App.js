@@ -4,12 +4,6 @@ import Header from "./components/header/header";
 import Main from "./components/main/main";
 import Contact from "./components/contact/contact";
 import Gallery from "./components/gallery/gallery";
-import Services from "./components/services/services";
-import Wedding from "./components/services/wedding";
-import MovieEvents from "./components/services/moviepublicity";
-import SportsEvents from "./components/services/sports";
-import OccasionalEvents from "./components/services/occasional";
-import SfxEvents from "./components/services/sfxproducts";
 import VenderLogin from "./vender/vlogin";
 import Register from "./Auth/Register";
 import Registeras from "./Auth/Registeras";
@@ -80,18 +74,12 @@ export default function App() {
           <Route path="/onboardedcandidates" element={<OnboardCandidates />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/verify" element={<VerifyOTP />} />
-          <Route path="/services" element={<Services/>} />
           <Route path="/employers/:id" element={<Employers />} />
           <Route path="/volunteers" element={<Volunteers/>} />
           <Route path="/trainers" element={<Trainers/>} />
           <Route path="/login" element={<Login/>} />
-          <Route path="/wedding" element={<Wedding/>} />
           <Route path="/profile" element={<Profile/>} />
-          <Route path="/movieevents" element={<MovieEvents/>} />
           <Route path="/jobsapplied" element={<Jobsapplied/>} />
-          <Route path="/sportsevents" element={<SportsEvents/>} />
-          <Route path="/occasionalevents" element={<OccasionalEvents/>} />
-          <Route path="/sfxevents" element={<SfxEvents/>} />
           <Route path="/login" element={<VenderLogin/>} />
           <Route path="/employeeregister" element={<Register/>} />
           <Route path="/employerregister" element={<Employerregister/>} />
