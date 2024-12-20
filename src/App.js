@@ -24,7 +24,7 @@ import SignupOtp from "./vender/signupotp";
 import './styles.css';
 import ReactGA from "react-ga4";
 import Admin from "./admin/admin";
-import Vender from "./vender/vender";
+// import Vender from "./vender/vender";
 import AddEvent from "./admin/addevent";
 import AddEventItems from "./admin/caddevent";
 import EventItems from "./admin/assign";
@@ -114,7 +114,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard/>}/>
           {shouldRedirectToAdmin ? <Navigate to="/admin" /> : null}
           <Route path="/admin" element={<Admin/>} />
-          <Route path="/vender" element={<Vender/>} />
+          {/* <Route path="/vender" element={<Vender/>} /> */}
           <Route path="/addevent" element={<AddEvent/>} />
           <Route path="/caddevent" element={<AddEventItems/>} />
           <Route path="/eventitem" element={<EventItems/>} />
