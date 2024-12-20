@@ -20,7 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import axios from "axios";
-import { APPLIED_CANDIDATES, SHORTLIST_CANDIDATES } from "../../endpoints"; // Correct endpoint import
+import { APPLIED_CANDIDATES, SHORTLIST_CANDIDATES } from "../../endpoints"; 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -138,7 +138,7 @@ const handleActive = (row) => {
               <TableCell>Employee Name</TableCell>
               <TableCell>Job Title</TableCell>
               <TableCell>Actions</TableCell>
-              {/* <TableCell>Video Resume</TableCell> */}
+              
             </TableRow>
           </TableHead>
           <TableBody>

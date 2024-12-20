@@ -16,7 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
 import "./jobs.css";
-import Postajob from "./postajob"; // Import the Postajob component
+import Postajob from "./postajob"; 
 import AppliedCandidatesDialog from "./Appliedcandidates"; 
 import ShortListedCandidates from "./ShortListedCandidates";
 import { CircularProgress } from "@mui/material";
@@ -37,9 +37,9 @@ export default function Shortlisted() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
+  const [isPostJobOpen, setIsPostJobOpen] = useState(false); 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
+  const [selectedJobCode, setSelectedJobCode] = useState(null); 
 
   useEffect(() => {
     
