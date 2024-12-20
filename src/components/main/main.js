@@ -27,16 +27,16 @@ import Footer from "../footer/footer";
 import BackGround from "../background/background";
 import CircularProgress from "@mui/material/CircularProgress";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-// import ReactGA from "react-ga4";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
   ...theme.typography.body2,
-  // padding: theme.spacing(1),
+  
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-evenly",
-  // textAlign: "center",
+  
   color: theme.palette.text.secondary,
   ...theme.applyStyles("dark", {
     backgroundColor: "#1A2027",
@@ -633,7 +633,7 @@ export default function Header() {
                 </Grid>
               </Grid>
 
-              {/* Hover Box (small box displayed on hover) */}
+              
               {hoveredItem === item && (
                 <Box
                   sx={{
@@ -663,9 +663,7 @@ export default function Header() {
                   <Typography style={{ fontFamily: "Serif" , margin:'10px'}}>
                     <LocationOnIcon/> {item.location} ,{item.state}        
                   </Typography>
-                  {/* <Typography style={{ fontFamily: "Serif" , margin:'10px'}}>
-                    <SchoolIcon/> {item.location} ,{item.state}        
-                  </Typography> */}
+                  
                   <Typography>
                   <Chip
                     label={item.employment_type}
