@@ -18,7 +18,7 @@ export default function ForgotPassword() {
 
     const handleEmailChange = (e) => {
         setFemail(e.target.value);
-        // Reset error message when user starts typing again
+        
         setError('');
     }
 

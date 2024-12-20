@@ -39,7 +39,7 @@ function ResetPassword() {
         setMessage(error.message
            || 'An error occurred. Please try again later.');
       }
-      setShow(true);  // To show the error message
+      setShow(true);  
     });
   }
   return (
@@ -53,7 +53,7 @@ function ResetPassword() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               fullWidth
-              // margin="dense"
+              
               className="custom-input"
               sx={{
                 "& .MuiOutlinedInput-root": {
@@ -76,7 +76,7 @@ function ResetPassword() {
               value={confirm_password}
               onChange={(e) => setConfirmpassword(e.target.value)}
               fullWidth
-              // margin="dense"
+              
               className="custom-input"
               sx={{
                 "& .MuiOutlinedInput-root": {
@@ -97,9 +97,7 @@ function ResetPassword() {
             <button onClick={handleSubmit}>submit</button>
           </Grid>
         </Grid>
-        {/* {
-        show === true ? <p style={{color:'red'}}>{message}</p> : ''
-      } */}
+        
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ import {
   TableCell,
   TableBody,
   TableContainer,
-  CircularProgress, // Import TableContainer
+  CircularProgress, 
 } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
@@ -31,7 +31,7 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
   const [appliedCandidates, setAppliedCandidates] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
 
-  // Fetch applied candidates whenever jobCode changes
+  
   useEffect(() => {
     if (open && jobCode) {
       setLoading(true)
@@ -48,10 +48,10 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
   }, [open ,jobCode]);
 
   const handleActive = (row) => {
-    // Optimistically update the local state
+    
     const updatedCandidates = appliedCandidates.map(candidate => {
       if (candidate.application_code === row.application_code) {
-        // Toggle the onboarded status locally
+        
         return {
           ...candidate,
           onboarded_status: !candidate.onboarded_status,
@@ -60,10 +60,10 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
       return candidate;
     });
   
-    // Update the state with the new values
+    
     setAppliedCandidates(updatedCandidates);
   
-    // Now make the API call to update the backend
+    
     let config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -73,13 +73,13 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
     axios
       .put(`${ONBOARD_CANDIDATE}${row.application_code}/`)
       .then((response) => {
-        // Optionally handle the success response
+        
         console.log(response);
       })
       .catch((error) => {
-        // If API call fails, revert the local state change
+        
         console.error("Error onboarding candidate:", error);
-        // Revert the switch state if the API call fails
+        
         setAppliedCandidates(prevState =>
           prevState.map(candidate =>
             candidate.application_code === row.application_code
@@ -144,7 +144,7 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
               <TableCell>Employee Name</TableCell>
               <TableCell>Job Title</TableCell>
               <TableCell>Actions</TableCell>
-              {/* <TableCell>Video Resume</TableCell> */}
+              
             </TableRow>
           </TableHead>
           <TableBody>

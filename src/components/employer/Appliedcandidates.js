@@ -13,7 +13,7 @@ import {
   TableCell,
   TableBody,
   TableContainer,
-  CircularProgress, // Import TableContainer
+  CircularProgress, 
 } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
@@ -31,7 +31,7 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
   const [appliedCandidates, setAppliedCandidates] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
 
-  // Fetch applied candidates whenever jobCode changes
+  
   useEffect(() => {
     if (open && jobCode) {
       setLoading(true)
@@ -47,18 +47,18 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
     }
   }, [open ,jobCode]);
 const handleActive = (row) => {
-  // Optimistically update the local state
+  
   const updatedCandidates = appliedCandidates.map(candidate => {
     if (candidate.application_code === row.application_code) {
       return {
         ...candidate,
-        shortlisted_status: !candidate.shortlisted_status, // Toggle status
+        shortlisted_status: !candidate.shortlisted_status, 
       };
     }
     return candidate;
   });
 
-  // Update the state with the new status
+  
   setAppliedCandidates(updatedCandidates);
 
  
@@ -66,14 +66,14 @@ const handleActive = (row) => {
   axios
     .put(`${SHORTLIST_CANDIDATES}${row.application_code}/`, {shortlisted_status:  !row.shortlisted_status})
     .then((response) => {
-      // Optionally handle the success response
+      
       console.log("Candidate status updated:", response);
     })
     .catch((error) => {
-      // If the request fails, revert the state change
+      
       console.error("Error updating candidate status:", error);
 
-      // Revert the optimistic state update in case of error
+      
       setAppliedCandidates((prevState) =>
         prevState.map((candidate) =>
           candidate.application_code === row.application_code

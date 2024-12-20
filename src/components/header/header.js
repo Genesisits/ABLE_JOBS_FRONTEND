@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { Button } from '@mui/material';
-import UploadResume from '../Employee/uploadresume'; // Import the dialog component
+import UploadResume from '../Employee/uploadresume'; 
 import "./header.css";
 import avatar from '../../images/avatar.webp';
 import able2 from '../../images/able_job2.JPG';
@@ -12,7 +12,7 @@ export default function Header() {
   const menuRef = useRef();
 
   const [userRole, setUserRole] = useState(null);
-  const [uploadDialogOpen, setUploadDialogOpen] = useState(false); // State for controlling dialog visibility
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false); 
 
   useEffect(() => {
     const isEmployee = localStorage.getItem('is_employee') === 'true';
@@ -24,7 +24,7 @@ export default function Header() {
     } else if (isEmployer) {
       setUserRole('employer');
     } else if (isAdmin) {
-      setUserRole('admin'); // Fixed case sensitivity
+      setUserRole('admin'); 
     } else {
       setUserRole(null);
     }
@@ -63,7 +63,7 @@ export default function Header() {
   return (
     <div ref={menuRef}>
       <div className={`header-container ${menuOpen ? 'menu-open' : ''}`}>
-        {/* Logo on the left */}
+        
         <div className="toggle-button-container">
           <button className={`toggle-button ${menuOpen ? 'close' : ''}`} onClick={toggleMenu}>
             {menuOpen ? <span>&times;</span> : <>
@@ -91,7 +91,7 @@ export default function Header() {
               </li>
             ) : (
               <>
-                {/* Show Home for other roles */}
+                
                 <li>
                   <Link to="/">
                     <Button className="vender-button" variant="standard">

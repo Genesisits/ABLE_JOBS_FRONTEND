@@ -17,7 +17,7 @@ library.add(faMap, faPhone, faEnvelope);
 
 export default function Footer() {
   useEffect(() => {
-    // Apply overflow: hidden to prevent horizontal overflow
+    
     document.documentElement.style.overflowX = 'hidden';
   }, []);
   return (
