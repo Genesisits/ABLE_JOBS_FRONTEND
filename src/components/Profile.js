@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './profile.css'; // Import the CSS file
+import './profile.css'; 
 import avatar from '../images/avatar.webp';
 import Layout from './sidenav/Layout';
 import {
@@ -30,7 +30,7 @@ const snackbarStyles = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  zIndex: 1400, // Ensures it's above other elements
+  zIndex: 1400, 
 };
 const fieldLabels = {
   first_name: 'First Name',
@@ -77,7 +77,7 @@ const Profile = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: '' });
   useEffect(() => {
     const fetchUserProfile = async () => {
-      // setLoading(true);
+      
       try {
         if (!hasFetched.current) {
           const response = await axios.get(USER_PROFILE, {
@@ -162,10 +162,10 @@ const Profile = () => {
 
 
     try {
-      // Create a FormData object
+      
       const formData = new FormData();
 
-      // Exclude specific file fields from the user object
+      
       const restrictedFields = [
         'company_logo',
         'gst_file',
@@ -201,7 +201,7 @@ const Profile = () => {
     }
   };
 
-  // Handle profile image upload
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
@@ -296,11 +296,7 @@ const Profile = () => {
               style={{ display: 'none' }}
               onChange={handleImageChange}
             />
-            {/* <label htmlFor="image-upload-input">
-              <IconButton component="span" >
-                <CameraAltIcon className='camera-icon'/>
-              </IconButton>
-            </label> */}
+            
           </div>
           <Snackbar
             open={snackbar.open}

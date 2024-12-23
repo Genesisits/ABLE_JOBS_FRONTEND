@@ -71,18 +71,18 @@ export default function Sidenav() {
   );
 
   const handleLogout = () => {
-    // Clear relevant items from localStorage
+    
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("is_employee");
     localStorage.removeItem("is_employer");
     localStorage.removeItem("is_admin");
-    // Navigate to login or home page
+    
     navigate("/login");
     window.location.reload();
   };
 
-  // Now rendering Drawer based on user role
+  
   return (
     <Drawer
       variant="permanent"
@@ -128,7 +128,7 @@ export default function Sidenav() {
     })
   ) : isAdmin ? (
     <>
-      {/* Admin-specific menu items */}
+      
       <ListItem
         button
         component={Link}
@@ -244,7 +244,7 @@ export default function Sidenav() {
         </AccordionDetails>
       </Accordion>
 
-      {/* Other Admin menu items */}
+      
       <ListItem
         button
         component={Link}
