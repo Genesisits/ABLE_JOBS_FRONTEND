@@ -13,93 +13,121 @@ import {
   TableCell,
   TableBody,
   TableContainer,
-  CircularProgress, 
+  CircularProgress,
+  Switch,
 } from "@mui/material";
-import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import axios from "axios";
-import { APPLIED_CANDIDATES, SHORTLIST_CANDIDATES } from "../../endpoints"; // Correct endpoint import
+import { APPLIED_CANDIDATES, SHORTLIST_CANDIDATES, ERESUME } from "../../endpoints";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [appliedCandidates, setAppliedCandidates] = useState([]);
-  const [selectedJob, setSelectedJob] = useState(null);
 
-  
+  // Fetch applied candidates
   useEffect(() => {
     if (open && jobCode) {
-      setLoading(true)
-      axios.get(`${APPLIED_CANDIDATES}${jobCode}`)
+      setLoading(true);
+      axios
+        .get(`${APPLIED_CANDIDATES}${jobCode}`)
         .then((response) => {
           setAppliedCandidates(response.data);
         })
         .catch((error) => {
           console.error("Error fetching candidates:", error);
-        }).finally(() => {
-          setLoading(false)
         })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-  }, [open ,jobCode]);
-const handleActive = (row) => {
+  }, [open, jobCode]);
+
+  // Toggle active status
+  const handleActive = (row) => {
+    const updatedCandidates = appliedCandidates.map((candidate) =>
+      candidate.application_code === row.application_code
+        ? { ...candidate, shortlisted_status: !candidate.shortlisted_status }
+        : candidate
+    );
+    setAppliedCandidates(updatedCandidates);
+
+    axios
+      .put(`${SHORTLIST_CANDIDATES}${row.application_code}/`, {
+        shortlisted_status: !row.shortlisted_status,
+      })
+      .catch((error) => {
+        console.error("Error updating candidate status:", error);
+        // Revert toggle in case of error
+        setAppliedCandidates((prevState) =>
+          prevState.map((candidate) =>
+            candidate.application_code === row.application_code
+              ? { ...candidate, shortlisted_status: !candidate.shortlisted_status }
+              : candidate
+          )
+        );
+      });
+  };
+
+  // Handle opening files
+  const handleOpenFile = (code, type) => {
+    axios
+      .get(`${ERESUME}${code}/`)
+      .then((response) => {
+        if (response.data.resumes && response.data.resumes.length > 0) {
+          const resumeData = response.data.resumes[0]; 
   
-  const updatedCandidates = appliedCandidates.map(candidate => {
-    if (candidate.application_code === row.application_code) {
-      return {
-        ...candidate,
-        shortlisted_status: !candidate.shortlisted_status, 
-      };
-    }
-    return candidate;
-  });
-
+          
+          const fileUrl = type === "pdf" ? resumeData.resume : resumeData.video_resume;
   
-  setAppliedCandidates(updatedCandidates);
-
- 
-
-  axios
-    .put(`${SHORTLIST_CANDIDATES}${row.application_code}/`, {shortlisted_status:  !row.shortlisted_status})
-    .then((response) => {
-      
-      console.log("Candidate status updated:", response);
-    })
-    .catch((error) => {
-      
-      console.error("Error updating candidate status:", error);
-
-      
-      setAppliedCandidates((prevState) =>
-        prevState.map((candidate) =>
-          candidate.application_code === row.application_code
-            ? { ...candidate, shortlisted_status: !candidate.shortlisted_status } // Revert the toggle
-            : candidate
-        )
-      );
-    });
-};
-
-
+          console.log(fileUrl); 
+  
+          
+          if (fileUrl) {
+            if (type === "pdf") {
+              // Open the PDF in a new tab
+              const pdfWindow = window.open(fileUrl, "_blank");
+              if (!pdfWindow) {
+                console.error("Popup blocked. Unable to open the PDF.");
+              }
+            } else if (type === "video") {
+              // Open the video in a new tab with an embedded video player
+              const videoWindow = window.open("", "_blank");
+              if (videoWindow) {
+                videoWindow.document.write(`
+                  <html>
+                    <head><title>Video Resume</title></head>
+                    <body>
+                      <video controls src="${fileUrl}" style="width: 100%; height: 700px;"></video>
+                    </body>
+                  </html>
+                `);
+              } else {
+                console.error("Popup blocked. Unable to open the video.");
+              }
+            }
+          } else {
+            console.error("File URL is missing");
+          }
+        } else {
+          console.error("No resumes found for this code:", code);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching file:", error);
+      });
+  };
+  
+  
+  // Handle closing the dialog
   const handleCloseDialog = () => {
     onClose();
     setAppliedCandidates([]);
-    setSelectedJob(null);
-  };
-
-  const handleOpenFile = (fileUrl, type) => {
-    if (type === "pdf") {
-      window.open(fileUrl, "_blank");
-    } else if (type === "video") {
-      const videoWindow = window.open("", "_blank");
-      videoWindow.document.write(
-        `<video controls src="${fileUrl}" style="width: 100%; height: auto;"></video>`
-      );
-    }
   };
 
   return (
@@ -109,7 +137,7 @@ const handleActive = (row) => {
       onClose={handleCloseDialog}
       TransitionComponent={Transition}
     >
-       {loading && (
+      {loading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
         </div>
@@ -121,12 +149,11 @@ const handleActive = (row) => {
             color="inherit"
             onClick={handleCloseDialog}
             aria-label="close"
-            style={{width:'3%'}}
           >
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" sx={{ ml: 2, flex: 1 }}>
-            Applied Candidates for {selectedJob?.job_title || "Unknown Job"}
+            Applied Candidates
           </Typography>
         </Toolbar>
       </AppBar>
@@ -136,52 +163,48 @@ const handleActive = (row) => {
             <TableRow>
               <TableCell>Application Code</TableCell>
               <TableCell>Employee Name</TableCell>
-              <TableCell>Job Title</TableCell>
               <TableCell>Actions</TableCell>
-              {/* <TableCell>Video Resume</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
-            {appliedCandidates.length > 0 ? (
-              appliedCandidates.map((candidate, index) => (
-                <TableRow key={index}>
-                  <TableCell>{candidate.application_code}</TableCell>
-                  <TableCell>{candidate.employee_name}</TableCell>
-                  <TableCell>{candidate.job_title}</TableCell>
-                  <TableCell>
-                    {candidate.resume_url && (
-                      <IconButton
-                        onClick={() => handleOpenFile(candidate.resume_url, "pdf")}
-                        title="View Resume"
-                      >
-                        <VisibilityIcon />
-                      </IconButton>
-                    )}
-                    <IconButton
-                        onClick={() =>
-                          handleOpenFile(candidate.video_resume_url, "video")
-                        }
-                        title="View Video Resume"
-                      >
-                        <PlayArrowIcon />
-                      </IconButton>
-                      <Switch
-                              checked={candidate.shortlisted_status}
-                              onChange={() => handleActive(candidate)}
-                              inputProps={{ "aria-label": "controlled" }}
-                               size="small"
-                            />
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  No applied candidates found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+  {appliedCandidates.length > 0 ? (
+    appliedCandidates.map((candidate) => (
+      <TableRow key={candidate.application_code}>
+        <TableCell>{candidate.application_code}</TableCell>
+        <TableCell>{candidate.employee_name}</TableCell>
+        <TableCell>
+          <IconButton
+            onClick={() =>
+              handleOpenFile(candidate.application_code, "pdf")
+            }
+            title="View Resume"
+          >
+            <VisibilityIcon />
+          </IconButton>
+          <IconButton
+            onClick={() =>
+              handleOpenFile(candidate.application_code, "video")
+            }
+            title="View Video Resume"
+          >
+            <PlayArrowIcon />
+          </IconButton>
+          <Switch
+            checked={candidate.shortlisted_status}
+            onChange={() => handleActive(candidate)}
+            size="small"
+          />
+        </TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={3} align="center">
+        No applied candidates found.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
         </Table>
       </TableContainer>
     </Dialog>
