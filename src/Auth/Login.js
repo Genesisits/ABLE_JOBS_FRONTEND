@@ -58,11 +58,9 @@ function Login() {
         .then((response) => {
           const { user_role } = response.data.user;
 
-
           localStorage.removeItem("is_employee");
           localStorage.removeItem("is_employer");
           localStorage.removeItem("is_admin");
-
 
           localStorage.setItem("access_token", response.data.access);
           localStorage.setItem("refresh_token", response.data.refresh);
@@ -81,7 +79,6 @@ function Login() {
             console.warn("Unknown job role:", user_role);
             setErrorMessage("Invalid user role");
           }
-
 
           setTimeout(() => {
             window.location.reload();
@@ -106,10 +103,9 @@ function Login() {
         </div>
       )}
 
-
       <div className="container1">
         <div className="flex-item-login">
-          <h3 style={{color:'blue'}}>Able Jobs</h3>
+          <h3 style={{ color: "blue" }}>Able Jobs</h3>
           <input
             type="text"
             placeholder="username"
@@ -139,8 +135,9 @@ function Login() {
             </button>
             <div className="links-container">
               <p className="link-item">
-                <Link to="/register">Register  |</Link>
+                <Link to="/register">Register</Link>
               </p>
+              <p className="link-item" style={{ color: "blue" }}>|</p>
               <p className="link-item">
                 <Link to="/forgetpassword">Forgot password?</Link>
               </p>
@@ -151,10 +148,9 @@ function Login() {
           )}
         </div>
         <div className="flex-item-login">
-          <img src={mail} alt="Mail" className="imageDetails" />
+          <img src={mail} alt="Mail" className="imageDetails_login" />
         </div>
       </div>
-
     </div>
   );
 }
