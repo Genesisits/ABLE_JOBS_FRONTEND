@@ -638,19 +638,20 @@ export default function Header() {
                 <Box
                   sx={{
                     position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    backgroundColor: "white",
-                    padding: "10px",
-                    borderRadius: "4px",
-                    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                    minWidth: "500px",
-                    maxWidth: "md",
-                    minHeight: "400px",
-                    maxHeight: "900px",
-                    zIndex: 10,
-                    transform: "translateY(0px)",
-                  }}
+    top: "50%",
+    left: "50%",
+    backgroundColor: "white",
+    padding: "10px",
+    borderRadius: "4px",
+    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+    minWidth: "500px",
+    maxWidth: "md",
+    overflowY: "auto", // Enables vertical scroll
+    height: "150px", // Reduced height
+    maxHeight: "250px", // Ensures a maximum height for responsive design
+    zIndex: 70,
+    transform: "translate(-50%, -50%)", // Properly centers the box
+  }}
                   onMouseEnter={handleModalMouseEnter}
                   onMouseLeave={handleModalMouseLeave}
                 >

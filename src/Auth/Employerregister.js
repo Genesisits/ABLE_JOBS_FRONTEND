@@ -84,7 +84,7 @@ function Employerregister({ open, onClose }) {
 
 
     const handleCompanysize = (event) => setCompanysize(event.target.value);
-    const handleCompanylogo = (event) => setCompanylogo(event.target.value);
+    // const handleCompanylogo = (event) => setCompanylogo(event.target.value);
     const handleChange = (event) => setCompanyName(event.target.value);
     const handleMobile = (event) => setMobileNumber(event.target.value);
     const handleEmail = (event) => setEmail(event.target.value);
@@ -279,7 +279,31 @@ function Employerregister({ open, onClose }) {
             Register(); 
         }
     };
-
+    const handleCompanylogo = (event) => {
+      const file = event.target.files[0];
+  
+      if (file) {
+          const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+          if (!allowedTypes.includes(file.type)) {
+              setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  company_logo: "Please upload a valid image file (jpeg, png, gif, jpg).",
+              }));
+              setCompanylogo(null);
+              return;
+          }
+  
+          // Clear the error if a valid image file is selected
+          setErrors((prevErrors) => ({
+              ...prevErrors,
+              company_logo: null,
+          }));
+          setCompanylogo(file);
+      } else {
+          setCompanylogo(null);
+      }
+  };
+  
     const theme = createTheme();
 
     return (
@@ -783,28 +807,27 @@ function Employerregister({ open, onClose }) {
                             <Grid item xs={4}>
                                 <label>Company Logo</label>
                                 <TextField
-                                    // label="Company Logo"
-                                    onChange={(event) => setCompanylogo(event.target.files[0])}
-                                    fullWidth
-                                    type="file"
-                                    margin="dense"
-                                    error={!!errors.company_logo}
-                                    helperText={errors.company_logo}
-                                    className="custom-input"
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                        },
-                                    }}
-                                />
+    onChange={handleCompanylogo}
+    fullWidth
+    type="file"
+    margin="dense"
+    error={!!errors.company_logo}
+    helperText={errors.company_logo}
+    className="custom-input"
+    sx={{
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'transparent',
+            },
+            '&:hover fieldset': {
+                borderColor: 'transparent',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'transparent',
+            },
+        },
+    }}
+/>
                             </Grid>
                             <Grid item xs={4}>
                                 <label>GST</label>
