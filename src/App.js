@@ -51,7 +51,7 @@ ReactGA.send({
    })
 
 export default function App() {
-  // const navigate = Navigate();
+ 
   const shouldRedirectToAdmin = false;
   <ScrollToTop />
   

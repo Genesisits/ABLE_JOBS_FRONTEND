@@ -4,13 +4,13 @@ export default function Search() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = () => {
-    // Perform the search action
+   
     alert(`Searching for: ${searchTerm}`);
   };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-      {/* Search input */}
+      
       <input
         type="text"
         placeholder="Search here..."
@@ -24,7 +24,7 @@ export default function Search() {
         }}
       />
 
-      {/* Search button */}
+      
       <button
         onClick={handleSearch}
         style={{
