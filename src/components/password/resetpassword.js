@@ -1,103 +1,96 @@
 import React, { useState } from "react";
 import "./resetpassword.css";
-import mail from '../../images/forgetPassword.jpg'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import {
-  Grid,
-  Box,
-  TextField,
-  Button,
-  Checkbox,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { TextField, Button, Grid } from "@mui/material";
 import axios from "axios";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FORGOT_PASSWORD, RESET_PASSWORD } from '../../endpoints';
+import { RESET_PASSWORD } from "../../endpoints";
+import { useLocation,useNavigate } from "react-router-dom";
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirm_password, setConfirmpassword] = useState("");
-  let [message, setMessage] = useState('')
-  let [show, setShow] = useState(false)
+  const [message, setMessage] = useState("");
+  const [Errmessage, setErrMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const token = params.get("token");
+  const navigate = useNavigate();
   const handleSubmit = () => {
-    let payload = {
-     new_password: password,
-     confirm_password: confirm_password
+    if (password !== confirm_password) {
+      setErrMessage("Passwords do not match. Please try again.");
+      return;
     }
-    axios.post(`${RESET_PASSWORD}`,payload)
-    .then(response => {
-     setShow(true)
-     setMessage(response.data.message)
-    })
-    .catch(error => {
-      if (error.response && error.response.status === 404) {
-        setMessage('Email not found. Please check your email address and try again.');
-      } else {
-        setMessage(error.message
-           || 'An error occurred. Please try again later.');
-      }
-      setShow(true);  
-    });
-  }
+    const url = `${RESET_PASSWORD}${token}/`;
+    const payload = {
+      new_password: password,
+      confirm_password: confirm_password,
+    };
+
+    setLoading(true);
+    axios
+      .post(url, payload)
+      .then((response) => {
+        setMessage(response.data.message || "Password reset successful!");
+        setErrMessage("");
+        setTimeout(() => {
+          // setShowPopup(false);
+          navigate('/login');
+        }, 4000); 
+      })
+      .catch((error) => {
+        setMessage("");
+        if (error.response && error.response.data && error.response.data.message) {
+        } else {
+          setMessage("An error occurred. Please try again later.");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <div className="resetpassword">
       <div className="flex-item">
+      {message && <p style={{ color: "green" }}>{message}</p>}
+      {Errmessage && <p style={{ color: "red" }}>{Errmessage}</p>}
         <Grid container spacing={2}>
           <Grid item xs={12}>
-          <h3 style={{color:'blue',paddingTop:'10px'}}>Reset Password</h3>
+            <h3 style={{ color: "blue", paddingTop: "10px" }}>Reset Password</h3>
             <TextField
               label="Enter your Password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               fullWidth
-              
               className="custom-input"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "transparent",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "transparent",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "transparent",
-                  },
-                },
-              }}
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               label="Confirm Password"
+              type="password"
               value={confirm_password}
               onChange={(e) => setConfirmpassword(e.target.value)}
               fullWidth
-              
               className="custom-input"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "transparent",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "transparent",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "transparent",
-                  },
-                },
-              }}
+              variant="outlined"
             />
           </Grid>
+          <Grid item xs={12}>
+          </Grid>
           <Grid item xs={6}>
-            <button onClick={handleSubmit}>submit</button>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              color="primary"
+              disabled={loading}
+            >
+              {loading ? "Submitting..." : "Submit"}
+            </Button>
           </Grid>
         </Grid>
-        
       </div>
     </div>
   );
