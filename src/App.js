@@ -4,7 +4,7 @@ import Header from "./components/header/header";
 import Main from "./components/main/main";
 import Contact from "./components/contact/contact";
 import Gallery from "./components/gallery/gallery";
-import VenderLogin from "./vender/vlogin";
+// import VenderLogin from "./vender/vlogin";
 import Register from "./Auth/Register";
 import Registeras from "./Auth/Registeras";
 import './styles.css';
@@ -80,7 +80,7 @@ export default function App() {
           <Route path="/login" element={<Login/>} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/jobsapplied" element={<Jobsapplied/>} />
-          <Route path="/login" element={<VenderLogin/>} />
+          {/* <Route path="/login" element={<VenderLogin/>} /> */}
           <Route path="/employeeregister" element={<Register/>} />
           <Route path="/employerregister" element={<Employerregister/>} />
           <Route path="/dashboard" element={<Dashboard/>}/>
