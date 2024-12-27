@@ -50,16 +50,23 @@ function Findjob({ closeModal }) {
     axios.get(GET_JOB)
       .then(response => {
         const jobData = response.data;
-        setData(jobData);
-
-        const companies = [...new Set(jobData.map(job => job.company_name))];
-        const locations = [...new Set(jobData.map(job => job.location))];
-        const skills = [...new Set(jobData.flatMap(job => job.skills.split(',').map(skill => skill.trim())))];
-        const jobTitles = [...new Set(jobData.map(job => job.job_title))];
-        
+  
+        // Filter out jobs with activation_status: false
+        const activeJobs = jobData.filter(job => job.activation_status);
+  
+        setData(activeJobs);
+  
+        const companies = [...new Set(activeJobs.map(job => job.company_name))];
+        const locations = [...new Set(activeJobs.map(job => job.location))];
+        const skills = [...new Set(activeJobs.flatMap(job => job.skills.split(',').map(skill => skill.trim())))];
+        const jobTitles = [...new Set(activeJobs.map(job => job.job_title))];
+  
         setUniqueCompanies(companies);
         setUniqueLocations(locations);
         setUniqueSkills([...skills, ...jobTitles]);
+      })
+      .catch(error => {
+        console.error("Error fetching job data:", error);
       });
   }, []);
 

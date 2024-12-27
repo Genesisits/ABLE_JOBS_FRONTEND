@@ -88,12 +88,19 @@ function Login() {
           }, 500);
         })
         .catch((error) => {
-          console.error(error.response?.data);
-          setUnauthorized(true);
-          setErrorMessage("Invalid credentials");
-        })
-        .finally(() => {
           setLoading(false);
+  
+          // Handle 403 error specifically
+          if (error.response && error.response.status === 403) {
+            const backendMessage = error.response.data.detail || JSON.stringify(error.response.data.error);
+            console.log(error.response.data)
+            setErrorMessage(backendMessage);
+          } else {
+            // Handle other errors
+            console.error(error.response?.data);
+            setUnauthorized(true);
+            setErrorMessage("Invalid credentials");
+          }
         });
     }
   };
