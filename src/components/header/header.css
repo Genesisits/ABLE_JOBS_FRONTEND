@@ -631,7 +631,9 @@ button3:hover {
   height: 50px;
   width: auto;
   cursor: pointer;
-  
+  border-radius: 50%;
+  object-fit: cover; 
+  border: 2px solid white;
 }
 .navbar-menu {
   margin-left: 0; 

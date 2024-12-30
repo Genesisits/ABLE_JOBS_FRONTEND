@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import UploadResume from '../Employee/uploadresume'; 
 import "./header.css";
 import avatar from '../../images/avatar.webp';
-import able2 from '../../images/able_job2.JPG';
+import able3 from '../../images/able_job3.JPG';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -77,7 +77,7 @@ export default function Header() {
         <nav className={`navbar ${menuOpen ? 'visible' : ''}`}>
           <div className="logo-container">
             <Link to="/">
-              <img src={able2} alt="Able Jobs Logo" className="header-logo" />
+              <img src={able3} alt="Able Jobs Logo" className="header-logo" />
             </Link>
           </div>
           <ul className="navbar-menu">
