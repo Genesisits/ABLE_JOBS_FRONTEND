@@ -54,7 +54,7 @@ export default function Header() {
 
   const isLandingOrRelevantPage = [
     '/', '/home', '/login', '/register', '/employeeregister', 
-    '/trainer', '/volunteer', '/forgetpassword', '/email', '/resetpassword'
+    '/trainer', '/volunteer', '/forgetpassword', '/email', '/resetpassword','/contact','/blog','/about'
   ];
 
   const openUploadDialog = () => setUploadDialogOpen(true);
@@ -99,7 +99,27 @@ export default function Header() {
                     </Button>
                   </Link>
                 </li>
-
+                <li>
+                  <Link to="/about">
+                    <Button className="vender-button" variant="standard">
+                      <span>AboutUs</span>
+                    </Button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blog">
+                    <Button className="vender-button" variant="standard">
+                      <span>Blog</span>
+                    </Button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact">
+                    <Button className="vender-button" variant="standard">
+                      <span>Contact Us</span>
+                    </Button>
+                  </Link>
+                </li>
                 {/* Upload button visible only to employees */}
                 {userRole === 'employee' && !isLandingOrRelevantPage.includes(location.pathname) && (
                   <li>

@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import Header from "./components/header/header";
 import Main from "./components/main/main";
 import Contact from "./components/contact/contact";
+import Blog from "./components/blog/blog";
+import About from "./components/about/about";
 import Gallery from "./components/gallery/gallery";
 // import VenderLogin from "./vender/vlogin";
 import Register from "./Auth/Register";
@@ -71,6 +73,8 @@ export default function App() {
           <Route path="/findjobs" element={<Findjobs />} />
           <Route path="/forgetpassword" element={<ForgetPassword/>} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/about" element={<About />} />
           <Route path="/onboardedcandidates" element={<OnboardCandidates />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/verify" element={<VerifyOTP />} />
