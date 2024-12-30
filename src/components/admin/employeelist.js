@@ -50,17 +50,13 @@ export default function Trainers() {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     };
-    axios
-      .get(`${ADIMN_EMPLOYEE_LIST}`)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    axios.get(`${ADIMN_EMPLOYEE_LIST}`).then((response) => {
+      setData(response.data);
+    }).catch((error) => {
+      console.log(error)
+    }).finally(() => {
+      setLoading(false)
+    })
   }, []);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
