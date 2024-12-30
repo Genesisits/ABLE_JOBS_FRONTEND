@@ -23,10 +23,8 @@ import Button from "@mui/material/Button";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
+import Tooltip from "@mui/material/Tooltip"; // Import Tooltip
 import axios from "axios";
-// import "./jobs.css";
-// import Postajob from "./postajob";
-// import AppliedCandidatesDialog from "./Appliedcandidates";
 
 const columns = [
   { id: "first_name", label: "First Name", minWidth: 100 },
@@ -34,7 +32,6 @@ const columns = [
   { id: "email", label: "Email", minWidth: 100 },
   { id: "mobile_number", label: "Mobile Number", minWidth: 100 },
   { id: "state", label: "State", minWidth: 100 },
-  // { id: "description", label: "Job Description", minWidth: 100 },
   { id: "status", label: "Actions", minWidth: 150 },
 ];
 
@@ -44,12 +41,11 @@ export default function Volunteers() {
   const [loading, setLoading] = useState(false)
   const [rows, setData] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
+  const [isPostJobOpen, setIsPostJobOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
+  const [selectedJobCode, setSelectedJobCode] = useState(null);
 
   useEffect(() => {
-    // Fetch job data from API
     setLoading(true)
     const config = {
       headers: {
@@ -97,28 +93,6 @@ export default function Volunteers() {
       });
   };
 
-  const openPostJobModal = () => {
-    setSelectedJob(null); // Set the selected job for editing
-    setIsPostJobOpen(true); // Open the modal
-  };
-  const closePostJobModal = () => {
-    setSelectedJob(null);
-    setIsPostJobOpen(false);
-  };
-  const handleOpenDialog = (jobCode) => {
-    setSelectedJobCode(jobCode); // Set the selected job code
-    setIsDialogOpen(true); // Open the dialog
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false); // Close the dialog
-  };
-
-  const openEditJobModal = (job) => {
-    setSelectedJob(job);
-    setIsPostJobOpen(true);
-  };
-
   return (
     <div>
       <Layout>
@@ -148,12 +122,7 @@ export default function Volunteers() {
                 {rows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.company_name}
-                    >
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.company_name}>
                       {columns.map((column) => {
                         if (column.id === "status") {
                           return (
@@ -165,50 +134,71 @@ export default function Volunteers() {
                                   margin: "0",
                                 }}
                               >
-                                <button
-                                onClick={(e)=>window.open(row.aadhar_card)}
-                                  style={{
-                                    padding:'0',
-                                    border: "none",
-                                    background: "none",
-                                    margin: "0",
-                                  }}
-                                >
-                                  <img
-                                    src={Aadhar}
-                                    style={{ width: "25px", height: "25px",margin:'0', }}
-                                  />
-                                </button>
+                                {/* Tooltip for Aadhar image */}
+                                <Tooltip title="Aadhar" arrow>
+                                  <button
+                                    onClick={(e) => window.open(row.aadhar_card)}
+                                    style={{
+                                      padding: "0",
+                                      border: "none",
+                                      background: "none",
+                                      margin: "0",
+                                    }}
+                                  >
+                                    <img
+                                      src={Aadhar}
+                                      style={{
+                                        width: "25px",
+                                        height: "25px",
+                                        margin: "0",
+                                      }}
+                                    />
+                                  </button>
+                                </Tooltip>
 
-                                <button
-                                onClick={(e)=>window.open(row.pan_card)}
-                                  style={{
-                                    padding:'0',
-                                    border: "none",
-                                    background: "none",
-                                    margin: "0",
-                                  }}
-                                >
-                                  <img
-                                    src={Pancard}
-                                    style={{ width: "25px", height: "25px",margin:'0', }}
-                                  />
-                                </button>
-                                <button
-                                onClick={(e) => window.open(row.resume)}
-                                  style={{
-                                    padding:'0',
-                                    border: "none",
-                                    background: "none",
-                                    margin: "0",
-                                  }}
-                                >
-                                  <img
-                                  
-                                    src={Resume}
-                                    style={{ width: "25px", height: "25px",margin:'0', }}
-                                  />
-                                </button>
+                                {/* Tooltip for Pan image */}
+                                <Tooltip title="Pan" arrow>
+                                  <button
+                                    onClick={(e) => window.open(row.pan_card)}
+                                    style={{
+                                      padding: "0",
+                                      border: "none",
+                                      background: "none",
+                                      margin: "0",
+                                    }}
+                                  >
+                                    <img
+                                      src={Pancard}
+                                      style={{
+                                        width: "25px",
+                                        height: "25px",
+                                        margin: "0",
+                                      }}
+                                    />
+                                  </button>
+                                </Tooltip>
+
+                                {/* Tooltip for Resume image */}
+                                <Tooltip title="Resume" arrow>
+                                  <button
+                                    onClick={(e) => window.open(row.resume)}
+                                    style={{
+                                      padding: "0",
+                                      border: "none",
+                                      background: "none",
+                                      margin: "0",
+                                    }}
+                                  >
+                                    <img
+                                      src={Resume}
+                                      style={{
+                                        width: "25px",
+                                        height: "25px",
+                                        margin: "0",
+                                      }}
+                                    />
+                                  </button>
+                                </Tooltip>
                               </div>
                             </TableCell>
                           );
@@ -234,16 +224,6 @@ export default function Volunteers() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-
-        {/* Post a Job Modal */}
-        {/* <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  /> */}
-
-        {/* Applied Candidates Dialog */}
-        {/* <AppliedCandidatesDialog
-          open={isDialogOpen}
-          onClose={handleCloseDialog}
-          jobCode={selectedJobCode} // Pass the jobCode to the dialog
-        /> */}
       </Layout>
     </div>
   );

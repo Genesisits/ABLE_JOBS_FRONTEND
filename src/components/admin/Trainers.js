@@ -21,6 +21,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import CircularProgress from "@mui/material/CircularProgress";
+import Tooltip from "@mui/material/Tooltip"; // Import Tooltip
 import axios from "axios";
 // import "./jobs.css";
 // import Postajob from "./postajob";
@@ -165,7 +166,7 @@ export default function Trainers() {
                                   margin: "0",
                                 }}
                               >
-                               
+                               <Tooltip title="Pan" arrow>
                                 <button
                                 onClick={(e)=>window.open(row.pan_card)}
                                   style={{
@@ -180,6 +181,8 @@ export default function Trainers() {
                                     style={{ width: "25px", height: "25px",margin:'0', }}
                                   />
                                 </button>
+                                </Tooltip>
+                                <Tooltip title="Resume" arrow>
                                 <button
                                 onClick={(e) => window.open(row.resume)}
                                   style={{
@@ -195,6 +198,7 @@ export default function Trainers() {
                                     style={{ width: "25px", height: "25px",margin:'0', }}
                                   />
                                 </button>
+                                </Tooltip>
                               </div>
                             </TableCell>
                           );
