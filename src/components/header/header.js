@@ -5,6 +5,14 @@ import UploadResume from '../Employee/uploadresume';
 import "./header.css";
 import avatar from '../../images/avatar.webp';
 import able3 from '../../images/able_job3.JPG';
+import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
+import ArticleIcon from '@mui/icons-material/Article';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+import UploadIcon from '@mui/icons-material/Upload';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LoginIcon from '@mui/icons-material/Login';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,57 +88,59 @@ export default function Header() {
               <img src={able3} alt="Able Jobs Logo" className="header-logo" />
             </Link>
           </div>
-          <ul className="navbar-menu">
-            {userRole === 'admin' ? (
-              <li>
-                <Link to="/">
-                  <Button className="vender-button" variant="standard">
-                    <span>Home</span>
-                  </Button>
-                </Link>
-              </li>
-            ) : (
-              <>
-                
-                <li>
-                  <Link to="/">
-                    <Button className="vender-button" variant="standard">
-                      <span>Home</span>
-                    </Button>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about">
-                    <Button className="vender-button" variant="standard">
-                      <span>AboutUs</span>
-                    </Button>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/blog">
-                    <Button className="vender-button" variant="standard">
-                      <span>Blog</span>
-                    </Button>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact">
-                    <Button className="vender-button" variant="standard">
-                      <span>Contact Us</span>
-                    </Button>
-                  </Link>
-                </li>
-                {/* Upload button visible only to employees */}
-                {userRole === 'employee' && !isLandingOrRelevantPage.includes(location.pathname) && (
-                  <li>
-                    <Button style={{ color: 'white', marginTop: '-4%' }} onClick={openUploadDialog}>
-                      Upload
-                    </Button>
-                  </li>
-                )}
-
-                {/* Profile link visible only to employees and employers */}
-                {(userRole === 'employee' || userRole === 'employer') && 
+          <ul className="navbar-menu" style={{ gap: '20px' }}>
+  {userRole === 'admin' ? (
+    <li>
+      <Link to="/">
+        <Button className="vender-button" variant="standard" startIcon={<HomeIcon />}>
+          <span>Home</span>
+        </Button>
+      </Link>
+    </li>
+  ) : (
+    <>
+      <li>
+        <Link to="/">
+          <Button className="vender-button" variant="standard" startIcon={<HomeIcon />}>
+            <span>Home</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link to="/about">
+          <Button className="vender-button" variant="standard" startIcon={<InfoIcon />}>
+            <span>About Us</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link to="/blog">
+          <Button className="vender-button" variant="standard" startIcon={<ArticleIcon />}>
+            <span>Blog</span>
+          </Button>
+        </Link>
+      </li>
+      <li>
+        <Link to="/contact">
+          <Button className="vender-button" variant="standard" startIcon={<ContactMailIcon />}>
+            <span>Contact Us</span>
+          </Button>
+        </Link>
+      </li>
+      {/* Upload button visible only to employees */}
+      {userRole === 'employee' && !isLandingOrRelevantPage.includes(location.pathname) && (
+        <li>
+          <Button
+            style={{ color: 'white', marginTop: '-4%' }}
+            onClick={openUploadDialog}
+            startIcon={<UploadIcon />}
+          >
+            Upload
+          </Button>
+        </li>
+      )}
+      {/* Profile link visible only to employees and employers */}
+      {(userRole === 'employee' || userRole === 'employer') && 
                  !isLandingOrRelevantPage.includes(location.pathname) && (
                   <li>
                     <Link to="/profile" className="profile-container1">
@@ -139,33 +149,40 @@ export default function Header() {
                     </Link>
                   </li>
                 )}
-
-                {/* Login and Register buttons for unauthenticated users */}
-                {isLandingOrRelevantPage.includes(location.pathname) && !userRole && (
-                  <>
-                    <li>
-                      <div className="vendor_login_button">
-                        <Link to="/login">
-                          <Button className="vender-button" variant="outlined">
-                            <span>Login</span>
-                          </Button>
-                        </Link>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="vendor_login_button">
-                        <Link to="/register">
-                          <Button className="vender-button" variant="outlined">
-                            <span>Register</span>
-                          </Button>
-                        </Link>
-                      </div>
-                    </li>
-                  </>
-                )}
-              </>
-            )}
-          </ul>
+      {/* Login and Register buttons for unauthenticated users */}
+      {isLandingOrRelevantPage.includes(location.pathname) && !userRole && (
+        <>
+          <li>
+            <div className="vendor_login_button">
+              <Link to="/login">
+                <Button
+                  className="vender-button"
+                  variant="outlined"
+                  startIcon={<LoginIcon />}
+                >
+                  <span>Login</span>
+                </Button>
+              </Link>
+            </div>
+          </li>
+          <li>
+            <div className="vendor_login_button">
+              <Link to="/register">
+                <Button
+                  className="vender-button"
+                  variant="outlined"
+                  startIcon={<AppRegistrationIcon />}
+                >
+                  <span>Register</span>
+                </Button>
+              </Link>
+            </div>
+          </li>
+        </>
+      )}
+    </>
+  )}
+</ul>
         </nav>
       </div>
       <UploadResume open={uploadDialogOpen} onClose={closeUploadDialog} />
