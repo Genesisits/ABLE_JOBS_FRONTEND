@@ -670,3 +670,26 @@ button3:hover {
     transform: translateX(0); /* Return to the original position */
   }
 }
+.navbar-menu {
+  display: flex;
+  gap: 40px; /* Adjust this value to control the gap between elements */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.navbar-menu li {
+  margin: 15px; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+}
+
+.vender-button {
+  padding: 15px 10px; /* Adjust padding inside buttons */
+  font-size: 14px;   /* Adjust font size if needed */
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
