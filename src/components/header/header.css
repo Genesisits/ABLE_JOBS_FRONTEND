@@ -679,12 +679,12 @@ button3:hover {
 }
 
 .navbar-menu li {
-  margin: 15px; /* Remove default margin */
+  margin: 10px; /* Remove default margin */
   padding: 0; /* Remove default padding */
 }
 
 .vender-button {
-  padding: 15px 10px; /* Adjust padding inside buttons */
+  padding: 5px 10px; /* Adjust padding inside buttons */
   font-size: 14px;   /* Adjust font size if needed */
 }
 
