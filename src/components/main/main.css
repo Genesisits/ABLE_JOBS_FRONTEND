@@ -123,25 +123,6 @@ background-color: rgb(19, 19, 141);
     width:90%;
     margin-left: 3%;
 }
-@media (min-width: 768px){
-.m-6 {
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-}
-@media (min-width: 576px){
-.m-12 {
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
-}
-}
-@media (min-width: 1200px){
-.m-container1, .m-container1-lg, .m-container1-md, .m-container1-sm, .m-container1-xl {
-    max-width: 1140px;
-}
-}
 .vision h4{
   font-family: 'Oswald', sans-serif;
     color: #000000;
@@ -197,12 +178,8 @@ background-color: rgb(19, 19, 141);
     background-position: center;
     background-size: cover;
 }
-
-@media (max-width: 991px){
-.main_img1 {
-    width: 350px;
-    height: 265px;
-}
+.company_name{
+  font-size: x-large;
 }
 .main_img1{
   width: 290px;
@@ -217,28 +194,6 @@ background-color: rgb(19, 19, 141);
   margin-top: -5%;
 }
 
-@media (min-width: 992px){
-.m-6 {
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-}
-@media (min-width: 992px){
-.m-3 {
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: 25%;
-    margin-top: 5%;
-}
-}
-@media (min-width: 576px){
-.m-6 {
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-}
 .main_img2{
   width: 300px;
     height: 250px;
@@ -259,16 +214,6 @@ background-color: rgb(19, 19, 141);
     overflow: hidden;
     position: relative;
 }
-@media (min-width: 768px){
-.m-container1, .m-container1-md, .m-container1-sm {
-    max-width: 720px;
-}
-}
-@media (min-width: 576px){
-.m-container1, .m-container1-sm {
-    max-width: 1140px;
-}
-}
 .m-container1, .m-container1-fluid, .m-container1-lg, .m-container1-md, .m-container1-sm, .m-container1-xl {
   width: 100%;
   padding-right: 15px;
@@ -276,14 +221,6 @@ background-color: rgb(19, 19, 141);
   margin-right: auto;
   margin-left: auto;
 }
-@media (min-width: 768px){
-.m-12 {
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
-}
-}
-
 .m-service-heading h2{
   font-family: 'Oswald', sans-serif;
     margin-top: -5%;
@@ -315,13 +252,7 @@ background-color: rgb(19, 19, 141);
     user-select: none;
     transition: color 1s ease;
 }
-@media (min-width: 576px){
-.m-6 {
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-}
+
 .m-3 .m-6{
   position: relative;
   width: 100%;
@@ -352,23 +283,12 @@ background-color: rgb(19, 19, 141);
     border-radius: 12px 12px 0px 0px;
     height:200px;
 }
-@media (max-width: 991px){
-.ser-box-text {
-    height: auto !important;
-}
-}
-
 .ser-box-text{
   background-color: #fff;
     border: 1px solid #eee;
     padding: 50px 12px 12px 12px;
     margin-top: -40px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
-}
-@media (max-width: 991px){
-.ser-box-text h3 {
-    font-size: 19px;
-}
 }
 .ser-box-text h3 {
   font-size: 16px;
@@ -709,11 +629,6 @@ background-color: rgb(19, 19, 141);
   position: relative;
   width: 100%;
 }
-.owl-carousel .owl-wrapper {
-  display: none;
-  position: relative;
-  -webkit-transform: translate3d(0, 0, 0);
-}
 .testimonial {
   margin: 50px 30px 30px 30px;
   text-align: center;
@@ -867,315 +782,100 @@ background-color: rgb(19, 19, 141);
     padding-right: 15px;
     padding-left: 15px;
 }
-
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
+  .my-container {
+    padding: 0 5%;
+  }
   .zoomed-image {
-    width: 100%;
-    height:400px;
+    width: 120%;
+    /* height: 200px; */
+    margin-left: -10%;
+    margin-top: 2%;
   }
-  .m-text h3 {
-    font-size: 24px;
-    margin-left: -1%;
-    margin-right: 10%;
+  .MuiGrid-container {
+    flex-direction: column;
+    gap: 15px;
   }
-  .m-text p {
-    margin-left: -1%;
+
+  .MuiFormControl-root {
+    width: 100%; /* Ensures dropdowns take full width */
   }
-  .vision h4{
-    margin-left: -85%;
+
+  .hovered-item-box {
+    min-width: 300px;
+    max-width: 90%;
   }
-  .vision p{
-    margin-left: -6%;
+  .my-container button{
+    margin-top: -25%;
   }
-  .mission h4{
-    margin-left: -80%;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .my-container {
+    padding: 0 7%;
   }
-  .mission p{
-    margin-left: -6%;
+  .zoomed-image {
+    width: 120%;
+    height: 500px;
+    margin-left: -10%;
   }
-  .m-button{
-    margin-left: -5%;
+  .MuiGrid-container {
+    flex-direction: column;
+    gap: 10px;
   }
-  .main_img1{
-    margin-left: 6%;
-    height: 150px;
-    width:50%;
+}
+@media (max-width: 960px) { /* Small and medium screens */
+  .scroll-container {
+    max-height: 80vh; /* Adjust height */
+    overflow-x: auto; /* Enable vertical scrolling */
   }
-  .main_img2{
-    
-    margin-left: 6%;
-    height: 150px;
-    width:50%;
-    margin-top:22% ;
-    margin-left: 20%;
-  }
-  .m-service-heading h2{
-    margin-top: 50%;
-    margin-left: 30%;
+}
+@media (max-width: 960px) { /* Small and medium screens */
+  .scroll-item {
     white-space: nowrap;
+    overflow-x: auto;
   }
-  
-  .m-3 {
-    flex: 0 0 100%; 
-    max-width: 80%; 
-    padding: 10px; 
-    margin-left:4%;
-    
+}
+@media (max-width: 360px) {
+  .my-container button {
+      margin-top: 10%;
+      
   }
-  .ourclients-main-heading-sec p{
-   padding: 1px 25px;
-   margin-left: -2%;
-   text-align: justify;
+  .zoomed-image {
+    width: 120%;
+    height: 500px;
+    margin-left: -10%;
   }
-  .testimonial_heading{
-    margin-left: -5%;
+}
+@media (min-width: 509px) and (max-width: 560px) {
+  .my-container button {
+      margin-top: -17%;
   }
-  .testimonial_heading h2{
-    margin-left: -35%;
+  .zoomed-image {
+    width: 120%;
+    height: 500px;
+    margin-left: -10%;
   }
-  .testimonial .description {
-    width: 45%;
-    margin-left: 6%;
+}
+@media (min-width: 769px) and (max-width: 899px) {
+  .my-container button {
+      margin-top: -17%;
   }
-  .testimonial .title {
-    margin-left: -35%;
+  .zoomed-image {
+    width: 120%;
+    height: 500px;
+    margin-left: -10%;
   }
-  .testimonial:before, .testimonial .title:before {
-  padding-left: 1px;
+}
+/* @media (min-width: 900px) and (max-width: 1024px) {
+  .my-container button {
+      margin-top: -17%;
   }
-  .testimonial .pic img{
-    margin-left: -35%;
-  }
-  .testimonial-buttons{
-    margin-left: -35%;
-  }
-  .wding_cps img{
-    margin-left: -70%;
-    margin-top: 0%;
-  }
-  .meet_our_space_lft_cnt h4 {
-    margin-left: 2%;
-    margin-top: -45%;
-  }
-  .abt_sec_home_btn1 {
-    margin-left: 24%;
-    margin-top: -2%;
-  }
-  .m-4{
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: calc(90% - 30px);
-    max-width: calc(90% - 30px);
-    padding: 0 15px;
-}
-.meet_our_space_slicbox img{
-  height: 200px;
-  margin-left: 1%;
-}
-.wedding_hands img {
-  display: none;
-}
-}
-@media (max-width: 576px){
-.meet_our_space::after {
-    left: 0px;
-    width: 98%;
-    border-radius: 0px 30px 30px 0px;
-    height: 680px;
-}
-}
-@media (max-width: 576px){
-.meet_our_space::after {
-    left: 0px;
-    width: 98%;
-    border-radius: 0px 30px 30px 0px;
-    height: 680px;
-}
-}
-
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-  
-.m-text h3{
-  font-size: 32px;
-}
-.vision{
-  margin-top: -5%;
-}
-.vision h4{
-  margin-left: -100%;
-}
-.mission h4{
-  margin-left: -96%;
-}
-.mission{
-  margin-top: -5%;
-}
-  .main_img1{
-    margin-left:-45%;
-    margin-top: 0%;
-    height:220px;
-    width:50%;
-  }
-  .main_img2{
-    margin-left: -26%;
-    height:220px;
-    width:50%;
-    margin-top: 20%;
-  } 
-  .m-6 {
-    flex: 0 0 100%;
-    max-width: 100%;
-}
-.m-service-heading h2{
-  margin-top: 30%;
-  margin-left: -10%;
-  white-space: nowrap;
-}
-.m-3 {
-  flex: 0 0 40%;
-  max-width: 40%;
-  padding: 10px;
-  margin-left: 2%;
-  /* margin-top: -3%; */
-}
-.meet_our_space::after {
-  left: 30px;
-}
-.meet_our_space::after {
-  left: 30px;
-}
-.meet_our_space_slicbox img {
-  height: 250px;
-  margin-left: -5%;
-  width:60%;
-  margin-top: 10%;
-}
-.meet_our_space_lft_cnt h4 {
-  margin-left: -70%;
-  margin-top: -45%;
-}
-.abt_sec_home_btn1 {
-  margin-left: -15%;
-  margin-top: -2%;
-}
-.ourclients-main-heading-sec p {
-  padding: 1px 25px;
-  margin-left: 2%;
-  margin-right: 12%;
-  text-align: justify;
-}
-.ourclients-main-heading-sec h2{
-  margin-left: -8%;
-}
-.testimonial .description {
-  width: 90%;
-  margin-left: 6%;
-  text-align: justify;
-}
-.testimonial_heading h2 {
-  margin-left: 2%;
-}
-.testimonial .title {
-  margin-left: 5%;
-}
-.testimonial .pic img {
-  margin-left: 5%;
-}
-.testimonial-buttons {
-  margin-left: 0%;
-}
-.wding_cps img {
-  margin-left: -10%;
-  margin-top: 0%;
-}
-}
-
-@media screen and (min-width: 1024px) and (max-width: 1024px) {
-  .m-text h3{
-    margin-left: -20%;
-  }
-  .vision h4 {
-    margin-left: -96%;
-}
-.main_img2 {
-    margin-top: 12%;
-}
-.vision p{
-  margin-left: -3%;
-}
-.mission h4 {
-  margin-left: -93%;
-}
-.mission p{
-  margin-left: -3%;
-}
-.main_img1{
-  margin-left:-45%;
-  margin-top: 0%;
-  height:220px;
-  width:40%;
-}
-.main_img2{
-  margin-left: -26%;
-  height:220px;
-  width:40%;
-  margin-top: 15%;
-}
-.wedding_hands img{
-  display:none;
-} 
-.meet_our_space_slicbox img{
-  margin-top: 3%;
-}
-.testimonial_heading h2 {
-  margin-left: 25%;
-}
-.wding_cps img{
-  margin-left: 62%;
-}
-.testimonial-buttons{
-  margin-left: 35%;
-}
-}
-@media screen and (min-width: 820px) and (max-width: 916px) {
-  .wedding_hands img{
-    display: none;
-  }
-  .m-row4{
-    margin-left: -15%;
-  }
-  .testimonial_heading h2 {
-    margin-left: 25%;
-  }
-  .testimonial-buttons{
-    margin-left: 35%;
-  }
-  .wding_cps img{
-    margin-left: 62%;
-  }
-  .vision h4 {
-    margin-left: -94%;
-}
-
-.vision p{
-  margin-left: -3%;
-}
-.mission h4 {
-  margin-left: -91%;
-}
-.mission p{
-  margin-left: -3%;
-}
-}
-@media screen and (min-width: 1280px) and (max-width: 1280px) {
-  .meet_our_space_slicbox img{
-    margin-left: 30%;
-    width:115%;
-  }
-  .meet_our_space_lft_cnt h4{
-    margin-left: 70%;
-  }
-  .abt_sec_home_btn1{
-    margin-left: 70%;
+} */
+@media (min-width: 900px) and (max-width: 1024px) {
+  .my-container button {
+      margin-left: -17%;
+      white-space:nowrap ;
+      width:90%;
   }
 }

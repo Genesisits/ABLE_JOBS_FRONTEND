@@ -79,9 +79,9 @@ button {
 span{
     color: white;
 }
-p{
+/* p{
     font-size: x-large;
-}
+} */
 input::placeholder,
 textarea::placeholder,
 select::placeholder {
@@ -212,12 +212,12 @@ select::placeholder {
         button {
            margin-left: 12%; 
         }
-        p{
+        /* p{
             text-align: center;
             margin-left: 5%;
             margin-right: 5%;
 
-        }
+        } */
         .row1{
         width:70%;
         margin-left: 13%;

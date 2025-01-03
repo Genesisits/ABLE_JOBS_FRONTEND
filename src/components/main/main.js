@@ -403,7 +403,7 @@ export default function Header() {
           sx={{
             minWidth: 120,
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "column", sm: "column", md:"column",lg:"row" },
             gap: "10px",
           }}
         >
@@ -597,40 +597,60 @@ export default function Header() {
         <Grid container spacing={1} style={{ marginTop: "10px" }}>
           {data.map((item, index) => (
             <Grid
-              item
-              xs={12}
-              key={item.id}
-              ref={(el) => (rowRefs.current[index] = el)} // Attach ref to each row
-              onMouseEnter={() => handleMouseEnter(item, index)} // Mouse enters and shows the box
-              onMouseLeave={handleMouseLeave} // Mouse leaves and hides the box
-              style={{
-                margin:'5px',
-                border: "1px solid #ddd",
-                padding: "10px",
-                borderRadius: "4px",
-                cursor: "pointer",
-                transition: "box-shadow 0.3s ease",
-                position: "relative", // Ensures the small box is positioned correctly
-              }}
-            >
-              <Grid container spacing={0}>
-                <Grid item xs={3}>
-                  <p>{item.company_name}</p>
-                  <h6>{item.job_title}</h6>
-                </Grid>
-                <Grid item xs={3}>
-                  <h6>
-                    {item.industry} - {item.department}
-                  </h6>
-                  <h6>{item.work_mode}</h6>
-                </Grid>
-                <Grid item xs={3}>
-                  <h6>No Of Positions - {item.number_of_positions}</h6>
-                  <h6>Notice Period - {item.notice_period}</h6>
-                </Grid>
-                <Grid item xs={3}>
-                  <Button onClick={onhandleClick}>Apply Now</Button>
-                </Grid>
+            item
+            xs={12} // Full width on small screens
+            sm={12}  // Half width on medium screens
+            md={12}  // One-third width on large screens
+            key={item.id}
+            ref={(el) => (rowRefs.current[index] = el)}
+            onMouseEnter={() => handleMouseEnter(item, index)}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              margin: '5px',
+              border: "1px solid #ddd",
+              padding: "10px",
+              borderRadius: "4px",
+              cursor: "pointer",
+              transition: "box-shadow 0.3s ease",
+              position: "relative",
+            }}
+          >              <Grid container spacing={{ xs: 1, sm: 6, md: 4 }} // Adjust spacing for different screen sizes
+          sx={{
+            '& .MuiGrid-item': {
+              marginBottom: { xs: '-34px', sm: '-76px', md: '24px',
+                '@media (max-width:360px)': {
+                  marginBottom: '-50px',
+                  marginTop: '-5px',
+                  height: '120px',
+    },  },
+    '@media (min-width:769px) and (max-width:899px)': {
+      marginBottom: '-38px', 
+      marginTop:'-15px'
+    },
+    '@media (min-width:900px) and (max-width:1024px)': {
+      marginBottom: '-28px', 
+      marginLeft:'-15px',
+      
+    },
+            },
+          }}>
+               <Grid item xs={12} sm={12} md={3}>
+    <p className="company_name">{item.company_name}</p>
+    <h6>{item.job_title}</h6>
+  </Grid>
+  <Grid item xs={12} sm={12} md={3}>
+    <h6>
+      {item.industry} - {item.department}
+    </h6>
+    <h6>{item.work_mode}</h6>
+  </Grid>
+  <Grid item xs={12} sm={12} md={3}>
+    <h6>No Of Positions - {item.number_of_positions}</h6>
+    <h6>Notice Period - {item.notice_period}</h6>
+  </Grid>
+  <Grid item xs={12} sm={12} md={3}>
+    <Button onClick={onhandleClick}>Apply Now</Button>
+  </Grid>
               </Grid>
 
               
