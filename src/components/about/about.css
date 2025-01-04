@@ -1,5 +1,10 @@
 .about-hero {
   animation: fadeIn 1.5s ease-in-out;
+  width: 100%;  /* Ensures the image takes up the full width */
+  height: 400px;  /* Set height for larger screens */
+  background-size: cover;  /* Ensures the background image covers the area without distortion */
+  background-position: center;  /* Keeps the image centered */
+  background-repeat: no-repeat; 
 }
 
 .about-secondary-img:hover {
@@ -16,7 +21,16 @@
   justify-content: space-between;
   padding: 3% 10%;
   gap: 20px;
-  background: #f8f9fa
+  background: white;
+}
+.about-section, .who-we-are-section{
+  padding: 2% 8%;
+  margin-top: -1%;
+}
+.additional-section {
+  padding: 2% 20%;
+  margin-top: -1%;
+  background: white;
 }
 
 .about-text {
@@ -108,13 +122,21 @@
   }
 }
 .who-we-are-section {
-  background: #f8f9fa;
-  padding: 5% 10%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 2% 8%;
   margin-top: -1%;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 1.5s ease-out;
+  background: white;
 }
+
+/* Content Alignment */
+.who-left, .who-right {
+  flex: 1 1 45%; /* Equal width for left and right */
+  text-align: justify;
+}
+
 
 .who-we-are-content {
   margin-bottom: 30px;
@@ -144,7 +166,8 @@
   line-height: 1.8;
   color: #555;
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 500px;
+  text-align: justify
 }
 
 /* Animations */
@@ -187,5 +210,200 @@
   to {
       opacity: 1;
       transform: translateX(0);
+  }
+}
+.section-heading {
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px; /* Reduced margin below headings */
+  position: relative;
+  text-transform: uppercase;
+}
+
+.section-heading::after {
+  content: '';
+  width: 50px; /* Slightly smaller underline */
+  height: 3px;
+  background: #007bff;
+  display: block;
+  margin: 8px auto 0; /* Reduced margin for underline */
+  border-radius: 5px;
+}
+
+/* List Styling */
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px; /* Reduced gap above the list */
+}
+
+ul li {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 25px; /* Space for custom bullet */
+}
+
+.additional-section ul li::before {
+    content: "▶"; /* Modern arrow icon */
+    font-size: 1rem;
+    color: #007bff; /* Arrow color */
+    position: absolute;
+    left: 0;
+}
+
+.list-icon {
+  color: #007bff;
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+      opacity: 0;
+      transform: translateX(-100%);
+  }
+  to {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+      opacity: 0;
+      transform: translateX(100%);
+  }
+  to {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+.vision-section,
+.impact-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2% 8%;
+    margin-top: -1%;
+    background: white;
+}
+
+.vision-section .vision-image,
+.impact-section .impact-image {
+    flex: 1;
+    max-width: 50%;
+    padding-right: 20px;
+}
+
+.vision-section .vision-content,
+.impact-section .impact-content {
+    flex: 1;
+    max-width: 50%;
+    padding-left: 20px;
+}
+
+.vision-section .vision-image img {
+    width: 50%;
+    height: auto;
+    border-radius: 10px;
+}
+.impact-section .impact-image img {
+  width: 50%;
+  height: auto;
+  border-radius: 10px;
+}
+.vision-section {
+    flex-direction: row;
+}
+
+/* .impact-section {
+    flex-direction: row-reverse;
+} */
+.vision-content p{
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0 auto;
+  max-width: 800px;
+}
+.impact-content{
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0 auto;
+  max-width: 800px;
+}
+@media (max-width: 768px) {
+  .about-section,
+  .vision-section,
+  .impact-section {
+      flex-direction: column;
+      text-align: center;
+  }
+  .vision-section .vision-image img {
+    width: 100%;
+  }
+  .about-image img,
+  .vision-image img,
+  .impact-image img {
+      max-width: 100%;
+  }
+  .impact-content p{
+    text-align: justify;
+  }
+  .vision-image p{
+    text-align: justify;
+  }
+  .who-we-are-section {
+      flex-direction: column;
+      text-align: center;
+  }
+
+  .who-we-are-content {
+      flex: 1;
+      margin-bottom: 20px;
+  }
+  .vision-content p{
+    text-align: justify;
+    width:200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero {
+      height: 300px;
+  }
+
+  .section-heading {
+      font-size: 1.5rem;
+  }
+
+  .additional-section li {
+      font-size: 0.9rem;
+  }
+  .impact-content p{
+    text-align: justify;
+  }
+  .vision-image p{
+    text-align: justify;
+  }
+  .vision-section .vision-image img {
+    width: 100%;
   }
 }
