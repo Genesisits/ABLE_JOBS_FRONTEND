@@ -19,6 +19,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
+import Tooltip from "@mui/material/Tooltip";  // Import Tooltip from Material-UI
 
 const columns = [
   { id: "first_name", label: "First Name", minWidth: 100 },
@@ -35,7 +36,7 @@ export default function Trainers() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [rows, setData] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function Trainers() {
 
   useEffect(() => {
     // Fetch job data from API
-    setLoading(true)
+    setLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -115,11 +116,11 @@ export default function Trainers() {
   return (
     <div>
       <Layout>
-      {loading && (
-        <div className="full-page-spinner">
-          <CircularProgress color="primary" size={50} />
-        </div>
-      )}
+        {loading && (
+          <div className="full-page-spinner">
+            <CircularProgress color="primary" size={50} />
+          </div>
+        )}
         <div className="jobs"></div>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
@@ -158,24 +159,26 @@ export default function Trainers() {
                                   margin: "0",
                                 }}
                               >
-                                <button
-                                  onClick={(e) => window.open(row.resume)}
-                                  style={{
-                                    padding: "0",
-                                    border: "none",
-                                    background: "none",
-                                    margin: "1px",
-                                  }}
-                                >
-                                  <img
-                                    src={Resume}
+                                <Tooltip title="Resume" arrow>
+                                  <button
+                                    onClick={(e) => window.open(row.resume)}
                                     style={{
-                                      width: "25px",
-                                      height: "25px",
-                                      margin: "0",
+                                      padding: "0",
+                                      border: "none",
+                                      background: "none",
+                                      margin: "1px",
                                     }}
-                                  />
-                                </button>
+                                  >
+                                    <img
+                                      src={Resume}
+                                      style={{
+                                        width: "25px",
+                                        height: "25px",
+                                        margin: "0",
+                                      }}
+                                    />
+                                  </button>
+                                </Tooltip>
                               </div>
                             </TableCell>
                           );
