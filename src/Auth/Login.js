@@ -56,24 +56,26 @@ function Login() {
       axios
         .post(`${LOGIN}`, payload)
         .then((response) => {
-          const { user_role } = response.data.user;
-
-
+          const { user_role, resume } = response.data.user;
           localStorage.removeItem("is_employee");
           localStorage.removeItem("is_employer");
           localStorage.removeItem("is_admin");
-
-
           localStorage.setItem("access_token", response.data.access);
           localStorage.setItem("refresh_token", response.data.refresh);
           localStorage.setItem("isLoggedIn", true);
-
           if (user_role === "Employer") {
             localStorage.setItem("is_employer", "true");
             navigate("/jobs");
           } else if (user_role === "Employee") {
             localStorage.setItem("is_employee", "true");
             navigate("/findajob", { state: { fromLogin: true } });
+            if (!resume || resume.trim() === "") {
+              setTimeout(() => {
+                alert(
+                  "Your resume is missing. Please upload your resume to proceed."
+                );
+              }, 400);
+            }
           } else if (user_role === "Admin") {
             localStorage.setItem("is_admin", "true");
             navigate("/dashboard");
@@ -81,19 +83,19 @@ function Login() {
             console.warn("Unknown job role:", user_role);
             setErrorMessage("Invalid user role");
           }
-
-
           setTimeout(() => {
             window.location.reload();
           }, 500);
         })
         .catch((error) => {
           setLoading(false);
-  
+
           // Handle 403 error specifically
           if (error.response && error.response.status === 403) {
-            const backendMessage = error.response.data.detail || JSON.stringify(error.response.data.error);
-            console.log(error.response.data)
+            const backendMessage =
+              error.response.data.detail ||
+              JSON.stringify(error.response.data.error);
+            console.log(error.response.data);
             setErrorMessage(backendMessage);
           } else {
             // Handle other errors
@@ -113,10 +115,9 @@ function Login() {
         </div>
       )}
 
-
       <div className="container1">
         <div className="flex-item-login">
-          <h3 style={{color:'blue'}}>Able Jobs</h3>
+          <h3 style={{ color: "blue" }}>Able Jobs</h3>
           <input
             type="text"
             placeholder="username"
@@ -146,7 +147,7 @@ function Login() {
             </button>
             <div className="links-container">
               <p className="link-item">
-                <Link to="/register">Register  |</Link>
+                <Link to="/register">Register |</Link>
               </p>
               <p className="link-item">
                 <Link to="/forgetpassword">Forgot password?</Link>
@@ -161,7 +162,6 @@ function Login() {
           <img src={mail} alt="Mail" className="imageDetails" />
         </div>
       </div>
-
     </div>
   );
 }
