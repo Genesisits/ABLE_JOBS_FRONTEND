@@ -43,6 +43,9 @@ export default function Header() {
     '/', '/home', '/login', '/register', '/employeeregister', 
     '/trainer', '/volunteer', '/forgetpassword', '/email', '/resetpassword','/contact','/blog','/about'
   ];
+  const isLandingprofile = [
+    '/','/jobs','/shortlisted','/findajob','/applied', '/shortlist','/onboard'
+  ]
 
   const openUploadDialog = () => setUploadDialogOpen(true);
   const closeUploadDialog = () => setUploadDialogOpen(false);
@@ -113,7 +116,7 @@ export default function Header() {
                 )}
                 {/* Profile link visible only to employees and employers */}
                 {(userRole === 'employee' || userRole === 'employer') && 
-                  !isLandingOrRelevantPage.includes(location.pathname) && (
+                  isLandingprofile.includes(location.pathname) && (
                     <li>
                       <Link to="/profile" className="profile-container1">
                         <img className="profile-avatar1" src={avatar} alt="Profile" />
@@ -132,20 +135,7 @@ export default function Header() {
                             variant="outlined"
                             startIcon={<LoginIcon />}
                           >
-                            <span>Login</span>
-                          </Button>
-                        </Link>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="vendor_login_button">
-                        <Link to="/register">
-                          <Button
-                            className="vender-button"
-                            variant="outlined"
-                            startIcon={<AppRegistrationIcon />}
-                          >
-                            <span>Register</span>
+                            <span>Login/Register</span>
                           </Button>
                         </Link>
                       </div>
