@@ -105,7 +105,7 @@ export default function Jobs() {
   }
 
   return (
-    <div>
+    // <div>
       <Layout>
       {loading && (
         <div className="full-page-spinner">
@@ -117,7 +117,7 @@ export default function Jobs() {
           Post a Job
         </button>
         </div>
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <Paper sx={{ width: "100%", overflow: "hidden", backgroundColor: "#ffffff" }}>
           <TableContainer sx={{ maxHeight: 400 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -203,6 +203,6 @@ export default function Jobs() {
           jobCode={selectedJobCode} 
         />
       </Layout>
-    </div>
+    // </div>
   );
 }

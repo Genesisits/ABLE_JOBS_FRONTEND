@@ -43,7 +43,11 @@ export default function Header() {
     '/', '/home', '/login', '/register', '/employeeregister', 
     '/trainer', '/volunteer', '/forgetpassword', '/email', '/resetpassword','/contact','/blog','/about'
   ];
+  const isLandingprofile = [
+    '/','/jobs','/shortlisted','/findajob','/applied', '/shortlist','/onboard'
+  ]
 
+  console.log(isLandingOrRelevantPage.includes(location.pathname))
   const openUploadDialog = () => setUploadDialogOpen(true);
   const closeUploadDialog = () => setUploadDialogOpen(false);
 
@@ -111,33 +115,31 @@ export default function Header() {
                     </Button>
                   </li>
                 )}
-                {/* Profile link visible only to employees and employers */}
+
+                {/* Profile link visible only to employees and employers and in homepage if loggedIn*/}
                 {(userRole === 'employee' || userRole === 'employer') && 
-                  !isLandingOrRelevantPage.includes(location.pathname) && (
-                    <li>
-                      <Link to="/profile" className="profile-container1">
-                        <img className="profile-avatar1" src={avatar} alt="Profile" />
-                        <p className="profile-name1">Profile</p>
-                      </Link>
-                    </li>
-                  )}
+                 isLandingprofile.includes(location.pathname) ? (
+                  <li>
+                    <Link to="/profile" className="profile-container1">
+                      <img className="profile-avatar1" src={avatar} alt="Profile" />
+                      <p className="profile-name1">Profile</p>
+                    </Link>
+                  </li>
+                ): ''}
+
                 {/* Login and Register buttons for unauthenticated users */}
                 {isLandingOrRelevantPage.includes(location.pathname) && !userRole && (
                   <>
                     <li>
                       <div className="vendor_login_button">
                         <Link to="/login">
-                          <Button
-                            className="vender-button"
-                            variant="outlined"
-                            startIcon={<LoginIcon />}
-                          >
-                            <span>Login</span>
+                          <Button className="vender-button" variant="outlined">
+                            <span>SignIn/SignUp</span>
                           </Button>
                         </Link>
                       </div>
                     </li>
-                    <li>
+                    {/* <li>
                       <div className="vendor_login_button">
                         <Link to="/register">
                           <Button
@@ -149,7 +151,7 @@ export default function Header() {
                           </Button>
                         </Link>
                       </div>
-                    </li>
+                    </li> */}
                   </>
                 )}
               </>

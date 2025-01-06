@@ -13,6 +13,39 @@
   z-index: 1000;
 }
 
+.vender-button {
+  background-color: #6200ea; /* Primary background color */
+  color: #ffffff; /* Text color */
+  border: 2px solid transparent; /* Transparent border for cleaner look */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for a balanced button size */
+  font-size: 16px; /* Font size for readability */
+  font-weight: bold; /* Bold text for emphasis */
+  text-transform: uppercase; /* Optional: Capitalize text */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  cursor: pointer; /* Pointer cursor for clickability */
+}
+
+.vender-button:hover {
+  width: fit-content;
+  background-color: #261353; /* Darker shade for hover */
+  color: #ffffff; /* Ensure text is readable */
+ 
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+.vender-button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.5); /* Focus ring for accessibility */
+  width: fit-content;
+}
+
+.vender-button:active {
+  background-color: #311b92; /* Slightly darker shade on click */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow for pressed state */
+}
+
+
 .header-container {
   display: flex;
   
@@ -69,6 +102,20 @@
   transition: transform 0.3s ease; 
 }
 
+/* .vender-button{
+  margin-top: -5%;
+  margin-bottom: -9%;
+  font-weight: 600;
+background-color: #FFFFFF;
+color: #881008;
+height:30px;
+padding-bottom:25px;
+}
+.vender-button:hover{
+  background-color: #FFFFFF;
+color: #881008;
+
+} */
 
 
 .homebg{
