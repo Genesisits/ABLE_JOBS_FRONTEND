@@ -47,6 +47,7 @@ export default function Header() {
     '/','/jobs','/shortlisted','/findajob','/applied', '/shortlist','/onboard'
   ]
 
+  console.log(isLandingOrRelevantPage.includes(location.pathname))
   const openUploadDialog = () => setUploadDialogOpen(true);
   const closeUploadDialog = () => setUploadDialogOpen(false);
 
@@ -114,7 +115,8 @@ export default function Header() {
                     </Button>
                   </li>
                 )}
-                {/* Profile link visible only to employees and employers */}
+
+                {/* Profile link visible only to employees and employers and in homepage if loggedIn*/}
                 {(userRole === 'employee' || userRole === 'employer') && 
                   isLandingprofile.includes(location.pathname) && (
                     <li>
@@ -130,16 +132,25 @@ export default function Header() {
                     <li>
                       <div className="vendor_login_button">
                         <Link to="/login">
-                          <Button
-                            className="vender-button"
-                            variant="outlined"
-                            startIcon={<LoginIcon />}
-                          >
-                            <span>Login/Register</span>
+                          <Button className="vender-button" variant="outlined">
+                            <span>SignIn/SignUp</span>
                           </Button>
                         </Link>
                       </div>
                     </li>
+                    {/* <li>
+                      <div className="vendor_login_button">
+                        <Link to="/register">
+                          <Button
+                            className="vender-button"
+                            variant="outlined"
+                            startIcon={<AppRegistrationIcon />}
+                          >
+                            <span>Register</span>
+                          </Button>
+                        </Link>
+                      </div>
+                    </li> */}
                   </>
                 )}
               </>
