@@ -118,15 +118,14 @@ export default function Header() {
 
                 {/* Profile link visible only to employees and employers and in homepage if loggedIn*/}
                 {(userRole === 'employee' || userRole === 'employer') && 
-                 isLandingprofile.includes(location.pathname) ? (
-                  <li>
-                    <Link to="/profile" className="profile-container1">
-                      <img className="profile-avatar1" src={avatar} alt="Profile" />
-                      <p className="profile-name1">Profile</p>
-                    </Link>
-                  </li>
-                ): ''}
-
+                  isLandingprofile.includes(location.pathname) && (
+                    <li>
+                      <Link to="/profile" className="profile-container1">
+                        <img className="profile-avatar1" src={avatar} alt="Profile" />
+                        <p className="profile-name1">Profile</p>
+                      </Link>
+                    </li>
+                  )}
                 {/* Login and Register buttons for unauthenticated users */}
                 {isLandingOrRelevantPage.includes(location.pathname) && !userRole && (
                   <>
