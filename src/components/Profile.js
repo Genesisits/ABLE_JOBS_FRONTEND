@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './profile.css'; 
-import avatar from '../images/avatar.webp';
-import Layout from './sidenav/Layout';
+import React, { useState, useEffect, useRef } from "react";
+import "./profile.css";
+import avatar from "../images/avatar.webp";
+import Layout from "./sidenav/Layout";
 import {
   Dialog,
   DialogActions,
@@ -14,70 +14,82 @@ import {
   IconButton,
   Snackbar,
   Alert,
-} from '@mui/material';
-import axios from 'axios';
-import { USER_PROFILE, PROFILE_UPDATE, PROFILE_UPDATE_IMAGE } from '../endpoints';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
+  FormControlLabel,
+  Typography,
+  Checkbox,
+} from "@mui/material";
+import axios from "axios";
+import {
+  USER_PROFILE,
+  PROFILE_UPDATE,
+  PROFILE_UPDATE_IMAGE,
+} from "../endpoints";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { CheckBox } from "@mui/icons-material";
 const textFieldStyles = {
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': { borderColor: 'transparent' },
-    '&:hover fieldset': { borderColor: 'transparent' },
-    '&.Mui-focused fieldset': { borderColor: 'transparent' },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": { borderColor: "transparent" },
+    "&:hover fieldset": { borderColor: "transparent" },
+    "&.Mui-focused fieldset": { borderColor: "transparent" },
   },
 };
 const snackbarStyles = {
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  zIndex: 1400, 
+  position: "fixed",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  zIndex: 1400,
 };
 const fieldLabels = {
-  first_name: 'First Name',
-  last_name: 'Last Name',
-  mobile_number: 'Mobile Number',
-  skills: 'Skills',
-  address: 'Address',
-  company_name: 'Company Name',
-  location: 'Location',
-  email: 'Email',
-  company_contact: 'Company Contact',
-  industry: 'Industry',
-  company_website: 'Company Website',
-  head_first_name: 'Head First Name',
-  head_last_name: 'Head Last Name',
-  head_email: 'Head Email',
-  head_contact: 'Head Contact',
-  head_designation: 'Head Designation',
-  linkedinlink: 'LinkedIn Link',
-  country: 'Country',
-  state: 'State',
-  availability_of_work: 'Availability of Work',
-  disability: 'Disability',
-  job_experiences: 'Job Experiences',
-  languages_known: 'Languages Known',
-  willing_to_relocate: 'Willing to Relocate'
+  first_name: "First Name",
+  last_name: "Last Name",
+  mobile_number: "Mobile Number",
+  skills: "Skills",
+  address: "Address",
+  company_name: "Company Name",
+  location: "Location",
+  email: "Email",
+  company_contact: "Company Contact",
+  industry: "Industry",
+  company_website: "Company Website",
+  head_first_name: "Head First Name",
+  head_last_name: "Head Last Name",
+  head_email: "Head Email",
+  head_contact: "Head Contact",
+  head_designation: "Head Designation",
+  linkedinlink: "LinkedIn Link",
+  country: "Country",
+  state: "State",
+  availability_of_work: "Availability of Work",
+  disability: "Disability",
+  job_experiences: "Job Experiences",
+  languages_known: "Languages Known",
+  willing_to_relocate: "Willing to Relocate",
 };
 const Profile = () => {
-  const [userType, setUserType] = useState('');
+  const [userType, setUserType] = useState("");
   const [user, setUser] = useState({
-    first_name: '',
-    last_name: '',
-    mobile_number: '',
-    skills: '',
-    address: '',
-    profile_image: '',
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    skills: "",
+    address: "",
+    profile_image: "",
+    willing_to_relocate: false,
   });
   const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [imageFile, setImageFile] = useState(null); // For handling image upload
-  const accessToken = localStorage.getItem('access_token');
+  const accessToken = localStorage.getItem("access_token");
   const hasFetched = useRef(false);
   const [showSubmit, setshowSubmit] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: '' });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
   useEffect(() => {
     const fetchUserProfile = async () => {
-      
       try {
         if (!hasFetched.current) {
           const response = await axios.get(USER_PROFILE, {
@@ -90,7 +102,7 @@ const Profile = () => {
           hasFetched.current = true;
         }
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error("Error fetching user profile:", error);
       } finally {
         setLoading(false);
       }
@@ -109,6 +121,7 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log("Updating field:", name, "with value:", value);
     setUser((prevUser) => ({
       ...prevUser,
       [name]: value,
@@ -116,32 +129,41 @@ const Profile = () => {
   };
 
   const handleSaveChanges = async () => {
-    setLoading(true)
-    const employeeRequiredFields = ['first_name', 'last_name', 'mobile_number', 'skills', 'address', 'country', 'state',
-      'availability_of_work', 'disability',
-      'languages_known', 'willing_to_relocate',
+    setLoading(true);
+    const employeeRequiredFields = [
+      "first_name",
+      "last_name",
+      "mobile_number",
+      "skills",
+      "address",
+      "country",
+      "state",
+      "availability_of_work",
+      "disability",
+      "languages_known",
+      // "willing_to_relocate",
     ];
     const employerRequiredFields = [
-      'company_name',
-      'location',
-      'email',
-      'company_contact',
-      'industry',
-      'company_website',
-      'head_first_name',
-      'head_last_name',
-      'head_email',
-      'head_contact',
-      'head_designation',
-      'linkedinlink'
+      "company_name",
+      "location",
+      "email",
+      "company_contact",
+      "industry",
+      "company_website",
+      "head_first_name",
+      "head_last_name",
+      "head_email",
+      "head_contact",
+      "head_designation",
+      "linkedinlink",
     ];
 
-    const requiredFields = userType === 'Employee' ? employeeRequiredFields : employerRequiredFields;
+    const requiredFields =
+      userType === "Employee" ? employeeRequiredFields : employerRequiredFields;
     const emptyFields = requiredFields.filter((field) => {
       const fieldValue = user[field];
 
-
-      if (typeof fieldValue === 'string') {
+      if (typeof fieldValue === "string") {
         return !fieldValue.trim();
       }
 
@@ -149,28 +171,27 @@ const Profile = () => {
     });
 
     if (emptyFields.length > 0) {
-      const emptyFieldLabels = emptyFields.map(field => fieldLabels[field] || field);
+      const emptyFieldLabels = emptyFields.map(
+        (field) => fieldLabels[field] || field
+      );
 
       setSnackbar({
         open: true,
-        message: `The following fields should not be empty: ${emptyFieldLabels.join(', ')}`,
-        severity: 'error',
+        message: `The following fields should not be empty: ${emptyFieldLabels.join(", ")}`,
+        severity: "error",
       });
       setLoading(false);
       return;
     }
 
-
     try {
-      
       const formData = new FormData();
 
-      
       const restrictedFields = [
-        'company_logo',
-        'gst_file',
-        'pan',
-        'registration_certificate',
+        "company_logo",
+        "gst_file",
+        "pan",
+        "registration_certificate",
       ];
 
       Object.entries(user).forEach(([key, value]) => {
@@ -182,29 +203,41 @@ const Profile = () => {
       const response = await axios.patch(PROFILE_UPDATE, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data', // Required for FormData
+          "Content-Type": "multipart/form-data", // Required for FormData
         },
       });
 
       if (response.status === 200) {
         setUser(response.data);
-        setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
+        setSnackbar({
+          open: true,
+          message: "Profile updated successfully",
+          severity: "success",
+        });
         setTimeout(() => {
           window.location.reload();
         }, 500);
       }
     } catch (error) {
-      setSnackbar({ open: true, message: 'Failed to update profile', severity: 'error' });
+      setSnackbar({
+        open: true,
+        message: "Failed to update profile",
+        severity: "error",
+      });
     } finally {
       handleDialogClose();
-      setLoading(false)
+      setLoading(false);
     }
   };
 
-  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ];
 
     if (file && validImageTypes.includes(file.type)) {
       setImageFile(file);
@@ -212,20 +245,24 @@ const Profile = () => {
     } else {
       setSnackbar({
         open: true,
-        message: 'Please upload a valid image file (JPEG, PNG, WEBP, or GIF).',
-        severity: 'error',
+        message: "Please upload a valid image file (JPEG, PNG, WEBP, or GIF).",
+        severity: "error",
       });
     }
   };
 
   const handleImageUpload = async () => {
     if (!imageFile) {
-      setSnackbar({ open: true, message: 'Please select an image to upload', severity: 'warning' });
+      setSnackbar({
+        open: true,
+        message: "Please select an image to upload",
+        severity: "warning",
+      });
       return;
     }
 
     const formData = new FormData();
-    formData.append('image', imageFile);
+    formData.append("image", imageFile);
 
     setLoading(true);
     try {
@@ -241,20 +278,32 @@ const Profile = () => {
           ...prevUser,
           profile_image: profile_image_url,
         }));
-        setSnackbar({ open: true, message: 'Profile image updated successfully', severity: 'success' });
+        setSnackbar({
+          open: true,
+          message: "Profile image updated successfully",
+          severity: "success",
+        });
         setshowSubmit(false);
       } else {
-        setSnackbar({ open: true, message: 'Unexpected response', severity: 'error' });
+        setSnackbar({
+          open: true,
+          message: "Unexpected response",
+          severity: "error",
+        });
       }
     } catch (error) {
-      setSnackbar({ open: true, message: 'Failed to upload image', severity: 'error' });
+      setSnackbar({
+        open: true,
+        message: "Failed to upload image",
+        severity: "error",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleCloseSnackbar = () => {
-    setSnackbar({ open: false, message: '', severity: '' });
+    setSnackbar({ open: false, message: "", severity: "" });
   };
   if (loading) {
     return (
@@ -281,7 +330,11 @@ const Profile = () => {
           <div className="profile-image-container">
             <img
               className="profile-image"
-              src={user.profile_image ? `${user.profile_image}?t=${new Date().getTime()}` : avatar}
+              src={
+                user.profile_image
+                  ? `${user.profile_image}?t=${new Date().getTime()}`
+                  : avatar
+              }
               alt="Profile"
             />
             <label htmlFor="image-upload-input" className="camera-icon">
@@ -293,29 +346,28 @@ const Profile = () => {
               accept="image/*"
               type="file"
               id="image-upload-input"
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               onChange={handleImageChange}
             />
-            
           </div>
           <Snackbar
             open={snackbar.open}
             autoHideDuration={6000}
             onClose={handleCloseSnackbar}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
             <Alert
               onClose={handleCloseSnackbar}
               severity={snackbar.severity}
-              sx={{ width: '100%' }}
+              sx={{ width: "100%" }}
             >
               {snackbar.message}
             </Alert>
           </Snackbar>
-          {userType === 'Employee' && (
+          {userType === "Employee" && (
             <>
               <h2 className="profile-name">{`${user.first_name} ${user.last_name}`}</h2>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: "flex" }}>
                 <div className="profile-info">
                   <div className="info-item">
                     <span className="info-label">Mobile Number:</span>
@@ -341,7 +393,9 @@ const Profile = () => {
                 <div className="profile-info1">
                   <div className="info-item">
                     <span className="info-label">Availability of Work:</span>
-                    <span className="info-value">{user.availability_of_work}</span>
+                    <span className="info-value">
+                      {user.availability_of_work}
+                    </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">Disability:</span>
@@ -357,17 +411,19 @@ const Profile = () => {
                   </div>
                   <div className="info-item">
                     <span className="info-label">willing to relocate:</span>
-                    <span className="info-value">{user.willing_to_relocate}</span>
+                    <span className="info-value">
+                      {user.willing_to_relocate === true ? "Yes" : "No"}
+                    </span>
                   </div>
                 </div>
               </div>
             </>
           )}
 
-          {userType === 'Employer' && (
+          {userType === "Employer" && (
             <>
               <h2 className="profile-name">{user.company_name}</h2>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: "flex" }}>
                 <div className="profile-info">
                   <div className="info-item">
                     <span className="info-label">Email:</span>
@@ -388,7 +444,11 @@ const Profile = () => {
                   <div className="info-item">
                     <span className="info-label">Website:</span>
                     <span className="info-value">
-                      <a href={user.company_website} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={user.company_website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {user.company_website}
                       </a>
                     </span>
@@ -414,7 +474,11 @@ const Profile = () => {
                   <div className="info-item">
                     <span className="info-label">Linkedin Link:</span>
                     <span className="info-value">
-                      <a href={user.linkedinlink} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={user.linkedinlink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {user.linkedinlink}
                       </a>
                     </span>
@@ -428,16 +492,25 @@ const Profile = () => {
             Edit Profile
           </button>
           {showSubmit && (
-            <Button onClick={handleImageUpload} variant="contained" color="primary">
+            <Button
+              onClick={handleImageUpload}
+              variant="contained"
+              color="primary"
+            >
               Submit
             </Button>
           )}
         </div>
       </div>
 
-      <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
+      <Dialog
+        open={openDialog}
+        onClose={handleDialogClose}
+        maxWidth="md"
+        fullWidth
+      >
         <DialogTitle>Update Profile</DialogTitle>
-        {userType === 'Employee' && (
+        {userType === "Employee" && (
           <DialogContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -551,20 +624,33 @@ const Profile = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Willing to elocate"
-                  fullWidth
-                  value={user.willing_to_relocate}
-                  name="willing_to_relocate"
-                  onChange={handleInputChange}
-                  sx={textFieldStyles}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={user.willing_to_relocate === true}
+                      onChange={(e) => {
+                        handleInputChange({
+                          target: {
+                            name: "willing_to_relocate",
+                            value: e.target.checked, // Update with true/false
+                          },
+                        });
+                      }}
+                      color="primary"
+                    />
+                  }
+                  label={
+                    <Typography sx={{ color: "black" }}>
+                      Willing to Relocate
+                    </Typography>
+                  }
                 />
               </Grid>
             </Grid>
           </DialogContent>
         )}
 
-        {userType === 'Employer' && (
+        {userType === "Employer" && (
           <DialogContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -674,7 +760,13 @@ const Profile = () => {
                   value={user.head_designation}
                   name="head_designation"
                   onChange={handleInputChange}
-                  sx={textFieldStyles}
+                  sx={{
+                    margin: "8px 0", // Add spacing between fields
+                    borderRadius: "8px", // Optional: Rounded corners for input
+                    "& .MuiInputBase-root": {
+                      borderRadius: "8px", // Round the input box
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
