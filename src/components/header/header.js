@@ -132,7 +132,7 @@ export default function Header() {
                     <li>
                       <div className="vendor_login_button">
                         <Link to="/login">
-                          <Button className="vender-button" variant="outlined">
+                          <Button className="vender-button" variant="outlined" startIcon={< LoginIcon />} >
                             <span>SignIn/SignUp</span>
                           </Button>
                         </Link>

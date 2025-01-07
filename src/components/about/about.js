@@ -15,8 +15,9 @@ export default function About() {
                     backgroundImage: `url(${about})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    height: '400px',
+                    height: '500px',
                     width: '100%',
+                    marginTop:'4%'
                 }}
                 className="about-hero"
             ></div>
