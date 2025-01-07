@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 import "./main.css";
+import "./jobboard.css";
 import one from "../../images/main.png";
-import DescriptionIcon from '@mui/icons-material/Description';
+import DescriptionIcon from "@mui/icons-material/Description";
 import two from "../../images/h2.jpg";
 import Paper from "@mui/material/Paper";
 import three from "../../images/h3.jfif";
@@ -10,7 +11,7 @@ import four from "../../images/h4.JPG";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
 import bridge1 from "../../images/d1.jpg";
-import Chip from '@mui/material/Chip';
+import Chip from "@mui/material/Chip";
 import { GET_JOB } from "../../endpoints";
 import bridge2 from "../../images/d2.jpg";
 import bridge3 from "../../images/d6.jpg";
@@ -21,22 +22,21 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Button, InputLabel, Grid, Modal, Typography } from "@mui/material";
-import SchoolIcon from '@mui/icons-material/School';
+import SchoolIcon from "@mui/icons-material/School";
 import Box from "@mui/material/Box";
 import Footer from "../footer/footer";
 import BackGround from "../background/background";
 import CircularProgress from "@mui/material/CircularProgress";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
   ...theme.typography.body2,
-  
+
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-evenly",
-  
+
   color: theme.palette.text.secondary,
   ...theme.applyStyles("dark", {
     backgroundColor: "#1A2027",
@@ -262,6 +262,7 @@ export default function Header() {
   const [hoverBoxPosition, setHoverBoxPosition] = useState({ top: 0, left: 0 });
   const rowRefs = useRef([]);
   const navigate = useNavigate();
+  const [selectedJob, setSelectedJob] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -274,8 +275,10 @@ export default function Header() {
             const matchDepartment = department
               ? job.department.toLowerCase().includes(department.toLowerCase())
               : true;
-              const matchQualification = qualification
-              ? job.qualification_required.toLowerCase().includes(qualification.toLowerCase())
+            const matchQualification = qualification
+              ? job.qualification_required
+                  .toLowerCase()
+                  .includes(qualification.toLowerCase())
               : true;
 
             const matchWorkmode = type
@@ -316,6 +319,9 @@ export default function Header() {
             );
           });
           setData(filteredData);
+          if (filteredData.length > 0) {
+            setSelectedJob(filteredData[0]);
+          }
         })
         .catch((error) => {
           console.error(error.response?.data);
@@ -337,49 +343,48 @@ export default function Header() {
   ]);
 
   useEffect(() => {
-    
     document.documentElement.style.overflowX = "hidden";
   }, []);
   const imgarray = images[currentImage % images.length];
   const imgarray2 = images2[currentImage % images2.length];
 
   const handleMouseEnter = (item, index) => {
-    clearTimeout(hoverTimeout); 
+    clearTimeout(hoverTimeout);
     setHoveredItem(item);
     const row = rowRefs.current[index];
     const rowRect = row.getBoundingClientRect();
-   
+
     setHoverBoxPosition({
-      top: rowRect.top + window.scrollY, 
-      left: rowRect.left + window.scrollX, 
+      top: rowRect.top + window.scrollY,
+      left: rowRect.left + window.scrollX,
     });
   };
 
   const onhandleClick = () => {
-    if(localStorage.getItem('access_token')) {
-      if(localStorage.getItem('is_employee')=== 'true') {
-         navigate("/findajob") 
-      } else if(localStorage.getItem('is_employer') === 'true'){
-        navigate("/jobs") 
+    if (localStorage.getItem("access_token")) {
+      if (localStorage.getItem("is_employee") === "true") {
+        navigate("/findajob");
+      } else if (localStorage.getItem("is_employer") === "true") {
+        navigate("/jobs");
       }
     } else {
-      navigate("/login")
+      navigate("/login");
     }
-  }
+  };
 
   const handleMouseLeave = () => {
     const timeout = setTimeout(() => {
-      setHoveredItem(null); 
-    }, 5000); 
+      setHoveredItem(null);
+    }, 5000);
     setHoverTimeout(timeout);
   };
 
   const handleModalMouseEnter = () => {
-    setIsModalHovered(true); 
+    setIsModalHovered(true);
   };
 
   const handleModalMouseLeave = () => {
-    setIsModalHovered(false); 
+    setIsModalHovered(false);
   };
 
   return (
@@ -391,11 +396,7 @@ export default function Header() {
         </div>
       )}
       <div className="image-zoom-container">
-        <img
-          className="zoomed-image"
-          src={imgarray}
-          alt="eventphoto"
-        />
+        <img className="zoomed-image" src={imgarray} alt="eventphoto" />
       </div>
       <div style={{ padding: " 0% 10%" }}>
         <h1>120+ Jobs for you to explore</h1>
@@ -403,7 +404,12 @@ export default function Header() {
           sx={{
             minWidth: 120,
             display: "flex",
-            flexDirection: { xs: "column", sm: "column", md:"column",lg:"row" },
+            flexDirection: {
+              xs: "column",
+              sm: "column",
+              md: "column",
+              lg: "row",
+            },
             gap: "10px",
           }}
         >
@@ -416,9 +422,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", 
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
-                  border: "2px solid #1976d2", 
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -437,9 +443,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", 
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
-                  border: "2px solid #1976d2", 
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -462,7 +468,7 @@ export default function Header() {
                   ? "2px solid #1976d2"
                   : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
-                  border: "2px solid #1976d2", 
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -483,9 +489,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", 
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
-                  border: "2px solid #1976d2", 
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -506,7 +512,7 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", 
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
                   border: "2px solid #1976d2",
                 },
@@ -529,7 +535,7 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", 
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
                   border: "2px solid #1976d2",
                 },
@@ -555,9 +561,9 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", 
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
-                  border: "2px solid #1976d2", 
+                  border: "2px solid #1976d2",
                 },
               }}
             >
@@ -578,7 +584,7 @@ export default function Header() {
               sx={{
                 border: type
                   ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)", 
+                  : "1px solid rgba(0, 0, 0, 0.23)",
                 "&:focus": {
                   border: "2px solid #1976d2",
                 },
@@ -593,161 +599,71 @@ export default function Header() {
             </Select>
           </FormControl>
         </Box>
-        {/* <div style={{ margin: "10px" }}> */}
-        <Grid container spacing={1} style={{ marginTop: "10px" }}>
-          {data.map((item, index) => (
-            <Grid
-            item
-            xs={12} // Full width on small screens
-            sm={12}  // Half width on medium screens
-            md={12}  // One-third width on large screens
-            key={item.id}
-            ref={(el) => (rowRefs.current[index] = el)}
-            onMouseEnter={() => handleMouseEnter(item, index)}
-            onMouseLeave={handleMouseLeave}
-            style={{
-              margin: '5px',
-              border: "1px solid #ddd",
-              padding: "10px",
-              borderRadius: "4px",
-              cursor: "pointer",
-              transition: "box-shadow 0.3s ease",
-              position: "relative",
-            }}
-          >              <Grid container spacing={{ xs: 1, sm: 6, md: 4 }} // Adjust spacing for different screen sizes
-          sx={{
-            '& .MuiGrid-item': {
-              marginBottom: { xs: '-34px', sm: '-76px', md: '24px',
-                '@media (max-width:360px)': {
-                  marginBottom: '-50px',
-                  marginTop: '-5px',
-                  height: '120px',
-    },  },
-    '@media (min-width:769px) and (max-width:899px)': {
-      marginBottom: '-38px', 
-      marginTop:'-15px'
-    },
-    '@media (min-width:900px) and (max-width:1024px)': {
-      marginBottom: '-28px', 
-      marginLeft:'-15px',
-      
-    },
-            },
-          }}>
-               <Grid item xs={12} sm={12} md={3}>
-    <p className="company_name">{item.company_name}</p>
-    <h6>{item.job_title}</h6>
-  </Grid>
-  <Grid item xs={12} sm={12} md={3}>
-    <h6>
-      {item.industry} - {item.department}
-    </h6>
-    <h6>{item.work_mode}</h6>
-  </Grid>
-  <Grid item xs={12} sm={12} md={3}>
-    <h6>No Of Positions - {item.number_of_positions}</h6>
-    <h6>Notice Period - {item.notice_period}</h6>
-  </Grid>
-  <Grid item xs={12} sm={12} md={3}>
-    <Button onClick={onhandleClick}>Apply Now</Button>
-  </Grid>
-              </Grid>
 
-              
-              {hoveredItem === item && (
-                <Box
-                  sx={{
-                    position: "absolute",
-    top: "50%",
-    left: "50%",
-    backgroundColor: "white",
-    padding: "10px",
-    borderRadius: "4px",
-    boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-    minWidth: "500px",
-    maxWidth: "md",
-    overflowY: "auto", // Enables vertical scroll
-    height: "150px", // Reduced height
-    maxHeight: "250px", // Ensures a maximum height for responsive design
-    zIndex: 70,
-    transform: "translate(-50%, -50%)", // Properly centers the box
-  }}
-                  onMouseEnter={handleModalMouseEnter}
-                  onMouseLeave={handleModalMouseLeave}
+        <div className="job-board-container">
+          <div className="job-board">
+            <div className="job-list">
+              {data.map((job, index) => (
+                <div
+                  key={job.id}
+                  className={`job-list-item ${selectedJob && selectedJob.id === job.id ? "active" : ""}`}
+                  onClick={() => setSelectedJob(job)}
                 >
-                  <Typography variant="h6" component="h2">
-                    <strong>{item.job_title}</strong>
-                  </Typography>
-                  <Typography style={{ textDecoration: "underline" }}>
-                    {item.company_name}
-                  </Typography>
-                  <Typography style={{ fontFamily: "Serif" , margin:'10px'}}>
-                    <LocationOnIcon/> {item.location} ,{item.state}        
-                  </Typography>
+                  <h3 className="job-title">{job.job_title}</h3>
+                  <p className="job-company">{job.company_name}</p>
+                  <p className="job-location">
+                    {job.location}, {job.state}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div className="job-details">
+              {selectedJob ? (
+                <>
+                  <h2>{selectedJob.job_title}</h2>
+                  <p className="info">
+                    <i className="fas fa-building"></i>
+                    {selectedJob.company_name} -
+                    <i className="fas fa-map-marker-alt"></i>{" "}
+                    {selectedJob.location}, {selectedJob.state}
+                  </p>
+                  <div>
+                    <span className="chip">{selectedJob.employment_type}</span>
+                    <span className="chip">₹{selectedJob.salary_offered}</span>
+                    <span className="chip">{selectedJob.skills}</span>
+                  </div>
+                  <div className="job-description">
+                    <p>
+                      <strong>Description:</strong> {selectedJob.description}
+                    </p>
+                  </div>
+                  <div className="job-infor">
+                    <p className="info">
+                      <i className="fas fa-briefcase"></i> Experience Required -{" "}
+                      {selectedJob.experience_required}
+                    </p>
+                    <p className="info">
+                      <i className="fas fa-graduation-cap"></i> Qualification
+                       - {selectedJob.qualification_required}
+                    </p>
+                    <p className="info">
+                      <i className="fas fa-users"></i> Number Of Positions -{" "}
+                      {selectedJob.number_of_positions}
+                    </p>
+                    <p className="info">
+                      <i className="fas fa-wheelchair"></i> Disability Eligible
+                      - {selectedJob.disability_eligible}
+                    </p>
+                  </div>
                   
-                  <Typography>
-                  <Chip
-                    label={item.employment_type}
-                    sx={{
-                      backgroundColor: "grey",
-                      borderRadius:'5px',
-                      color: "black",
-                      marginRight: "10px",
-                      marginBottom: "10px"
-                    }}
-                  />
-                  <Chip
-                    label={'$'+item.salary_offered}
-                    sx={{
-                      backgroundColor: "grey",
-                      borderRadius:'5px',
-                      color: "black",
-                      marginRight: "10px",
-                      marginBottom: "10px"
-                    }}
-                  />
-                  <Chip
-                    label={item.work_mode}
-                    sx={{
-                      backgroundColor: "grey",
-                      borderRadius:'5px',
-                      color: "black",
-                      marginRight: "10px",
-                      marginBottom: "10px"
-                    }}
-                  />
-                    <Chip
-                    label={'Notice Period: ' +item.notice_period}
-                    sx={{
-                      backgroundColor: "grey",
-                      borderRadius:'5px',
-                      color: "black",
-                      marginRight: "10px",
-                      marginBottom: "10px"
-                    }}
-                  />
-                  </Typography>
-                  <Typography>
-                    {item.company_website}
-                  </Typography>
-                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
-                    <strong>Skills Required</strong> {item.skills}
-                  </Typography>
-                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
-                    <strong>Experience Required</strong> {item.experience_required}
-                  </Typography>
-                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
-                    <strong>Disability Eliigible</strong> {item.disability_eligible}
-                  </Typography>
-                  <Typography sx={{ mt: 1 }} style={{textAlign:'left'}}>
-                    <strong>Description:</strong> 
-                    {item.description}
-                  </Typography>
-                </Box>
+                  <button onClick={onhandleClick}>Apply Now</button>
+                </>
+              ) : (
+                <p>Select a job to view details</p>
               )}
-            </Grid>
-          ))}
-        </Grid>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
