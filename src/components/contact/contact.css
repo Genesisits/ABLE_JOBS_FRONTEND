@@ -1,14 +1,14 @@
-.c-contact{
+/* .c-contact{
     width: 100%;
     height: 500px;
 }
 .contact-heading{
     text-align: center;
-    /* margin-left: 30%; */
+    margin-left: 30%;
 }
 .contact-heading1{
     text-align: center;
-    /* margin-left: 30%; */
+    margin-left: 30%;
 }
 form {
     width: 50%;
@@ -23,7 +23,7 @@ label {
     margin-right: 90%;
     white-space: nowrap;
     font-size: large;
-}
+} */
 
 input[type="text"],
 input[type="password"],
@@ -37,14 +37,14 @@ textarea{
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
-.c-event{
+/* .c-event{
     width: 105%;
     padding: 20px;
     margin-top: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);   
-}
+} */
 
 /* select {
     height: 48px; 
@@ -146,13 +146,13 @@ select::placeholder {
     padding: 6px;
     gap:10px;
 }
-.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+/* .container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
-}
+} */
 /* .fa {
     display: inline-block;
     font: normal normal normal 14px/1 FontAwesome;
@@ -192,73 +192,90 @@ select::placeholder {
     filter: brightness(100%) contrast(100%) saturate(100%) hue-rotate(240deg);
     } 
    
-    @media only screen and (max-width: 768px) {
-        .contact{
-            height: 300px;
-        }
-        form {
-            width: 70%;
-            /* margin: 0 auto; */
-            margin-left: 8%;
-        }
-        .c-event {
-            /* height: 48px;  */
-            width:115%;
-            font-size: large;
-        }
-        .contact-event{
-            width:115%;
-        }
-        button {
-           margin-left: 12%; 
-        }
-        /* p{
-            text-align: center;
-            margin-left: 5%;
-            margin-right: 5%;
-
-        } */
-        .row1{
-        width:70%;
-        margin-left: 13%;
+   
+    .contact-container1 {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        margin-top: 5%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .contact-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      
+      .contact-form .form-group {
+        margin-bottom: 15px;
+      }
+      
+      .contact-form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      
+      .contact-form textarea {
+        resize: vertical;
+        height: 120px;
+      }
+      
+      .contact-form button {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      
+      .contact-form button:hover {
+        background-color: #0056b3;
+      }
+      .contact-container img {
+        width: 100%; 
+        height: auto; 
+        max-height: 500px; 
+        object-fit: cover; 
+        margin-top: 4%;
+        background: white;
+      }
+      .contact-info {
         display: flex;
-        height: 30%;
-        gap:10px;
-       
-        }
-        .single-box {
-            min-height: 100px;
-        }
-.single-box1 {
-    width:145%;
-    min-height: 100px;
-}
-.single-box2 {
-    width:104%;
-    min-height: 100px;
-}
-
-.bg_color iframe{
-    height: 300px;
-}
+        justify-content: space-around; /* Space between groups */
+        align-items: center;
+        margin: 20px 0;
+        gap: 10px; /* Reduced gap between items */
+        flex-wrap: wrap; /* Wrap items on smaller screens */
     }
- @media screen and (min-width: 768px) and (max-width: 1024px) {
-    .c-event {
-        /* height: 48px;  */
-        width:110%;
-        font-size: large;
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 5px; /* Reduced gap between icon and text */
+        font-size: 16px;
+        color: #555;
     }
-    .contact-event{
-        width:110%;
+    
+    .info-item i {
+        font-size: 20px;
+        color: #007BFF; /* Icon color */
     }
-    }
-    @media screen and (min-width: 1024px) and (max-width: 1024px) {
-        .c-event {
-            /* height: 48px;  */
-            width:108%;
-            font-size: large;
-        }
-        .contact-event{
-            width:108%;
-        } 
-    }
+    
+      
