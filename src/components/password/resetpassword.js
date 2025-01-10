@@ -207,18 +207,17 @@ function ResetPassword() {
                       }}
                     />
           </Grid>
-          <Grid item xs={6}>
-            <div style={{marginLeft:"95%"}}>
+           <Grid item xs={12}>
             <Button
               onClick={handleSubmit}
               variant="contained"
               color="primary"
+              fullWidth
               disabled={loading}
-              style={{width:'30%',}}
+              style={{ height: "45px",marginLeft:'25%' }}
             >
               {loading ? "Submitting..." : "Submit"}
             </Button>
-            </div>
           </Grid>
         </Grid>
       </div>
