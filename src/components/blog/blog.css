@@ -1,4 +1,40 @@
 /* BlogPage.css */
+/* Global Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  height: 100%; /* Full height for root elements */
+}
+
+/* Ensure #root takes full height */
+#root {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* About Hero Section */
+.about-hero {
+  margin: 0;
+  height: 50vh; /* Responsive height */
+  overflow: hidden;
+}
+
+/* Blog Content Grid */
+.blog-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 10px; /* Adjusted padding */
+  overflow: hidden;
+}
+
+/* Debugging Outline (Optional) */
+* {
+  box-sizing: border-box;
+  outline: none; /* Remove for production */
+}
+
 .blog-container {
   max-width: 1100px;
   margin: 0 auto;
