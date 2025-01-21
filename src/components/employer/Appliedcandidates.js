@@ -149,6 +149,7 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
             color="inherit"
             onClick={handleCloseDialog}
             aria-label="close"
+            width='30px'
           >
             <CloseIcon />
           </IconButton>
