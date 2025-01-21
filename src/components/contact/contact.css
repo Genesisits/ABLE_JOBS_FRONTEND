@@ -211,7 +211,7 @@ select::placeholder {
         flex-wrap: wrap; /* Wrap items on smaller screens */
     }
     
-    .info-item {
+    .info-item1 {
         display: flex;
         flex-direction: column; /* Arrange children in a column */
         align-items: center; /* Center-align content */
@@ -227,17 +227,17 @@ select::placeholder {
         margin-top: 4%;
     }
     
-    .info-item i {
+    .info-item1 i {
         font-size: 6rem;
         color: #007BFF; /* Icon color */
     }
-    .info-item p {
+    .info-item1 p {
         margin: 0; /* Remove extra margin */
         font-size: 1rem; /* Adjust text size */
         color: #555; /* Customize text color */
     }
     
-    .info-item:hover {  
+    .info-item1:hover {  
         background: #d5c6c6;
     }
     .contact-map {

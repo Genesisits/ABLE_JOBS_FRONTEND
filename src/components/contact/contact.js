@@ -12,15 +12,15 @@ export default function Contact() {
             <img src={contact} alt='contactus_image' />
             </div>
             <div className="contact-info">
-                <div className="info-item">
+                <div className="info-item1">
                     <i className="fas fa-map-marker-alt"></i>
                     <p>1234 Street Name, City, Country</p>
                 </div>
-                <div className="info-item">
+                <div className="info-item1">
                     <i className="fas fa-envelope"></i>
                     <p>contact@example.com</p>
                 </div>
-                <div className="info-item">
+                <div className="info-item1">
                     <i className="fas fa-phone-alt"></i>
                     <p>+1 234 567 890</p>
                 </div>
