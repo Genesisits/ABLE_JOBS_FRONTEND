@@ -13,6 +13,7 @@ import {
   AccordionDetails,
   Checkbox,
   FormControlLabel,
+  ListItemIcon,
 } from "@mui/material";
 import {
   Link,
@@ -20,6 +21,12 @@ import {
   useLocation,
 } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import WorkIcon from "@mui/icons-material/Work";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import TrainerIcon from "@mui/icons-material/SportsGymnastics";
 import { EMPLOYERS_LIST } from "../../endpoints";
 import Employers from "../admin/Employers";
 import { useMediaQuery } from '@mui/material';
@@ -57,10 +64,25 @@ export default function Sidenav() {
   }, [isAdmin]);
 
   let menuItems = [];
+  let iconsMap = {};
+
   if (isEmployee) {
     menuItems = ["Find a Job", "Applied", "Shortlist", "On Board", "Logout"];
+    iconsMap = {
+      "Find a Job": <WorkIcon />,
+      "Applied": <PeopleIcon />,
+      "Shortlist": <PeopleIcon />,
+      "On Board": <PeopleIcon />,
+      "Logout": <LogoutIcon />,
+    };
   } else if (isEmployer) {
     menuItems = ["Jobs", "Shortlisted", "Reports", "Logout"];
+    iconsMap = {
+      "Jobs": <WorkIcon />,
+      "Shortlisted": <PeopleIcon />,
+      "Reports": <DashboardIcon />,
+      "Logout": <LogoutIcon />,
+    };
   }
 
   const handleEmployer = (empId) => {
@@ -86,10 +108,10 @@ export default function Sidenav() {
       variant="permanent"
       open
       sx={{
-        width: isMobile ? drawerWidthMobile : drawerWidthDesktop,  // Dynamically adjust width
+        width: isMobile ? drawerWidthMobile : drawerWidthDesktop,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: isMobile ? drawerWidthMobile : drawerWidthDesktop,  // Adjust paper width accordingly
+          width: isMobile ? drawerWidthMobile : drawerWidthDesktop,
           boxSizing: "border-box",
           backgroundColor: "#1976D2",
           color: "white",
@@ -121,6 +143,9 @@ export default function Sidenav() {
                   },
                 }}
               >
+                <ListItemIcon sx={{ color: "white" }}>
+                  {iconsMap[text]}
+                </ListItemIcon>
                 <ListItemText primary={text} sx={{ color: "white" }} />
               </ListItem>
             );
@@ -140,6 +165,9 @@ export default function Sidenav() {
                 px: 1,
               }}
             >
+              <ListItemIcon sx={{ color: "white" }}>
+                <DashboardIcon />
+              </ListItemIcon>
               <ListItemText primary="Dashboard" sx={{ color: "white" }} />
             </ListItem>
 
@@ -254,6 +282,9 @@ export default function Sidenav() {
                 px: 1,
               }}
             >
+              <ListItemIcon sx={{ color: "white" }}>
+                <PeopleIcon />
+              </ListItemIcon>
               <ListItemText primary="Employee" sx={{ color: "white" }} />
             </ListItem>
             <ListItem
@@ -269,6 +300,9 @@ export default function Sidenav() {
                 px: 1,
               }}
             >
+              <ListItemIcon sx={{ color: "white" }}>
+                <VolunteerActivismIcon />
+              </ListItemIcon>
               <ListItemText primary="Volunteers" sx={{ color: "white" }} />
             </ListItem>
             <ListItem
@@ -284,6 +318,9 @@ export default function Sidenav() {
                 px: 0.5,
               }}
             >
+              <ListItemIcon sx={{ color: "white" }}>
+                <TrainerIcon />
+              </ListItemIcon>
               <ListItemText primary="Trainers" sx={{ color: "white" }} />
             </ListItem>
             <ListItem
@@ -297,6 +334,9 @@ export default function Sidenav() {
                 px: 1,
               }}
             >
+              <ListItemIcon sx={{ color: "white" }}>
+                <LogoutIcon />
+              </ListItemIcon>
               <ListItemText primary="Logout" sx={{ color: "white" }} />
             </ListItem>
           </>
