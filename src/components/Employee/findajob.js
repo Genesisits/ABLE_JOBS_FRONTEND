@@ -157,7 +157,7 @@ function Findjob({ closeModal }) {
       console.error("Error:", error.response);
       setErrorMessage(
         error.response?.data?.detail ||
-          "There was an error applying for the job."
+          "You have already applied for this job"
       );
       setErrorModalOpen(true);
     }

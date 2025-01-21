@@ -343,9 +343,9 @@ select::placeholder {
         .contact-form {
             width:67%
         }
-        .contact-image1 img {
+        /* .contact-image1 img {
             margin-top: -40%;
-        }
+        } */
     }
     @media screen and (max-width: 1023px) {
         .contact-map iframe {
