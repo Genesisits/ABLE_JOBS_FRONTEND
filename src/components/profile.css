@@ -138,7 +138,7 @@ body {
   .camera-icon {
     position: absolute;
     top: 90%;
-    right: -105px; 
+    /* right: -105px;  */
     transform: translateY(-50%);
     
     border-radius: 50%;
