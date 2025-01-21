@@ -201,7 +201,9 @@ function Employerregister({ open, onClose }) {
     
     
       };
-      const Register = () => {
+    //   const Register = () => {
+        const handleSubmit = (event) => {
+            event.preventDefault();
         setLoading(true);
         let payload = {
             "company_name": companyName,
@@ -271,14 +273,11 @@ function Employerregister({ open, onClose }) {
         setLoading(false);
       });
   };
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const validationErrors = validateForm();
-        if (Object.keys(validationErrors).length === 0) {
-            Register(); 
-        }
-    };
+        // const validationErrors = validateForm();
+        // if (Object.keys(validationErrors).length === 0) {
+        //     Register(); 
+        // }
+    // };
     const handleCompanylogo = (event) => {
       const file = event.target.files[0];
   
