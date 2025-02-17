@@ -15,21 +15,18 @@ import {
   FormControlLabel,
   ListItemIcon,
 } from "@mui/material";
-import {
-  Link,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import WorkIcon from "@mui/icons-material/Work";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import PeopleIcon from "@mui/icons-material/People";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import TrainerIcon from "@mui/icons-material/SportsGymnastics";
 import { EMPLOYERS_LIST } from "../../endpoints";
-import Employers from "../admin/Employers";
-import { useMediaQuery } from '@mui/material';
+// import Employers from "../admin/Employers";
+import { useMediaQuery } from "@mui/material";
 
 const drawerWidthDesktop = 240;
 const drawerWidthMobile = 180; // Reduced size for mobile view
@@ -41,12 +38,12 @@ export default function Sidenav() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const isEmployee = localStorage.getItem("is_employee") === "true";
   const isEmployer = localStorage.getItem("is_employer") === "true";
   const isAdmin = localStorage.getItem("is_admin") === "true";
 
-  const isMobile = useMediaQuery('(max-width: 600px)');  // Detect mobile view
+  const isMobile = useMediaQuery("(max-width: 600px)"); // Detect mobile view
 
   useEffect(() => {
     if (isAdmin) {
@@ -56,6 +53,10 @@ export default function Sidenav() {
           employers_data.push({
             name: response.data[j].company_name,
             id: response.data[j].code,
+            logo:response.data[j].company_logo,
+            gst:response.data[j].gst_file,
+            pan:response.data[j].pan,
+            registration:response.data[j].registration_certificate,
           });
         }
         setEmployers(employers_data);
@@ -70,29 +71,30 @@ export default function Sidenav() {
     menuItems = ["Find a Job", "Applied", "Shortlist", "On Board", "Logout"];
     iconsMap = {
       "Find a Job": <WorkIcon />,
-      "Applied": <PeopleIcon />,
-      "Shortlist": <PeopleIcon />,
+      Applied: <PeopleIcon />,
+      Shortlist: <PeopleIcon />,
       "On Board": <PeopleIcon />,
-      "Logout": <LogoutIcon />,
+      Logout: <LogoutIcon />,
     };
   } else if (isEmployer) {
     menuItems = ["Jobs", "Shortlisted", "Reports", "Logout"];
     iconsMap = {
-      "Jobs": <WorkIcon />,
-      "Shortlisted": <PeopleIcon />,
-      "Reports": <DashboardIcon />,
-      "Logout": <LogoutIcon />,
+      Jobs: <WorkIcon />,
+      Shortlisted: <PeopleIcon />,
+      Reports: <DashboardIcon />,
+      Logout: <LogoutIcon />,
     };
   }
 
-  const handleEmployer = (empId) => {
-    navigate(`/employers/${empId}`);
-  };
+  // const handleEmployer = (employerdata,empId) => {
+  //   console.log(employerdata)
+  //   navigate(`/employers/${empId}`,{state: employerdata});
+  // };
 
-  const filteredEmployers = employers.filter((emp) =>
-    emp.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredEmployers = employers.filter((emp) =>
+  //   emp.name.toLowerCase().includes(searchQuery.toLowerCase())
 
+  // );
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -157,7 +159,10 @@ export default function Sidenav() {
               component={Link}
               to="/dashboard"
               sx={{
-                backgroundColor: location.pathname === "/dashboard" ? "#0056b3" : "transparent",
+                backgroundColor:
+                  location.pathname === "/dashboard"
+                    ? "#0056b3"
+                    : "transparent",
                 "&:hover": {
                   backgroundColor: "#5384c9",
                 },
@@ -171,7 +176,7 @@ export default function Sidenav() {
               <ListItemText primary="Dashboard" sx={{ color: "white" }} />
             </ListItem>
 
-            <Accordion
+            {/* <Accordion
               sx={{
                 backgroundColor: "#1976D2",
                 color: "white",
@@ -232,7 +237,9 @@ export default function Sidenav() {
                       button
                       sx={{
                         backgroundColor:
-                          selectedEmployer === employer.id ? "#0056b3" : "transparent",
+                          selectedEmployer === employer.id
+                            ? "#0056b3"
+                            : "transparent",
                         "&:hover": {
                           backgroundColor: "#5384c9",
                           borderRadius: "2px",
@@ -249,7 +256,7 @@ export default function Sidenav() {
                             checked={selectedEmployer === employer.id}
                             onChange={() => {
                               handleEmployerSelect(employer.id);
-                              handleEmployer(employer.id);
+                              handleEmployer(employer,employer.id);
                             }}
                             sx={{
                               color: "white",
@@ -268,13 +275,14 @@ export default function Sidenav() {
                   ))}
                 </List>
               </AccordionDetails>
-            </Accordion>
+            </Accordion> */}
             <ListItem
               button
               component={Link}
               to="/employee"
               sx={{
-                backgroundColor: location.pathname === "/employee" ? "#0056b3" : "transparent",
+                backgroundColor:
+                  location.pathname === "/employee" ? "#0056b3" : "transparent",
                 "&:hover": {
                   backgroundColor: "#5384c9",
                 },
@@ -290,9 +298,33 @@ export default function Sidenav() {
             <ListItem
               button
               component={Link}
+              to="/employers"
+              sx={{
+                backgroundColor:
+                  location.pathname === "/employers"
+                    ? "#0056b3"
+                    : "transparent",
+                "&:hover": {
+                  backgroundColor: "#5384c9",
+                },
+                py: 0.5,
+                px: 1,
+              }}
+            >
+              <ListItemIcon sx={{ color: "white" }}>
+                <VolunteerActivismIcon />
+              </ListItemIcon>
+              <ListItemText primary="Employers" sx={{ color: "white" }} />
+            </ListItem>
+            <ListItem
+              button
+              component={Link}
               to="/volunteers"
               sx={{
-                backgroundColor: location.pathname === "/volunteers" ? "#0056b3" : "transparent",
+                backgroundColor:
+                  location.pathname === "/volunteers"
+                    ? "#0056b3"
+                    : "transparent",
                 "&:hover": {
                   backgroundColor: "#5384c9",
                 },
@@ -310,7 +342,8 @@ export default function Sidenav() {
               component={Link}
               to="/trainers"
               sx={{
-                backgroundColor: location.pathname === "/trainers" ? "#0056b3" : "transparent",
+                backgroundColor:
+                  location.pathname === "/trainers" ? "#0056b3" : "transparent",
                 "&:hover": {
                   backgroundColor: "#5384c9",
                 },
@@ -342,8 +375,6 @@ export default function Sidenav() {
           </>
         ) : null}
       </List>
-
-      {selectedEmployerID && <Employers Employer={selectedEmployerID} />}
     </Drawer>
   );
 }
