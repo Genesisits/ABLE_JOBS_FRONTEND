@@ -78,7 +78,6 @@ export default function App() {
           <Route path="/onboardedcandidates" element={<OnboardCandidates />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/verify" element={<VerifyOTP />} />
-          <Route path="/employers/:id" element={<Employers />} />
           <Route path="/volunteers" element={<Volunteers/>} />
           <Route path="/trainers" element={<Trainers/>} />
           <Route path="/login" element={<Login/>} />
@@ -90,6 +89,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard/>}/>
           {shouldRedirectToAdmin ? <Navigate to="/admin" /> : null}
           <Route path="/admin" element={<Admin/>} />
+          <Route path="/employers" element={<Employers />} />
           <Route path="/addevent" element={<AddEvent/>} />
           <Route path="/caddevent" element={<AddEventItems/>} />
           <Route path="/eventitem" element={<EventItems/>} />
@@ -103,6 +103,7 @@ export default function App() {
           <Route path="/onboard" element={<Onboarded/>} />
           <Route path="/email" element={<Email/>} />
           <Route path="/employee" element={<EmployeeList/>} />
+          
         </Routes>
       </div>
     </Router>

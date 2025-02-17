@@ -60,8 +60,8 @@ import { ThemeConsume } from "styled-components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Select } from "@mui/material";
 import { blue } from "@mui/material/colors";
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { InputAdornment} from '@mui/material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { InputAdornment } from "@mui/material";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -305,7 +305,6 @@ function Employeeregister({ open, onClose }) {
   const handleSkillAdd = (newSkill) => {
     if (newSkill && !selectedSkills.includes(newSkill)) {
       setSelectedSkills([...selectedSkills, newSkill]);
-      
     }
   };
 
@@ -399,40 +398,35 @@ function Employeeregister({ open, onClose }) {
     { id: "26", name: "Others", abbreviation: "Others" },
   ];
 
-  
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    
     const filtered = skillOptions.filter((skill) =>
       skill.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredSkills(filtered);
   };
 
-  
   const handleSkillSelect = (skill) => {
-    
     if (!selectedSkills.includes(skill)) {
       setSelectedSkills([...selectedSkills, skill]);
     }
-   
+
     setSearchTerm("");
   };
 
-  
   const handleSkillRemove = (skillToRemove) => {
     setSelectedSkills(
       selectedSkills.filter((skill) => skill !== skillToRemove)
     );
   };
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword); 
+    setShowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
   };
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -459,7 +453,6 @@ function Employeeregister({ open, onClose }) {
     setEducationFields(newFields);
   };
 
-  
   const addEducationField = () => {
     setEducationFields([
       ...educationFields,
@@ -474,7 +467,6 @@ function Employeeregister({ open, onClose }) {
     ]);
   };
 
-  
   const removeEducationField = (indexToRemove) => {
     const newFields = educationFields.filter(
       (_, index) => index !== indexToRemove
@@ -565,15 +557,13 @@ function Employeeregister({ open, onClose }) {
       return;
     }
     if (activeStep === 2 && !validateExperienceSection()) {
-      return; 
+      return;
     }
     if (activeStep === 2 && !validateExperience()) {
-      
       setSnackbarOpen(true);
       return;
     }
     if (activeStep === 3 && !validateSkills()) {
-      
       setSnackbarOpen(true);
       return;
     }
@@ -593,20 +583,21 @@ function Employeeregister({ open, onClose }) {
 
   const handleSkip = () => {
     if (activeStep === 1) {
-      
-      const hasValidEntry = educations.some((education) => education.college.trim() !== "");
-      
+      const hasValidEntry = educations.some(
+        (education) => education.college.trim() !== ""
+      );
+
       if (!hasValidEntry) {
         setError("At least one valid School/College Name is required to skip.");
         setSnackbarOpen(true);
         return;
       }
     }
-  
+
     if (!isStepOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
-  
+
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped((prevSkipped) => {
       const newSkipped = new Set(prevSkipped.values());
@@ -616,7 +607,7 @@ function Employeeregister({ open, onClose }) {
   };
   const handleSubmit = () => {
     if (!validateSpecialConsiderations()) {
-      setSnackbarOpen(true); 
+      setSnackbarOpen(true);
       return;
     }
 
@@ -624,7 +615,7 @@ function Employeeregister({ open, onClose }) {
     const payload = {
       educations: educations,
       projects: [],
-      
+
       job_experiences:
         selectedOption === "Experienced"
           ? experienceList.map((exp) => ({
@@ -649,7 +640,7 @@ function Employeeregister({ open, onClose }) {
       disability: disability,
       disabilityPercentage: disabilitypercentage,
       willing_to_relocate: willingToRelocate,
-      
+
       languages_known: languages_known,
     };
 
@@ -662,19 +653,20 @@ function Employeeregister({ open, onClose }) {
       })
       .then((response) => {
         setShowPopup(true);
-        setPopupMessage(`User successfully registered! Please check "${useremail}"!`);
+        setPopupMessage(
+          `User successfully registered! Please check "${useremail}"!`
+        );
         setTimeout(() => {
           setShowPopup(false);
-          navigate('/login');
-        }, 4000); 
+          navigate("/login");
+        }, 4000);
       })
       .catch((error) => {
         let errorMessage = "An error occurred. Please try again.";
         if (error.response) {
           switch (error.response.status) {
             case 400:
-              errorMessage =
-                "Bad Request: Email already registered.";
+              errorMessage = "Bad Request: Email already registered.";
               break;
             case 401:
               errorMessage = "Unauthorized: Please log in and try again.";
@@ -691,7 +683,7 @@ function Employeeregister({ open, onClose }) {
               errorMessage = `Error: Something went wrong. Status code: ${error.response.status}`;
           }
         }
-        setShowPopup(true); 
+        setShowPopup(true);
         setPopupMessage(errorMessage);
       })
       .finally(() => {
@@ -713,13 +705,12 @@ function Employeeregister({ open, onClose }) {
     },
   ]);
   const handleEducationChange = (index, field, value) => {
-    const updatedEducations = [...educations]; 
+    const updatedEducations = [...educations];
     if (field === "startDate" || field === "endDate") {
-      
       value = new Date(value).toISOString().split("T")[0];
     }
-    updatedEducations[index][field] = value; 
-    setEducations(updatedEducations); 
+    updatedEducations[index][field] = value;
+    setEducations(updatedEducations);
   };
 
   const handleExperienceChange = (index, field, value) => {
@@ -743,9 +734,7 @@ function Employeeregister({ open, onClose }) {
     ]);
   };
   const navigate = useNavigate();
-  const handleOTP = () => {
-    
-  };
+  const handleOTP = () => {};
   const validateSkills = () => {
     if (selectedSkills.length === 0) {
       setError("Please add at least one skill.");
@@ -764,14 +753,10 @@ function Employeeregister({ open, onClose }) {
       return false;
     }
 
-    
-
     if (!languages_known || languages_known.trim() === "") {
       setError("Please specify at least one known language.");
       return false;
     }
-
-   
 
     return true;
   };
@@ -815,12 +800,8 @@ function Employeeregister({ open, onClose }) {
     };
     axios
       .post(`${REGISTER}`, payload)
-      .then((response) => {
-       
-      })
-      .catch((error) => {
-        
-      });
+      .then((response) => {})
+      .catch((error) => {});
   };
 
   const theme = createTheme();
@@ -831,7 +812,6 @@ function Employeeregister({ open, onClose }) {
           <ThemeProvider theme={theme}>
             <Box style={{ margin: "0% 15% ", gap: "5px" }}>
               <Grid container spacing={1} style={{ marginLeft: "3%" }}>
-                
                 <Grid item xs={6}>
                   <TextField
                     label="First name"
@@ -868,7 +848,7 @@ function Employeeregister({ open, onClose }) {
                     }}
                   />
                 </Grid>
-                
+
                 <Grid item xs={6}>
                   <TextField
                     label="Email"
@@ -893,36 +873,32 @@ function Employeeregister({ open, onClose }) {
                     value={userpassword}
                     onChange={(e) => setPassword(e.target.value)}
                     fullWidth
-                    className="custom-input" type={showPassword ? 'text' : 'password'} // Toggle password field type
-                    style={{width:'105%'}}
+                    className="custom-input"
+                    type={showPassword ? "text" : "password"} // Toggle password field type
+                    style={{ width: "105%" }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton
-                            onClick={handleClickShowPassword} 
-                            onMouseDown={handleMouseDownPassword}  
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
                             edge="end"
                             sx={{
-                              padding: 0, 
-                              color: 'rgba(0, 0, 0, 0.54)', 
-                              fontSize: '1.5rem', 
-                             
-                              display: 'flex', 
-                              alignItems: 'center', 
-                              justifyContent: 'center', 
-                              marginLeft: '-16px',
-                              
-                              
-                              
-                            
+                              padding: 0,
+                              color: "rgba(0, 0, 0, 0.54)",
+                              fontSize: "1.5rem",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              marginLeft: "-16px",
                             }}
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle the eye icon */}
+                            {showPassword ? <VisibilityOff /> : <Visibility />}{" "}
+                            {/* Toggle the eye icon */}
                           </IconButton>
                         </InputAdornment>
                       ),
                     }}
-
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         "& fieldset": { borderColor: "transparent" },
@@ -935,7 +911,6 @@ function Employeeregister({ open, onClose }) {
                   />
                 </Grid>
 
-                
                 <Grid item xs={6}>
                   <TextField
                     label="Mobile Number"
@@ -955,9 +930,7 @@ function Employeeregister({ open, onClose }) {
                   />
                 </Grid>
 
-                
                 <Grid item xs={6}>
-                  
                   <select
                     value={state}
                     style={{ width: "100%" }}
@@ -970,16 +943,13 @@ function Employeeregister({ open, onClose }) {
                       </option>
                     ))}
                   </select>
-                 
                 </Grid>
 
-                
                 <Grid item xs={12}>
                   <TextField
                     label="Address"
                     value={useraddress}
                     onChange={(e) => setAddress(e.target.value)}
-                    
                     margin="dense"
                     multiline
                     rows={4}
@@ -994,7 +964,6 @@ function Employeeregister({ open, onClose }) {
         return (
           <div className="education">
             <Box style={{ margin: "0% 2%" }}>
-              
               {educations.map((education, index) => (
                 <Grid container spacing={2} key={index}>
                   <Grid item xs={2}>
@@ -1012,11 +981,7 @@ function Employeeregister({ open, onClose }) {
                       placeholder="School/College Name"
                       value={education.college}
                       onChange={(e) =>
-                        handleEducationChange(
-                          index,
-                          "college",
-                          e.target.value
-                        )
+                        handleEducationChange(index, "college", e.target.value)
                       }
                       fullWidth
                     />
@@ -1039,7 +1004,7 @@ function Employeeregister({ open, onClose }) {
                   <Grid item xs={2}>
                     <DatePicker
                       selected={education.startDate}
-                      maxDate={new Date()} 
+                      maxDate={new Date()}
                       onChange={(date) =>
                         handleEducationChange(index, "startDate", date)
                       }
@@ -1051,7 +1016,7 @@ function Employeeregister({ open, onClose }) {
                   <Grid item xs={2}>
                     <DatePicker
                       selected={education.endDate}
-                      maxDate={new Date()} 
+                      maxDate={new Date()}
                       onChange={(date) =>
                         handleEducationChange(index, "endDate", date)
                       }
@@ -1298,107 +1263,109 @@ function Employeeregister({ open, onClose }) {
         return (
           <div className="special-considerations">
             <Box style={{ margin: "2% 5%" }}>
-            <Grid container spacing={4}>
-  <Grid item xs={12} sm={6}>
-    <FormControl fullWidth>
-      <Select
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-        displayEmpty
-        inputProps={{ "aria-label": "Without label" }}
-        sx={{
-          "&.Mui-focused": {
-            outline: "2px solid #3f51b5",
-            outlineOffset: "2px",
-          },
-          height: "40px", 
-          backgroundColor: "#fff", 
-        }}
-      >
-        <MenuItem value="">Availability of Work</MenuItem>
-        <MenuItem value="hybrid">Hybrid</MenuItem>
-        <MenuItem value="remote">Remote</MenuItem>
-        <MenuItem value="location-based">Location based</MenuItem>
-      </Select>
-    </FormControl>
-  </Grid>
+              <Grid container spacing={4}>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                      sx={{
+                        "&.Mui-focused": {
+                          outline: "2px solid #3f51b5",
+                          outlineOffset: "2px",
+                        },
+                        height: "40px",
+                        backgroundColor: "#fff",
+                      }}
+                    >
+                      <MenuItem value="">Availability of Work</MenuItem>
+                      <MenuItem value="hybrid">Hybrid</MenuItem>
+                      <MenuItem value="remote">Remote</MenuItem>
+                      <MenuItem value="location-based">Location based</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-  <Grid item xs={12} sm={6}>
-    <FormControl fullWidth>
-      <Select
-        value={disability}
-        onChange={(e) => setDisability(e.target.value)}
-        displayEmpty
-        inputProps={{ "aria-label": "Without label" }}
-        sx={{
-          "&.Mui-focused": {
-            outline: "2px solid #3f51b5", 
-            outlineOffset: "2px",
-          },
-          height: "40px",
-          backgroundColor: "#fff",
-        }}
-      >
-        <MenuItem value="">All Disabilities</MenuItem>
-        {disabilities.map((disabilit) => (
-          <MenuItem key={disabilit.id} value={disabilit.abbreviation}>
-            {disabilit.name}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={disability}
+                      onChange={(e) => setDisability(e.target.value)}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                      sx={{
+                        "&.Mui-focused": {
+                          outline: "2px solid #3f51b5",
+                          outlineOffset: "2px",
+                        },
+                        height: "40px",
+                        backgroundColor: "#fff",
+                      }}
+                    >
+                      <MenuItem value="">All Disabilities</MenuItem>
+                      {disabilities.map((disabilit) => (
+                        <MenuItem
+                          key={disabilit.id}
+                          value={disabilit.abbreviation}
+                        >
+                          {disabilit.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-  <Grid item xs={12} sm={6}>
-    <input
-      type="text"
-      placeholder="Disability Percentage"
-      value={disabilitypercentage}
-      onChange={(e) => setDisabilitypercentage(e.target.value)}
-      style={{
-        width: "100%",
-        height: "40px", 
-        padding: "8px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        boxSizing: "border-box",
-      }}
-    />
-  </Grid>
+                <Grid item xs={12} sm={6}>
+                  <input
+                    type="text"
+                    placeholder="Disability Percentage"
+                    value={disabilitypercentage}
+                    onChange={(e) => setDisabilitypercentage(e.target.value)}
+                    style={{
+                      width: "100%",
+                      height: "40px",
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </Grid>
 
-  <Grid item xs={12} sm={6}>
-    <input
-      type="text"
-      value={languages_known}
-      onChange={(e) => setLanguagesknow(e.target.value)}
-      placeholder="Please enter known languages with comma"
-      style={{
-        width: "100%",
-        height: "40px", 
-        padding: "8px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        boxSizing: "border-box",
-      }}
-    />
-  </Grid>
+                <Grid item xs={12} sm={6}>
+                  <input
+                    type="text"
+                    value={languages_known}
+                    onChange={(e) => setLanguagesknow(e.target.value)}
+                    placeholder="Please enter known languages with comma"
+                    style={{
+                      width: "100%",
+                      height: "40px",
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </Grid>
 
-  <Grid item xs={12} sm={6}>
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={willingToRelocate}
-          onChange={(e) => setWillingToRelocate(e.target.checked)}
-        />
-      }
-      label="Willing to relocate"
-      componentsProps={{
-        typography: { color: "black" },
-      }}
-    />
-  </Grid>
-</Grid>
-
+                <Grid item xs={12} sm={6}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={willingToRelocate}
+                        onChange={(e) => setWillingToRelocate(e.target.checked)}
+                      />
+                    }
+                    label="Willing to relocate"
+                    componentsProps={{
+                      typography: { color: "black" },
+                    }}
+                  />
+                </Grid>
+              </Grid>
 
               {/* <Grid container spacing={1} style={{ margin: "2%" }}> */}
 
@@ -1445,12 +1412,11 @@ function Employeeregister({ open, onClose }) {
   };
 
   return (
-    
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogTitle style={{ textAlign: "center" }}>
         Employee Registration
       </DialogTitle>
-      
+
       {isLoading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
@@ -1555,7 +1521,6 @@ function Employeeregister({ open, onClose }) {
         )}
       </Box>
     </Dialog>
-    
   );
 }
 

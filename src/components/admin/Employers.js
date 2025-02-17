@@ -1,362 +1,359 @@
-import * as React from "react";
-import Layout from "../sidenav/Layout";
-import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
-import CircularProgress from "@mui/material/CircularProgress";
-import "./employer.css";
+import React, { useEffect, useState } from "react";
 import {
-  GET_JOB,
-  ACTIVATE_JOB,
-  GET_JOB_EMPLOYEE,
-  JOBS_LIST_BASED_ON_EMPLOYER,
-} from "../../endpoints";
-import {
-  Grid,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
   Table,
-  Paper,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  Box,
-  TextField,
-  Tooltip,
+  Paper,
+  TablePagination,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
-import { useState, useEffect } from "react";
-import TablePagination from "@mui/material/TablePagination";
-import Button from "@mui/material/Button";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditIcon from "@mui/icons-material/Edit";
-import Switch from "@mui/material/Switch";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import Layout from "../sidenav/Layout";
+import { EMPLOYERS_LIST, JOBS_LIST_BASED_ON_EMPLOYER } from "../../endpoints";
 import OnboardCandidates from "./OnboardCandidates";
-import { Label } from "@mui/icons-material";
-// import "./jobs.css";
-// import Postajob from "./postajob";
-// import AppliedCandidatesDialog from "./Appliedcandidates";
 
-const columns = [
-  { id: "job_title", label: "Job Role", minWidth: 100 },
-  { id: "experience_required", label: "Experience", minWidth: 100 },
-  { id: "salary_offered", label: "Salary", minWidth: 100 },
-  { id: "skills", label: "Required Technology Stack", minWidth: 100 },
-  { id: "location", label: "Location", minWidth: 100 },
-  { id: "description", label: "Job Description", minWidth: 100 },
-  // { id: "status", label: "Actions", minWidth: 150 },
-];
-
-export default function Employers({ Employer }) {
-  const [tabValue, setTabvalue] = useState("1");
+export default function Employers() {
+  const [expanded, setExpanded] = useState(null);
+  const [employersData, setEmployersData] = useState([]);
+  const [selectedEmployerDetails, setSelectedEmployerDetails] = useState({});
   const [page, setPage] = useState(0);
-  const [endDate, setEnddate] = useState();
-  const [startDate, setStartDate] = useState();
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [rows, setData] = useState([]);
-  const [filteredRows, setFilteredRows] = useState([]); // Filtered data
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedJob, setSelectedJob] = useState(null);
-  const [isPostJobOpen, setIsPostJobOpen] = useState(false); // State to control Postajob modal
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedJobCode, setSelectedJobCode] = useState(null); // Store selected job code for the dialog
-  const { id } = useParams();
-  const [loading, setLoading] = useState(false)
-  const handleTabchange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
+  const [open, setOpen] = useState(false);
+  const [docData, setDocData] = useState("");
+  const [employerPage, setEmployerPage] = useState(0);
+  const [employerRowsPerPage, setEmployerRowsPerPage] = useState(5);
+
+  // Fetch Employers List
   useEffect(() => {
-    setLoading(true)
-    if (id) {
-      let payload = {
-        code: id,
-      };
-      axios.post(`${JOBS_LIST_BASED_ON_EMPLOYER}`, payload).then((response) => {
-        if (Array.isArray(response.data) && response.data.length > 0) {
-          setData(response.data);
-          setFilteredRows(response.data); // Initialize filteredRows
-        } else if (
-          response.data.message === "No jobs posted by this employer."
-        ) {
-          setData([]);
-          setFilteredRows([]);
-        } else {
-          console.error("Unexpected response format", response.data);
-          setData([]);
-          setFilteredRows([]);
-        }
-      }).catch((error) => {
-        console.log(error)
-      }).finally(()=> {
-        setLoading(false)
-      })
-    }
-  }, [id]);
-
-  const handleChangePage = (event, newPage) => setPage(newPage);
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const handleActive = (row) => {
-    const updatedStatus = !row.activation_status;
-    let config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    };
-    setData((prevRows) =>
-      prevRows.map((item) =>
-        item.code === row.code
-          ? { ...item, activation_status: updatedStatus }
-          : item
-      )
-    );
-
     axios
-      .put(
-        `${ACTIVATE_JOB}${row.code}/`,
-        { activation_status: updatedStatus },
-        config
-      )
+      .get(EMPLOYERS_LIST)
       .then((response) => {
-        console.log(response);
-      });
-  };
+        setEmployersData(response.data);
+      })
+      .catch((error) => console.error("Error fetching employers:", error));
+  }, []);
 
-  const handleRowClick = (row) => {
-    setSelectedRow(row); // Update state with the selected row data
-  };
-
-  const openPostJobModal = () => {
-    setSelectedJob(null); // Set the selected job for editing
-    setIsPostJobOpen(true); // Open the modal
-  };
-  const closePostJobModal = () => {
-    setSelectedJob(null);
-    setIsPostJobOpen(false);
-  };
-  const handleOpenDialog = (jobCode) => {
-    setSelectedRow(jobCode);
-    setSelectedJobCode(jobCode); // Set the selected job code
-    setIsDialogOpen(true); // Open the dialog
+  // Handle Accordion Click
+  const handleExpansion = (id) => (event, isExpanded) => {
+    if (isExpanded) {
+      setExpanded(id);
+      if (!selectedEmployerDetails[id]) {
+        fetchEmployerDetails(id);
+      }
+    } else {
+      setExpanded(null);
+    }
   };
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false); // Close the dialog
   };
 
-  const openEditJobModal = (job) => {
-    setSelectedJob(job);
-    setIsPostJobOpen(true);
+  // Fetch Job Details for Selected Employer
+  const fetchEmployerDetails = (id) => {
+    axios
+      .post(JOBS_LIST_BASED_ON_EMPLOYER, { code: id })
+      .then((response) => {
+        setSelectedEmployerDetails((prevState) => ({
+          ...prevState,
+          [id]: response.data,
+        }));
+      })
+      .catch((error) =>
+        console.error("Error fetching employer details:", error)
+      );
   };
 
-  const handleSearchChange = (event) => {
-    const query = event.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    if (query === "") {
-      // Reset to full rows when the query is empty
-      setFilteredRows(rows);
-    } else {
-      // Filter specific fields
-      setFilteredRows(
-        rows.filter((row) => {
-          const fieldsToSearch = [
-            row.job_title,
-            row.employment_type,
-            row.disability_eligible,
-            row.location,
-            row.industry,
-            row.department,
-            row.description,
-            row.work_mode,
-            row.employment_type,
-            row.skills,
-            row.salary_offered,
-            row.experience_required,
-          ];
-          return fieldsToSearch.some(
-            (field) => field && field.toString().toLowerCase().includes(query)
-          );
-        })
-      );
-    }
+  // Pagination Handlers
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const handleFilterSubmit = () => {
-    // Combine both search and date filtering
-    
-    const filterBySearch = rows.filter((row) => {
-      const query = searchQuery.toLowerCase();
-      const fieldsToSearch = [
-        row.job_title,
-        row.employment_type,
-        row.disability_eligible,
-        row.location,
-        row.industry,
-        row.department,
-        row.description,
-        row.work_mode,
-        row.skills,
-        row.salary_offered,
-        row.experience_required,
-      ];
-  
-      return fieldsToSearch.some(
-        (field) => field && field.toString().toLowerCase().includes(query)
-      );
-    });
-  
-    // Date filtering
-    const filterByDate = filterBySearch.filter((row) => {
-      const rowDate = new Date(row.posted_date).setHours(0, 0, 0, 0); // Normalize to midnight
-      const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) : null;
-      const end = endDate ? new Date(endDate).setHours(0, 0, 0, 0) : null;
-  
-      if (start && end) {
-        return rowDate >= start && rowDate <= end;
-      } else if (start) {
-        return rowDate >= start;
-      } else if (end) {
-        return rowDate <= end;
-      }
-  
-      return true; // No date filter applied
-    });
-  
-    // Update the filtered rows
-    setFilteredRows(filterByDate);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleRowClick = (job) => {
+    setSelectedRow(job);
+    // setSelectedJobCode(jobCode); // Set the selected job code
+    setIsDialogOpen(true);
+  };
+
+  const handleOpenPopup = (data) => {
+    setDocData(data);
+    setOpen(true);
+  };
+
+
+  const handleChangeEmployerPage = (event, newPage) => {
+    setEmployerPage(newPage);
+  };
+
+  const handleChangeEmployerRowsPerPage = (event) => {
+    setEmployerRowsPerPage(parseInt(event.target.value, 10));
+    setEmployerPage(0);
   };
 
   return (
     <Layout>
-       {loading && (
-        <div className="full-page-spinner">
-          <CircularProgress color="primary" size={50} />
-        </div>
-      )}
-      <Box style={{ margin: "0px 5%" }}>
-        <Grid container spacing={1} sx={{ marginBottom: 1 }}>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Search jobs with experience, skills, job role,etc"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              sx={{
-                width: "100%",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    border: "none",
-                  },
-                },
+      <div>
+        {employersData.map((employer) => (
+          <Accordion
+            key={employer.code}
+            expanded={expanded === employer.code}
+            onChange={handleExpansion(employer.code)}
+            style={{
+              marginBottom: "10px",
+              borderRadius: "10px",
+              boxShadow: "0px 2px 5px rgba(0,0,0,0.2)",
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`panel${employer.code}-content`}
+              id={`panel${employer.code}-header`}
+              style={{
+                backgroundColor: "#f5f5f5",
+                borderRadius: "10px",
+                padding: "10px 20px",
               }}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <DatePicker
-              label="Start Date"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              dateFormat="yyyy/MM/dd"
-              placeholderText="Start Date"
-              popperPlacement="right-start"
-              popperClassName="react-datepicker-popper" // Aligns the dropdown on the right
-              fullWidth
-              maxDate={new Date()}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEnddate(date)}
-              dateFormat="yyyy/MM/dd"
-              placeholderText="End Date"
-              popperPlacement="right-start"
-              popperClassName="react-datepicker-popper"
-              fullWidth
-              maxDate={new Date()}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <button style={{width:'80%'}} onClick={handleFilterSubmit}>submit</button>
-          </Grid>
-        </Grid>
-      </Box>
-      <Typography variant="h6" gutterBottom>
-        Employers
-      </Typography>
-      <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "2%" }}>
-        <TableContainer sx={{ maxHeight: 400 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    style={{ minWidth: column.minWidth }}
-                    sx={{ backgroundColor: "#2840b7", color: "white" }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredRows.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={columns.length} align="center">
-                    No jobs posted by this employer.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredRows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <Tooltip title="Click anywhere to see onboarded candidates for this job" arrow>
-                    <TableRow
-                      key={row.code} // Ensure the key is unique
-                      onClick={() => handleOpenDialog(row)}
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      sx={{
-                        cursor: "pointer",  
-                        "&:hover": { backgroundColor: "#f5f5f5" },
-                      }}
+            >
+              <Typography
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  color: "#333",
+                }}
+              >
+                {employer.company_name}
+              </Typography>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "15px",
+                  justifyContent: "center",
+                  // marginTop: "5%",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  onClick={() => handleOpenPopup(employer.pan)}
+                >
+                  PAN
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  size="small"
+                  onClick={() =>
+                    handleOpenPopup(employer.registration_certificate)
+                  }
+                >
+                  <Typography style={{ fontSize: "7px" }}>
+                    Registration Certificate
+                  </Typography>
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="success"
+                  size="small"
+                  onClick={() => handleOpenPopup(employer.gst)}
+                >
+                  GST
+                </Button>
+                <Dialog open={open} onOpenChange={setOpen}>
+                  <DialogContent className="max-w-3xl h-[100vh] relative">
+                    <button
+                      onClick={() => setOpen(false)}
+                      className="absolute top-2 right-1 text-xl font-bold bg-transparent border-none cursor-pointer"
+                      aria-label="Close"
                     >
-                      {columns.map((column) => (
-                        <TableCell key={column.id}>{row[column.id]}</TableCell>
-                      ))}
+                      ×
+                    </button>
+                    <DialogTitle>Document Preview</DialogTitle>
+                    {/* </DialogHeader> */}
+
+                    {/* File Viewer */}
+                    {docData ? (
+                      docData.endsWith(".pdf") ? (
+                        // PDF Viewer using an iframe
+                        <iframe
+                          src={docData}
+                          className="w-full h-[100vh]"
+                          style={{ border: "none" }}
+                        />
+                      ) : docData.endsWith(".doc") ||
+                        docData.endsWith(".docx") ? (
+                        // Word Document Viewer using Microsoft Office Viewer
+                        <iframe
+                          src={`https://view.officeapps.live.com/op/embed.aspx?src=${window.location.origin + docData}`}
+                          className="w-full h-[100vh]"
+                          style={{ border: "none" }}
+                        />
+                      ) : (
+                        <p>Unsupported file type</p>
+                      )
+                    ) : (
+                      <p>No file selected</p>
+                    )}
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </AccordionSummary>
+            <AccordionDetails style={{ padding: "20px" }}>
+              <TableContainer
+                component={Paper}
+                style={{ borderRadius: "10px", overflow: "hidden" }}
+              >
+                <Table size="small">
+                  <TableHead>
+                    <TableRow style={{ backgroundColor: "#0077b6" }}>
+                      <TableCell style={tableHeaderStyle}>Job Title</TableCell>
+                      <TableCell style={tableHeaderStyle}>
+                        Employment Type
+                      </TableCell>
+                      <TableCell style={tableHeaderStyle}>Skills</TableCell>
+                      <TableCell style={tableHeaderStyle}>Salary</TableCell>
+                      <TableCell style={tableHeaderStyle}>Location</TableCell>
+                      <TableCell style={tableHeaderStyle}>Experience</TableCell>
                     </TableRow>
-                    </Tooltip>
-                  ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {selectedRow && (
-          <OnboardCandidates
-            open={isDialogOpen}
-            onClose={handleCloseDialog}
-            selectedRow={selectedRow}
-          />
-        )}
+                  </TableHead>
+                  <TableBody>
+                    {selectedEmployerDetails[employer.code] ? (
+                      selectedEmployerDetails[employer.code]
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((job, i) => (
+                          <TableRow
+                            key={i}
+                            style={{
+                              backgroundColor:
+                                i % 2 === 0 ? "#f9f9f9" : "#ffffff",
+                              transition: "background 0.3s",
+                            }}
+                            onClick={() => handleRowClick(job)}
+                            onMouseEnter={(e) =>
+                              (e.currentTarget.style.backgroundColor =
+                                "#e3f2fd")
+                            }
+                            onMouseLeave={(e) =>
+                              (e.currentTarget.style.backgroundColor =
+                                i % 2 === 0 ? "#f9f9f9" : "#ffffff")
+                            }
+                          >
+                            <TableCell style={tableCellStyle}>
+                              {job.job_title}
+                            </TableCell>
+                            <TableCell style={tableCellStyle}>
+                              {job.employment_type}
+                            </TableCell>
+                            <TableCell style={tableCellStyle}>
+                              {job.skills}
+                            </TableCell>
+                            <TableCell style={tableCellStyle}>
+                              ₹{job.salary_offered}
+                            </TableCell>
+                            <TableCell style={tableCellStyle}>
+                              {job.location}, {job.state}
+                            </TableCell>
+                            <TableCell style={tableCellStyle}>
+                              {job.experience_required} yrs
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={6}
+                          style={{
+                            textAlign: "center",
+                            padding: "10px",
+                            fontStyle: "italic",
+                            color: "#555",
+                          }}
+                        >
+                          Loading job details...
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+                {selectedRow && (
+                  <OnboardCandidates
+                    open={isDialogOpen}
+                    onClose={handleCloseDialog}
+                    selectedRow={selectedRow}
+                  />
+                )}
+                {selectedEmployerDetails[employer.code] && (
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 20]}
+                    component="div"
+                    count={selectedEmployerDetails[employer.code].length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      borderTop: "1px solid #ddd",
+                    }}
+                  />
+                )}
+              </TableContainer>
+            </AccordionDetails>
+          </Accordion>
+          
+        ))}
         <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
+          rowsPerPageOptions={[5, 10, 20]}
           component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          count={employersData.length}
+          rowsPerPage={employerRowsPerPage}
+          page={employerPage}
+          onPageChange={handleChangeEmployerPage}
+          onRowsPerPageChange={handleChangeEmployerRowsPerPage}
+          style={{
+            backgroundColor: "#f8f9fa",
+            borderTop: "1px solid #ddd",
+          }}
         />
-      </Paper>
+      </div>
     </Layout>
   );
 }
+
+const tableCellStyle = {
+  padding: "10px",
+  textAlign: "center",
+  fontSize: "0.9rem",
+  borderBottom: "1px solid #ddd",
+};
+
+const tableHeaderStyle = {
+  backgroundColor: "#000000", // Black background
+  color: "#ffffff", // White text
+  fontWeight: "bold",
+  textTransform: "uppercase",
+  padding: "14px",
+  textAlign: "center",
+  borderBottom: "3px solid #333333", // Dark grey bottom border for depth
+};
