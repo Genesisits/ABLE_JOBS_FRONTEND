@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useEffect, useState } from "react";
 import {
   Accordion,
@@ -70,7 +69,7 @@ export default function Employers() {
       .then((response) => {
         setSelectedEmployerDetails((prevState) => ({
           ...prevState,
-          [id]: Array.isArray(response.data) ? response.data : [],
+          [id]: response.data,
         }));
       })
       .catch((error) =>
@@ -236,7 +235,7 @@ export default function Employers() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {selectedEmployerDetails[employer.code] && Array.isArray(selectedEmployerDetails[employer.code]) ? (
+                    {selectedEmployerDetails[employer.code] ? (
                       selectedEmployerDetails[employer.code]
                         .slice(
                           page * rowsPerPage,

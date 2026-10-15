@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import "./register.css";

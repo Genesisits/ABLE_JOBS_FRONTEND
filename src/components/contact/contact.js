@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from "react";
 import contact from '../../images/contactus_ablejobs.avif';
 import contact2 from '../../images/able_contactus.avif';

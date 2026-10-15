@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import './employerregister.css';
 import { useNavigate } from 'react-router-dom';

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {

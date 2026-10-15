@@ -45,11 +45,10 @@ useEffect(() => {
       },
     })
     .then(response => {
-      setData(Array.isArray(response.data) ? response.data : []);
+      setData(response.data);
     })
     .catch(error => {
-      console.error('Error fetching onboarded jobs:', error);
-      setData([]);
+      console.error('Error fetching applied jobs:', error);
     });
   }
 }, [token]);

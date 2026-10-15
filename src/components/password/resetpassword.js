@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from "react";
 import "./resetpassword.css";
 import { TextField, Button, Grid, IconButton, InputAdornment } from "@mui/material";

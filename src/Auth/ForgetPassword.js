@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from "react";
 import "./forgetpassword.css";
 import mail from "../images/forgetPassword.jpg";

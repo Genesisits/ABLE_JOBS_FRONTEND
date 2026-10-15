@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect, useRef } from "react";
 import "./profile.css";
 import avatar from "../images/avatar.webp";

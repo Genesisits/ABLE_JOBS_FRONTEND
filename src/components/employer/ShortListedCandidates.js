@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -36,9 +35,9 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
   useEffect(() => {
     if (open && jobCode) {
       setLoading(true)
-      axios.get(`${SHORTLIST_ONBOARD}${jobCode}/`)
+      axios.get(`${SHORTLIST_ONBOARD}${jobCode}`)
         .then((response) => {
-          setAppliedCandidates(Array.isArray(response.data) ? response.data : []);
+          setAppliedCandidates(response.data);
         })
         .catch((error) => {
           console.error("Error fetching candidates:", error);
