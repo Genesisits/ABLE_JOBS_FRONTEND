@@ -58,10 +58,11 @@ useEffect(() => {
       },
     })
     .then(response => {
-      setData(response.data);
+      setData(Array.isArray(response.data) ? response.data : []);
     })
     .catch(error => {
       console.error('Error fetching applied jobs:', error);
+      setData([]);
     });
   }
 }, [token]);

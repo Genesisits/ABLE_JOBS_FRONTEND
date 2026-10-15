@@ -35,9 +35,9 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
     if (open && jobCode) {
       setLoading(true);
       axios
-        .get(`${APPLIED_CANDIDATES}${jobCode}`)
+        .get(`${APPLIED_CANDIDATES}${jobCode}/`)
         .then((response) => {
-          setAppliedCandidates(response.data);
+          setAppliedCandidates(Array.isArray(response.data) ? response.data : []);
         })
         .catch((error) => {
           console.error("Error fetching candidates:", error);

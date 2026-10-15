@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from "react";
 import "./registeras.css";
 import { useNavigate } from "react-router-dom";

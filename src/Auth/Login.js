@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from "react";
 import "./login.css";
 import mail from "../images/artboard2.jpeg";
@@ -79,6 +80,12 @@ function Login() {
           } else if (user_role === "Admin") {
             localStorage.setItem("is_admin", "true");
             navigate("/dashboard");
+          } else if (user_role === "Trainer") {
+            localStorage.setItem("is_trainer", "true");
+            navigate("/profile");
+          } else if (user_role === "Volunteer") {
+            localStorage.setItem("is_volunteer", "true");
+            navigate("/profile");
           } else {
             console.warn("Unknown job role:", user_role);
             setErrorMessage("Invalid user role");

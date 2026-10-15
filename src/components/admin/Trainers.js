@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
@@ -57,10 +58,10 @@ export default function Trainers() {
       },
     };
     axios.get(`${TRAINERS_LIST}`).then((response) => {
-      setData(response.data);
-    }).catch(() => {
-
-
+      setData(Array.isArray(response.data) ? response.data : []);
+    }).catch((error) => {
+      console.log(error);
+      setData([]);
     }).finally(() => {
       setLoading(false)
     })

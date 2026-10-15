@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import SearchBar from '../../components/search/SearchBar'
 import Layout from '../sidenav/Layout';

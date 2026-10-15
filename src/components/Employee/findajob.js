@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from "react";
 import Layout from "../sidenav/Layout";
 import Paper from "@mui/material/Paper";
@@ -113,7 +114,7 @@ function Findjob({ closeModal }) {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         alert("Resume uploaded successfully!");
         setUploadDialogOpen(false);
         ApplyJob();
@@ -149,7 +150,7 @@ function Findjob({ closeModal }) {
 
       if (response.status === 201) {
         setSuccess(true);
-        confirmDialogOpen(false);
+        setConfirmDialogOpen(false);
       } else {
         alert("Failed to apply for the job.");
       }

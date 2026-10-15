@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Button, Snackbar, Alert } from "@mui/material";

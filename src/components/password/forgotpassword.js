@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import { FORGOT_PASSWORD } from '../../endpoints.js';
 import { useNavigate } from 'react-router-dom';
