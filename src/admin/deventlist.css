@@ -1,0 +1,39 @@
+
+
+.devent-list-container {
+    margin: 20px;
+  }
+  
+  .devent-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .devent-table th, .devent-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .devent-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .devent-table tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  @media (max-width: 600px){
+.devent-table {
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+    width: 120%;
+}
+.pagination{
+  margin-top: 2%;
+}
+
+  }
+  
+  

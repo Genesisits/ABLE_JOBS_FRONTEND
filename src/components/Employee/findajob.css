@@ -1,0 +1,255 @@
+.findajob_button{
+    margin-top: 30px;
+  width: 50%;
+  background-color: teal;
+}
+.search-container {
+  background-color: #e0f7fa;
+  padding: 5px; /* Reduced padding for decreased height */
+  border-radius: 50px;
+  margin-bottom: 20px;
+  margin-top: 1%;
+  margin-left: 7%;
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  max-width: 80%;
+  height: 70px;
+}
+
+.search-bar1 {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  /* margin: 10px; */
+  gap: 10px;
+  margin-left: 2%;
+  width:100%;
+}
+
+.search-bar1 input {
+  width: 100%; /* Reduced width for smaller input box */
+  padding: 5px; /* Reduced padding */
+  border: 1px solid #6c757d;
+  /* border-radius: 20px; */
+  outline: none;
+  font-size: 14px; /* Reduced font size */
+}
+.search-bar1 button{
+  background-color: #007bff;
+  color: white;
+  padding: 8px 15px; /* Reduced padding for smaller button */
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  height:40px;
+  margin-left: 0%;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+.dropdown1{
+  width:50%;
+}
+
+.findajob_button {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.findajob_button:hover {
+  background-color: #0056b3;
+}
+.dropdown-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #6c757d;
+  margin-right: 10px;
+}
+.dropdown-input {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #6c757d;
+  margin-top: 5px;
+  font-size: 14px;
+  max-width:30%;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.dialog-content input[type="file"] {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.dialog-content input[type="file"]::file-selector-button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dialog-content input[type="file"]::file-selector-button:hover {
+  background-color: #0056b3;
+}
+
+.dialog-content .file-label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.upload-button {
+  width: fit-content;
+  background-color: #007bff; /* Primary color */
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase; /* Makes text uppercase */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.upload-button:hover {
+  background-color: #0e3f74; /* Darker shade on hover */
+  width: fit-content;
+  color: white;
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.upload-button:active {
+  background-color: #004085; /* Even darker shade on click */
+  width: fit-content;
+  transform: scale(0.98); /* Slightly shrink on click */
+}
+
+.upload-button:disabled {
+  background-color: #ccc; /* Gray for disabled state */
+  cursor: not-allowed;
+}
+.upload-button:hover .upload-icon {
+  color: whitesmoke; /* Icon color turns to white when button is hovered */
+}
+
+.upload-icon {
+  color: blue; /* Initial icon color */
+}
+/* Job Cards Container */
+.job-container {
+  max-height: 500px;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+/* Job Card */
+.job-card {
+  border: 1px solid #6c757d;
+  margin: 20px auto;
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  max-width: 90%;
+}
+
+.job-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Job Details */
+.job-details {
+  flex: 0.5;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  text-align: left;
+}
+
+.job-details p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Job Info */
+.job-info {
+  flex: 0.5;
+  font-family: 'Georgia', serif;
+  color: #555;
+  text-align: left;
+}
+
+.job-info p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #777;
+}
+
+/* Button Container */
+.button-container {
+  flex: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.findajob_button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.findajob_button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* No Jobs Found */
+.no-jobs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: red;
+  font-family: 'Arial', sans-serif;
+  font-size: 18px;
+  font-style: italic;
+}

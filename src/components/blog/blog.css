@@ -1,0 +1,105 @@
+/* BlogPage.css */
+/* Global Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  height: 100%; /* Full height for root elements */
+}
+
+/* Ensure #root takes full height */
+#root {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* About Hero Section */
+.about-hero {
+  margin: 0;
+  height: 50vh; /* Responsive height */
+  overflow: hidden;
+}
+
+/* Blog Content Grid */
+.blog-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 10px; /* Adjusted padding */
+  overflow: hidden;
+}
+
+/* Debugging Outline (Optional) */
+* {
+  box-sizing: border-box;
+  outline: none; /* Remove for production */
+}
+
+.blog-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  /* background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.blog-header h1 {
+  font-size: 2rem;
+  text-align: center;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.blog-content p {
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.blog-footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 20px;
+}
+.blog-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.blog-grid-item {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.blog-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.blog-text p {
+  margin: 10px 0;
+}
+
+.read-more-button {
+  background: #007BFF;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.blog-content-grid  .blog-image:hover {
+  transform: scale(1.06);  /* Zoom in by 10% */
+}
+

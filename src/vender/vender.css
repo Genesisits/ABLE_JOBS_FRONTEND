@@ -1,0 +1,139 @@
+.vendor-container {
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+}
+
+.v-sidebar {
+    width: 300px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    height: 1000px;
+}
+
+.vendor-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-top: 3%;
+    /* Add additional styles for the main content area */
+}
+
+/* Style the sidebar list items */
+.vendor ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 50px; /* Adjust the margin to add space between elements */
+    cursor: pointer;
+    font-size:x-large;
+}
+
+/* Add hover effect on sidebar items if needed */
+.sidebar li:hover {
+    background-color: #555;
+}
+.add-event-button{
+    margin-top: 0%;
+    margin-right: 60%;
+    display: inline-block;
+}
+/* Style the search bar */
+.search-bar {
+    margin-bottom: 20px;
+    
+}
+
+.search-bar input {
+    width: 20%;
+    padding: 8px;
+    margin-left: 50%;
+    box-sizing: border-box;
+    margin-top: 5%;
+}
+
+.search-bar button {
+    padding: 10px;
+    margin-left: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+.admin-button{
+    margin-top: -8%;
+}
+/* .content-display p{
+    color:black;
+    margin-top: 200%;
+} */
+@media (max-width: 768px) {
+    .sidebar {
+        margin-top: -1%;
+        height:400px;
+        width:100%
+    }
+    .sidebar ul{
+        margin-top: 5%;
+    }
+    .vendor-container {
+      flex-direction: column;
+  }
+  .devent-table{
+    overflow-x: auto;
+    /* display: block; */
+    white-space: nowrap;
+    width: 100%;
+  }
+ .vevent-table{
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+    width: 100%;
+ }
+  }
+  @media (min-width: 820px) and (max-width: 912px) {
+    .vendor-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        margin-top: -1%;
+        height:400px;
+        width:100%
+    }
+    .devent-table{
+        overflow-x: auto;
+        /* display: block; */
+        white-space: nowrap;
+        width: 100%;
+      }
+     .vevent-table{
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+        width: 100%;
+     }
+  }
+  @media (min-width: 1024px) and (max-width: 1024px) {
+    .vendor-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        margin-top: 6%;
+        height:400px;
+        width:100%
+    }
+    .devent-table{
+        overflow-x: auto;
+        /* display: block; */
+        white-space: nowrap;
+        width: 100%;
+      }
+     .vevent-table{
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+        width: 100%;
+     } 
+  }
+

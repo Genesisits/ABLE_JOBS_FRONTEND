@@ -1,0 +1,25 @@
+.dashboardGen {
+    /* margin-top: 5%; */
+    width: 100%;
+    background-color: darkslateblue;
+    height: 170px;
+    border: 1px solid darkslateblue;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h3 {
+    color: white;
+    font-size: 30px;
+}
+
+.dashboardGen button {
+    background-color: #5384c9;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}

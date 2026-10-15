@@ -1,0 +1,131 @@
+.education input[type="text"] {
+  width: 85%;
+  padding: 18px;
+  margin: '0x 10px';
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.special-considerations input[type="text"] {
+  width: 100%;
+  padding: 18px;
+  margin: '0x 10px';
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.skills input[type="text"] {
+  width: 85%;
+  padding: 18px;
+  margin: '0x 10px';
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.file-input {
+  display: none; 
+}
+
+.upload-button {
+  background-color: #4caf50; 
+  color: white; 
+  padding: 10px 20px; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+  margin-top: 10px; 
+}
+
+.upload-button:hover {
+  background-color: #45a049; 
+}
+
+.file-input-label {
+  display: inline-block; 
+  background-color: #007bff; 
+  color: white; 
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  cursor: pointer;
+  transition: background-color 0.3s; 
+  margin-bottom: 10px; 
+}
+
+.file-input-label:hover {
+  background-color: #0056b3; 
+}
+
+.full-page-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+ .experienced input[type="text"] {
+  width: 80%;
+  padding: 18px;
+  margin: '0x 20px';
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.experienced select {
+  width: 100%; 
+  padding: 20px;
+  margin: 10px 0; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+}
+
+
+.education {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin:5px;
+  gap: 10px;
+}
+
+.headDiv {
+  border-radius: 10px;
+  border: 1px solid gray;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.popup button {
+  margin: '0%';
+  align-content: center;
+}
+.custom-select.Mui-focused {
+  outline: 2px solid #3f51b5; 
+  outline-offset: 2px;
+}
