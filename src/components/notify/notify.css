@@ -1,0 +1,104 @@
+/* Centered pop-up notifications – navy / gold brand */
+.cp-backdrop {
+  background: rgba(8, 33, 90, 0.55) !important;
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+}
+
+.MuiDialog-paper.cp-card {
+  --cp-accent: #2f6fed;
+  --cp-accent-soft: rgba(47, 111, 237, 0.12);
+  position: relative;
+  box-sizing: border-box;
+  width: min(420px, 90vw);
+  margin: 16px !important;
+  padding: 34px 30px 28px !important;
+  overflow: hidden !important;
+  text-align: center;
+  background: #fff;
+  border-radius: 24px !important;
+  border-bottom: 5px solid var(--cp-accent) !important;
+  box-shadow: 0 24px 60px rgba(4, 14, 46, 0.5) !important;
+  animation: cp-pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+  max-width: 90vw !important;
+}
+.cp-card.cp-success { --cp-accent: #1f9d55; --cp-accent-soft: rgba(31, 157, 85, 0.13); }
+.cp-card.cp-error   { --cp-accent: #d93636; --cp-accent-soft: rgba(217, 54, 54, 0.12); }
+.cp-card.cp-warning { --cp-accent: #f5a623; --cp-accent-soft: rgba(245, 166, 35, 0.16); }
+.cp-card.cp-info    { --cp-accent: #2f6fed; --cp-accent-soft: rgba(47, 111, 237, 0.12); }
+
+.cp-icon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 16px;
+  color: var(--cp-accent);
+  background: var(--cp-accent-soft);
+  border-radius: 50%;
+  box-shadow: 0 0 0 8px var(--cp-accent-soft);
+  animation: cp-icon 0.45s 0.08s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+
+.cp-title {
+  margin: 0 0 8px;
+  color: #13235a;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.cp-message {
+  margin: 0 0 22px;
+  color: #3d4a73;
+  font-size: 1rem;
+  line-height: 1.6;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+.cp-btn {
+  min-width: 120px;
+  padding: 11px 28px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #08215a, #0b2a6f);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.cp-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(8, 33, 90, 0.35); }
+.cp-btn:focus-visible { outline: 3px solid #f5a623; outline-offset: 2px; }
+
+/* time-left bar for pop-ups that close by themselves */
+.cp-timer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.18);
+  transform-origin: left;
+  animation-name: cp-timer;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes cp-pop {
+  from { opacity: 0; transform: scale(0.88) translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes cp-icon {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+@keyframes cp-timer {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .MuiDialog-paper.cp-card, .cp-icon, .cp-timer { animation: none; }
+}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Layout from '../sidenav/Layout';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
-import { useState, useEffect , useRef} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { SHORTLIST_JOB } from './../../endpoints';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -20,6 +20,7 @@ const columns = [
   { id: "company_name", label: "Company Name", minWidth: 100 },
   { id: "location", label: "Location", minWidth: 100 },
   { id: "number_of_positions", label: "Number of Positions", minWidth: 100 },
+  { id: "application_status", label: "Status", minWidth: 100 },
 ];
 
 function Shortlist() {
@@ -36,28 +37,28 @@ function Shortlist() {
   };
   const hasFetched = useRef(false);
 
-useEffect(() => {
-  if (!hasFetched.current) {
-    hasFetched.current = true; // Mark as fetched
-    axios.get(`${SHORTLIST_JOB}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then(response => {
-      setData(response.data);
-    })
-    .catch(error => {
-      console.error('Error fetching applied jobs:', error);
-    });
-  }
-}, [token]);
+  useEffect(() => {
+    if (!hasFetched.current) {
+      hasFetched.current = true; // Mark as fetched
+      axios.get(`${SHORTLIST_JOB}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(response => {
+          setData(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching applied jobs:', error);
+        });
+    }
+  }, [token]);
 
   return (
     <Layout>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 400 }}>
-          <Table stickyHeader aria-label="sticky table">
+        <TableContainer sx={{ maxHeight: "max(320px, calc(100vh - 320px))" }}>
+          <Table stickyHeader aria-label="sticky table" className="ajh-stack">
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
@@ -72,49 +73,49 @@ useEffect(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {rows.length === 0 ? (
-    <TableRow>
-      <TableCell
-  colSpan={columns.length}
-  align="center"
-  sx={{ color: "red", fontStyle: "italic" }}
->
-  No short listed jobs found
-</TableCell>
-    </TableRow>
-  ) : (
-    rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.company_name}
+              {rows.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    align="center"
+                    sx={{ color: "red", fontStyle: "italic" }}
                   >
-                    {columns.map((column) => {
-                      if (column.id === "status") {
-                        return (
-                          <TableCell key={column.id}>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              sx={{
-                                padding: '4px 8px',
-                                minHeight: '14px',
-                                fontSize: '0.675rem',
-                              }}
-                            >
-                              View
-                            </Button>
-                          </TableCell>
-                        );
-                      }
-                    return <TableCell key={column.id}>{row[column.id]}</TableCell>;
-                  })}
+                    No short listed jobs found
+                  </TableCell>
                 </TableRow>
-              ))
-          )}
+              ) : (
+                rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.code}
+                    >
+                      {columns.map((column) => {
+                        if (column.id === "status") {
+                          return (
+                            <TableCell key={column.id} data-label={column.label}>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                sx={{
+                                  padding: '4px 8px',
+                                  minHeight: '14px',
+                                  fontSize: '0.675rem',
+                                }}
+                              >
+                                View
+                              </Button>
+                            </TableCell>
+                          );
+                        }
+                        return <TableCell key={column.id} data-label={column.label}>{row[column.id]}</TableCell>;
+                      })}
+                    </TableRow>
+                  ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

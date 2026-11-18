@@ -1,34 +1,25 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Paper,
-  Slide,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableContainer,
-  CircularProgress,
-  Switch,
-} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import GroupsIcon from "@mui/icons-material/Groups";
 import axios from "axios";
 import { APPLIED_CANDIDATES, SHORTLIST_CANDIDATES, ERESUME } from "../../endpoints";
+import VideoResumePlayerDialog from "./VideoResumePlayerDialog";
+import PdfResumeViewerDialog from "./PdfResumeViewerDialog";
+import PurpleDialog from "../Employee/PurpleDialog";
+import "./shortlistedcandidates.css";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+const initials = (name) =>
+  (name || "?").trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 
 export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
   const [loading, setLoading] = useState(false);
   const [appliedCandidates, setAppliedCandidates] = useState([]);
+  const [player, setPlayer] = useState({ open: false, url: null, name: "" });
+  const [pdf, setPdf] = useState({ open: false, url: null, name: "" });
 
   // Fetch applied candidates
   useEffect(() => {
@@ -37,10 +28,11 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
       axios
         .get(`${APPLIED_CANDIDATES}${jobCode}`)
         .then((response) => {
-          setAppliedCandidates(response.data);
+          setAppliedCandidates(Array.isArray(response.data) ? response.data : []);
         })
         .catch((error) => {
           console.error("Error fetching candidates:", error);
+          setAppliedCandidates([]);
         })
         .finally(() => {
           setLoading(false);
@@ -74,56 +66,38 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
       });
   };
 
-  // Handle opening files
-  const handleOpenFile = (code, type) => {
+  // Get the student's resume data. Uses the URL already on the list row when
+  // there is one; otherwise asks the server (/eresume/<application_code>/) for the
+  // student's latest upload, so a missing/stale value on the row never hides a file.
+  const fetchResumeData = (candidate) =>
     axios
-      .get(`${ERESUME}${code}/`)
-      .then((response) => {
-        if (response.data.resumes && response.data.resumes.length > 0) {
-          const resumeData = response.data.resumes[0]; 
-  
-          
-          const fileUrl = type === "pdf" ? resumeData.resume : resumeData.video_resume;
-  
-          console.log(fileUrl); 
-  
-          
-          if (fileUrl) {
-            if (type === "pdf") {
-              // Open the PDF in a new tab
-              const pdfWindow = window.open(fileUrl, "_blank");
-              if (!pdfWindow) {
-                console.error("Popup blocked. Unable to open the PDF.");
-              }
-            } else if (type === "video") {
-              // Open the video in a new tab with an embedded video player
-              const videoWindow = window.open("", "_blank");
-              if (videoWindow) {
-                videoWindow.document.write(`
-                  <html>
-                    <head><title>Video Resume</title></head>
-                    <body>
-                      <video controls src="${fileUrl}" style="width: 100%; height: 700px;"></video>
-                    </body>
-                  </html>
-                `);
-              } else {
-                console.error("Popup blocked. Unable to open the video.");
-              }
-            }
-          } else {
-            console.error("File URL is missing");
-          }
-        } else {
-          console.error("No resumes found for this code:", code);
-        }
-      })
+      .get(`${ERESUME}${candidate.application_code}/`)
+      .then((response) => response.data || {})
       .catch((error) => {
-        console.error("Error fetching file:", error);
+        console.error("Error fetching student resume data:", error);
+        return {};
       });
+
+  const handleOpenVideo = async (candidate) => {
+    const name = candidate.employee_name || "";
+    if (candidate.video_resume_url) {
+      setPlayer({ open: true, url: candidate.video_resume_url, name });
+      return;
+    }
+    const data = await fetchResumeData(candidate);
+    setPlayer({ open: true, url: data.video_resume_url || null, name });
   };
-  
-  
+
+  const handleOpenPdf = async (candidate) => {
+    const name = candidate.employee_name || "";
+    if (candidate.resume_url) {
+      setPdf({ open: true, url: candidate.resume_url, name });
+      return;
+    }
+    const data = await fetchResumeData(candidate);
+    setPdf({ open: true, url: data.resume_url || null, name });
+  };
+
   // Handle closing the dialog
   const handleCloseDialog = () => {
     onClose();
@@ -131,83 +105,96 @@ export default function AppliedCandidatesDialog({ open, onClose, jobCode }) {
   };
 
   return (
-    <Dialog
-      fullScreen
-      open={open}
-      onClose={handleCloseDialog}
-      TransitionComponent={Transition}
-    >
-      {loading && (
-        <div className="full-page-spinner">
-          <CircularProgress color="primary" size={50} />
+    <>
+      <PurpleDialog
+        open={open}
+        onClose={handleCloseDialog}
+        title="Applied Candidates"
+        icon={<GroupsIcon />}
+        width={900}
+        loading={loading}
+        actions={
+          <button type="button" className="jd-btn jd-btn-outline" onClick={handleCloseDialog}>
+            <CloseIcon /> Close
+          </button>
+        }
+      >
+        <div className="sc-list">
+          {appliedCandidates.length > 0 ? (
+            appliedCandidates.map((candidate) => {
+              const status = candidate.onboarded_status
+                ? "Onboarded"
+                : candidate.shortlisted_status
+                  ? "Shortlisted"
+                  : "Applied";
+              const appliedOn = candidate.applied_at
+                ? new Date(candidate.applied_at).toLocaleDateString()
+                : "-";
+              return (
+                <div className="sc-row" key={candidate.application_code}>
+                  <span className="sc-avatar" aria-hidden="true">{initials(candidate.employee_name)}</span>
+                  <div className="sc-info">
+                    <span className="sc-name" title={candidate.employee_name}>{candidate.employee_name || "-"}</span>
+                    <span className="sc-meta" title={candidate.employee_email}>
+                      {candidate.employee_email || "-"} &middot; Applied {appliedOn}
+                    </span>
+                    <span className="sc-meta">Code: {candidate.application_code}</span>
+                  </div>
+                  <span className={`sc-status is-${status.toLowerCase()}`}>{status}</span>
+                  <div className="sc-actions">
+                    <button
+                      type="button"
+                      className="sc-act"
+                      onClick={() => handleOpenPdf(candidate)}
+                      title="View resume"
+                      aria-label="View resume"
+                    >
+                      <VisibilityIcon />
+                    </button>
+                    <button
+                      type="button"
+                      className="sc-act"
+                      onClick={() => handleOpenVideo(candidate)}
+                      title={candidate.video_resume_url === null ? "No video resume" : "Watch video resume"}
+                      aria-label="Watch video resume"
+                    >
+                      <PlayArrowIcon />
+                    </button>
+                    {candidate.onboarded_status ? (
+                      <button type="button" className="sc-pill sc-pill-done" disabled>
+                        <CheckCircleIcon /> Onboarded
+                      </button>
+                    ) : candidate.shortlisted_status ? (
+                      <button type="button" className="sc-pill sc-pill-remove" onClick={() => handleActive(candidate)}>
+                        <PersonRemoveIcon /> Remove Shortlist
+                      </button>
+                    ) : (
+                      <button type="button" className="sc-pill sc-pill-add" onClick={() => handleActive(candidate)}>
+                        <CheckCircleIcon /> Approve Shortlist
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="sc-empty">{loading ? "Loading candidates..." : "No applied candidates found."}</div>
+          )}
         </div>
-      )}
-      <AppBar sx={{ position: "relative" }}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={handleCloseDialog}
-            aria-label="close"
-            width='30px'
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ ml: 2, flex: 1 }}>
-            Applied Candidates
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Application Code</TableCell>
-              <TableCell>Employee Name</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-  {appliedCandidates.length > 0 ? (
-    appliedCandidates.map((candidate) => (
-      <TableRow key={candidate.application_code}>
-        <TableCell>{candidate.application_code}</TableCell>
-        <TableCell>{candidate.employee_name}</TableCell>
-        <TableCell>
-          <IconButton
-            onClick={() =>
-              handleOpenFile(candidate.application_code, "pdf")
-            }
-            title="View Resume"
-          >
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton
-            onClick={() =>
-              handleOpenFile(candidate.application_code, "video")
-            }
-            title="View Video Resume"
-          >
-            <PlayArrowIcon />
-          </IconButton>
-          <Switch
-            checked={candidate.shortlisted_status}
-            onChange={() => handleActive(candidate)}
-            size="small"
-          />
-        </TableCell>
-      </TableRow>
-    ))
-  ) : (
-    <TableRow>
-      <TableCell colSpan={3} align="center">
-        No applied candidates found.
-      </TableCell>
-    </TableRow>
-  )}
-</TableBody>
-        </Table>
-      </TableContainer>
-    </Dialog>
+      </PurpleDialog>
+
+      <PdfResumeViewerDialog
+        open={pdf.open}
+        url={pdf.url}
+        candidateName={pdf.name}
+        onClose={() => setPdf({ open: false, url: null, name: "" })}
+      />
+      <VideoResumePlayerDialog
+        open={player.open}
+        url={player.url}
+        candidateName={player.name}
+        onClose={() => setPlayer({ open: false, url: null, name: "" })}
+      />
+    </>
   );
 }

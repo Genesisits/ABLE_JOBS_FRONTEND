@@ -1,0 +1,33 @@
+/* Add / Edit Job form inside the purple popup (builds on the jd-* styles in Employee/findajob.css) */
+.jd-paper .pj-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 16px; text-align: left; }
+.jd-paper .pj-grid.pj-two { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; }
+.jd-paper .pj-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.jd-paper .pj-field > span { color: #1c0a66; font-weight: 700; font-size: 13.5px; }
+
+.jd-paper .pj-field input[type="text"],
+.jd-paper .pj-field select,
+.jd-paper .pj-field textarea {
+  width: 100%; margin: 0; box-sizing: border-box; padding: 11px 14px;
+  border: 2px solid #d9d2f5; border-radius: 14px; background: #f7f5ff; box-shadow: none;
+  color: #2b2550; font: 500 14.5px 'Poppins', 'Segoe UI', Arial, sans-serif; outline: none;
+  transition: border-color .15s, background .15s, box-shadow .15s;
+}
+.jd-paper .pj-field select {
+  appearance: none; -webkit-appearance: none; padding-right: 38px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233a0ca3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.jd-paper .pj-field textarea { resize: vertical; min-height: 92px; }
+.jd-paper .pj-field input::placeholder, .jd-paper .pj-field textarea::placeholder { color: #9a93c4; }
+.jd-paper .pj-field input[type="text"]:focus,
+.jd-paper .pj-field select:focus,
+.jd-paper .pj-field textarea:focus {
+  border-color: #3a0ca3; background: #fff; box-shadow: 0 0 0 4px rgba(58, 12, 163, .12);
+}
+
+@media (max-width: 900px) {
+  .jd-paper .pj-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .jd-paper .pj-grid, .jd-paper .pj-grid.pj-two { grid-template-columns: minmax(0, 1fr); }
+}

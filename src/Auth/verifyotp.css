@@ -1,17 +1,112 @@
+/* ---------- Verify OTP ---------- */
 .otpContainer {
-    margin-top:10%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: auto;
-   
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  margin: 0;
+  padding: clamp(80px, 12vh, 120px) 16px 48px;
+  background: linear-gradient(135deg, #08215a 0%, #0b2a6f 55%, #1b4fd8 100%);
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+.otpContainer .card {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 460px;
+  padding: 44px 36px 36px;
+  text-align: center;
+  background: #fff;
+  border: none;
+  border-bottom: 6px solid #f5a623;
+  border-radius: 32px;
+  box-shadow: 0 24px 60px rgba(4, 14, 46, 0.45);
+}
+.otpContainer h4 {
+  margin: 0 0 10px;
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #0b2a6f;
+}
+.otpContainer h4::after {
+  content: '';
+  display: block;
+  width: 56px; height: 4px;
+  margin: 10px auto 0;
+  background: #f5a623;
+  border-radius: 4px;
+}
+.otpContainer p {
+  margin: 16px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #4a5a85;
 }
 
-.otpContainer .card {
-    border: 2px solid rgb(175, 169, 169);
-    
-    border-radius: 20px;
-    padding: 50px;
-   
+/* OTP boxes */
+.otpContainer .card > div {
+  justify-content: center;
+  gap: 6px;
+  margin: 26px 0 22px;
+}
+.otpContainer .card input {
+  box-sizing: border-box;
+  width: 48px !important;
+  height: 56px;
+  padding: 0;
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  color: #0b2a6f;
+  background: #eef2fa;
+  border: 1.5px solid #c5d0ea;
+  border-radius: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.otpContainer .card input:focus {
+  background: #fff;
+  border-color: #1b4fd8;
+  box-shadow: 0 0 0 3px rgba(27, 79, 216, 0.18);
+}
+.otpContainer .card > div span { color: #f5a623; font-weight: 700; }
+
+.otpContainer button[type="submit"] {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto 8px;
+  padding: 13px 24px;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #08215a, #0b2a6f);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 6px 14px rgba(11, 42, 111, 0.35);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.otpContainer button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(11, 42, 111, 0.4);
+}
+.otpContainer button:focus-visible { outline: 3px solid #f5a623; outline-offset: 3px; }
+.otpContainer .MuiButton-root {
+  display: inline-flex;
+  margin: 6px auto 0;
+  color: #1b4fd8;
+  font-weight: 600;
+  text-transform: none;
+}
+
+@media (max-width: 420px) {
+  .otpContainer .card { padding: 36px 18px 28px; }
+  .otpContainer .card input { width: 40px !important; height: 50px; font-size: 1.2rem; }
+  .otpContainer .card > div { gap: 3px; }
 }

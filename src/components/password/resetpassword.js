@@ -4,6 +4,7 @@ import { TextField, Button, Grid, IconButton, InputAdornment } from "@mui/materi
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 import { RESET_PASSWORD } from "../../endpoints";
+import { CenterPopup } from "../notify/Notify";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function ResetPassword() {
@@ -82,9 +83,23 @@ function ResetPassword() {
   return (
     <div className="resetpassword">
       <div className="flex-item">
-        {message && <p style={{ color: "green" }}>{message}</p>}
-        {Errmessage && <p style={{ color: "red" }}>{Errmessage}</p>}
-        {message1 && <p style={{ color: "red" }}>{message1}</p>}
+        <CenterPopup
+          open={Boolean(message)}
+          severity="success"
+          title="Password reset"
+          message={message}
+          onClose={() => setMessage("")}
+        />
+        <CenterPopup
+          open={Boolean(Errmessage || message1)}
+          severity="error"
+          title="Unable to reset password"
+          message={Errmessage || message1}
+          onClose={() => {
+            setErrMessage("");
+            setMessage1("");
+          }}
+        />
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <h3 style={{ color: "blue", paddingTop: "10px" }}>Reset Password</h3>

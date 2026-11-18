@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
 import "./jobs.css";
+import { USE_DEMO_DATA, DEMO_JOBS } from "./demoData";
 import Postajob from "./postajob"; // Import the Postajob component
 import AppliedCandidatesDialog from "./Appliedcandidates"; 
 import ShortListedCandidates from "./ShortListedCandidates";
@@ -50,9 +51,11 @@ export default function Shortlisted() {
       },
     }
     axios.get(`${SHORTLIST_APPLICATIONS}`,config).then((response) => {
-      setData(response.data);
+      const data = Array.isArray(response.data) ? response.data : [];
+      setData(data.length === 0 && USE_DEMO_DATA ? DEMO_JOBS : data);
     }).catch((error) => {
       console.log(error)
+      if (USE_DEMO_DATA) setData(DEMO_JOBS);
     }).finally(() => {
       setLoading(false)
     })
@@ -137,14 +140,14 @@ export default function Shortlisted() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.company_name}
+                      key={row.code}
                     >
                       {columns.map((column) => {
                         if (column.id === "status") {
                           return (
                             <TableCell key={column.id}>
                               <VisibilityIcon
-                                style={{ cursor: "pointer", marginRight: "2px" }}
+                                style={{ cursor: "pointer", marginRight: "2px", color: "blue" }}
                                 fontSize="small"
                                 onClick={() => handleOpenDialog(row.code)} 
                               />

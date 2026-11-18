@@ -96,6 +96,7 @@ body {
   max-width: 800px;
   margin-left: 20px;
   margin-right: 20px;
+  padding: 20px 0px;
 }
 
 .job-details h2 {
@@ -195,6 +196,7 @@ body {
   font-size: 1.1rem;
   color: #444;
   line-height: 1.6;
+  width: 95%;
 }
 
 .job-details .job-description p {
@@ -209,6 +211,7 @@ body {
   .job-details {
     padding: 15px;
     margin-top: 10px;
+    height: 550px;
   }
 
   .job-details h2 {
@@ -226,10 +229,11 @@ body {
 }
 
 .job-infor {
-    width: 30%;
+    width: 95%;
     margin-right: 2%; /* Optional: Space between the two sections */
     display: inline-block;
     vertical-align: top;
+    margin-bottom: 20px; /* Optional: Adjust as needed */
   }
   
   .job-description {

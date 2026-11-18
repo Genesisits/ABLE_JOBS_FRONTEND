@@ -1,0 +1,219 @@
+/* Responsive job cards for the employer "Jobs" page (.ajh-card).
+   Loaded after ajhdash/dashboard-theme.css and scoped to .ajh-list so it
+   wins over the theme's single 760px "flex-wrap" rule, which squeezed the
+   logo, text, badge and actions into one cramped row on phones. */
+
+.ajh-list { min-width: 0; }
+
+.ajh-list .ajh-card {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  text-align: left;            /* App.css sets text-align:center on .App, which every card inherited */
+}
+
+.ajh-list .ajh-title,
+.ajh-list .ajh-company,
+.ajh-list .ajh-meta span {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.ajh-list .ajh-company svg,
+.ajh-list .ajh-meta svg { flex: 0 0 auto; }
+
+.ajh-list .ajh-tags:empty { display: none; }
+.ajh-list .ajh-tag { max-width: 100%; overflow-wrap: anywhere; }
+
+/* ---------- tablet: still a row, just tighter ---------- */
+@media (min-width: 761px) and (max-width: 1000px) {
+  .ajh-list .ajh-card { gap: 16px; padding: 16px 18px; }
+  .ajh-list .ajh-logo { flex-basis: 96px; padding-right: 16px; }
+  .ajh-list .ajh-title { font-size: 20px; }
+  .ajh-list .ajh-actions { padding-left: 16px; gap: 8px; }
+}
+
+/* ---------- phone: stacked card laid out with a grid ----------
+   ┌────────┬───────────────────┬────────┐
+   │  logo  │ title             │ badge  │
+   │ applied│ company           │        │
+   ├────────┴───────────────────┴────────┤
+   │ location · type · exp • salary      │
+   │ skill tags…                         │
+   ├─────────────────────────────────────┤
+   │ [view] [edit]            [ switch ] │
+   └─────────────────────────────────────┘                          */
+@media (max-width: 760px) {
+  .ajh-list { margin-left: 8px; margin-right: 8px; gap: 14px; }
+
+  .ajh-list .ajh-card {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-areas:
+      "logo    title"
+      "logo    company"
+      "logo    badge"
+      "meta    meta"
+      "tags    tags"
+      "details details"
+      "actions actions";
+    column-gap: 14px;
+    row-gap: 8px;
+    align-items: start;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  /* let the title / company / meta / tags sit directly on the card grid */
+  .ajh-list .ajh-body { display: contents; }
+
+  .ajh-list .ajh-logo {
+    grid-area: logo;
+    height: auto;
+    flex: none;
+    display: block;
+    padding: 0;
+    border-right: 0;
+  }
+  .ajh-list .ajh-logo-badge { width: 56px; height: 56px; border-radius: 16px; font-size: 22px; }
+  .ajh-list .ajh-logo small {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  /* the company name is already shown under the job title, so skip the cramped copy under the logo */
+  .ajh-list .ajh-logo .ajh-logo-name { display: none; }
+
+  .ajh-list .ajh-title {
+    grid-area: title;
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.25;
+    align-self: center;
+  }
+  .ajh-list .ajh-company { grid-area: company; margin: 0; align-items: flex-start; }
+
+  .ajh-list .ajh-badge {
+    grid-area: badge;
+    justify-self: start;
+    align-self: start;
+    padding: 5px 12px;
+    font-size: 13px;
+  }
+
+  .ajh-list .ajh-meta {
+    grid-area: meta;
+    margin-top: 4px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--ajh-line, #dfe5f3);
+    gap: 8px 16px;
+    font-size: 14px;
+  }
+  .ajh-list .ajh-meta span { align-items: flex-start; }
+
+  .ajh-list .ajh-tags { grid-area: tags; margin: 0; gap: 6px; }
+  .ajh-list .ajh-details { grid-area: details; margin-top: 2px; }
+  .ajh-list .ajh-dgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+  .ajh-list .ajh-tag { padding: 4px 12px; font-size: 12.5px; }
+
+  .ajh-list .ajh-actions {
+    grid-area: actions;
+    width: 100%;
+    min-height: 0;
+    margin-top: 4px;
+    padding: 12px 0 0;
+    border-left: 0;
+    border-top: 1.5px solid var(--ajh-line, #dfe5f3);
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  .ajh-list .ajh-icon-btn { width: 44px; height: 44px; }  /* comfortable tap target */
+  .ajh-list .ajh-actions .ajh-btn { width: 100% !important; height: 48px; font-size: 16px; }
+
+  /* Find-a-job search pill: stack the fields and make Search full width */
+  .ajh-search { padding: 12px; gap: 10px; border-radius: 22px; }
+  .ajh-search .ajh-field { flex: 1 1 100%; }
+  .ajh-search > .ajh-btn:not(.gold) { width: 100% !important; }
+  .ajh-list .ajh-actions > .MuiSwitch-root { margin-left: auto; }
+}
+
+/* ---------- small phones: one detail per line ---------- */
+@media (max-width: 480px) {
+  .ajh-list .ajh-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+@media (max-width: 360px) {
+  .ajh-list .ajh-card { grid-template-columns: 52px minmax(0, 1fr); column-gap: 10px; padding: 14px; }
+  .ajh-list .ajh-logo-badge { width: 48px; height: 48px; font-size: 20px; }
+  .ajh-list .ajh-title { font-size: 17px; }
+}
+
+/* ---------- full job details (description + every field) ---------- */
+.ajh-list .ajh-details {
+  min-width: 0;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--ajh-line, #dfe5f3);
+}
+
+.ajh-list .ajh-dlabel,
+.ajh-list .ajh-ditem dt {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ajh-muted, #6b7aa3);
+}
+
+.ajh-list .ajh-desc p {
+  margin: 4px 0 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #34415f;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.ajh-list .ajh-desc p.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The app has a global `button { margin-left: 50%; width: 20%; background… }`
+   rule (employer/jobs.css), so this link-style button resets all of it. */
+.ajh-list .ajh-readmore {
+  width: auto;
+  margin: 4px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ajh-blue, #1b4fd8);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ajh-list .ajh-readmore:hover { text-decoration: underline; }
+
+.ajh-list .ajh-dgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px 20px;
+  margin: 12px 0 0;
+}
+.ajh-list .ajh-desc + .ajh-dgrid { margin-top: 14px; }
+.ajh-list .ajh-ditem { min-width: 0; }
+.ajh-list .ajh-ditem dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ajh-navy, #0b2a6f);
+  overflow-wrap: anywhere;
+}
+.ajh-list .ajh-ditem a { color: var(--ajh-blue, #1b4fd8); text-decoration: none; }
+.ajh-list .ajh-ditem a:hover { text-decoration: underline; }

@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import "./register.css";
 import { useNavigate } from "react-router-dom";
-import { Snackbar } from "@mui/material";
+import { CenterPopup } from "../components/notify/Notify";
 import axios from "axios";
 import { List, ListItem, Chip, Checkbox } from "@mui/material";
 import { Add, Label } from "@mui/icons-material";
 import { REGISTER } from "../endpoints";
+import { RegDialogTitle, RegField, RegSelect, RegPassword, Hint, useIsMobile } from "./FormParts";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -36,16 +37,19 @@ import {
   CountryDropdown,
   StateDropdown,
   CityDropdown,
-  LanguagesDropdown,
+  LanguageDropdown,
   PhoneInput,
 } from "react-country-state-dropdown";
+
 import {
   CitySelect,
   CountrySelect,
   StateSelect,
   LanguageSelect,
 } from "react-country-state-city";
+
 import "react-country-state-city/dist/react-country-state-city.css";
+
 import {
   Dialog,
   DialogActions,
@@ -56,12 +60,13 @@ import {
   IconButton,
 } from "@mui/material";
 import { Padding, Password } from "@mui/icons-material";
-import { ThemeConsume } from "styled-components";
+import { ThemeConsumer } from "styled-components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Select } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { InputAdornment } from "@mui/material";
+import { V, clean } from "./validation";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -86,8 +91,8 @@ const QontoConnector = styled(StepConnector)(({ theme }) => ({
   },
 }));
 
-const QontoStepIconRoot = styled("div")(({ theme }) => ({
-  color: "#eaeaf0",
+const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
+  color: ownerState && ownerState.active ? "#0b2a6f" : "#c5d0ea",
   display: "flex",
   height: 22,
   alignItems: "center",
@@ -191,6 +196,25 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
+// A education row counts as "empty" when the user has not typed anything in it
+const isRowEmpty = (e) =>
+  !String(e.college).trim() &&
+  !String(e.percentage).trim() &&
+  !e.startDate &&
+  !e.endDate &&
+  !String(e.field_of_study).trim();
+
+// Red message shown directly below a field
+const FieldError = ({ msg }) =>
+  msg ? (
+    <div
+      role="alert"
+      style={{ color: "#d32f2f", fontSize: "0.75rem", lineHeight: 1.3, marginTop: 4, textAlign: "left" }}
+    >
+      {msg}
+    </div>
+  ) : null;
+
 function Employeeregister({ open, onClose }) {
   const [isLoading, setisLoading] = useState(false);
   const skillOptions = [
@@ -259,6 +283,9 @@ function Employeeregister({ open, onClose }) {
   const [errorRadio, setErrorRadio] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const clearErr = (key) =>
+    setFieldErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));
   const [educations, setEducations] = useState([
     {
       degree_level: "SSC",
@@ -303,6 +330,7 @@ function Employeeregister({ open, onClose }) {
   ]);
 
   const handleSkillAdd = (newSkill) => {
+    clearErr("skills");
     if (newSkill && !selectedSkills.includes(newSkill)) {
       setSelectedSkills([...selectedSkills, newSkill]);
     }
@@ -482,69 +510,57 @@ function Employeeregister({ open, onClose }) {
     "Doctorate/Ph.D",
   ];
 
-  const isStepOptional = (step) => step === 1;
+  // Education is now mandatory (SSC), so no step can be skipped
+  const isStepOptional = () => false;
 
   const isStepSkipped = (step) => skipped.has(step);
 
-  const validateForm = () => {
-    if (!userfname) {
-      setError("First name is required.");
-      return false;
-    }
-    if (!userlname) {
-      setError("Last name is required.");
-      return false;
-    }
-    if (!useremail || !/\S+@\S+\.\S+/.test(useremail)) {
-      setError("A valid email is required.");
-      return false;
-    }
-    if (!userpassword || userpassword.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return false;
-    }
-    if (!usermobile || !/^\d{10}$/.test(usermobile)) {
-      setError("A valid 10-digit mobile number is required.");
-      return false;
-    }
-    if (!state || state === "Select State") {
-      setError("State selection is required.");
-      return false;
-    }
-    if (!useraddress) {
-      setError("Address is required.");
+  const GENERIC_ERR = "Please fix the highlighted fields.";
+  const finishValidation = (errs) => {
+    setFieldErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      setError(GENERIC_ERR);
       return false;
     }
     return true;
   };
 
+  const validateForm = () => {
+    const errs = {};
+    const fe = V.name(userfname, "First name"); if (fe) errs.fname = fe;
+    const le = V.name(userlname, "Last name"); if (le) errs.lname = le;
+    if (!useremail || !/\S+@\S+\.\S+/.test(useremail))
+      errs.email = "A valid email is required.";
+    if (!userpassword || userpassword.length < 6)
+      errs.password = "Password must be at least 6 characters.";
+    if (!usermobile || !/^[6-9]\d{9}$/.test(usermobile))
+      errs.mobile = "A valid 10-digit mobile number is required.";
+    if (!state || state === "Select State") errs.state = "State selection is required.";
+    if (!useraddress.trim()) errs.address = "Address is required.";
+    return finishValidation(errs);
+  };
+
+  // Only SSC (first row) is mandatory. Other levels may stay completely empty,
+  // but if the user starts one, every field of that row must be filled.
   const validateEducation = () => {
+    const errs = {};
     for (let i = 0; i < educations.length; i++) {
       const education = educations[i];
-      if (!education.college) {
-        setError(`School/College Name is required for entry ${i + 1}.`);
-        return false;
-      }
-      if (!education.percentage || isNaN(education.percentage)) {
-        setError(`Valid Percentage is required for entry ${i + 1}.`);
-        return false;
-      }
-      if (!education.startDate) {
-        setError(`Start Date is required for entry ${i + 1}.`);
-        return false;
-      }
-      if (!education.endDate) {
-        setError(`End Date is required for entry ${i + 1}.`);
-        return false;
-      }
-      if (education.startDate >= education.endDate) {
-        setError(
-          `Start Date must be earlier than End Date for entry ${i + 1}.`
-        );
-        return false;
-      }
+
+      if (i > 0 && isRowEmpty(education)) continue;
+
+      if (!String(education.college).trim())
+        errs[`edu_${i}_college`] = "School/College name is required.";
+      if (!education.percentage || isNaN(education.percentage))
+        errs[`edu_${i}_percentage`] = "Valid percentage is required.";
+      if (!education.startDate)
+        errs[`edu_${i}_startDate`] = "Start date is required.";
+      if (!education.endDate)
+        errs[`edu_${i}_endDate`] = "End date is required.";
+      if (education.startDate && education.endDate && education.startDate >= education.endDate)
+        errs[`edu_${i}_endDate`] = "End date must be after the start date.";
     }
-    return true;
+    return finishValidation(errs);
   };
 
   const handleNext = () => {
@@ -582,18 +598,6 @@ function Employeeregister({ open, onClose }) {
   };
 
   const handleSkip = () => {
-    if (activeStep === 1) {
-      const hasValidEntry = educations.some(
-        (education) => education.college.trim() !== ""
-      );
-
-      if (!hasValidEntry) {
-        setError("At least one valid School/College Name is required to skip.");
-        setSnackbarOpen(true);
-        return;
-      }
-    }
-
     if (!isStepOptional(activeStep)) {
       throw new Error("You can't skip a step that isn't optional.");
     }
@@ -613,19 +617,20 @@ function Employeeregister({ open, onClose }) {
 
     setisLoading(true);
     const payload = {
-      educations: educations,
+      // send only the education rows the user actually filled in
+      educations: educations.filter((e) => !isRowEmpty(e)),
       projects: [],
 
       job_experiences:
         selectedOption === "Experienced"
           ? experienceList.map((exp) => ({
-              job_role: exp.jobTitle,
-              company_name: exp.companyname,
-              location: exp.location,
-              start_date: exp.startDate.toISOString().split("T")[0],
-              end_date: exp.endDate.toISOString().split("T")[0],
-              employment_type: exp.employmentType,
-            }))
+            job_role: exp.jobTitle,
+            company_name: exp.companyname,
+            location: exp.location,
+            start_date: exp.startDate.toISOString().split("T")[0],
+            end_date: exp.endDate.toISOString().split("T")[0],
+            employment_type: exp.employmentType,
+          }))
           : [],
       first_name: userfname,
       last_name: userlname,
@@ -706,6 +711,8 @@ function Employeeregister({ open, onClose }) {
   ]);
   const handleEducationChange = (index, field, value) => {
     const updatedEducations = [...educations];
+    clearErr(`edu_${index}_${field}`);
+    if (field === "startDate" || field === "endDate") clearErr(`edu_${index}_endDate`);
     if (field === "startDate" || field === "endDate") {
       value = new Date(value).toISOString().split("T")[0];
     }
@@ -714,6 +721,7 @@ function Employeeregister({ open, onClose }) {
   };
 
   const handleExperienceChange = (index, field, value) => {
+    clearErr(`exp_${index}`);
     const updatedExperienceList = experienceList.map((experience, i) =>
       i === index ? { ...experience, [field]: value } : experience
     );
@@ -734,31 +742,19 @@ function Employeeregister({ open, onClose }) {
     ]);
   };
   const navigate = useNavigate();
-  const handleOTP = () => {};
+  const handleOTP = () => { };
   const validateSkills = () => {
-    if (selectedSkills.length === 0) {
-      setError("Please add at least one skill.");
-      return false;
-    }
-    return true;
+    const errs = {};
+    if (selectedSkills.length === 0) errs.skills = "Please add at least one skill.";
+    return finishValidation(errs);
   };
   const validateSpecialConsiderations = () => {
-    if (!type) {
-      setError("Please select an Availability of Work option.");
-      return false;
-    }
-
-    if (!disability) {
-      setError("Please select a disability type.");
-      return false;
-    }
-
-    if (!languages_known || languages_known.trim() === "") {
-      setError("Please specify at least one known language.");
-      return false;
-    }
-
-    return true;
+    const errs = {};
+    if (!type) errs.type = "Please select an availability of work option.";
+    if (!disability) errs.disability = "Please select a disability type.";
+    if (!languages_known || languages_known.trim() === "")
+      errs.languages = "Please enter at least one known language.";
+    return finishValidation(errs);
   };
   const validateExperienceSection = () => {
     if (!selectedOption) {
@@ -769,27 +765,24 @@ function Employeeregister({ open, onClose }) {
   };
 
   const validateExperience = () => {
+    const errs = {};
     if (selectedOption === "Experienced") {
-      for (const experience of experienceList) {
+      experienceList.forEach((exp, i) => {
         if (
-          !experience.jobTitle ||
-          !experience.companyname ||
-          !experience.location ||
-          !experience.startDate ||
-          !experience.endDate ||
-          !experience.employmentType
+          !exp.jobTitle ||
+          !exp.companyname ||
+          !exp.location ||
+          !exp.startDate ||
+          !exp.endDate ||
+          !exp.employmentType
         ) {
-          setError("Please fill out all fields for each experience entry.");
-          return false;
+          errs[`exp_${i}`] = "Please fill out all fields for this entry.";
+        } else if (exp.startDate >= exp.endDate) {
+          errs[`exp_${i}`] = "Start date must be earlier than the end date.";
         }
-
-        if (experience.startDate >= experience.endDate) {
-          setError("Start date must be earlier than the end date.");
-          return false;
-        }
-      }
+      });
     }
-    return true;
+    return finishValidation(errs);
   };
 
   const Register = () => {
@@ -800,558 +793,412 @@ function Employeeregister({ open, onClose }) {
     };
     axios
       .post(`${REGISTER}`, payload)
-      .then((response) => {})
-      .catch((error) => {});
+      .then((response) => { })
+      .catch((error) => { });
   };
 
-  const theme = createTheme();
+  const isMobile = useIsMobile();
+
   const renderForm = () => {
     switch (activeStep) {
+      /* ---------------------------- Step 1: basic details ---------------------------- */
       case 0:
         return (
-          <ThemeProvider theme={theme}>
-            <Box style={{ margin: "0% 15% ", gap: "5px" }}>
-              <Grid container spacing={1} style={{ marginLeft: "3%" }}>
-                <Grid item xs={6}>
-                  <TextField
-                    label="First name"
-                    value={userfname}
-                    onChange={(e) => setUserfname(e.target.value)}
-                    fullWidth
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "transparent" },
-                        "&:hover fieldset": { borderColor: "transparent" },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Last name"
-                    value={userlname}
-                    onChange={(e) => setUserlname(e.target.value)}
-                    fullWidth
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "transparent" },
-                        "&:hover fieldset": { borderColor: "transparent" },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    label="Email"
-                    value={useremail}
-                    onChange={(e) => setEmail(e.target.value)}
-                    fullWidth
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "transparent" },
-                        "&:hover fieldset": { borderColor: "transparent" },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Password"
-                    value={userpassword}
-                    onChange={(e) => setPassword(e.target.value)}
-                    fullWidth
-                    className="custom-input"
-                    type={showPassword ? "text" : "password"} // Toggle password field type
-                    style={{ width: "105%" }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            sx={{
-                              padding: 0,
-                              color: "rgba(0, 0, 0, 0.54)",
-                              fontSize: "1.5rem",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              marginLeft: "-16px",
-                            }}
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}{" "}
-                            {/* Toggle the eye icon */}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "transparent" },
-                        "&:hover fieldset": { borderColor: "transparent" },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    label="Mobile Number"
-                    value={usermobile}
-                    onChange={(e) => setMobile(e.target.value)}
-                    fullWidth
-                    className="custom-input"
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "transparent" },
-                        "&:hover fieldset": { borderColor: "transparent" },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "transparent",
-                        },
-                      },
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <select
-                    value={state}
-                    style={{ width: "100%" }}
-                    onChange={(e) => setState(e.target.value)}
-                  >
-                    <option>Select State</option>
-                    {allstates.map((states) => (
-                      <option key={states.id} value={states.state_name}>
-                        {states.state_name}
-                      </option>
-                    ))}
-                  </select>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <TextField
-                    label="Address"
-                    value={useraddress}
-                    onChange={(e) => setAddress(e.target.value)}
-                    margin="dense"
-                    multiline
-                    rows={4}
-                    style={{ width: "100%" }}
-                  />
-                </Grid>
+          <div className="reg-step">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <RegField
+                  label="First name"
+                  required
+                  hint="Your first name"
+                  error={fieldErrors.fname}
+                  value={userfname}
+                  onChange={(e) => { setUserfname(clean.name(e.target.value)); clearErr("fname"); }}
+                />
               </Grid>
-            </Box>
-          </ThemeProvider>
+              <Grid item xs={12} sm={6}>
+                <RegField
+                  label="Last name"
+                  required
+                  hint="Your last name"
+                  error={fieldErrors.lname}
+                  value={userlname}
+                  onChange={(e) => { setUserlname(clean.name(e.target.value)); clearErr("lname"); }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegField
+                  label="Email"
+                  type="email"
+                  required
+                  hint="Email address used to sign in"
+                  error={fieldErrors.email}
+                  value={useremail}
+                  onChange={(e) => { setEmail(e.target.value); clearErr("email"); }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegPassword
+                  label="Password"
+                  required
+                  hint="At least 6 characters"
+                  error={fieldErrors.password}
+                  value={userpassword}
+                  onChange={(e) => { setPassword(e.target.value); clearErr("password"); }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegField
+                  label="Mobile Number"
+                  required
+                  hint="10-digit mobile number"
+                  error={fieldErrors.mobile}
+                  value={usermobile}
+                  onChange={(e) => { setMobile(clean.digits(e.target.value)); clearErr("mobile"); }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegSelect
+                  label="State"
+                  required
+                  hint="State you live in"
+                  error={fieldErrors.state}
+                  value={state || ""}
+                  onChange={(e) => { setState(e.target.value); clearErr("state"); }}
+                >
+                  {allstates.map((s) => (
+                    <MenuItem key={s.state_id} value={s.state_name}>
+                      {s.state_name}
+                    </MenuItem>
+                  ))}
+                </RegSelect>
+              </Grid>
+              <Grid item xs={12}>
+                <RegField
+                  label="Address"
+                  required
+                  hint="Full postal address"
+                  error={fieldErrors.address}
+                  value={useraddress}
+                  onChange={(e) => { setAddress(e.target.value); clearErr("address"); }}
+                  multiline
+                  minRows={4}
+                />
+              </Grid>
+            </Grid>
+            <Typography variant="caption" className="reg-required-note">
+              <span style={{ color: "#d32f2f" }}>*</span> Required fields
+            </Typography>
+          </div>
         );
+
+      /* ------------------------------ Step 2: education ------------------------------ */
       case 1:
         return (
-          <div className="education">
-            <Box style={{ margin: "0% 2%" }}>
-              {educations.map((education, index) => (
-                <Grid container spacing={2} key={index}>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      placeholder="Education Level"
+          <div className="reg-step education">
+            {educations.map((education, index) => (
+              <div className="reg-row-card" key={index}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <RegField
+                      label="Education Level"
+                      hint="Level of education"
                       value={education.degree_level}
                       disabled
-                      fullWidth
                     />
                   </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      placeholder="School/College Name"
+                  <Grid item xs={12} sm={6} md={4}>
+                    <RegField
+                      label="School / College Name"
+                      required={index === 0}
+                      hint="Name of your school or college"
+                      error={fieldErrors[`edu_${index}_college`]}
                       value={education.college}
-                      onChange={(e) =>
-                        handleEducationChange(index, "college", e.target.value)
-                      }
-                      fullWidth
+                      onChange={(e) => handleEducationChange(index, "college", e.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      placeholder="Percentage"
+                  <Grid item xs={12} sm={6} md={4}>
+                    <RegField
+                      label="Percentage"
+                      required={index === 0}
+                      hint="Marks obtained, in %"
+                      error={fieldErrors[`edu_${index}_percentage`]}
                       value={education.percentage}
-                      fullWidth
-                      onChange={(e) =>
-                        handleEducationChange(
-                          index,
-                          "percentage",
-                          e.target.value
-                        )
-                      }
+                      onChange={(e) => handleEducationChange(index, "percentage", e.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <DatePicker
                       selected={education.startDate}
                       maxDate={new Date()}
-                      onChange={(date) =>
-                        handleEducationChange(index, "startDate", date)
-                      }
+                      onChange={(date) => handleEducationChange(index, "startDate", date)}
                       dateFormat="yyyy/MM/dd"
-                      placeholderText="Start Date"
-                      fullWidth
+                      placeholderText={`Start Date${index === 0 ? " *" : ""}`}
+                      wrapperClassName="reg-date-wrap"
+                      className="reg-date"
                     />
+                    <Hint error={!!fieldErrors[`edu_${index}_startDate`]}>
+                      {fieldErrors[`edu_${index}_startDate`] || "Date you started"}
+                    </Hint>
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <DatePicker
                       selected={education.endDate}
                       maxDate={new Date()}
-                      onChange={(date) =>
-                        handleEducationChange(index, "endDate", date)
-                      }
+                      onChange={(date) => handleEducationChange(index, "endDate", date)}
                       dateFormat="yyyy/MM/dd"
-                      placeholderText="end Date"
-                      fullWidth
+                      placeholderText={`End Date${index === 0 ? " *" : ""}`}
+                      wrapperClassName="reg-date-wrap"
+                      className="reg-date"
                     />
+                    <Hint error={!!fieldErrors[`edu_${index}_endDate`]}>
+                      {fieldErrors[`edu_${index}_endDate`] || "Date you finished"}
+                    </Hint>
                   </Grid>
-                  <Grid item xs={2}>
-                    <input
-                      type="text"
-                      placeholder="Specialization"
+                  <Grid item xs={12} sm={6} md={4}>
+                    <RegField
+                      label="Specialization"
+                      hint="Subject or stream"
                       disabled={education.degree_level === "SSC"}
                       value={education.field_of_study}
-                      fullWidth
-                      onChange={(e) =>
-                        handleEducationChange(
-                          index,
-                          "field_of_study",
-                          e.target.value
-                        )
-                      }
+                      onChange={(e) => handleEducationChange(index, "field_of_study", e.target.value)}
                     />
                   </Grid>
                 </Grid>
+              </div>
+            ))}
+            <Typography variant="caption" className="reg-required-note">
+              <span style={{ color: "#d32f2f" }}>*</span> Required. SSC details are mandatory.
+              Other qualifications are optional, but if you start one, fill in all its fields.
+            </Typography>
+          </div>
+        );
+
+      /* --------------------------- Step 3: work experience --------------------------- */
+      case 2:
+        return (
+          <div className="reg-step experienced">
+            <div className="reg-radio-row" role="radiogroup" aria-label="Work status">
+              <label>
+                <input
+                  type="radio"
+                  name="fresher"
+                  value="Fresher"
+                  checked={selectedOption === "Fresher"}
+                  onChange={handleRadioChange}
+                />
+                Fresher
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="experience"
+                  value="Experienced"
+                  checked={selectedOption === "Experienced"}
+                  onChange={handleRadioChange}
+                />
+                Experienced
+              </label>
+            </div>
+            {errorRadio && (
+              <div role="alert" className="reg-hint reg-hint-error">
+                Please select either Fresher or Experienced.
+              </div>
+            )}
+
+            {selectedOption === "Experienced" &&
+              experienceList.map((experience, index) => (
+                <div className="reg-row-card" key={index}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <RegField
+                        label="Job Title"
+                        required
+                        hint="Your role"
+                        value={experience.jobTitle}
+                        onChange={(e) => handleExperienceChange(index, "jobTitle", e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <RegField
+                        label="Company Name"
+                        required
+                        hint="Where you worked"
+                        value={experience.companyname}
+                        onChange={(e) => handleExperienceChange(index, "companyname", e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <RegField
+                        label="Location"
+                        required
+                        hint="City of the workplace"
+                        value={experience.location}
+                        onChange={(e) => handleExperienceChange(index, "location", e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <DatePicker
+                        selected={experience.startDate}
+                        onChange={(date) => handleExperienceChange(index, "startDate", date)}
+                        dateFormat="yyyy/MM/dd"
+                        placeholderText="Start Date *"
+                        wrapperClassName="reg-date-wrap"
+                        className="reg-date"
+                      />
+                      <Hint>Date you joined</Hint>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <DatePicker
+                        selected={experience.endDate}
+                        onChange={(date) => handleExperienceChange(index, "endDate", date)}
+                        dateFormat="yyyy/MM/dd"
+                        placeholderText="End Date *"
+                        wrapperClassName="reg-date-wrap"
+                        className="reg-date"
+                      />
+                      <Hint>Date you left</Hint>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <RegSelect
+                        label="Employment Type"
+                        required
+                        hint="Kind of employment"
+                        value={experience.employmentType}
+                        onChange={(e) => handleExperienceChange(index, "employmentType", e.target.value)}
+                      >
+                        <MenuItem value="Full-Time">Full-Time</MenuItem>
+                        <MenuItem value="Part-Time">Part-Time</MenuItem>
+                        <MenuItem value="Contract">Contract</MenuItem>
+                        <MenuItem value="Internship">Internship</MenuItem>
+                        <MenuItem value="Freelance">Freelance</MenuItem>
+                      </RegSelect>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FieldError msg={fieldErrors[`exp_${index}`]} />
+                    </Grid>
+                  </Grid>
+                  {index === experienceList.length - 1 && (
+                    <Button
+                      className="reg-add-btn"
+                      startIcon={<AddIcon />}
+                      onClick={addExperienceFields}
+                    >
+                      Add another experience
+                    </Button>
+                  )}
+                </div>
+              ))}
+            {selectedOption === "Experienced" && (
+              <Typography variant="caption" className="reg-required-note">
+                <span style={{ color: "#d32f2f" }}>*</span> Required for each experience entry
+              </Typography>
+            )}
+          </div>
+        );
+
+      /* ------------------------------- Step 4: skills -------------------------------- */
+      case 3:
+        return (
+          <div className="reg-step skills">
+            <Autocomplete
+              multiple
+              freeSolo
+              options={skillOptions}
+              value={selectedSkills}
+              onChange={(event, newValue) => {
+                setSelectedSkills([...new Set(newValue)]);
+                clearErr("skills");
+              }}
+              renderTags={() => null}
+              inputValue={inputValue}
+              onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && inputValue) {
+                  handleSkillAdd(inputValue);
+                  setInputValue("");
+                  event.preventDefault();
+                }
+              }}
+              renderInput={(params) => (
+                <RegField
+                  {...params}
+                  label="Add or Select Skills"
+                  required
+                  placeholder="Type and press Enter to add"
+                  hint="Add at least one skill"
+                  error={fieldErrors.skills}
+                />
+              )}
+              sx={{ display: "block", width: "100%" }}
+            />
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "14px" }}>
+              {selectedSkills.map((skill, index) => (
+                <Chip
+                  key={index}
+                  label={skill}
+                  onDelete={() => handleSkillRemove(skill)}
+                />
               ))}
             </Box>
           </div>
         );
-      case 2:
-        return (
-          <div className="experienced">
-            <Box style={{ margin: "0% 0%" }}>
-              <Grid container spacing={6}>
-                <Grid item sx={6}>
-                  <label>
-                    <input
-                      type="radio"
-                      name="fresher"
-                      value="Fresher"
-                      checked={selectedOption === "Fresher"}
-                      onChange={handleRadioChange}
-                    />
-                    Fresher
-                  </label>
-                </Grid>
-                <Grid item sx={6}>
-                  <label>
-                    <input
-                      type="radio"
-                      name="experience"
-                      value="Experienced"
-                      checked={selectedOption === "Experienced"}
-                      onChange={handleRadioChange}
-                    />
-                    Experienced
-                  </label>
-                </Grid>
-              </Grid>
-              {errorRadio && (
-                <div style={{ color: "red", marginTop: "10px" }}>
-                  Please select either Fresher or Experienced.
-                </div>
-              )}
 
-              {selectedOption === "Experienced" &&
-                experienceList.map((experience, index) => (
-                  <Grid container spacing={2} key={index} direction="row">
-                    <Grid item xs={2}>
-                      <input
-                        fullWidth
-                        type="text"
-                        value={experience.jobTitle}
-                        onChange={(e) =>
-                          handleExperienceChange(
-                            index,
-                            "jobTitle",
-                            e.target.value
-                          )
-                        }
-                        placeholder="Job Title"
-                      />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <input
-                        fullWidth
-                        type="text"
-                        value={experience.companyname}
-                        onChange={(e) =>
-                          handleExperienceChange(
-                            index,
-                            "companyname",
-                            e.target.value
-                          )
-                        }
-                        placeholder="Company name"
-                      />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <input
-                        type="text"
-                        fullWidth
-                        value={experience.location}
-                        onChange={(e) =>
-                          handleExperienceChange(
-                            index,
-                            "location",
-                            e.target.value
-                          )
-                        }
-                        placeholder="Location"
-                      />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <DatePicker
-                        selected={experience.startDate}
-                        onChange={(date) =>
-                          handleExperienceChange(index, "startDate", date)
-                        }
-                        dateFormat="yyyy/MM/dd"
-                        placeholderText="Start Date"
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <DatePicker
-                        selected={experience.endDate}
-                        onChange={(date) =>
-                          handleExperienceChange(index, "endDate", date)
-                        }
-                        dateFormat="yyyy/MM/dd"
-                        placeholderText="End Date"
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <select
-                        value={experience.employmentType}
-                        onChange={(e) =>
-                          handleExperienceChange(
-                            index,
-                            "employmentType",
-                            e.target.value
-                          )
-                        }
-                        placeholder="Employment Type"
-                        style={{ width: "100%" }}
-                      >
-                        <option value="">Select Employment Type</option>
-                        <option value="Full-Time">Full-Time</option>
-                        <option value="Part-Time">Part-Time</option>
-                        <option value="Contract">Contract</option>
-                        <option value="Internship">Internship</option>
-                        <option value="Freelance">Freelance</option>
-                      </select>
-                    </Grid>
-                    {index === experienceList.length - 1 && (
-                      <Grid item xs={1}>
-                        <AddIcon
-                          style={{
-                            margin: "20px 0px 0px 0px",
-                            cursor: "pointer",
-                          }}
-                          onClick={addExperienceFields}
-                        />
-                      </Grid>
-                    )}
-                  </Grid>
-                ))}
-            </Box>
-          </div>
-        );
-      case 3:
-        return (
-          <div className="skills">
-            <Box sx={{ margin: "20px", width: "100%" }}>
-              <Autocomplete
-                multiple
-                freeSolo
-                options={skillOptions}
-                value={selectedSkills}
-                onChange={(event, newValue) => {
-                  setSelectedSkills([...new Set(newValue)]);
-                }}
-                renderTags={() => null}
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) =>
-                  setInputValue(newInputValue)
-                }
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" && inputValue) {
-                    handleSkillAdd(inputValue);
-                    setInputValue("");
-                    event.preventDefault();
-                  }
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Add or Select Skills"
-                    placeholder="Type and press Enter to add"
-                    fullWidth
-                    InputProps={{
-                      ...params.InputProps,
-                      disableUnderline: true,
-                    }}
-                    sx={{
-                      width: "75%",
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          border: "none",
-                        },
-                      },
-                    }}
-                  />
-                )}
-                sx={{ display: "block", width: "100%" }}
-              />
-
-              <Box
-                sx={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}
-              >
-                {selectedSkills.map((skill, index) => (
-                  <Chip
-                    key={index}
-                    label={skill}
-                    onDelete={() => handleSkillRemove(skill)}
-                    sx={{
-                      backgroundColor: "#4E1B9A",
-                      color: "white",
-                      marginRight: "10px",
-                      marginBottom: "10px",
-                      "& .MuiChip-deleteIcon": {
-                        color: "white",
-                      },
-                    }}
-                  />
-                ))}
-              </Box>
-            </Box>
-          </div>
-        );
+      /* ------------------------- Step 5: special considerations ---------------------- */
       case 4:
         return (
-          <div className="special-considerations">
-            <Box style={{ margin: "2% 5%" }}>
-              <Grid container spacing={4}>
-                <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
-                    <Select
-                      value={type}
-                      onChange={(e) => setType(e.target.value)}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                      sx={{
-                        "&.Mui-focused": {
-                          outline: "2px solid #3f51b5",
-                          outlineOffset: "2px",
-                        },
-                        height: "40px",
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <MenuItem value="">Availability of Work</MenuItem>
-                      <MenuItem value="hybrid">Hybrid</MenuItem>
-                      <MenuItem value="remote">Remote</MenuItem>
-                      <MenuItem value="location-based">Location based</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
-                    <Select
-                      value={disability}
-                      onChange={(e) => setDisability(e.target.value)}
-                      displayEmpty
-                      inputProps={{ "aria-label": "Without label" }}
-                      sx={{
-                        "&.Mui-focused": {
-                          outline: "2px solid #3f51b5",
-                          outlineOffset: "2px",
-                        },
-                        height: "40px",
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <MenuItem value="">All Disabilities</MenuItem>
-                      {disabilities.map((disabilit) => (
-                        <MenuItem
-                          key={disabilit.id}
-                          value={disabilit.abbreviation}
-                        >
-                          {disabilit.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <input
-                    type="text"
-                    placeholder="Disability Percentage"
-                    value={disabilitypercentage}
-                    onChange={(e) => setDisabilitypercentage(e.target.value)}
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      padding: "8px",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <input
-                    type="text"
-                    value={languages_known}
-                    onChange={(e) => setLanguagesknow(e.target.value)}
-                    placeholder="Please enter known languages with comma"
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      padding: "8px",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
+          <div className="reg-step special-considerations">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <RegSelect
+                  label="Availability of Work"
+                  required
+                  hint="How you can work"
+                  error={fieldErrors.type}
+                  value={type}
+                  onChange={(e) => { setType(e.target.value); clearErr("type"); }}
+                >
+                  <MenuItem value="hybrid">Hybrid</MenuItem>
+                  <MenuItem value="remote">Remote</MenuItem>
+                  <MenuItem value="location-based">Location based</MenuItem>
+                </RegSelect>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegSelect
+                  label="Disability"
+                  required
+                  hint="Type of disability"
+                  error={fieldErrors.disability}
+                  value={disability}
+                  onChange={(e) => { setDisability(e.target.value); clearErr("disability"); }}
+                >
+                  {disabilities.map((disabilit) => (
+                    <MenuItem key={disabilit.id} value={disabilit.abbreviation}>
+                      {disabilit.name}
+                    </MenuItem>
+                  ))}
+                </RegSelect>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegField
+                  label="Disability Percentage"
+                  hint="Percentage shown on your certificate"
+                  value={disabilitypercentage}
+                  onChange={(e) => setDisabilitypercentage(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <RegField
+                  label="Languages Known"
+                  required
+                  hint="Separate languages with commas"
+                  error={fieldErrors.languages}
+                  value={languages_known}
+                  onChange={(e) => { setLanguagesknow(e.target.value); clearErr("languages"); }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <div className="reg-check">
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -1360,50 +1207,13 @@ function Employeeregister({ open, onClose }) {
                       />
                     }
                     label="Willing to relocate"
-                    componentsProps={{
-                      typography: { color: "black" },
-                    }}
                   />
-                </Grid>
+                </div>
               </Grid>
-
-              {/* <Grid container spacing={1} style={{ margin: "2%" }}> */}
-
-              {/* </Grid> */}
-              {/* <Grid container spacing={6}>
-              <Grid item xs={4}>
-                <label>Disability Certificate</label>
-                <TextField
-                  type="file"
-                  onChange={(event) => setFile(event.target.files[0])}
-                  fullWidth
-                  margin="dense"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  className="custom-input"
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      backgroundColor: "#fff",
-                      "& fieldset": {
-                        borderColor: "#ccc",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "#888",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#000",
-                      },
-                    },
-                    '& input[type="file"]': {
-                      display: "block",
-                      cursor: "pointer",
-                    },
-                  }}
-                />
-              </Grid>
-            </Grid> */}
-            </Box>
+            </Grid>
+            <Typography variant="caption" className="reg-required-note">
+              <span style={{ color: "#d32f2f" }}>*</span> Required fields
+            </Typography>
           </div>
         );
       default:
@@ -1411,115 +1221,86 @@ function Employeeregister({ open, onClose }) {
     }
   };
 
+  const isLastStep = activeStep === steps.length - 1;
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
-      <DialogTitle style={{ textAlign: "center" }}>
-        Employee Registration
-      </DialogTitle>
+    <Dialog open={!!open} onClose={onClose} maxWidth="md" fullWidth fullScreen={isMobile}>
+      <RegDialogTitle onClose={onClose}>Employee Registration</RegDialogTitle>
 
       {isLoading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
         </div>
       )}
-      <Box sx={{ width: "100%", margin: "0%" }}>
-        {showPopup && (
-          <div className="popup">
-            <p style={{ fontSize: "medium", fontFamily: "sans-serif" }}>
-              {popupMessage}
-            </p>
-            <button
-              style={{ marginLeft: "35%", width: "30%" }}
-              onClick={() => setShowPopup(false)}
-            >
-              Close
-            </button>
-          </div>
-        )}
-        <Box
-          sx={{
-            position: "sticky",
-            top: "12%",
-            zIndex: 1,
-            backgroundColor: "white",
-          }}
-        >
-          <Stepper
-            alternativeLabel
-            activeStep={activeStep}
-            connector={<QontoConnector />}
-          >
-            {steps.map((label, index) => {
-              const stepProps = {};
-              const labelProps = {};
-              if (isStepOptional(index)) {
-                labelProps.optional = (
-                  <Typography variant="caption">Optional</Typography>
-                );
-              }
-              if (isStepSkipped(index)) {
-                stepProps.completed = false;
-              }
-              return (
-                <Step key={label} {...stepProps}>
-                  <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
-                    {label}
-                  </StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-        </Box>
+
+      <CenterPopup
+        open={showPopup}
+        severity={/successfully/i.test(popupMessage) ? "success" : "error"}
+        title={/successfully/i.test(popupMessage) ? "Registration successful" : "Registration failed"}
+        message={popupMessage}
+        onClose={() => setShowPopup(false)}
+      />
+      <CenterPopup
+        open={snackbarOpen}
+        severity="warning"
+        title="Please check the form"
+        message={error}
+        onClose={() => setSnackbarOpen(false)}
+      />
+
+      <DialogContent className="reg-content reg-wizard">
+        <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />} className="reg-stepper">
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            if (isStepOptional(index)) {
+              labelProps.optional = <Typography variant="caption">Optional</Typography>;
+            }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel StepIconComponent={QontoStepIcon} {...labelProps}>
+                  {label}
+                </StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+
         {activeStep === steps.length ? (
-          <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              {confirmMessage && confirmMessage}
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleSubmit}>Submit</Button>
-            </Box>
-          </React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>{confirmMessage && confirmMessage}</Typography>
         ) : (
-          <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-            <Snackbar
-              open={snackbarOpen}
-              autoHideDuration={4000}
-              onClose={() => setSnackbarOpen(false)}
-              message={error}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            />
+          <>
+            <Typography className="reg-step-count">
+              Step {activeStep + 1} of {steps.length}
+            </Typography>
             {renderForm()}
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                  Skip
-                </Button>
-              )}
-              <Button onClick={onClose}>
-                {activeStep === steps.length - 1 ? "Cancel" : ""}
-              </Button>
-              <Button
-                onClick={
-                  activeStep === steps.length - 1 ? handleSubmit : handleNext
-                }
-              >
-                {activeStep === steps.length - 1 ? "Submit" : "Next"}
-              </Button>
-            </Box>
-          </React.Fragment>
+          </>
         )}
-      </Box>
+      </DialogContent>
+
+      <DialogActions className="reg-actions reg-wizard-actions">
+        {activeStep === steps.length ? (
+          <Button onClick={handleSubmit} color="primary">Submit</Button>
+        ) : (
+          <>
+            <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} className="reg-btn-back">
+              Back
+            </Button>
+            {isStepOptional(activeStep) && (
+              <Button color="inherit" onClick={handleSkip}>Skip</Button>
+            )}
+            {isLastStep && (
+              <Button onClick={onClose} color="secondary">Cancel</Button>
+            )}
+            <Button onClick={isLastStep ? handleSubmit : handleNext} color="primary">
+              {isLastStep ? "Submit" : "Next"}
+            </Button>
+          </>
+        )}
+      </DialogActions>
     </Dialog>
   );
 }

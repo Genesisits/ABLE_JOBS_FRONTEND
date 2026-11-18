@@ -1,140 +1,135 @@
-import React,{useEffect} from "react";
-import logo from '../../images/vajraksh_logo2.jpg';
-import logo2 from '../../images/foot_lk_icon.png';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {  faMap,faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import "./footer.css";
+import React from "react";
 import { Link } from "react-router-dom";
-import fblogo from '../../images/fbicon.png';
-import insta from '../../images/instalogo.png';
-import link from '../../images/linklogo.png';
-import twitter from '../../images/twtter_logo.jfif';
-import phone from '../../images/phone1.png';
-import map from '../../images/map.png';
-import mail from '../../images/email.png';
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
+import PlaceIcon from "@mui/icons-material/Place";
+import AccessibleIcon from "@mui/icons-material/Accessible";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ableLogo from "../../images/able-hub-logo.png";
+import "./footer.css";
 
-library.add(faMap, faPhone, faEnvelope);
+const COLUMNS = [
+  {
+    title: "For Job Seekers",
+    links: [
+      ["Find Jobs", "/alljobs"],
+      ["Create Account", "/register"],
+      ["My Applications", "/applied"],
+      ["Training Support", "/trainer-dashboard"],
+    ],
+  },
+  {
+    title: "For Employers",
+    links: [
+      ["Post a Job", "/jobs"],
+      ["Employer Sign Up", "/register"],
+      ["Shortlisted Candidates", "/shortlisted"],
+      ["Hiring Reports", "/reports"],
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      ["About Us", "/about"],
+      ["Blog", "/blog"],
+      ["Gallery", "/gallery"],
+      ["Volunteer", "/volunteer"],
+      ["Contact Us", "/contact"],
+    ],
+  },
+];
+
+const SOCIAL = [
+  ["Facebook", "https://facebook.com", <FacebookIcon />],
+  ["Instagram", "https://instagram.com", <InstagramIcon />],
+  ["LinkedIn", "https://linkedin.com", <LinkedInIcon />],
+  ["Twitter", "https://twitter.com", <TwitterIcon />],
+];
 
 export default function Footer() {
-  useEffect(() => {
-    
-    document.documentElement.style.overflowX = 'hidden';
-  }, []);
+  const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
   return (
-   <div id="footer">
-    <div className="tatal_footer_section">
-      <div className="footer_section">
-      <div className="footer_container">
-        <div className="f-row footer_section_row">
-          <div className="row-1 row-2 row-3">
-          <div className="v-logo">
-            <Link to='/'>
-          <img src={logo} className="footer-logo" alt="logo_img" />
-          </Link>
-          <p className="footer-p">We excel in all types of events. Our team is the driving force behind successful events and plays a critical role in ensuring that they are executed to the highest standards.</p>
-          </div>
-          </div>
-          <div className="row-1 row-2 row-3">
-            <div className="footer-links1">
-              <h3>Useful links</h3>
-              <ul>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/' className="no-underline">Home</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/about' className="no-underline">About Us</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/services' className="no-underline">Services </Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/gallery' className="no-underline">Gallery </Link> </li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/blog' className="no-underline">Blog </Link> </li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/careers' className="no-underline">Careers </Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/contact' className="no-underline">Contact </Link></li>
-              </ul>
+    <footer className="ajf" aria-label="Site footer">
+      {/* decorative wave, same curve language as the dashboard banner */}
+      <svg className="ajf-wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,60 C240,110 480,10 760,40 C1040,70 1240,20 1440,50 L1440,90 L0,90 Z" fill="#0b2a6f" />
+        <path d="M0,70 C260,100 520,30 800,52 C1060,72 1250,36 1440,62" fill="none" stroke="#fbbf24" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+
+      <div className="ajf-body">
+        <div className="ajf-grid">
+          <div className="ajf-brand">
+            <Link to="/" className="ajf-logo" aria-label="Able Jobs Hub home">
+              <img src={ableLogo} alt="Able Jobs Hub – Breaking Barriers" />
+            </Link>
+            <p>
+              Connecting talented with inclusive employers. Your ability is our
+              priority — find the right job, showcase your skills and achieve your dreams.
+            </p>
+            <div className="ajf-open">
+              <AccessibleIcon /> Open to Differently Abled
+            </div>
+            <div className="ajf-social">
+              {SOCIAL.map(([label, href, icon]) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+                  {icon}
+                </a>
+              ))}
             </div>
           </div>
-          <div className="row-1 row-2 row-3">
-          <div className="footer-links">
-              <h3>SERVICES</h3>
+
+          {COLUMNS.map((col) => (
+            <nav className="ajf-col" key={col.title} aria-label={col.title}>
+              <h3>{col.title}</h3>
               <ul>
-                <li><img src={logo2} alt="logo_img1" /> <Link to='/wedding' className="no-underline" >Wedding & Receptions </Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/corporateevents' className="no-underline">Corporate Events</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/miceevents' className="no-underline">MICE Events</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/movieevents' className="no-underline">Publicity & Promotions</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/birthdayevents' className="no-underline">Birthday Parties</Link></li>
-                {/* <li><img src={logo2} alt="logo_img1" /><Link to='/sportsevents' className="no-underline">Sports Events</Link></li> */}
-                <li><img src={logo2} alt="logo_img1" /><Link to='/sportsevents' className="no-underline">Sports Events</Link></li>
+                {col.links.map(([label, to]) => (
+                  <li key={label}>
+                    <Link to={to}>
+                      <ChevronRightIcon fontSize="small" /> {label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
-              </div>
-            </div>
-            <div className="row-1 row-2 row-3">
-          <div className="footer-links2">
+            </nav>
+          ))}
+
+          <div className="ajf-col ajf-contact">
+            <h3>Get in Touch</h3>
             <ul>
-               <li><img src={logo2} alt="logo_img1" /><Link to='/mediaevents' className="no-underline">Media Planners</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/celebrityevents' className="no-underline">Celebrity Management</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/occasionalevents' className="no-underline">Occasional Events</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/entertainmentevents' className="no-underline"> Entertainment</Link></li>
-                <li><img src={logo2} alt="logo_img1" /><Link to='/sfxevents' className="no-underline">SFX Products</Link></li>
-                </ul>
-                <div>
-                <div className="footer_social_icons">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-        <img src={fblogo} className="footer_social_icons" alt=''/>
-      </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-        <img src={insta} className="footer_social_icons" alt=''/>
-      </a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-        <img src={link} className="footer_social_icons" alt=''/>
-      </a>
-      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-        <img src={twitter} className="footer_social_icons" alt=''/></a>
-                </div>
-                </div>
-            </div>
+              <li>
+                <PhoneIcon fontSize="small" />
+                <a href="tel:+919885881244">Helpline: +91 9885881244</a>
+              </li>
+              <li>
+                <EmailIcon fontSize="small" />
+                <a href="mailto:info@ablejobshub.com">info@ablejobshub.com</a>
+              </li>
+              <li>
+                <PlaceIcon fontSize="small" />
+                <span>Hyderabad, Telangana, India</span>
+              </li>
+            </ul>
+            <Link to="/contact" className="ajf-cta">Contact Support</Link>
           </div>
         </div>
-        <div className="f-row footer_section_row">
-        <div className="foot_line"></div>
+
+        <div className="ajf-tagline">
+          Equal Opportunity<i>•</i>Inclusive Growth<i>•</i>A Stronger Tomorrow
         </div>
-        <div className="f-row1">
-        <div className="f-row footer_section_row">
-        <div className="row-4">
-        <div className="contact-details1">
-          <h5>
-          <img src={phone} className="footer-phone-icon" alt=''/>
-         <p>+91-9248755551</p>
-          </h5>
-        </div>
-        </div>
-        <div className="row-4">
-        <div className="contact-details">
-          <h5>
-          <img src={mail} className="footer-email-icon" alt=''/>
-  
-  <p>info@vajrakshevents.com</p>
-          </h5>
-        </div>
-        </div>
-        <div className="row-4">
-        <div className="contact-details2">
-          <h5>
-          <img src={map} className="footer-map-icon" alt=''/>
-   
-   <p style={{whiteSpace:'nowrap'}}>Vajraksh ,Hyderabad, Telangana<br/>
-    </p>
-          </h5>
-        </div>
-        </div>
-        </div>
-        </div>
-        <div className="f-row footer_section_row">
-        <div className="foot_line2"></div>
-        <div className="footer_right">
-          <div className="footerbottom1">
-          <h5>© 2023 Vajraksh Events All Rights Reserved.</h5>
-          </div>
-            </div>
-        </div>
-       
+
+        <div className="ajf-bottom">
+          <span>© {new Date().getFullYear()} Able Jobs Hub. All rights reserved.</span>
+          <button type="button" className="ajf-top" onClick={toTop} aria-label="Back to top">
+            <KeyboardArrowUpIcon /> Back to top
+          </button>
         </div>
       </div>
-      </div>
-      </div>
+    </footer>
   );
 }

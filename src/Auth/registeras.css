@@ -1,38 +1,161 @@
+/* ---------- Shared split card (Login + Register As) ---------- */
+.container-login {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  padding: clamp(80px, 12vh, 120px) 20px 48px;
+  background: linear-gradient(135deg, #08215a 0%, #0b2a6f 55%, #1b4fd8 100%);
+  overflow: hidden;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+.container-login::before,
+.container-login::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.container-login::before {
+  width: 440px; height: 440px;
+  left: -150px; top: -130px;
+  border: 2px solid rgba(245, 166, 35, 0.5);
+}
+.container-login::after {
+  width: 320px; height: 320px;
+  right: -90px; bottom: -110px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+}
+
 .container1 {
-    margin-top: 5%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;  
-    width: 90%;
-    background-color: white;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 980px;
+  height: auto;
+  margin: 0;
+  background: #fff;
+  border-radius: 36px;
+  border-bottom: 6px solid #f5a623;
+  box-shadow: 0 24px 60px rgba(4, 14, 46, 0.45);
+  overflow: hidden;
 }
 
 .flex-item-login {
-    flex: 1 1 50%; 
-    height: 90%;
-    text-align: center;
-    margin: 20px 50px;
+  box-sizing: border-box;
+  flex: none;
+  max-width: none;
+  height: auto;
+  margin: 0;
+  padding: 48px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.flex-item-login:last-child {
+  background: #eef2fa;
+  padding: 32px;
 }
 
-.imageDetails_login {
-    width: 50%;  
-    height: auto;
+.container-login .flex-item-login h3 {
+  margin: 0 0 24px;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #0b2a6f !important;
+}
+.container-login .flex-item-login h3::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 4px;
+  margin: 10px auto 0;
+  background: #f5a623;
+  border-radius: 4px;
 }
 
-
-
-
-.container1 button {
-    width: 80%;
-    padding: 20px;
+.container-login .flex-item-login img,
+.container-login .imageDetails {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  max-height: 420px;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+  border-radius: 24px;
 }
-.button-row button{
-    margin: 25px 15px;
-    box-shadow: 4px -4px 5px rgba(0, 0, 0, 0.4);
-  }
-  .button-row button:hover {
-    background-color: #406aa1;
-    box-shadow: 8px -8px 7px rgba(0, 0, 0, 0.6);
-    transform: scale(1.05);
-  }
+
+/* ---------- Role buttons ---------- */
+.button-container {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 340px;
+}
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.container-login .button-row button {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 24px 10px;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  /* overrides the inline background-color set in the component */
+  background: linear-gradient(135deg, #08215a, #0b2a6f) !important;
+  border: none;
+  border-bottom: 5px solid #f5a623;
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(11, 42, 111, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.container-login .button-row button:hover {
+  background: linear-gradient(135deg, #0b2a6f, #1b4fd8) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 14px 24px rgba(11, 42, 111, 0.4);
+}
+.container-login .button-row button:focus-visible { outline: 3px solid #f5a623; outline-offset: 3px; }
+
+.full-page-spinner {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 33, 90, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+@media (max-width: 860px) {
+  .container1 { grid-template-columns: 1fr; max-width: 520px; }
+  .flex-item-login { padding: 36px 26px; }
+  .flex-item-login:last-child { padding: 22px; }
+  .container-login .flex-item-login img,
+  .container-login .imageDetails { max-width: 280px; }
+
+  .flex-item-login .button-container { flex-direction: column; gap: 12px; }
+}
+
+@media (max-width: 380px) {
+  .button-row { grid-template-columns: 1fr; }
+}

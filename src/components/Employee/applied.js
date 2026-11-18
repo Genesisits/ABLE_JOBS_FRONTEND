@@ -12,8 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import Button from '@mui/material/Button';
+import JobDetailsDialog from './JobDetailsDialog';
 import './applied.css';
 
 const columns = [
@@ -22,6 +21,8 @@ const columns = [
   { id: "company_name", label: "Company Name", minWidth: 100 },
   { id: "location", label: "Location", minWidth: 100 },
   { id: "number_of_positions", label: "Number of Positions", minWidth: 100 },
+  { id: "applied_at", label: "Applied On", minWidth: 100 },
+  { id: "application_status", label: "Status", minWidth: 100 },
   { id: "status", label: "Actions", minWidth: 150 },
 ];
 
@@ -69,8 +70,8 @@ useEffect(() => {
   return (
     <Layout>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 400 }}>
-          <Table stickyHeader aria-label="sticky table">
+        <TableContainer sx={{ maxHeight: "max(320px, calc(100vh - 320px))" }}>
+          <Table stickyHeader aria-label="sticky table" className="ajh-stack">
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
@@ -99,11 +100,11 @@ useEffect(() => {
     rows
       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       .map((row) => (
-        <TableRow hover role="checkbox" tabIndex={-1} key={row.company_name}>
+        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
           {columns.map((column) => {
                         if (column.id === "status") {
                           return (
-                            <TableCell key={column.id}>
+                            <TableCell key={column.id} data-label={column.label}>
                               <VisibilityIcon
                                 style={{ cursor: "pointer", marginLeft: "12%" }}
                                 fontSize="small"
@@ -112,8 +113,15 @@ useEffect(() => {
                             </TableCell>
                           );
                         }
+                        if (column.id === "applied_at") {
+                          return (
+                            <TableCell key={column.id} data-label={column.label}>
+                              {row.applied_at ? new Date(row.applied_at).toLocaleDateString() : "-"}
+                            </TableCell>
+                          );
+                        }
                         return (
-                          <TableCell key={column.id}>
+                          <TableCell key={column.id} data-label={column.label}>
                             {row[column.id]}
                           </TableCell>
                         );
@@ -135,34 +143,12 @@ useEffect(() => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="lg" fullWidth>
-        <DialogTitle>Job Details</DialogTitle>
-        <DialogContent>
-          {selectedJob && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr ', gap: '8px' }}>
-               <p><strong>Job Title:</strong> {selectedJob.job_title}</p>
-        <p><strong>Company:</strong> {selectedJob.company_name}</p>
-        <p><strong>Location:</strong> {selectedJob.location}</p>
-        <p><strong>Employment Type:</strong> {selectedJob.employment_type}</p>
-        <p><strong>Skills Required:</strong> {selectedJob.skills}</p>
-        <p><strong>Department:</strong> {selectedJob.department}</p>
-        <p><strong>Industry:</strong> {selectedJob.industry}</p>
-        <p><strong>Work Mode:</strong> {selectedJob.work_mode}</p>
-        <p><strong>Salary Offered:</strong> {selectedJob.salary_offered}</p>
-        <p><strong>Experience Required:</strong> {selectedJob.experience_required}</p>
-        <p><strong>Company Website:</strong> <a href={selectedJob.company_website} target="_blank" rel="noopener noreferrer">{selectedJob.company_website}</a></p>
-        <p><strong>Number of Positions:</strong> {selectedJob.number_of_positions}</p>
-        <p><strong>Notice Period:</strong> {selectedJob.notice_period}</p>
-        <p><strong>Job Code:</strong> {selectedJob.code}</p>
-        <p><strong>Description:</strong> {selectedJob.description}</p>
-            </div>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">Close</Button>
-          {/* <Button onClick={handleApplyNow} color="secondary" variant="contained">Apply Now</Button> */}
-        </DialogActions>
-      </Dialog>
+      <JobDetailsDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        job={selectedJob}
+        primaryLabel="Applied"
+      />
     </Layout>
   );
 }

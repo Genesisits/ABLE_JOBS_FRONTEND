@@ -6,7 +6,7 @@ import {
   VENUE, TRANSPORT, PHOTOGRAPHY, CORPORATE_GIFTS, BCAKE, CORPORATE_SHEILDS} from '../endpoints';
 import './../components/services/services.css';
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { notify } from '../components/notify/Notify';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -481,10 +481,9 @@ export default function AddEvent() {
     ];
 
     if (selectedItems.length > 0 && email.length > 0) {
-      toast.info('Your quote is being prepared, please be patient', {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000,
-        className: 'custom-toast-info',
+      notify.info('Your quote is being prepared, please be patient', {
+        title: 'Preparing your quote',
+        autoHide: 3000,
       });
 
       

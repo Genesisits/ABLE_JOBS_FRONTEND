@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
+import useDocumentViewer from "./DocumentViewer";
 import Layout from "../sidenav/Layout";
 import { EMPLOYERS_LIST, JOBS_LIST_BASED_ON_EMPLOYER } from "../../endpoints";
 import OnboardCandidates from "./OnboardCandidates";
@@ -31,8 +32,7 @@ export default function Employers() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [docData, setDocData] = useState("");
+  const { openDoc, viewer } = useDocumentViewer();
   const [employerPage, setEmployerPage] = useState(0);
   const [employerRowsPerPage, setEmployerRowsPerPage] = useState(5);
 
@@ -69,12 +69,14 @@ export default function Employers() {
       .then((response) => {
         setSelectedEmployerDetails((prevState) => ({
           ...prevState,
-          [id]: response.data,
+          // API returns {"message": "No jobs..."} (not a list) when the employer has no jobs
+          [id]: Array.isArray(response.data) ? response.data : [],
         }));
       })
-      .catch((error) =>
-        console.error("Error fetching employer details:", error)
-      );
+      .catch((error) => {
+        console.error("Error fetching employer details:", error);
+        setSelectedEmployerDetails((prevState) => ({ ...prevState, [id]: [] }));
+      });
   };
 
   // Pagination Handlers
@@ -93,10 +95,6 @@ export default function Employers() {
     setIsDialogOpen(true);
   };
 
-  const handleOpenPopup = (data) => {
-    setDocData(data);
-    setOpen(true);
-  };
 
 
   const handleChangeEmployerPage = (event, newPage) => {
@@ -153,7 +151,7 @@ export default function Employers() {
                   variant="outlined"
                   color="primary"
                   size="small"
-                  onClick={() => handleOpenPopup(employer.pan)}
+                  onClick={(e) => { e.stopPropagation(); openDoc(employer.pan, "PAN Card"); }}
                 >
                   PAN
                 </Button>
@@ -161,9 +159,10 @@ export default function Employers() {
                   variant="outlined"
                   color="secondary"
                   size="small"
-                  onClick={() =>
-                    handleOpenPopup(employer.registration_certificate)
-                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openDoc(employer.registration_certificate, "Registration Certificate");
+                  }}
                 >
                   <Typography style={{ fontSize: "7px" }}>
                     Registration Certificate
@@ -173,47 +172,10 @@ export default function Employers() {
                   variant="outlined"
                   color="success"
                   size="small"
-                  onClick={() => handleOpenPopup(employer.gst)}
+                  onClick={(e) => { e.stopPropagation(); openDoc(employer.gst_file, "GST Certificate"); }}
                 >
                   GST
                 </Button>
-                <Dialog open={open} onOpenChange={setOpen}>
-                  <DialogContent className="max-w-3xl h-[100vh] relative">
-                    <button
-                      onClick={() => setOpen(false)}
-                      className="absolute top-2 right-1 text-xl font-bold bg-transparent border-none cursor-pointer"
-                      aria-label="Close"
-                    >
-                      ×
-                    </button>
-                    <DialogTitle>Document Preview</DialogTitle>
-                    {/* </DialogHeader> */}
-
-                    {/* File Viewer */}
-                    {docData ? (
-                      docData.endsWith(".pdf") ? (
-                        // PDF Viewer using an iframe
-                        <iframe
-                          src={docData}
-                          className="w-full h-[100vh]"
-                          style={{ border: "none" }}
-                        />
-                      ) : docData.endsWith(".doc") ||
-                        docData.endsWith(".docx") ? (
-                        // Word Document Viewer using Microsoft Office Viewer
-                        <iframe
-                          src={`https://view.officeapps.live.com/op/embed.aspx?src=${window.location.origin + docData}`}
-                          className="w-full h-[100vh]"
-                          style={{ border: "none" }}
-                        />
-                      ) : (
-                        <p>Unsupported file type</p>
-                      )
-                    ) : (
-                      <p>No file selected</p>
-                    )}
-                  </DialogContent>
-                </Dialog>
               </div>
             </AccordionSummary>
             <AccordionDetails style={{ padding: "20px" }}>
@@ -337,6 +299,7 @@ export default function Employers() {
           }}
         />
       </div>
+      {viewer}
     </Layout>
   );
 }

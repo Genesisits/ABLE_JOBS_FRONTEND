@@ -23,6 +23,7 @@ import Switch from "@mui/material/Switch";
 import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip"; // Import Tooltip
 import axios from "axios";
+import useDocumentViewer from "./DocumentViewer";
 // import "./jobs.css";
 // import Postajob from "./postajob";
 // import AppliedCandidatesDialog from "./Appliedcandidates";
@@ -39,6 +40,7 @@ const columns = [
 ];
 
 export default function Trainers() {
+  const { openDoc, viewer } = useDocumentViewer();
   const [loading,setLoading] = useState(false)
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -153,7 +155,7 @@ export default function Trainers() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.company_name}
+                      key={row.code || row.email}
                     >
                       {columns.map((column) => {
                         if (column.id === "status") {
@@ -166,9 +168,26 @@ export default function Trainers() {
                                   margin: "0",
                                 }}
                               >
+                               <Tooltip title="Aadhaar" arrow>
+                                <button
+                                onClick={() => openDoc(row.aadhaar_card, "Aadhaar Card")}
+                                  style={{
+                                    padding:'0',
+                                    border: "none",
+                                    background: "none",
+                                    margin: "0",
+                                  }}
+                                >
+                                  <img
+                                    src={Aadhar}
+                                    alt="Aadhaar"
+                                    style={{ width: "25px", height: "25px",margin:'0', }}
+                                  />
+                                </button>
+                                </Tooltip>
                                <Tooltip title="Pan" arrow>
                                 <button
-                                onClick={(e)=>window.open(row.pan_card)}
+                                onClick={() => openDoc(row.pan_card, "PAN Card")}
                                   style={{
                                     padding:'0',
                                     border: "none",
@@ -184,7 +203,7 @@ export default function Trainers() {
                                 </Tooltip>
                                 <Tooltip title="Resume" arrow>
                                 <button
-                                onClick={(e) => window.open(row.resume)}
+                                onClick={() => openDoc(row.resume, "Resume")}
                                   style={{
                                     padding:'0',
                                     border: "none",
@@ -225,6 +244,7 @@ export default function Trainers() {
           />
         </Paper>
 
+        {viewer}
         {/* Post a Job Modal */}
         {/* <Postajob modalIsOpen={isPostJobOpen} closeModal={closePostJobModal} selectedJob={selectedJob}  /> */}
 

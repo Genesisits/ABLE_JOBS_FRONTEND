@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.ablejobshub.com/api';
+export const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.29.224:8000/api';
 export const LOGIN= `${BASE_URL}/user_login/`;
 export const REGISTER = `${BASE_URL}/employee_signup/`;
 export const EMPLOYER_REGISTER = `${BASE_URL}/employer_signup/`
@@ -8,7 +8,7 @@ export const CREATE_JOB = `${BASE_URL}/add_jobs/`;
 export const GET_JOB = `${BASE_URL}/jobs/`;
 export const GET_JOB_EMPLOYEE = `${BASE_URL}/jobs_list/`;
 export const APPLIED_CANDIDATES = `${BASE_URL}/job_applications/`;
-export const SHORTLIST_APPLICATIONS = `${BASE_URL}/jobs_shorts`;
+export const SHORTLIST_APPLICATIONS = `${BASE_URL}/jobs_shorts/`;
 export const SHORTLIST_ONBOARD = `${BASE_URL}/shortlisted_job_applications/`;
 export const ONBOARD_CANDIDATE = `${BASE_URL}/onboard_application/`;
 export const ONBOARDED_LIST =  `${BASE_URL}/onboarded_job_applications/`;
@@ -28,11 +28,15 @@ export const APPLIED_JOB = `${BASE_URL}/applied_jobs/`;
 export const SHORTLIST_JOB = `${BASE_URL}/shortlisted_jobs/`;
 export const ONBOARD_JOB = `${BASE_URL}/onboarded_jobs/`;
 export const UPLOAD_RESUME = `${BASE_URL}/upload_resume/`;
+export const MY_RESUME = `${BASE_URL}/my_resume/`;
+export const ADMIN_STATS = `${BASE_URL}/admin_stats/`;
 export const USER_PROFILE = `${BASE_URL}/user_profile/`;
 export const PROFILE_UPDATE = `${BASE_URL}/userprofile_Update/`;
 export const PROFILE_UPDATE_IMAGE = `${BASE_URL}/upload-profile-image/`;
 export const ADIMN_EMPLOYEE_LIST = `${BASE_URL}/employees_list/`;
 export const ERESUME = `${BASE_URL}/eresume/`;
+export const EMPLOYEE_DETAILS = `${BASE_URL}/employee_details/`;
+export const CONTACT_US = `${BASE_URL}/contact_us/`;
 
 export const CHAIR_URL = `${BASE_URL}/chairs`;
 export const DECORATION_URL = `${BASE_URL}/decoration`;
@@ -72,5 +76,3 @@ export const ADD_EVENT_ITEMS =`${BASE_URL}/add_event_items?event_id=`;
 export const EVENT_ITEMS =`${BASE_URL}/event_items?event_id=`;
 export const ASSIGN_CONTRACT =`${BASE_URL}/assign_contract`;
 export const CONTRACT_DATA =`${BASE_URL}/contract-data`;
-
-

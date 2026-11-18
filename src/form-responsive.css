@@ -1,0 +1,18 @@
+/* Shared form feedback and popup responsiveness */
+.form-field-error,.field-error,.error-label{display:block;width:100%;margin:5px 0 0;color:#d32f2f;font-size:12px;line-height:1.4;text-align:left}
+.form-field-success{color:#237a43;font-size:13px}
+input[aria-invalid="true"],textarea[aria-invalid="true"],select[aria-invalid="true"]{border-color:#d32f2f!important;outline-color:#d32f2f}
+.MuiDialog-root .MuiDialog-paper{width:min(960px,calc(100% - 32px));max-width:calc(100% - 32px);max-height:calc(100dvh - 32px);margin:16px;overflow:hidden}
+.MuiDialog-root .MuiDialogContent-root{overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+.MuiDialog-root .MuiDialogContent-root .MuiGrid-container,.MuiDialog-root .MuiDialogContent-root .MuiGrid-item{min-width:0}
+.MuiModal-root .MuiBox-root{box-sizing:border-box;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+.MuiDialog-root input,.MuiDialog-root textarea,.MuiDialog-root select,.MuiModal-root input,.MuiModal-root textarea,.MuiModal-root select{max-width:100%;min-width:0}
+@media(max-width:767px){
+.MuiDialog-root .MuiDialog-paper{width:calc(100% - 20px);max-width:calc(100% - 20px);max-height:calc(100dvh - 20px);margin:10px;border-radius:12px}
+.MuiDialog-root .MuiDialogTitle-root{padding:14px 16px;font-size:18px}
+.MuiDialog-root .MuiDialogContent-root{padding:12px 16px 18px}
+.MuiDialog-root .MuiDialogContent-root .MuiGrid-item{flex-basis:100%!important;max-width:100%!important}
+.MuiDialog-root .MuiDialogActions-root{flex-wrap:wrap;padding:12px 16px}
+.MuiModal-root .MuiBox-root{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important;max-height:calc(100dvh - 24px)!important;padding:16px!important}
+}
+@media(max-width:420px){.MuiDialog-root .MuiDialog-paper{width:calc(100% - 12px);max-width:calc(100% - 12px);margin:6px}.MuiDialog-root .MuiDialogContent-root{padding:10px 12px 16px}}

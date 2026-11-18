@@ -1,131 +1,170 @@
-.education input[type="text"] {
-  width: 85%;
-  padding: 18px;
-  margin: '0x 10px';
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-.special-considerations input[type="text"] {
-  width: 100%;
-  padding: 18px;
-  margin: '0x 10px';
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-.skills input[type="text"] {
-  width: 85%;
-  padding: 18px;
-  margin: '0x 10px';
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
+/* ===== Employee registration wizard (extra rules on top of employerregister.css) ===== */
 
+/* stepper – recolour the purple Qonto defaults to navy / gold */
+.MuiStepConnector-root .MuiStepConnector-line {
+  border-color: #c5d0ea !important;
+  border-top-width: 3px !important;
+}
+.MuiStepConnector-root.Mui-active .MuiStepConnector-line,
+.MuiStepConnector-root.Mui-completed .MuiStepConnector-line {
+  border-color: #f5a623 !important;
+}
+.MuiStepLabel-iconContainer { color: #c5d0ea !important; }
+.MuiStepLabel-iconContainer.Mui-active,
+.MuiStepLabel-root:has(.Mui-active) .MuiStepLabel-iconContainer { color: #0b2a6f !important; }
+.QontoStepIcon-circle { width: 10px !important; height: 10px !important; }
+.QontoStepIcon-completedIcon { color: #f5a623 !important; font-size: 22px !important; }
+.MuiStepLabel-label { font-size: 0.85rem; color: #6b7aa3; }
+.MuiStepLabel-label.Mui-active { color: #0b2a6f; font-weight: 700; }
+.MuiStepLabel-label.Mui-completed { color: #0b2a6f; font-weight: 600; }
+
+/* skills autocomplete */
+.skills .MuiAutocomplete-inputRoot { padding: 6px 10px !important; }
+.MuiChip-root {
+  font-weight: 600;
+  color: #0b2a6f;
+  background: #eef2fa;
+}
+.MuiChip-root .MuiChip-deleteIcon { color: #6b7aa3; }
+
+/* document upload */
 .file-upload-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
 }
-
-.file-input {
-  display: none; 
-}
-
-.upload-button {
-  background-color: #4caf50; 
-  color: white; 
-  padding: 10px 20px; 
-  border: none; 
-  border-radius: 5px; 
-  cursor: pointer; 
-  transition: background-color 0.3s; 
-  margin-top: 10px; 
-}
-
-.upload-button:hover {
-  background-color: #45a049; 
-}
-
+.file-input { display: none; }
 .file-input-label {
-  display: inline-block; 
-  background-color: #007bff; 
-  color: white; 
-  padding: 10px 20px; 
-  border-radius: 5px; 
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 10px 24px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #08215a, #0b2a6f);
+  border-radius: 999px;
   cursor: pointer;
-  transition: background-color 0.3s; 
-  margin-bottom: 10px; 
+  transition: transform 0.2s;
 }
-
-.file-input-label:hover {
-  background-color: #0056b3; 
+.file-input-label:hover { transform: translateY(-2px); }
+.upload-button {
+  margin-top: 10px;
+  padding: 10px 24px;
+  font-weight: 700;
+  color: #08215a;
+  background: #f5a623;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
+.upload-button:hover { background: #ffb84a; }
 
-.full-page-spinner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
- .experienced input[type="text"] {
-  width: 80%;
-  padding: 18px;
-  margin: '0x 20px';
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-.experienced select {
-  width: 100%; 
-  padding: 20px;
-  margin: 10px 0; 
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-
-}
-
-
-.education {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin:5px;
-  gap: 10px;
-}
-
-.headDiv {
-  border-radius: 10px;
-  border: 1px solid gray;
-}
-
-.popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border: 1px solid #ccc;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-.popup button {
-  margin: '0%';
-  align-content: center;
-}
 .custom-select.Mui-focused {
-  outline: 2px solid #3f51b5; 
+  outline: 2px solid #1b4fd8;
   outline-offset: 2px;
+}
+
+
+
+/* ===== Employee wizard layout ===== */
+.reg-wizard { padding-top: 12px; }
+.reg-stepper.MuiStepper-root { margin-bottom: 8px; padding: 0; }
+.reg-step-count {
+  margin: 14px 0 16px !important;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1b4fd8;
+}
+.reg-step { width: 100%; }
+.reg-required-note.MuiTypography-root {
+  display: block;
+  margin-top: 16px;
+  color: #6b7aa3;
+}
+
+/* one card per education / experience entry */
+.reg-row-card {
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f6f8fd;
+  border: 1.5px solid #c5d0ea;
+  border-radius: 20px;
+}
+.reg-row-card .reg-field .MuiOutlinedInput-root { background: #fff; }
+
+/* react-datepicker – same box as the other inputs */
+.reg-date-wrap,
+.reg-date-wrap .react-datepicker__input-container { display: block; width: 100%; }
+.reg-date-wrap input.reg-date {
+  box-sizing: border-box;
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 0.98rem;
+  color: #13235a;
+  background: #fff;
+  border: 1.5px solid #c5d0ea;
+  border-radius: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.reg-date-wrap input.reg-date:hover { border-color: #1b4fd8; }
+.reg-date-wrap input.reg-date:focus {
+  border-color: #1b4fd8;
+  box-shadow: 0 0 0 3px rgba(27, 79, 216, 0.18);
+}
+.react-datepicker-popper { z-index: 2200 !important; }
+
+/* fresher / experienced radios */
+.reg-radio-row { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-bottom: 16px; }
+.reg-radio-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 !important;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.reg-radio-row input[type="radio"] { width: 18px; height: 18px; accent-color: #0b2a6f; }
+
+.MuiDialog-paper .reg-add-btn.MuiButton-root {
+  width: auto;
+  margin: 4px 0 0;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  color: #0b2a6f;
+  background: #fff;
+  border: 1.5px dashed #0b2a6f;
+  box-shadow: none;
+}
+
+/* wizard button bar: Back on the left, the rest on the right */
+.reg-wizard-actions.MuiDialogActions-root { justify-content: flex-end !important; }
+.MuiDialog-paper .reg-wizard-actions .reg-btn-back.MuiButton-root { margin-right: auto; }
+.MuiDialog-paper .reg-wizard-actions .MuiButton-root:not(:last-child):not(.reg-btn-back) {
+  color: #0b2a6f;
+  background: #fff;
+  border: 2px solid #c5d0ea;
+  box-shadow: none;
+}
+.MuiDialog-paper .reg-wizard-actions .MuiButton-root.reg-btn-back,
+.MuiDialog-paper .reg-wizard-actions .MuiButton-root.reg-btn-back:last-child {
+  color: #0b2a6f;
+  background: transparent;
+  box-shadow: none;
+}
+
+.MuiDialog-paper .reg-wizard-actions .MuiButton-root.reg-btn-back.Mui-disabled { color: #9aa6c6; }
+
+@media (max-width: 600px) {
+  .reg-row-card { padding: 12px; border-radius: 16px; }
+  /* keep the 5-step bar on one line: smaller labels, tighter spacing */
+  .reg-stepper .MuiStepLabel-label { font-size: 0.62rem; line-height: 1.2; margin-top: 6px !important; }
+  .reg-stepper .MuiStepConnector-root { top: 10px; }
+  .MuiDialog-paper .reg-wizard-actions .reg-btn-back.MuiButton-root { margin-right: 0; }
+  .MuiDialog-paper .reg-wizard-actions .MuiButton-root { order: 0; }
+  .MuiDialog-paper .reg-wizard-actions .reg-btn-back.MuiButton-root { order: 1; }
 }

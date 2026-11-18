@@ -1,91 +1,221 @@
+/* ===== Registration dialogs (Employer / Trainer / Volunteer / Employee) ===== */
 
-.custom-input input {
-  border: 2px solid #ccc; 
-  padding: 12px; 
-  border-radius: 8px; 
-  font-size: 16px; 
-  transition: all 0.3s ease; 
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); 
+/* backdrop */
+.MuiDialog-root .MuiBackdrop-root {
+  background: rgba(8, 33, 90, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+}
+
+/* dialog card */
+.MuiDialog-paper {
+  padding: 0 !important;
+  max-width: 900px;
+  margin: auto;
+  border-radius: 28px !important;
+  border-bottom: 6px solid #f5a623;
+  box-shadow: 0 24px 60px rgba(4, 14, 46, 0.45) !important;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+
+/* title bar */
+.MuiDialog-paper .MuiDialogTitle-root {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding: 20px 28px;
+  margin: 0 0 12px;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #08215a, #0b2a6f);
+}
+
+/* body wrappers */
+.MuiDialog-paper > .MuiBox-root {
+  box-sizing: border-box;
+  padding: 0 24px 8px;
+}
+.MuiDialog-paper .MuiDialogContent-root { padding: 8px 12px; }
+
+/* text fields (outlined) */
+.MuiDialog-paper .MuiOutlinedInput-root {
+  background: #fff;
+  border-radius: 14px;
+  transition: box-shadow 0.2s;
+}
+.MuiDialog-paper .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #c5d0ea !important;
+  border-width: 1.5px !important;
+}
+.MuiDialog-paper .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #1b4fd8 !important;
+}
+.MuiDialog-paper .MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 0 0 3px rgba(27, 79, 216, 0.18);
+}
+.MuiDialog-paper .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #1b4fd8 !important;
+  border-width: 2px !important;
+}
+.MuiDialog-paper .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: #d93025 !important;
+}
+
+/* the inner <input> used to carry its own second border – remove it */
+.custom-input input,
+.custom-input1 input {
+  padding: 14px 16px;
+  font-size: 0.98rem;
+  color: #13235a;
+  background: transparent;
+  border: 0 !important;
+  border-radius: 14px;
+  box-shadow: none !important;
   outline: none !important;
 }
-
-
-.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: transparent !important; 
+.custom-input label,
+.custom-input1 label {
+  font-size: 14px;
+  color: #6b7aa3;
 }
+.custom-input label.Mui-focused,
+.custom-input1 label.Mui-focused { color: #1b4fd8; }
+.MuiDialog-paper .MuiFormHelperText-root { margin-left: 6px; }
 
-
-.custom-input label {
-  font-size: 14px; 
-  color: #666; 
-}
-
-
-.custom-input:hover input {
-  border-color: #007BFF; 
-}
-
-
-.custom-input input:focus {
-  border-color: #007BFF !important; 
-  background-color: #fff; 
-  outline: none !important; 
-  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4); 
-}
-
-
-.MuiMenuItem-root {
-  font-size: 26px;
-}
-
-
-.custom-input select {
-  
-  border-radius: 8px;
-  padding: 10px;
-  border: 2px solid #ccc;
-  transition: all 0.3s ease;
-  outline: none !important; 
-}
-
-
-.custom-input:hover select {
-  border-color: #007BFF;
-}
-
-
-.custom-input select:focus {
-  border-color: #007BFF;
-  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
-  outline: none !important; 
-}
-
-
-.MuiDialog-paper {
-  padding: 20px;
-  max-width: 900px; 
-  margin: auto;
-}
-
-
-.MuiButton-root {
-  margin-top: 20px;
+/* plain <label> captions (Company Logo, GST, PAN, …) */
+.MuiDialog-paper label:not([class*="Mui"]) {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-.custom-input1 .MuiOutlinedInput-root {
-  background-color: #fff; 
-  border-radius: 8px;
-  border: 2px solid #ccc; 
+  margin: 6px 0 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0b2a6f;
 }
 
-
-.custom-input1 .MuiOutlinedInput-root.Mui-focused {
-  border-color: #007BFF; 
+/* native <select> */
+.custom-input select,
+.custom-input1 select,
+.MuiDialog-paper select {
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 0.98rem;
+  color: #13235a;
+  background: #fff;
+  border: 1.5px solid #c5d0ea;
+  border-radius: 14px;
+  outline: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.custom-input:hover select,
+.MuiDialog-paper select:hover { border-color: #1b4fd8; }
+.custom-input select:focus,
+.MuiDialog-paper select:focus {
+  border-color: #1b4fd8;
+  box-shadow: 0 0 0 3px rgba(27, 79, 216, 0.18);
 }
 
+/* checkbox */
+.MuiDialog-paper .MuiCheckbox-root.Mui-checked { color: #0b2a6f !important; }
+.MuiDialog-paper .MuiFormControlLabel-label { font-size: 0.95rem; color: #13235a; }
 
-.MuiMenuItem-root {
-  font-size: 16px;
+/* dropdown menus (rendered in a portal) */
+.MuiMenu-paper { border-radius: 14px !important; box-shadow: 0 12px 28px rgba(11, 42, 111, 0.25) !important; }
+.MuiMenuItem-root { font-size: 16px; }
+.MuiMenuItem-root:hover { background: #eef2fa !important; }
+.MuiMenuItem-root.Mui-selected {
+  background: #eef2fa !important;
+  font-weight: 600;
+  color: #0b2a6f;
+}
+
+/* buttons */
+.MuiDialog-paper .MuiButton-root {
+  min-width: 0;
+  margin: 16px 4px 8px;
+  padding: 8px 24px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  text-transform: none;
+  color: #0b2a6f;
+  width: 100%;
+  border-radius: 999px;
+}
+.MuiDialog-paper .MuiButton-root:hover { background: #eef2fa; }
+.MuiDialog-paper .MuiButton-root.Mui-disabled { color: #9aa6c6; }
+.MuiDialog-paper .MuiButton-root:last-child,
+.MuiDialogActions-root .MuiButton-colorPrimary {
+  color: #fff;
+  background: linear-gradient(90deg, #08215a, #0b2a6f);
+  box-shadow: 0 6px 14px rgba(11, 42, 111, 0.35);
+}
+.MuiDialog-paper .MuiButton-root:last-child:hover,
+.MuiDialogActions-root .MuiButton-colorPrimary:hover {
+  background: linear-gradient(90deg, #0b2a6f, #1b4fd8);
+}
+.MuiDialogActions-root {
+  justify-content: center !important;
+  gap: 12px;
+  padding: 8px 28px 24px !important;
+}
+.MuiDialogActions-root .MuiButton-colorSecondary {
+  color: #0b2a6f;
+  border: 2px solid #c5d0ea;
+}
+
+/* step counter text in the employee wizard */
+.MuiDialog-paper > .MuiBox-root > .MuiTypography-root {
+  font-weight: 700;
+  color: #1b4fd8;
+}
+
+/* snackbar */
+.MuiSnackbarContent-root {
+  background: #0b2a6f !important;
+  border-radius: 14px !important;
+  font-weight: 500;
+}
+
+/* popup message */
+.popup {
+  box-sizing: border-box;
+  width: min(380px, 90vw);
+  padding: 28px 26px 24px;
+  text-align: center;
+  background: #fff;
+  border: none;
+  border-bottom: 5px solid #f5a623;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(4, 14, 46, 0.5);
+  z-index: 2100;
+}
+.popup p { margin: 0 0 16px; color: #13235a; line-height: 1.6; }
+.popup button {
+  margin: 0 !important;
+  padding: 10px 20px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #08215a, #0b2a6f);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.full-page-spinner {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 33, 90, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+@media (max-width: 600px) {
+  .MuiDialog-paper { border-radius: 22px !important; }
+  .MuiDialog-paper .MuiDialogTitle-root { padding: 16px 20px; font-size: 1.25rem; }
+  .MuiDialog-paper > .MuiBox-root { padding: 0 12px 8px; }
 }

@@ -25,6 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip"; // Import Tooltip
 import axios from "axios";
+import useDocumentViewer from "./DocumentViewer";
 
 const columns = [
   { id: "first_name", label: "First Name", minWidth: 100 },
@@ -36,6 +37,7 @@ const columns = [
 ];
 
 export default function Volunteers() {
+  const { openDoc, viewer } = useDocumentViewer();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false)
@@ -122,7 +124,7 @@ export default function Volunteers() {
                 {rows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.company_name}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code || row.email}>
                       {columns.map((column) => {
                         if (column.id === "status") {
                           return (
@@ -137,7 +139,7 @@ export default function Volunteers() {
                                 {/* Tooltip for Aadhar image */}
                                 <Tooltip title="Aadhar" arrow>
                                   <button
-                                    onClick={(e) => window.open(row.aadhar_card)}
+                                    onClick={() => openDoc(row.aadhaar_card, "Aadhaar Card")}
                                     style={{
                                       padding: "0",
                                       border: "none",
@@ -159,7 +161,7 @@ export default function Volunteers() {
                                 {/* Tooltip for Pan image */}
                                 <Tooltip title="Pan" arrow>
                                   <button
-                                    onClick={(e) => window.open(row.pan_card)}
+                                    onClick={() => openDoc(row.pan_card, "PAN Card")}
                                     style={{
                                       padding: "0",
                                       border: "none",
@@ -181,7 +183,7 @@ export default function Volunteers() {
                                 {/* Tooltip for Resume image */}
                                 <Tooltip title="Resume" arrow>
                                   <button
-                                    onClick={(e) => window.open(row.resume)}
+                                    onClick={() => openDoc(row.resume, "Resume")}
                                     style={{
                                       padding: "0",
                                       border: "none",
@@ -224,6 +226,7 @@ export default function Volunteers() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
+        {viewer}
       </Layout>
     </div>
   );

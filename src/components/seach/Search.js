@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { notify } from '../notify/Notify';
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = () => {
    
-    alert(`Searching for: ${searchTerm}`);
+    notify.info(`Searching for: ${searchTerm}`);
   };
 
   return (

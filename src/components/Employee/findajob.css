@@ -25,6 +25,7 @@
   gap: 10px;
   margin-left: 2%;
   width:100%;
+  padding: 0px 15px;
 }
 
 .search-bar1 input {
@@ -44,7 +45,7 @@
   cursor: pointer;
   font-size: 14px;
   height:40px;
-  margin-left: 0%;
+  margin: auto 0%;
 }
 
 .search-button:hover {
@@ -253,3 +254,170 @@
   font-size: 18px;
   font-style: italic;
 }
+
+
+/* ===== Job Details dialog (purple modal) ===== */
+.MuiDialog-paper.jd-paper {
+  overflow: hidden;
+  border-radius: 28px !important;
+  border-bottom: 8px solid #fbbf24;
+  background: #fff;
+  max-width: 940px;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+.jd-paper .jd-header {
+  position: relative; display: flex; align-items: center; gap: 16px;
+  padding: 26px 28px 40px; color: #fff; overflow: hidden;
+  background: linear-gradient(100deg, #1c0a66 0%, #3a0ca3 60%, #4c1bd0 100%);
+}
+.jd-paper .jd-swoosh { position: absolute; right: 0; bottom: 0; width: 46%; height: 100%; pointer-events: none; }
+.jd-paper .jd-header-icon { font-size: 40px !important; color: #fff; z-index: 1; }
+.jd-paper .jd-header-bar { width: 1.5px; height: 38px; background: rgba(255,255,255,.55); z-index: 1; }
+.jd-paper .jd-header-title { margin: 0; font-size: 1.9rem; font-weight: 700; z-index: 1; }
+.jd-paper .jd-x {
+  position: absolute; top: 16px; right: 18px; z-index: 2; width: 40px; height: 40px;
+  display: grid; place-items: center; border: 0; background: transparent; color: #fff; cursor: pointer; border-radius: 50%;
+}
+.jd-paper .jd-x:hover { background: rgba(255,255,255,.16); }
+
+.jd-paper .jd-body {
+  position: relative; margin-top: -22px; padding: 22px 26px 24px;
+  background: #fff; border-radius: 26px 26px 0 0; max-height: 72vh; overflow-y: auto;
+}
+.jd-paper .jd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+.jd-paper .jd-col:first-child { padding-right: 14px; border-right: 1.5px solid #ece8f7; }
+.jd-paper .jd-row { display: flex; align-items: center; gap: 14px; padding: 9px 0; border-bottom: 1.5px solid #f0edf8; }
+.jd-paper .jd-col .jd-row:last-child { border-bottom: 0; }
+.jd-paper .jd-chip {
+  flex: 0 0 44px; height: 44px; display: grid; place-items: center; border-radius: 14px;
+  background: #ece8ff; color: #3a0ca3;
+}
+.jd-paper .jd-chip svg { font-size: 22px; }
+.jd-paper .jd-text { min-width: 0; display: flex; flex-wrap: wrap; column-gap: 12px; align-items: baseline; text-align: left; }
+.jd-paper .jd-label { color: #1c0a66; font-weight: 700; font-size: 15px; }
+.jd-paper .jd-value { color: #2b2550; font-size: 15px; overflow-wrap: anywhere; }
+.jd-paper .jd-value a { color: #1d3bd8; text-decoration: underline; }
+.jd-paper .jd-link-icon { font-size: 15px !important; vertical-align: -2px; }
+
+.jd-paper .jd-about {
+  display: flex; align-items: center; gap: 16px; margin-top: 16px; padding: 16px 20px;
+  border-radius: 20px; background: #ece8ff; text-align: left;
+}
+.jd-paper .jd-about-icon { font-size: 40px !important; color: #3a0ca3; flex: 0 0 auto; }
+.jd-paper .jd-about-bar { width: 1.5px; align-self: stretch; background: #3a0ca3; opacity: .5; }
+.jd-paper .jd-about-text { min-width: 0; }
+.jd-paper .jd-about-text h4 { margin: 0 0 2px; color: #1c0a66; font-size: 1.1rem; font-weight: 700; }
+.jd-paper .jd-about-text p { margin: 0; color: #2b2550; font-size: 14.5px; max-height: 110px; overflow-y: auto; overflow-wrap: anywhere; white-space: pre-line; }
+.jd-paper .jd-about-text small { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 6px; color: #5b5391; font-size: 12.5px; }
+
+.jd-paper .jd-actions { display: flex; gap: 20px; margin-top: 20px; }
+.jd-paper .jd-btn {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; border-radius: 999px; font: 700 1.05rem 'Poppins', 'Segoe UI', Arial, sans-serif; cursor: pointer;
+}
+.jd-paper .jd-btn-outline { background: #fff; color: #1c0a66; border: 2.5px solid #c9c2e3; }
+.jd-paper .jd-btn-outline:hover { background: #f5f2ff; }
+.jd-paper .jd-btn-fill {
+  color: #fff; border: 0; background: linear-gradient(90deg, #3a0ca3, #5a1fe0);
+  box-shadow: 0 8px 18px rgba(58, 12, 163, .35);
+}
+.jd-paper .jd-btn-fill:hover:not(:disabled) { filter: brightness(1.1); }
+.jd-paper .jd-btn-fill:disabled { cursor: default; opacity: .92; }
+
+@media (max-width: 720px) {
+  .jd-paper .jd-grid { grid-template-columns: 1fr; }
+  .jd-paper .jd-col:first-child { padding-right: 0; border-right: 0; }
+  .jd-paper .jd-col:first-child .jd-row:last-child { border-bottom: 1.5px solid #f0edf8; }
+  .jd-paper .jd-header-title { font-size: 1.5rem; }
+  .jd-paper .jd-actions { gap: 12px; }
+  .jd-paper .jd-btn { font-size: .95rem; }
+}
+
+/* --- fixes: neutralise the global `button { margin-left:50%; padding:10px; ... }` rule and stop sideways overflow --- */
+.MuiDialog-paper.jd-paper button.jd-btn,
+.MuiDialog-paper.jd-paper button.jd-x {
+  margin: 0 !important;
+  box-sizing: border-box;
+  line-height: 1.2;
+  text-transform: none;
+}
+.MuiDialog-paper.jd-paper button.jd-btn {
+  flex: 1 1 0 !important;
+  min-width: 0;
+  width: auto !important;
+  padding: 10px 18px !important;
+  font-size: 1.05rem !important;
+  white-space: nowrap;
+  border-radius: 999px !important;
+}
+.MuiDialog-paper.jd-paper button.jd-btn-outline { background: #fff !important; color: #1c0a66 !important; }
+.MuiDialog-paper.jd-paper button.jd-btn-fill { background: linear-gradient(90deg, #3a0ca3, #5a1fe0) !important; color: #fff !important; }
+.MuiDialog-paper.jd-paper button.jd-x { padding: 0 !important; background: transparent !important; color: #fff !important; }
+.jd-paper .jd-body { overflow-x: hidden; box-sizing: border-box; min-width: 0; }
+.jd-paper .jd-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.jd-paper .jd-col, .jd-paper .jd-row { min-width: 0; }
+.jd-paper .jd-actions { box-sizing: border-box; width: 100%; }
+@media (max-width: 720px) {
+  .jd-paper .jd-grid { grid-template-columns: minmax(0, 1fr); }
+  .MuiDialog-paper.jd-paper button.jd-btn { font-size: .95rem !important; padding: 10px 10px !important; }
+}
+
+/* ===== Resume dialogs (shared purple modal) ===== */
+.jd-paper .jd-header-icon-wrap { display: grid; place-items: center; z-index: 1; color: #fff; }
+.jd-paper .jd-header-icon-wrap svg { font-size: 40px; }
+.jd-paper .jd-lead { margin: 4px 0 16px; color: #2b2550; font-size: 15px; text-align: left; }
+.jd-paper .jd-section { margin-top: 14px; text-align: left; }
+.jd-paper .jd-section-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; color: #1c0a66; font-weight: 700; font-size: 15px; }
+.jd-paper .jd-section-title svg { color: #3a0ca3; font-size: 20px; }
+.jd-paper .jd-section-title em { font-style: normal; font-weight: 500; color: #5b5391; font-size: 13px; }
+.jd-paper .jd-req { color: #d93025; font-weight: 700; }
+
+.jd-paper label.jd-drop {
+  display: flex; align-items: center; gap: 14px; margin: 0; padding: 14px 16px; cursor: pointer;
+  border: 2px dashed #b9aef0; border-radius: 18px; background: #f7f5ff; text-align: left; transition: background .15s, border-color .15s;
+}
+.jd-paper label.jd-drop:hover { background: #ece8ff; border-color: #3a0ca3; }
+.jd-paper .jd-drop-text { min-width: 0; display: flex; flex-direction: column; }
+.jd-paper .jd-drop-text strong { color: #1c0a66; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jd-paper .jd-drop-text small { color: #5b5391; font-size: 12.5px; }
+
+/* video field: buttons from VideoResumeField */
+.jd-paper .jd-video .MuiButton-root {
+  width: auto !important; flex: 1 1 190px; margin: 0 !important; min-height: 46px; box-shadow: none;
+  border-radius: 999px !important; font-weight: 700; text-transform: none;
+}
+.jd-paper .jd-video .MuiButton-root.MuiButton-outlined { background: #fff !important; color: #1c0a66 !important; border: 2px solid #c9c2e3 !important; }
+.jd-paper .jd-video .MuiButton-root.MuiButton-contained { background: linear-gradient(90deg, #3a0ca3, #5a1fe0) !important; color: #fff !important; box-shadow: 0 6px 14px rgba(58,12,163,.3); }
+.jd-paper .jd-video .MuiBox-root { text-align: left; }
+
+/* saved-resume preview */
+.jd-paper .jd-preview { text-align: left; }
+.jd-paper .jd-preview-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.jd-paper .jd-preview-name { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.jd-paper .jd-preview-name strong { color: #1c0a66; font-size: 15px; }
+.jd-paper .jd-preview-name span { color: #5b5391; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jd-paper a.jd-mini, .jd-paper button.jd-mini {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; margin: 0 !important; padding: 7px 14px !important;
+  border-radius: 999px; border: 2px solid #c9c2e3; background: #fff !important; color: #1c0a66 !important;
+  font: 600 13.5px 'Poppins', 'Segoe UI', Arial, sans-serif; text-decoration: none; cursor: pointer; white-space: nowrap; width: auto !important;
+}
+.jd-paper a.jd-mini:hover, .jd-paper button.jd-mini:hover { background: #f5f2ff !important; }
+.jd-paper .jd-mini svg { font-size: 16px; }
+.jd-paper .jd-preview-frame { height: 420px; border: 2px solid #d9d2f5; border-radius: 16px; overflow: hidden; background: #f7f5ff; }
+.jd-paper .jd-preview-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.jd-paper .jd-preview-msg { height: 100%; display: grid; place-items: center; padding: 20px; text-align: center; color: #5b5391; font-size: 14px; }
+
+/* notices + loading overlay */
+.jd-paper .jd-notice {
+  display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 18px; text-align: left;
+  background: #fff7e0; border: 1.5px solid #f5d27a; color: #4a3500;
+}
+.jd-paper .jd-notice svg { font-size: 34px; color: #e8a317; flex: 0 0 auto; }
+.jd-paper .jd-notice p { margin: 0; font-size: 15px; }
+.jd-paper .jd-saved { margin: 10px 0 0; padding: 8px 12px; border-radius: 12px; background: #ece8ff; color: #3a0ca3; font-size: 13px; text-align: left; }
+.jd-paper .jd-loading {
+  position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.88);
+}
+.jd-paper .jd-loading p { margin: 12px 0 0; font-weight: 700; color: #1c0a66; }
+.jd-paper .jd-present { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }

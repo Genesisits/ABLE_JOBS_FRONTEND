@@ -1,53 +1,69 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Button, Snackbar, Alert } from "@mui/material";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import { CenterPopup } from "../notify/Notify";
 import axios from "axios";
 import { CREATE_JOB, UPDATE_JOB } from "../../endpoints";
-import { Typography, CircularProgress } from "@mui/material";
 import "./jobs.css";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import "./postajob.css";
+import PurpleDialog from "../Employee/PurpleDialog";
+import EditIcon from "@mui/icons-material/Edit";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
-const customStyles = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "70%",
-  bgcolor: "background.paper",
-  border: "1px solid #000",
-  boxShadow: 24,
-  height: "650px",
-  p: 4,
-};
+// Label + control wrapper used by the form below
+function Field({ label, children }) {
+  return (
+    <label className="pj-field">
+      <span>{label}</span>
+      {children}
+    </label>
+  );
+}
 
 const industries = [
   { id: "1", name: "IT and IT Services", abbreviation: "IT and IT Services" },
   {
-    id: "1",
+    id: "2",
     name: "Banking, Financial Service, and Insurance",
     abbreviation: "Banking, Financial Service, and Insurance",
   },
   {
-    id: "1",
+    id: "3",
     name: "Retail and E-Commerce",
     abbreviation: "Retail and E-Commerce",
   },
-  { id: "1", name: "FinTech", abbreviation: "FinTech" },
-  { id: "1", name: "Tele Communications", abbreviation: "Tele Communications" },
+  { id: "4", name: "FinTech", abbreviation: "FinTech" },
+  { id: "5", name: "Tele Communications", abbreviation: "Tele Communications" },
   {
-    id: "1",
+    id: "6",
     name: "Healthcare and pharmaceuticals",
     abbreviation: "Healthcare and pharmaceuticals",
   },
   {
-    id: "1",
+    id: "7",
     name: "Education and Training",
     abbreviation: "Education and Training",
   },
+
+   {
+    id: "8",
+    name: "Engineering Jobs",
+    abbreviation: "Engineering Jobs",
+  },
+
+  {
+    id: "9",
+    name: "Education Jobs",
+    abbreviation: "Education Jobs",
+  },
+
+  {
+    id: "10",
+    name: "Government Jobs",
+    abbreviation: "Government Jobs",
+  },
+
 ];
 
 const qualifications = [
@@ -86,6 +102,36 @@ const departments = [
     name: "UI, UX design and architecture",
     abbreviation: "UI, UX design and architecture",
   },
+  {
+    id: 7,
+    name: "Banking & Finance",
+    abbreviation: "Banking & Finance",
+  },
+
+  {
+    id: 8,
+    name: "Engineering",
+    abbreviation: "Engineering",
+  },
+
+  {
+    id: 9,
+    name: "Healthcare",
+    abbreviation: "Healthcare",
+  },
+
+   {
+    id: 10,
+    name: "Education",
+    abbreviation: "Education",
+  },
+
+    {
+    id: 11,
+    name: "Government Jobs",
+    abbreviation: "Government Jobs",
+  },
+
 ];
 
 const disabilities = [
@@ -349,266 +395,136 @@ export default function Postajob({ modalIsOpen, closeModal, selectedJob }) {
 
   return (
     <>
-      <Modal
-        open={modalIsOpen}
+      <PurpleDialog
+        open={!!modalIsOpen}
         onClose={(e, reason) => {
-          
-          if (reason === "backdropClick") {
-            return;
-          }
-          closeModal(); 
+          if (reason === "backdropClick") return; // keep the form open on outside clicks
+          closeModal();
         }}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-        BackdropProps={{
-          onClick: (e) => {
-            
-            e.stopPropagation();
-          },
-        }}
+        title={isEditing ? "Edit Job" : "Add Job"}
+        icon={isEditing ? <EditIcon /> : <WorkOutlineIcon />}
+        width={940}
+        loading={loading}
+        actions={
+          <>
+            <button type="button" className="jd-btn jd-btn-outline" onClick={closeModal}>
+              <CloseIcon /> Close
+            </button>
+            <button type="button" className="jd-btn jd-btn-fill" onClick={handleNext}>
+              <CheckIcon /> {isEditing ? "Update" : "Save"}
+            </button>
+          </>
+        }
       >
-        <div className="employ">
-          <Box>
-            {loading ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  minHeight: "300px",
-                }}
-              >
-                <CircularProgress />
-              </div>
-            ) : (
-              <Box sx={customStyles}>
-                <h2 style={{ margin: "0", textAlign: "center" }}>
-                  {isEditing ? "Edit Job" : "Add Job"}
-                </h2>
+        <div className="pj-grid">
+          <Field label="Company Name">
+            <input type="text" placeholder="Company Name" value={company_name} onChange={(e) => setCompanyName(e.target.value)} />
+          </Field>
+          <Field label="Job Role">
+            <input type="text" placeholder="Job Role" value={job_title} onChange={(e) => setJobrole(e.target.value)} />
+          </Field>
+          <Field label="Department">
+            <select value={department} onChange={(e) => setDepartment(e.target.value)}>
+              <option value="" disabled hidden>Select Department</option>
+              {departments.map((d) => (
+                <option key={d.id} value={d.abbreviation}>{d.name}</option>
+              ))}
+            </select>
+          </Field>
 
-                {/* Row 1 */}
-                <div className="employ-row">
+          <Field label="Salary">
+            <input type="text" placeholder="Salary" value={salary_offered} onChange={(e) => setSalary(e.target.value)} />
+          </Field>
+          <Field label="Location">
+            <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
+          </Field>
+          <Field label="Job Type">
+            <select value={employment_type} onChange={(e) => setJobtype(e.target.value)}>
+              <option value="" disabled hidden>Select Job Type</option>
+              <option value="full-time">Full-time</option>
+              <option value="part-time">Part-time</option>
+              <option value="contract">Contract</option>
+              <option value="freelance">Freelance</option>
+              <option value="temporary">Temporary</option>
+              <option value="internship">Internship</option>
+            </select>
+          </Field>
 
-                  <input
-                    type="text"
-                    placeholder="Company Name"
-                    value={company_name}
-                    onChange={(e) => setCompanyName(e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Job Role"
-                    value={job_title}
-                    onChange={(e) => setJobrole(e.target.value)}
-                  />
-                  <select
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                  >
-                    <option value="" disabled hidden>Select Department</option>
-                    {departments.map((department) => (
-                      <option key={department.id} value={department.abbreviation}>
-                        {department.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+          <Field label="Industry">
+            <select value={industry} onChange={(e) => setindustry(e.target.value)}>
+              <option value="" disabled hidden>Select Industry</option>
+              {industries.map((i) => (
+                <option key={i.id} value={i.abbreviation}>{i.name}</option>
+              ))}
+            </select>
+          </Field>
+          <Field label="State">
+            <input type="text" placeholder="State" value={state} onChange={(e) => setState(e.target.value)} />
+          </Field>
+          <Field label="Qualification">
+            <select value={qualification_required} onChange={(e) => setQualification(e.target.value)}>
+              <option value="" disabled hidden>Select Qualification</option>
+              {qualifications.map((q) => (
+                <option key={q.id} value={q.abbreviation}>{q.name}</option>
+              ))}
+            </select>
+          </Field>
 
-                {/* Row 2 */}
-                <div className="employ-row">
-                  <input
-                    type="text"
-                    placeholder="Salary"
-                    value={salary_offered}
-                    onChange={(e) => setSalary(e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                  />
-                  <select
-                    value={employment_type}
-                    onChange={(e) => setJobtype(e.target.value)}
-                  >
-                    <option value="" disabled hidden>Select Job Type</option>
-                    <option value="full-time">Full-time</option>
-                    <option value="part-time">Part-time</option>
-                    <option value="contract">Contract</option>
-                    <option value="freelance">Freelance</option>
-                    <option value="temporary">Temporary</option>
-                    <option value="internship">Internship</option>
-                  </select>
-                </div>
+          <Field label="Number of Positions">
+            <input type="text" placeholder="Number of Positions" value={number_of_positions} onChange={(e) => setNofPositions(e.target.value)} />
+          </Field>
+          <Field label="Experience Required">
+            <input type="text" placeholder="Experience Required" value={experience_required} onChange={(e) => setExperiencerequired(e.target.value)} />
+          </Field>
+          <Field label="Work Mode">
+            <select value={work_mode} onChange={(e) => setWorkmode(e.target.value)}>
+              <option value="" disabled hidden>Select Mode of Work</option>
+              <option>On-site</option>
+              <option>Remote</option>
+              <option>Hybrid</option>
+            </select>
+          </Field>
 
-                {/* Row 3 */}
-                <div className="employ-row">
-                  <select
-                    value={industry}
-                    onChange={(e) => setindustry(e.target.value)}
-                  >
-                    <option value="" disabled hidden>Select Industry</option>
-                    {industries.map((industry) => (
-                      <option key={industry.id} value={industry.abbreviation}>
-                        {industry.name}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    placeholder="State"
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
-                  />
-                  <select
-                    value={qualification_required}
-                    onChange={(e) => setQualification(e.target.value)}
-                  >
-                    <option value="" disabled hidden>Select Qualification</option>
-                    {qualifications.map((qualif) => (
-                      <option key={qualif.id} value={qualif.abbreviation}>
-                        {qualif.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Row 4 */}
-                <div className="employ-row">
-                  <input
-                    type="text"
-                    placeholder="Number of Positions"
-                    value={number_of_positions}
-                    onChange={(e) => setNofPositions(e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Experience Required"
-                    value={experience_required}
-                    onChange={(e) => setExperiencerequired(e.target.value)}
-                  />
-                  <select
-                    value={work_mode}
-                    onChange={(e) => setWorkmode(e.target.value)}
-                  >
-                    <option value="" disabled hidden>Select Mode of Work</option>
-                    <option>On-site</option>
-                    <option>Remote</option>
-                    <option>Hybrid</option>
-                  </select>
-                </div>
-
-                {/* Row 5 */}
-                <div className="employ-row">
-                  <input
-                    type="text"
-                    placeholder="Company Website"
-                    value={companywebsite}
-                    onChange={(e) => setcompanywebsite(e.target.value)}
-                  />
-                  <select
-                    value={disability}
-                    onChange={(e) => setdisability(e.target.value)}
-                  >
-                    <option value="" disabled hidden>Disability Type</option>
-                    {disabilities.map((disable) => (
-                      <option key={disable.id} value={disable.abbreviation}>
-                        {disable.name}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    value={notice_period}
-                    onChange={(e) => setNoticeperiod(e.target.value)}
-                    placeholder="Notice Period"
-                  />
-                </div>
-
-                {/* Job Description */}
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    gap: "10px",
-                  }}
-                >
-                  <textarea
-                    value={description}
-                    onChange={(e) => setJobdescription(e.target.value)}
-                    placeholder="Job Description"
-                    rows="3"
-                  />
-                  <textarea
-                    placeholder="Required Technology Stack"
-                    value={skills}
-                    onChange={(e) => setRTS(e.target.value)}
-                    rows="3"
-                  />
-                </div>
-
-                {/* Action Buttons */}
-                <div
-                  style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
-                >
-                  <Button variant="outlined" color="secondary" onClick={closeModal}>
-                    Close
-                  </Button>
-                  <Button variant="contained" color="primary" onClick={handleNext}>
-                    {isEditing ? "Update" : "Save"}
-                  </Button>
-                </div>
-                <Snackbar
-                  open={openSnackbar}
-                  autoHideDuration={6000}
-                  onClose={handleCloseSnackbar}
-                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                >
-                  <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
-                    {errorMessage}
-                  </Alert>
-                </Snackbar>
-              </Box>
-            )}
-          </Box>
+          <Field label="Company Website">
+            <input type="text" placeholder="https://www.companyname.com" value={companywebsite} onChange={(e) => setcompanywebsite(e.target.value)} />
+          </Field>
+          <Field label="Disability Type">
+            <select value={disability} onChange={(e) => setdisability(e.target.value)}>
+              <option value="" disabled hidden>Disability Type</option>
+              {disabilities.map((d, idx) => (
+                <option key={`${d.id}-${idx}`} value={d.abbreviation}>{d.name}</option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Notice Period">
+            <input type="text" placeholder="Notice Period" value={notice_period} onChange={(e) => setNoticeperiod(e.target.value)} />
+          </Field>
         </div>
-      </Modal>
-      <Modal
+
+        <div className="pj-grid pj-two">
+          <Field label="Job Description">
+            <textarea rows="3" placeholder="Job Description" value={description} onChange={(e) => setJobdescription(e.target.value)} />
+          </Field>
+          <Field label="Required Technology Stack">
+            <textarea rows="3" placeholder="Required Technology Stack" value={skills} onChange={(e) => setRTS(e.target.value)} />
+          </Field>
+        </div>
+      </PurpleDialog>
+
+      <CenterPopup
+        open={openSnackbar}
+        severity="error"
+        title="Please check the form"
+        message={errorMessage}
+        onClose={handleCloseSnackbar}
+      />
+      <CenterPopup
         open={success}
+        severity="success"
+        title={isEditing ? "Job Updated Successfully!" : "Job Created Successfully!"}
+        message={`Your job has been ${isEditing ? "updated" : "created"} successfully.`}
         onClose={closeSuccessModal}
-        aria-labelledby="success-modal-title"
-        aria-describedby="success-modal-description"
-      >
-        <Box
-          sx={{
-            ...customStyles,
-            width: "40%",
-            height: "auto",
-            textAlign: "center",
-          }}
-        >
-          <Typography id="success-modal-title" variant="h6" component="h2">
-            {isEditing ? "Job Updated Successfully!" : "Job Created Successfully!"}
-          </Typography>
-          <Typography
-            id="success-modal-description"
-            sx={{ mt: 2, fontSize: "16px" }}
-          >
-            Your job has been {isEditing ? "updated" : "created"} successfully.
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={closeSuccessModal}
-            sx={{ mt: 3 }}
-          >
-            Close
-          </Button>
-        </Box>
-      </Modal>
+      />
     </>
   );
 }

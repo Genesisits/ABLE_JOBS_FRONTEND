@@ -1,0 +1,22 @@
+/* clickable stat cards + the panel that opens below them */
+button.ajh-stat-btn { font: inherit; text-align: left; cursor: pointer; width: auto; margin: 0; border: 1px solid transparent; transition: transform .15s, box-shadow .15s, border-color .15s; }
+button.ajh-stat-btn:hover { transform: translateY(-2px); }
+button.ajh-stat-btn:focus-visible { outline: 3px solid #f5a623; outline-offset: 2px; }
+button.ajh-stat-btn.is-open { border-color: #0b2a6f; box-shadow: 0 6px 18px rgba(11, 42, 111, .18); }
+
+.jp-panel { margin: -6px 12px 22px; background: #fff; border: 1px solid #dfe5f3; border-radius: 16px; box-shadow: 0 6px 20px rgba(11, 42, 111, .08); overflow: hidden; }
+.jp-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #e8ecf7; }
+.jp-head h3 { margin: 0; font-size: 1.05rem; color: #0b2a6f; }
+.jp-close { width: 32px; height: 32px; margin: 0; padding: 0; border: 0; border-radius: 50%; background: #eef2fa; color: #0b2a6f; cursor: pointer; }
+.jp-scroll { max-height: 360px; overflow: auto; }
+.jp-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.jp-table th { position: sticky; top: 0; background: #f6f8fd; text-align: left; padding: 10px 16px; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: #6b7aa3; white-space: nowrap; }
+.jp-table td { padding: 11px 16px; border-top: 1px solid #eef1f8; color: #13235a; vertical-align: middle; }
+.jp-table tr:hover td { background: #fafbff; }
+.jp-empty { padding: 28px; text-align: center; color: #6b7aa3; }
+.jp-link { width: auto; margin: 0; padding: 0; border: 0; background: none; color: #1b4fd8; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.jp-link:hover { text-decoration: underline; }
+.jp-status { padding: 3px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: #eef2fa; color: #0b2a6f; }
+.jp-status.shortlisted { background: #dcf5e7; color: #12794a; }
+.jp-status.onboarded { background: #fff3d1; color: #a96b00; }
+@media (max-width: 700px) { .jp-panel { margin: -6px 0 18px; } .jp-table th, .jp-table td { padding: 9px 10px; } }

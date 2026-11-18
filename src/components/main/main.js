@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 import "./main.css";
 import "./jobboard.css";
+import JobDetails from "./JobDetails";
 import one from "../../images/main.png";
 import DescriptionIcon from "@mui/icons-material/Description";
 import two from "../../images/h2.jpg";
@@ -21,13 +22,33 @@ import bridge6 from "../../images/d5.jpg";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Button, InputLabel, Grid, Modal, Typography } from "@mui/material";
+import { Button, InputLabel, Grid, Modal, Typography, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import SchoolIcon from "@mui/icons-material/School";
 import Box from "@mui/material/Box";
 import Footer from "../footer/footer";
 import BackGround from "../background/background";
 import CircularProgress from "@mui/material/CircularProgress";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SearchIcon from "@mui/icons-material/Search";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import WorkIcon from "@mui/icons-material/Work";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import GridViewIcon from "@mui/icons-material/GridView";
+import GroupsIcon from "@mui/icons-material/Groups";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import BoltIcon from "@mui/icons-material/Bolt";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import LaptopMacIcon from "@mui/icons-material/LaptopMac";
+import SettingsIcon from "@mui/icons-material/Settings";
+import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import AppsIcon from "@mui/icons-material/Apps";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import BusinessIcon from "@mui/icons-material/Business";
+import CompanySlider from "../slider/CompanySlider";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -44,6 +65,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 const images = [one, two, three, four];
 const images2 = [bridge1, bridge2, bridge3, bridge4, bridge5, bridge6];
+// Number of newest jobs shown on the index page; the rest live on /alljobs.
+const LATEST_JOBS_LIMIT = 8;
 const states = [
   { id: 1, name: "Andhra Pradesh", abbreviation: "Andhra Pradesh" },
   { id: 2, name: "Telangana", abbreviation: "Telangana" },
@@ -243,6 +266,106 @@ const companies = [
   { id: "19", name: "JLL", abbreviation: "jll" },
   { id: "20", name: "Expert Aid Techn", abbreviation: "expert aid tech" },
 ];
+
+const featureItems = [
+  { icon: <WorkIcon />, title: "Inclusive", sub: "Job Opportunities" },
+  { icon: <GroupsIcon />, title: "Support for", sub: "Differently Abled" },
+  { icon: <VerifiedUserIcon />, title: "Trusted &", sub: "Verified Employers" },
+  { icon: <BoltIcon />, title: "Easy Application", sub: "Process" },
+  { icon: <BarChartIcon />, title: "Build a", sub: "Successful Career" },
+];
+
+// `match` = words looked for in a job's department, industry and title.
+const categoryItems = [
+  {
+    icon: <LaptopMacIcon />, label: "IT & Software", color: "#6b3df0",
+    match: ["it and it services", "it & information", "information security", "software", "developer", "data science", "ui, ux", "web", "cloud", "devops"],
+  },
+  {
+    icon: <BarChartIcon />, label: "Banking & Finance", color: "#1f6fd6",
+    match: ["banking", "bank", "financial", "finance", "fintech", "insurance", "accounts", "accountant"],
+  },
+  {
+    icon: <SettingsIcon />, label: "Engineering", color: "#12a150",
+    match: ["engineering", "engineer", "mechanical", "civil", "electrical", "manufacturing"],
+  },
+  {
+    icon: <MonitorHeartIcon />, label: "Healthcare", color: "#f08a00",
+    match: ["healthcare", "pharma", "medical", "nurse", "hospital", "clinical"],
+  },
+  {
+    icon: <SchoolIcon />, label: "Education", color: "#2a2fb8",
+    match: ["education", "training", "teacher", "tutor", "lecturer", "faculty"],
+  },
+  {
+    icon: <ApartmentIcon />, label: "Government Jobs", color: "#12a3a8",
+    match: ["government", "govt", "public sector", "psu", "municipal"],
+  },
+];
+const jobInCategory = (job, categoryLabel) => {
+  const cat = categoryItems.find((c) => c.label === categoryLabel);
+  if (!cat) return true;
+  const hay = [job.department, job.industry, job.job_title]
+    .map((v) => (v || "").toLowerCase())
+    .join(" | ");
+  return cat.match.some((w) => hay.includes(w));
+};
+
+const statItems = [
+  { icon: <GroupsIcon />, value: "50,000+", label: "Job Seekers" },
+  { icon: <BusinessIcon />, value: "5,000+", label: "Employers" },
+  { icon: <WorkIcon />, value: "1,00,000+", label: "Job Vacancies" },
+];
+
+// One filter dropdown. Same value / onChange contract as before.
+function FilterSelect({ icon, value, onChange, placeholder, options, className = "" }) {
+  const labelFor = (v) => (options.find((o) => o.value === v) || {}).label || v;
+  return (
+    <FormControl fullWidth className={`filter-field ${value ? "has-value" : ""} ${className}`}>
+      <span className="filter-icon" aria-hidden="true">{icon}</span>
+      <Select
+        value={value}
+        onChange={onChange}
+        displayEmpty
+        // The placeholder is only shown as the closed-state text; it is no longer
+        // a selectable item (index 0) in the dropdown list.
+        renderValue={(v) => (v ? labelFor(v) : placeholder)}
+        inputProps={{ "aria-label": placeholder }}
+        // no tabindex attribute on the select div
+        SelectDisplayProps={{ tabIndex: null }}
+        MenuProps={{
+          // open directly BELOW the field instead of over it
+          anchorOrigin: { vertical: "bottom", horizontal: "left" },
+          transformOrigin: { vertical: "top", horizontal: "left" },
+          // MUI's scroll-lock + html{overflow-x:hidden} was jumping the page back to the banner
+          disableScrollLock: true,
+          disableAutoFocusItem: true,
+          PaperProps: { className: "filter-menu", style: { maxHeight: 320, marginTop: 6 } },
+        }}
+        endAdornment={
+          value ? (
+            <IconButton
+              size="small"
+              aria-label={`Clear ${placeholder}`}
+              onClick={() => onChange({ target: { value: "" } })}
+              sx={{ mr: 3 }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          ) : null
+        }
+      >
+        {options.map((o, i) => (
+          <MenuItem key={`${o.value}-${i}`} value={o.value}>
+            {o.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+}
+const opt = (list) => list.map((x) => ({ value: x.abbreviation, label: x.name }));
+
 export default function Header() {
   const [currentImage, setCurrentImage] = useState(0);
   const [age, setAge] = React.useState("");
@@ -253,8 +376,10 @@ export default function Header() {
   const [qualification, setQualifiation] = React.useState("");
   const [company, setCompany] = React.useState("");
   const [disability, setDisability] = React.useState("");
+  const [category, setCategory] = React.useState(""); // chosen in "Explore Job Categories"
   const [location, setLocation] = React.useState("");
   const [data, setData] = useState([]);
+  const [totalJobs, setTotalJobs] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [hoverTimeout, setHoverTimeout] = useState(null);
@@ -263,6 +388,18 @@ export default function Header() {
   const rowRefs = useRef([]);
   const navigate = useNavigate();
   const [selectedJob, setSelectedJob] = useState(null);
+  const jobsRef = useRef(null);
+  const scrollToJobs = () =>
+    jobsRef.current && jobsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Clicking a category shows only that category's jobs (click again to undo).
+  const chooseCategory = (label) => {
+    setCategory((cur) => (cur === label ? "" : label));
+    setTimeout(scrollToJobs, 50);
+  };
+  const showAllCategories = () => {
+    setCategory("");
+    setTimeout(scrollToJobs, 50);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -272,6 +409,8 @@ export default function Header() {
         .get(`${GET_JOB}`)
         .then((response) => {
           const filteredData = response.data.filter((job) => {
+            // deactivated jobs are not shown publicly
+            if (!job.activation_status) return false;
             const matchDepartment = department
               ? job.department.toLowerCase().includes(department.toLowerCase())
               : true;
@@ -307,7 +446,10 @@ export default function Header() {
                   .includes(disability.toLowerCase())
               : true;
 
+            const matchesCategory = jobInCategory(job, category);
+
             return (
+              matchesCategory &&
               matchesCompany &&
               matchesState &&
               matchesDisability &&
@@ -318,10 +460,12 @@ export default function Header() {
               matchQualification
             );
           });
-          setData(filteredData);
-          if (filteredData.length > 0) {
-            setSelectedJob(filteredData[0]);
-          }
+          // newest first; the index page only shows the latest few
+          const newestFirst = [...filteredData].sort((a, b) => b.id - a.id);
+          const latest = newestFirst.slice(0, LATEST_JOBS_LIMIT);
+          setTotalJobs(newestFirst.length);
+          setData(latest);
+          setSelectedJob(latest.length > 0 ? latest[0] : null);
         })
         .catch((error) => {
           console.error(error.response?.data);
@@ -340,6 +484,7 @@ export default function Header() {
     qualification,
     company,
     disability,
+    category,
   ]);
 
   useEffect(() => {
@@ -388,217 +533,176 @@ export default function Header() {
   };
 
   return (
-    // <div>
-    <div className="my-container">
+    <div className="my-container home">
       {loading && (
         <div className="full-page-spinner">
           <CircularProgress color="primary" size={50} />
         </div>
       )}
-      <div className="image-zoom-container">
-        <img className="zoomed-image" src={imgarray} alt="eventphoto" />
-      </div>
-      <div style={{ padding: " 0% 10%" }}>
-        <h1>120+ Jobs for you to explore</h1>
-        <Box
-          sx={{
-            minWidth: 120,
-            display: "flex",
-            flexDirection: {
-              xs: "column",
-              sm: "column",
-              md: "column",
-              lg: "row",
-            },
-            gap: "10px",
-          }}
-        >
-          <FormControl fullWidth>
-            <Select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
+
+      {/* ---------- hero ---------- */}
+      <section className="hero">
+        <div className="hero-copy">
+          <p className="hero-eyebrow">ABLE JOBS HUB</p>
+          <h1 className="hero-title">
+            Empowering to Build a Better Career
+          </h1>
+          <p className="hero-sub">
+            Your Ability is Our Priority. Find the right job, showcase your
+            skills and achieve your dreams.
+          </p>
+          <div className="hero-actions">
+            <a className="btn-gold" onClick={onhandleClick}>
+              <SearchIcon /> Find Jobs Now <ArrowForwardIcon className="btn-arrow" />
+            </a>
+            <Link to="/about" className="btn-outline">
+              <PlayArrowIcon /> Watch Video
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- feature strip ---------- */}
+      <ul className="feature-strip">
+        {featureItems.map((f) => (
+          <li key={f.title + f.sub}>
+            <span className="feature-icon">{f.icon}</span>
+            <span className="feature-text">
+              {f.title}
+              <br />
+              {f.sub}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {/* ---------- search / filters ---------- */}
+      <section className="search-panel" aria-label="Search jobs">
+        <div className="search-row">
+          <div className="search-title">
+            <SearchIcon className="search-title-icon" />
+            <div>
+              <h2>Search Jobs</h2>
+              <p>Find the perfect job that matches your skills</p>
+            </div>
+          </div>
+
+          <FilterSelect
+            icon={<WorkOutlineIcon />}
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            placeholder="Select Job Type"
+            options={[
+              { value: "hybrid", label: "Hybrid" },
+              { value: "remote", label: "Remote" },
+              { value: "on-site", label: "On-site" },
+            ]}
+          />
+          <FilterSelect
+            icon={<GridViewIcon />}
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            placeholder="Select Category"
+            options={opt(departments)}
+          />
+          <FilterSelect
+            icon={<LocationOnIcon />}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Select Location"
+            options={opt(locations)}
+          />
+          <a className="btn-search" onClick={scrollToJobs}>
+            <SearchIcon /> Search Jobs
+          </a>
+        </div>
+      </section>
+
+      {/* ---------- categories ---------- */}
+      <section className="categories" aria-labelledby="cat-title">
+        <h2 className="section-title" id="cat-title">
+          <span>Explore Job Categories</span>
+        </h2>
+        <div className="category-grid">
+          {categoryItems.map((c) => (
+            <a
+              className={`category-card${category === c.label ? " selected" : ""}`}
+              key={c.label}
+              role="button"
+              tabIndex={0}
+              aria-pressed={category === c.label}
+              onClick={() => chooseCategory(c.label)}
+              onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), chooseCategory(c.label))}
+              style={{ "--cat": c.color }}
             >
-              <MenuItem value="">All Types</MenuItem>
-              <MenuItem value="hybrid">Hybrid</MenuItem>
-              <MenuItem value="remote">Remote</MenuItem>
-              <MenuItem value="on-site">On-site</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              value={state}
-              onChange={(e) => setStates(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
-            >
-              <MenuItem value="">States</MenuItem>
-              {states.map((state) => (
-                <MenuItem key={state.id} value={state.abbreviation}>
-                  {state.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
-            >
-              <MenuItem value="">Departments</MenuItem>
-              {departments.map((department) => (
-                <MenuItem key={department.id} value={department.abbreviation}>
-                  {department.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
-            >
-              <MenuItem value="">Industries</MenuItem>
-              {industries.map((Industrie) => (
-                <MenuItem key={Industrie.id} value={Industrie.abbreviation}>
-                  {Industrie.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
-            >
-              <MenuItem value="">All Locations</MenuItem>
-              {locations.map((locate) => (
-                <MenuItem key={locate.id} value={locate.abbreviation}>
-                  {locate.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              value={qualification}
-              onChange={(e) => setQualifiation(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
-            >
-              <MenuItem value="">Qualification</MenuItem>
-              {qualifications.map((qualification) => (
-                <MenuItem
-                  key={qualification.id}
-                  value={qualification.abbreviation}
-                >
-                  {qualification.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
-            >
-              <MenuItem value="">Companies</MenuItem>
-              {companies.map((company) => (
-                <MenuItem key={company.id} value={company.abbreviation}>
-                  {company.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <Select
-              value={disability}
-              onChange={(e) => setDisability(e.target.value)}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              sx={{
-                border: type
-                  ? "2px solid #1976d2"
-                  : "1px solid rgba(0, 0, 0, 0.23)",
-                "&:focus": {
-                  border: "2px solid #1976d2",
-                },
-              }}
-            >
-              <MenuItem value="">All Disabilities</MenuItem>
-              {disabilities.map((disabilit) => (
-                <MenuItem key={disabilit.id} value={disabilit.abbreviation}>
-                  {disabilit.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+              {c.icon}
+              <span>{c.label}</span>
+            </a>
+          ))}
+          <a className={`category-card category-all${!category ? " selected" : ""}`} role="button" tabIndex={0} onClick={showAllCategories} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), showAllCategories())}>
+            <AppsIcon />
+            <span>
+              View All <ArrowForwardIcon className="btn-arrow" />
+            </span>
+          </a>
+        </div>
+      </section>
+
+      
+
+      {/* ---------- job board ---------- */}
+      <section className="jobs-section" ref={jobsRef}>
+        <h2 className="jobs-heading">
+          {category ? `${category} Jobs` : "Latest Jobs for you to explore"}
+        </h2>
+        {category && (
+          <div className="category-active">
+            <span>
+              Showing <b>{totalJobs}</b> {category} job{totalJobs === 1 ? "" : "s"}
+            </span>
+            <button type="button" className="category-clear" onClick={() => setCategory("")}>
+              <CloseIcon fontSize="small" /> Clear category
+            </button>
+          </div>
+        )}
+
+        <div className="search-more">
+          <FilterSelect
+            icon={<LocationOnIcon />}
+            value={state}
+            onChange={(e) => setStates(e.target.value)}
+            placeholder="States"
+            options={opt(states)}
+          />
+          <FilterSelect
+            icon={<BusinessIcon />}
+            value={industry}
+            onChange={(e) => setIndustry(e.target.value)}
+            placeholder="Industries"
+            options={opt(industries)}
+          />
+          <FilterSelect
+            icon={<SchoolIcon />}
+            value={qualification}
+            onChange={(e) => setQualifiation(e.target.value)}
+            placeholder="Qualification"
+            options={opt(qualifications)}
+          />
+          <FilterSelect
+            icon={<ApartmentIcon />}
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            placeholder="Companies"
+            options={opt(companies)}
+          />
+          <FilterSelect
+            icon={<VolunteerActivismIcon />}
+            value={disability}
+            onChange={(e) => setDisability(e.target.value)}
+            placeholder="All Disabilities"
+            options={opt(disabilities)}
+          />
+        </div>
 
         <div className="job-board-container">
           <div className="job-board">
@@ -616,55 +720,63 @@ export default function Header() {
                   </p>
                 </div>
               ))}
-            </div>
-            <div className="job-details">
-              {selectedJob ? (
-                <>
-                  <h2>{selectedJob.job_title}</h2>
-                  <p className="info">
-                    <i className="fas fa-building"></i>
-                    {selectedJob.company_name} -
-                    <i className="fas fa-map-marker-alt"></i>{" "}
-                    {selectedJob.location}, {selectedJob.state}
-                  </p>
-                  <div>
-                    <span className="chip">{selectedJob.employment_type}</span>
-                    <span className="chip">₹{selectedJob.salary_offered}</span>
-                    <span className="chip">{selectedJob.skills}</span>
-                  </div>
-                  <div className="job-description">
-                    <p>
-                      <strong>Description:</strong> {selectedJob.description}
-                    </p>
-                  </div>
-                  <div className="job-infor">
-                    <p className="info">
-                      <i className="fas fa-briefcase"></i> Experience Required -{" "}
-                      {selectedJob.experience_required}
-                    </p>
-                    <p className="info">
-                      <i className="fas fa-graduation-cap"></i> Qualification
-                       - {selectedJob.qualification_required}
-                    </p>
-                    <p className="info">
-                      <i className="fas fa-users"></i> Number Of Positions -{" "}
-                      {selectedJob.number_of_positions}
-                    </p>
-                    <p className="info">
-                      <i className="fas fa-wheelchair"></i> Disability Eligible
-                      - {selectedJob.disability_eligible}
-                    </p>
-                  </div>
-                  
-                  <button onClick={onhandleClick}>Apply Now</button>
-                </>
-              ) : (
-                <p>Select a job to view details</p>
+              {!loading && data.length === 0 && (
+                <div className="job-list-item">
+                  {category ? `No ${category} jobs right now.` : "No jobs found."}
+                </div>
               )}
             </div>
+            <JobDetails job={selectedJob} onApply={onhandleClick} />
           </div>
         </div>
-      </div>
+
+        {totalJobs > LATEST_JOBS_LIMIT && (
+          <div style={{ textAlign: "center", marginTop: 8 }}>
+            <Link to="/alljobs" className="btn-gold">
+              View All {totalJobs} Jobs <ArrowForwardIcon className="btn-arrow" />
+            </Link>
+          </div>
+        )}
+        {totalJobs <= LATEST_JOBS_LIMIT && totalJobs > 0 && (
+          <div style={{ textAlign: "center", marginTop: 8 }}>
+            <Link to="/alljobs" className="btn-gold">
+              Browse Jobs Page <ArrowForwardIcon className="btn-arrow" />
+            </Link>
+          </div>
+        )}
+      </section>
+
+
+      {/* ---------- why choose us ---------- */}
+      <section className="why-us">
+        <div className="why-copy">
+          <h2>
+            Why Choose <span>Us?</span>
+          </h2>
+          <p>Because Inclusion Creates a Stronger Workforce</p>
+        </div>
+        <ul className="why-stats">
+          {statItems.map((s) => (
+            <li key={s.label}>
+              <span className="stat-icon">{s.icon}</span>
+              <strong>{s.value}</strong>
+              <span>{s.label}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="why-mission">
+          <VolunteerActivismIcon className="mission-icon" />
+          <div>
+            <h3>Our Mission</h3>
+            <p>
+              To bridge the gap between talented=== and inclusive employers.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <CompanySlider />
+
     </div>
   );
 }

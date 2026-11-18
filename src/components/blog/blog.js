@@ -52,41 +52,54 @@ export default function Blog() {
     ];
 
     return (
-        <div style={{ background: 'white' }}>
-            <div
-                style={{
-                    backgroundImage: `url(${blog})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    height: '700px',
-                    width: '100%',
-                    marginTop: '4%',
-                }}
-                className="about-hero"
-            ></div>
-           
-            <div className="blog-container">
-                <header className="blog-header">
+        <div className="bl-page">
+            {/* Hero banner */}
+            <div className="bl-hero">
+                <span className="bl-ring bl-ring-1" />
+                <span className="bl-ring bl-ring-2" />
+                <span className="bl-dots" />
+                <div className="bl-hero-icon">
+                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                        <g fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="8" y="20" width="48" height="32" rx="6" />
+                            <path d="M24 20v-5a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v5" />
+                            <path d="M8 34h48" />
+                        </g>
+                        <rect x="28" y="30" width="8" height="8" rx="2" fill="#f5a623" />
+                    </svg>
+                </div>
+                <div className="bl-hero-stripe" />
+                <div className="bl-hero-photo">
+                    <img src={blog} alt="blog banner" />
+                </div>
+            </div>
+
+            <div className="bl-container">
+                <header className="bl-header">
                     <h1>Challenges Faced by People with Disabilities in Employment</h1>
                 </header>
 
-                <section className="blog-content-grid">
+                <section className="bl-grid">
                     {paragraphs.map((paragraph, index) => (
-                        <div className="blog-grid-item" key={index}>
-                            <img src={paragraph.image} alt={`Blog_Image ${index + 1}`} className="blog-image" style={index === 0 ? { height: '300px' } : index === 5 ? { height: '300px' } : {}} />
-                            <div className="blog-text">
-                                <p>{paragraph.text}</p>
-                                <p className="blog-timestamp">Published: {paragraph.timestamp}</p> {/* Display unique timestamp */}
+                        <article className="bl-card" key={index}>
+                            <div className="bl-card-img">
+                                <img src={paragraph.image} alt={`Blog_Image ${index + 1}`} />
                             </div>
-                        </div>
+                            <div className="bl-card-body">
+                                <p className="bl-card-text">{paragraph.text}</p>
+                                <p className="bl-timestamp">Published: {paragraph.timestamp}</p>
+                            </div>
+                        </article>
                     ))}
                 </section>
 
-                <footer className="blog-footer">
+                <footer className="bl-footer">
                     <p>Published: January 2025</p>
                     <p>Last Updated: {new Date().toLocaleString()}</p>
                 </footer>
             </div>
+
+      
         </div>
     );
 }

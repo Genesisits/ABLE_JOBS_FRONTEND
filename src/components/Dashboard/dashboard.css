@@ -10,9 +10,9 @@
     align-items: center;
 }
 
-h3 {
-    color: white;
+.dashboardGen h3 {
     font-size: 30px;
+    color: #fff;
 }
 
 .dashboardGen button {

@@ -8,6 +8,10 @@ body {
   
   .profile-container {
     display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    overflow-x: hidden;
     justify-content: center;
     align-items: center;
     
@@ -18,7 +22,9 @@ body {
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    min-width: 950px;
+    width: 100%;
+    max-width: 950px;
+    box-sizing: border-box;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
@@ -156,3 +162,22 @@ body {
     color: #000; 
     font-size: 20px; 
   }
+
+
+/* --- fixes: image box, camera icon, responsive --- */
+.profile-image-container { overflow: visible; }
+.profile-image { display: block; aspect-ratio: 1 / 1; background: #eee; }
+.camera-icon {
+  top: auto !important;
+  bottom: 4px;
+  right: 4px;
+  transform: none !important;
+  background: #fff;
+  line-height: 0;
+}
+.camera-icon:hover { transform: scale(1.15) !important; }
+.profile-card:hover { transform: none; }
+@media (max-width: 768px) {
+  .profile-card { padding: 12px; }
+  .profile-info, .profile-info1 { margin-left: 0; }
+}

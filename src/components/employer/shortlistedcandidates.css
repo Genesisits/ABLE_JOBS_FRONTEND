@@ -1,0 +1,59 @@
+/* Candidate rows inside the purple popup (builds on the jd-* styles in Employee/findajob.css) */
+.jd-paper .sc-list { display: flex; flex-direction: column; text-align: left; }
+.jd-paper .sc-row {
+  display: flex; align-items: center; gap: 14px; padding: 12px 0;
+  border-bottom: 1.5px solid #f0edf8; min-width: 0;
+}
+.jd-paper .sc-row:last-child { border-bottom: 0; }
+.jd-paper .sc-avatar {
+  flex: 0 0 46px; height: 46px; display: grid; place-items: center; border-radius: 14px;
+  background: #ece8ff; color: #3a0ca3; font-weight: 700; font-size: 16px;
+}
+.jd-paper .sc-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.jd-paper .sc-name { color: #1c0a66; font-weight: 700; font-size: 15.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jd-paper .sc-meta { color: #5b5391; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jd-paper .sc-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+
+.MuiDialog-paper.jd-paper button.sc-act {
+  margin: 0 !important; width: 40px !important; height: 40px; padding: 0 !important;
+  display: grid; place-items: center; border-radius: 12px !important; border: 0;
+  background: #ece8ff !important; color: #3a0ca3 !important; cursor: pointer; transition: background .15s;
+}
+.MuiDialog-paper.jd-paper button.sc-act:hover:not(:disabled) { background: #ddd5ff !important; }
+.MuiDialog-paper.jd-paper button.sc-act:focus-visible { outline: 2px solid #3a0ca3; outline-offset: 2px; }
+.MuiDialog-paper.jd-paper button.sc-act:disabled { opacity: .4; cursor: not-allowed; }
+.jd-paper .sc-act svg { font-size: 22px; }
+
+.jd-paper .sc-onboard {
+  display: inline-flex; align-items: center; gap: 4px; margin: 0 0 0 4px; padding-left: 10px;
+  border-left: 1.5px solid #ece8f7; color: #1c0a66; font-size: 13px; font-weight: 600; white-space: nowrap;
+}
+.jd-paper .sc-onboard.is-done { color: #1b7f4b; }
+.jd-paper .sc-empty { padding: 28px 8px; text-align: center; color: #5b5391; font-size: 15px; }
+
+@media (max-width: 720px) {
+  .jd-paper .sc-row { flex-wrap: wrap; }
+  .jd-paper .sc-actions { flex: 1 1 100%; justify-content: flex-end; }
+}
+
+/* ---- additions used by the Applied Candidates popup ---- */
+.jd-paper .sc-status {
+  flex: 0 0 auto; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; white-space: nowrap;
+  background: #ece8ff; color: #3a0ca3;
+}
+.jd-paper .sc-status.is-shortlisted { background: #fff3cf; color: #8a5a00; }
+.jd-paper .sc-status.is-onboarded { background: #dcf5e6; color: #1b7f4b; }
+
+.MuiDialog-paper.jd-paper button.sc-pill {
+  margin: 0 !important; width: auto !important; height: 40px; padding: 0 16px !important;
+  display: inline-flex; align-items: center; gap: 6px; border-radius: 999px !important;
+  font: 700 13.5px 'Poppins', 'Segoe UI', Arial, sans-serif; white-space: nowrap; cursor: pointer; text-transform: none;
+}
+.MuiDialog-paper.jd-paper button.sc-pill svg { font-size: 18px; }
+.MuiDialog-paper.jd-paper button.sc-pill-add { border: 0; color: #fff !important; background: linear-gradient(90deg, #3a0ca3, #5a1fe0) !important; box-shadow: 0 6px 14px rgba(58,12,163,.28); }
+.MuiDialog-paper.jd-paper button.sc-pill-add:hover { filter: brightness(1.1); }
+.MuiDialog-paper.jd-paper button.sc-pill-remove { background: #fff !important; color: #c0392b !important; border: 2px solid #f1c4bf; }
+.MuiDialog-paper.jd-paper button.sc-pill-remove:hover { background: #fff4f2 !important; }
+.MuiDialog-paper.jd-paper button.sc-pill-done { background: #dcf5e6 !important; color: #1b7f4b !important; border: 0; cursor: default; }
+.MuiDialog-paper.jd-paper button.sc-pill:focus-visible { outline: 2px solid #3a0ca3; outline-offset: 2px; }
+.jd-paper .sc-actions { flex-wrap: wrap; justify-content: flex-end; }

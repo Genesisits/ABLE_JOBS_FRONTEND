@@ -8,7 +8,5 @@
 }
 
 @media (max-width: 768px) {
-  .App {
-    width: fit-content; /* Apply for smaller screens (e.g., tablets, mobile) */
-  }
+  .App { width: 100%; min-width: 0; }
 }

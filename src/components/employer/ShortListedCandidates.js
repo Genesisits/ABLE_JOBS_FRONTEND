@@ -1,57 +1,50 @@
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Paper,
-  Slide,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableContainer,
-  CircularProgress, 
-} from "@mui/material";
 import Switch from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import GroupsIcon from "@mui/icons-material/Groups";
 import axios from "axios";
+import { USE_DEMO_DATA, DEMO_SHORTLISTED } from "./demoData";
+import VideoResumePlayerDialog from "./VideoResumePlayerDialog";
+import PdfResumeViewerDialog from "./PdfResumeViewerDialog";
+import PurpleDialog from "../Employee/PurpleDialog";
+import "./shortlistedcandidates.css";
 import { ONBOARD_CANDIDATE, SHORTLIST_CANDIDATES, SHORTLIST_ONBOARD } from "../../endpoints"; // Correct endpoint import
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+const initials = (name) =>
+  (name || "?").trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 
 export default function ShortListedCandidates({ open, onClose, jobCode }) {
   const [loading, setLoading] = useState(false)
   const [appliedCandidates, setAppliedCandidates] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [player, setPlayer] = useState({ open: false, url: null, name: "" });
+  const [pdf, setPdf] = useState({ open: false, url: null, name: "" });
 
-  
+
   useEffect(() => {
     if (open && jobCode) {
       setLoading(true)
       axios.get(`${SHORTLIST_ONBOARD}${jobCode}`)
         .then((response) => {
-          setAppliedCandidates(response.data);
+          const data = Array.isArray(response.data) ? response.data : [];
+          setAppliedCandidates(data.length === 0 && USE_DEMO_DATA ? DEMO_SHORTLISTED : data);
         })
         .catch((error) => {
           console.error("Error fetching candidates:", error);
+          if (USE_DEMO_DATA) setAppliedCandidates(DEMO_SHORTLISTED);
         }).finally(() => {
           setLoading(false)
         })
     }
-  }, [open ,jobCode]);
+  }, [open, jobCode]);
 
   const handleActive = (row) => {
-    
+
     const updatedCandidates = appliedCandidates.map(candidate => {
       if (candidate.application_code === row.application_code) {
-        
+
         return {
           ...candidate,
           onboarded_status: !candidate.onboarded_status,
@@ -59,27 +52,27 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
       }
       return candidate;
     });
-  
-    
+
+
     setAppliedCandidates(updatedCandidates);
-  
-    
+
+
     let config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     };
-  
+
     axios
       .put(`${ONBOARD_CANDIDATE}${row.application_code}/`)
       .then((response) => {
-        
+
         console.log(response);
       })
       .catch((error) => {
-        
+
         console.error("Error onboarding candidate:", error);
-        
+
         setAppliedCandidates(prevState =>
           prevState.map(candidate =>
             candidate.application_code === row.application_code
@@ -89,7 +82,7 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
         );
       });
   };
-  
+
 
   const handleCloseDialog = () => {
     onClose();
@@ -97,84 +90,102 @@ export default function ShortListedCandidates({ open, onClose, jobCode }) {
     setSelectedJob(null);
   };
 
-  const handleOpenFile = (fileUrl, type) => {
-    if (type === "pdf") {
-      window.open(fileUrl, "_blank");
-    } else if (type === "video") {
-      const videoWindow = window.open("", "_blank");
-      videoWindow.document.write(
-        `<video controls src="${fileUrl}" style="width: 100%; height: auto;"></video>`
-      );
-    }
-  };
+  const handleOpenPdf = (candidate) =>
+    setPdf({
+      open: true,
+      url: candidate.resume_url || null,
+      name: candidate.employee_name || "",
+    });
+
+  const handleOpenVideo = (candidate) =>
+    setPlayer({
+      open: true,
+      url: candidate.video_resume_url || null,
+      name: candidate.employee_name || "",
+    });
 
   return (
-    <Dialog
-      fullScreen
-      open={open}
-      onClose={handleCloseDialog}
-      TransitionComponent={Transition}
-    >
-       {loading && (
-        <div className="full-page-spinner">
-          <CircularProgress color="primary" size={50} />
+    <>
+      <PurpleDialog
+        open={open}
+        onClose={handleCloseDialog}
+        title="Shortlisted Candidates"
+        icon={<GroupsIcon />}
+        width={760}
+        loading={loading}
+        actions={
+          <button type="button" className="jd-btn jd-btn-outline" onClick={handleCloseDialog}>
+            <CloseIcon /> Close
+          </button>
+        }
+      >
+        <div className="sc-list">
+          {appliedCandidates.length > 0 ? (
+            appliedCandidates.map((candidate, index) => (
+              <div className="sc-row" key={candidate.application_code || index}>
+                <span className="sc-avatar" aria-hidden="true">{initials(candidate.employee_name)}</span>
+                <div className="sc-info">
+                  <span className="sc-name" title={candidate.employee_name}>{candidate.employee_name || "-"}</span>
+                  <span className="sc-meta">
+                    {candidate.job_title || "-"} &middot; {candidate.application_code}
+                  </span>
+                </div>
+                <div className="sc-actions">
+                  <button
+                    type="button"
+                    className="sc-act"
+                    onClick={() => handleOpenPdf(candidate)}
+                    disabled={!candidate.resume_url}
+                    title={candidate.resume_url ? "View resume" : "No resume"}
+                    aria-label="View resume"
+                  >
+                    <VisibilityIcon />
+                  </button>
+                  <button
+                    type="button"
+                    className="sc-act"
+                    onClick={() => handleOpenVideo(candidate)}
+                    disabled={!candidate.video_resume_url}
+                    title={candidate.video_resume_url ? "Watch video resume" : "No video resume"}
+                    aria-label="Watch video resume"
+                  >
+                    <PlayArrowIcon />
+                  </button>
+                  <label className={`sc-onboard${candidate.onboarded_status ? " is-done" : ""}`}>
+                    <Switch
+                      checked={!!candidate.onboarded_status}
+                      onChange={() => handleActive(candidate)}
+                      inputProps={{ "aria-label": "Onboard candidate" }}
+                      size="small"
+                      disabled={!!candidate.onboarded_status}
+                      sx={{
+                        "& .MuiSwitch-switchBase.Mui-checked": { color: "#3a0ca3" },
+                        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { backgroundColor: "#3a0ca3" },
+                      }}
+                    />
+                    {candidate.onboarded_status ? "Onboarded" : "Onboard"}
+                  </label>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="sc-empty">{loading ? "Loading candidates..." : "No shortlisted candidates yet."}</div>
+          )}
         </div>
-      )}
-      <AppBar sx={{ position: "relative" }}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={handleCloseDialog}
-            aria-label="close"
-            style={{width:'4%'}}
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ ml: 2, flex: 1 }}>
-            Applied Candidates for {selectedJob?.job_title || "Unknown Job"}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Application Code</TableCell>
-              <TableCell>Employee Name</TableCell>
-              <TableCell>Job Title</TableCell>
-              <TableCell>Actions</TableCell>
-              
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {appliedCandidates.length > 0 ? (
-              appliedCandidates.map((candidate, index) => (
-                <TableRow key={index}>
-                  <TableCell>{candidate.application_code}</TableCell>
-                  <TableCell>{candidate.employee_name}</TableCell>
-                  <TableCell>{candidate.job_title}</TableCell>
-                  <TableCell>
-                      <Switch
-                              checked={candidate.onboarded_status}
-                              onChange={() => handleActive(candidate)}
-                              inputProps={{ "aria-label": "controlled" }}
-                               size="small"
-                               disabled={candidate.onboarded_status} 
-                            />
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  No applied candidates found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Dialog>
+      </PurpleDialog>
+
+      <PdfResumeViewerDialog
+        open={pdf.open}
+        url={pdf.url}
+        candidateName={pdf.name}
+        onClose={() => setPdf({ open: false, url: null, name: "" })}
+      />
+      <VideoResumePlayerDialog
+        open={player.open}
+        url={player.url}
+        candidateName={player.name}
+        onClose={() => setPlayer({ open: false, url: null, name: "" })}
+      />
+    </>
   );
 }
